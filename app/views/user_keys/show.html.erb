@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @user_key.status %>
+</p>
+
+<p>
+  <strong>Date requested:</strong>
+  <%= @user_key.date_requested %>
+</p>
+
+<p>
+  <strong>Expiration date:</strong>
+  <%= @user_key.expiration_date %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @user_key.value %>
+</p>
+
+<p>
+  <strong>Application text:</strong>
+  <%= @user_key.application_text %>
+</p>
+
+<%= link_to 'Edit', edit_user_key_path(@user_key) %> |
+<%= link_to 'Back', user_keys_path %>

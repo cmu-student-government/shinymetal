@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  message: MyText
+  is_private: false
+  time_posted: 2015-03-04 17:53:19
+
+two:
+  message: MyText
+  is_private: false
+  time_posted: 2015-03-04 17:53:19

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Resource:</strong>
+  <%= @filter.resource %>
+</p>
+
+<p>
+  <strong>Filter name:</strong>
+  <%= @filter.filter_name %>
+</p>
+
+<p>
+  <strong>Filter value:</strong>
+  <%= @filter.filter_value %>
+</p>
+
+<%= link_to 'Edit', edit_filter_path(@filter) %> |
+<%= link_to 'Back', filters_path %>

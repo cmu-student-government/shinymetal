@@ -60,7 +60,6 @@ group :test do
 	gem 'factory_girl_rails'
 	gem 'mocha', require: false
 	gem 'simplecov'
-  gem 'turn'
   gem 'single_test'
 	# gem 'tconsole'  # issues with matchers and minitest, so skip for now
 end

@@ -32,13 +32,22 @@ class UserKeyTest < ActiveSupport::TestCase
       assert @bender_key.approved_by_all?
     end
     
+    should "have a scope to sort by andrew_id" do
+      assert_equal ["bender", "bender"], UserKey.by_user.all.map{|o| o.user.andrew_id}
+    end
+    
+    should "have a scope to sort by time submitted" do
+      assert_equal [["bender", DateTime.now.to_formatted_s(:pretty)]],
+                   UserKey.by_user.by_time_submitted.all.map{|o| [o.user.andrew_id, o.time_submitted.to_formatted_s(:pretty)] }
+    end
+    
     should "have time_requested set to now when request is submitted" do
-      assert @bender_key.time_requested.nil?
+      assert @bender_key.time_submitted.nil?
       @bender_key.set_key_as("submitted")
-      #uses to_date to test, since DateTime changes too quickly to be tested...
+      # Uses to_s formatting to test, since DateTime changes too quickly to be tested...
       @bender_key.reload
-      assert_equal DateTime.now.to_date,
-                   @bender_key.time_requested.to_date
+      assert_equal DateTime.now.to_formatted_s(:pretty),
+                   @bender_key.time_submitted.to_formatted_s(:pretty)
     end
     
     should "have status changed when request is submitted" do
@@ -54,10 +63,10 @@ class UserKeyTest < ActiveSupport::TestCase
     should "have time_filtered set to now when request is set as filtered by admin" do
       assert @bender_key_submitted.time_filtered.nil?
       @bender_key_submitted.set_key_as("filtered")
-      #uses to_date to test, since DateTime changes too quickly to be tested...
+      #uses to_s to test, since DateTime changes too quickly to be tested...
       @bender_key_submitted.reload
-      assert_equal DateTime.now.to_date,
-                   @bender_key_submitted.time_filtered.to_date
+      assert_equal DateTime.now.to_formatted_s(:pretty),
+                   @bender_key_submitted.time_filtered.to_formatted_s(:pretty)
     end
     
     should "have status changed when request is filtered" do

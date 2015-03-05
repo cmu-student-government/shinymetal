@@ -22,7 +22,7 @@ module Shinymetal
 
     # For Foundation 5
     config.assets.precompile += %w( vendor/modernizr )
-
+    
     # Default Pittsburgh timezone
     config.time_zone = "Eastern Time (US & Canada)"
 

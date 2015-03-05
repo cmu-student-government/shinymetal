@@ -20,7 +20,8 @@ class UserKey < ActiveRecord::Base
   validates_inclusion_of :status, in: STATUS_LIST
   
   # Scopes
-  scope :by_user, -> { joins(:user).order(:andrew_id) }
+  scope :by_user, -> { joins(:user).order("andrew_id") }
+  scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
   
   # Methods
   def approved_by_all?
@@ -67,7 +68,7 @@ class UserKey < ActiveRecord::Base
   def set_key_as_submitted
     if validate_status_is("awaiting_submission")
       set_status_to("awaiting_filters")
-      set_time_to_now(:time_requested)
+      set_time_to_now(:time_submitted)
       save_changes
       return true
     end

@@ -1,0 +1,7 @@
+<p>
+  <% for filter in Filter.alphabetical %>
+    <%= check_box_tag "user_key[filter_ids][]", filter.id, @user_key.filters.include?(filter) %>
+    <%= filter.name %>
+    <br />
+  <% end  %>
+</p>

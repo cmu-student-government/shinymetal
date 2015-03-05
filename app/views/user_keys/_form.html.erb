@@ -16,17 +16,16 @@
     <%= f.text_field :status %>
   </div>
   <div class="row">
-    <%= f.label :expiration_date %><br>
-    <%= f.date_select :expiration_date %>
-  </div>
-  <div class="field">
-    <%= f.label :value %><br>
-    <%= f.text_field :value %>
+    <%= f.label :time_expired %><br>
+    <%= f.time_select :time_expired %>
   </div>
   <div class="field">
     <%= f.label :application_text %><br>
     <%= f.text_field :application_text %>
   </div>
+  
+  <%= render :partial => 'filters_checkboxes' %>
+  
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -20,5 +20,7 @@
   <%= @user_key.application_text %>
 </p>
 
+<%= render :partial => 'list_of_filters' %>
+
 <%= link_to 'Edit', edit_user_key_path(@user_key) %> |
 <%= link_to 'Back', user_keys_path %>

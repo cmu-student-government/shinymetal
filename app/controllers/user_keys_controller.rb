@@ -69,6 +69,6 @@ class UserKeysController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_key_params
-      params.require(:user_key).permit(:status, :expiration_date, :application_text, :user_key_filter_ids => [])
+      params.require(:user_key).permit(:status, :expiration_date, :application_text, :filter_ids => [], :approval_ids => [], :comment_ids => [])
     end
 end

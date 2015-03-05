@@ -8,9 +8,17 @@ class UserKeyTest < ActiveSupport::TestCase
   should have_many(:comments)
   should have_many(:approvals)
   
-  # test "the truth" do
-  #   assert true
-  # end
+  # Validations
+  
+  # Status
+  should allow_value("awaiting_submission").for(:status)
+  should allow_value("awaiting_filters").for(:status)
+  should allow_value("awaiting_approval").for(:status)
+  should allow_value("approved").for(:status)
+  should_not allow_value("anything_else").for(:status)
+  should_not allow_value(nil).for(:status)
+  
+  
   context "Creating a user key context" do
     setup do
       create_everything
@@ -22,6 +30,25 @@ class UserKeyTest < ActiveSupport::TestCase
     
     should "have a method that indicates that the key has been approved by all approvers" do
       assert @bender_key.approved_by_all?
+    end
+    
+    should "have time_requested set to now when request is submitted" do
+      assert @bender_key.time_requested.nil?
+      @bender_key.set_key_as_submitted
+      #uses to_date to test, since DateTime changes too quickly to be tested...
+      @bender_key.reload
+      assert_equal DateTime.now.to_date,
+                   @bender_key.time_requested.to_date
+    end
+    
+    should "have status changed when request is submitted" do
+      assert_equal "awaiting_submission",
+                   @bender_key.status
+      @bender_key.set_key_as_submitted
+      #uses to_date to test, since DateTime changes too quickly to be tested...
+      @bender_key.reload
+      assert_equal "awaiting_filters",
+                   @bender_key.status
     end
   end
 end

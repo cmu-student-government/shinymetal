@@ -1,6 +1,8 @@
 class CreateUserKeys < ActiveRecord::Migration
   def change
     create_table :user_keys do |t|
+      t.integer :user_id
+      t.integer :status
       t.string :status
       t.datetime :time_requested
       t.datetime :time_expired

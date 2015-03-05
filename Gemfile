@@ -32,14 +32,38 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+# Foundation gems
+gem 'foundation-rails'
+group :development do
+  gem 'rails_layout'
+end
 
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+# The following gems were taken straight from Prof H's gemfiles
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
+group :development do
+	gem 'quiet_assets'
+  gem 'thin'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'meta_request'
+  gem 'wirble'
+  gem 'hirb'
+  gem 'populator3'
+  gem 'faker'
+end
+
+# Gems used only in testing
+# single_test and factory_girl_rails are set up
+group :test do
+	gem 'shoulda'
+	gem 'shoulda-matchers'
+	gem 'factory_girl_rails'
+	gem 'mocha', require: false
+	gem 'simplecov'
+  gem 'single_test'
+  
+  # This one is NOT from Prof H, replaces turn gem, turn gem is deprecated
+  gem 'minitest-reporters'
+	# gem 'tconsole'  # issues with matchers and minitest, so skip for now
 end
 

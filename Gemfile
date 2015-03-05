@@ -61,6 +61,9 @@ group :test do
 	gem 'mocha', require: false
 	gem 'simplecov'
   gem 'single_test'
+  
+  # This one is NOT from Prof H, replaces turn gem, turn gem is deprecated
+  gem 'minitest-reporters'
 	# gem 'tconsole'  # issues with matchers and minitest, so skip for now
 end
 

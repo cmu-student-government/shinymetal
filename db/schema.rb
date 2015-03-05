@@ -64,8 +64,9 @@ ActiveRecord::Schema.define(version: 20150304225636) do
     t.integer  "user_id"
     t.string   "status"
     t.datetime "time_requested"
-    t.datetime "time_expired"
+    t.datetime "time_filtered"
     t.datetime "time_granted"
+    t.datetime "time_expired"
     t.string   "value"
     t.text     "application_text"
     t.datetime "created_at",       null: false

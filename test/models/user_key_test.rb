@@ -34,7 +34,7 @@ class UserKeyTest < ActiveSupport::TestCase
     
     should "have time_requested set to now when request is submitted" do
       assert @bender_key.time_requested.nil?
-      @bender_key.set_key_as_submitted
+      @bender_key.set_key_as("submitted")
       #uses to_date to test, since DateTime changes too quickly to be tested...
       @bender_key.reload
       assert_equal DateTime.now.to_date,
@@ -44,11 +44,39 @@ class UserKeyTest < ActiveSupport::TestCase
     should "have status changed when request is submitted" do
       assert_equal "awaiting_submission",
                    @bender_key.status
-      @bender_key.set_key_as_submitted
-      #uses to_date to test, since DateTime changes too quickly to be tested...
+      @bender_key.set_key_as("submitted")
+      # Reload to make sure changes were saved ot database
       @bender_key.reload
       assert_equal "awaiting_filters",
                    @bender_key.status
+    end
+    
+    should "have time_filtered set to now when request is set as filtered by admin" do
+      assert @bender_key_submitted.time_filtered.nil?
+      @bender_key_submitted.set_key_as("filtered")
+      #uses to_date to test, since DateTime changes too quickly to be tested...
+      @bender_key_submitted.reload
+      assert_equal DateTime.now.to_date,
+                   @bender_key_submitted.time_filtered.to_date
+    end
+    
+    should "have status changed when request is filtered" do
+      assert_equal "awaiting_filters",
+                   @bender_key_submitted.status
+      @bender_key_submitted.set_key_as("filtered")
+      # Reload to make sure changes were saved ot database
+      @bender_key_submitted.reload
+      assert_equal "awaiting_approval",
+                   @bender_key_submitted.status
+    end
+    
+    should "not allow submission-ready key to be set as filtered" do
+      # Build an unsubmitted key
+      bender_key_invalid = FactoryGirl.build(:user_key, user:@bender)
+      # Try and fail to set it as filtered
+      deny bender_key_invalid.set_key_as("filtered")
+      assert_equal "awaiting_submission",
+                   bender_key_invalid.status
     end
   end
 end

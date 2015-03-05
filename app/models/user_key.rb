@@ -27,24 +27,18 @@ class UserKey < ActiveRecord::Base
     return true
   end
   
-  # Called by controller when a key is submitted by requester to admin
-  def set_key_as_submitted
-    validate_status_is("awaiting_submission")
-    set_status_to("awaiting_filters")
-    set_time_to_now(:time_requested)
-    save_changes
-  end
-  
-  # Called by controller when an admin submits the filter form
-  def set_key_as_filtered
-    validate_status_is("awaiting_filters")
-    set_status_to("awaiting_approval")
-    set_time_to_now(:time_filtered)
-    save_changes
+  def set_key_as(param_status)
+    case param_status
+    when "submitted"
+      set_key_as_submitted
+    when "filtered"
+      set_key_as_filtered
+    #when approved
+    #else #throw an error
+    end
   end
   
   private
-  
   # Save changes to Ruby object to the database
   def save_changes
     self.save!
@@ -68,4 +62,27 @@ class UserKey < ActiveRecord::Base
   def set_time_to_now(param_time_attribute)
     self[param_time_attribute] = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
   end
+
+  # When a key is submitted by requester to admin
+  def set_key_as_submitted
+    if validate_status_is("awaiting_submission")
+      set_status_to("awaiting_filters")
+      set_time_to_now(:time_requested)
+      save_changes
+      return true
+    end
+    return false
+  end
+  
+  # When an admin submits the filter form so it can be approved by everyone
+  def set_key_as_filtered
+    if validate_status_is("awaiting_filters")
+      set_status_to("awaiting_approval")
+      set_time_to_now(:time_filtered)
+      save_changes
+      return true
+    end
+    return false
+  end
+
 end

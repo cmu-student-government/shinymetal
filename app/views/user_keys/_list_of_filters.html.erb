@@ -1,0 +1,8 @@
+<p>
+  <b><%= pluralize(@user_key.filters.size, 'Filter') %></b><br />
+  <ul>
+    <% for filter in @user_key.filters %>
+      <li><%= link_to((filter.name), filter_path(filter)) %></li>
+    <% end  %>
+  </ul>
+</p>

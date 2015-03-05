@@ -63,9 +63,10 @@ ActiveRecord::Schema.define(version: 20150304225636) do
   create_table "user_keys", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "status"
-    t.datetime "time_requested"
+    t.datetime "time_submitted"
+    t.datetime "time_filtered"
+    t.datetime "time_approved"
     t.datetime "time_expired"
-    t.datetime "time_granted"
     t.string   "value"
     t.text     "application_text"
     t.datetime "created_at",       null: false

@@ -10,7 +10,9 @@ module Contexts
   
   # User keys
   def create_user_keys
-    @bender_key = FactoryGirl.create(:user_key, user: @bender) 
+    @bender_key = FactoryGirl.create(:user_key, user: @bender)
+    @bender_key_submitted = FactoryGirl.create(:user_key, user:@bender)
+    @bender_key_submitted.set_key_as("submitted")
   end
   
   def destroy_user_keys

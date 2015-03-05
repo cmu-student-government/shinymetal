@@ -1,0 +1,1 @@
+Time::DATE_FORMATS[:pretty] = '%H:%M, %B %d, %Y'

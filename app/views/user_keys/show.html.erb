@@ -6,13 +6,8 @@
 </p>
 
 <p>
-  <strong>Date requested:</strong>
-  <%= @user_key.date_requested %>
-</p>
-
-<p>
-  <strong>Expiration date:</strong>
-  <%= @user_key.expiration_date %>
+  <strong>Time submitted:</strong>
+  <%= @user_key.time_submitted %>
 </p>
 
 <p>
@@ -24,6 +19,8 @@
   <strong>Application text:</strong>
   <%= @user_key.application_text %>
 </p>
+
+<%= render :partial => 'list_of_filters' %>
 
 <%= link_to 'Edit', edit_user_key_path(@user_key) %> |
 <%= link_to 'Back', user_keys_path %>

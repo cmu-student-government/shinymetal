@@ -79,13 +79,18 @@ class UserKeyTest < ActiveSupport::TestCase
                    @bender_key_submitted.status
     end
     
-    should "not allow submission-ready key to be set as filtered" do
-      # Build an unsubmitted key
-      bender_key_invalid = FactoryGirl.build(:user_key, user:@bender)
-      # Try and fail to set it as filtered
-      deny bender_key_invalid.set_key_as("filtered")
+    should "not allow submission-ready key to be set as filtered too early" do
+      # Try and fail to set key as filtered
+      deny @bender_key.set_key_as("filtered")
       assert_equal "awaiting_submission",
-                   bender_key_invalid.status
+                   @bender_key.status
+    end
+    
+    should "not allow approval-ready key to be set as submitted again" do
+      # Try and fail to set it as approved
+      deny @bender_key_submitted.set_key_as("submitted")
+      assert_equal "awaiting_filters",
+                   @bender_key_submitted.status
     end
   end
 end

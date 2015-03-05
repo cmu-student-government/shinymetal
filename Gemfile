@@ -38,7 +38,8 @@ group :development do
   gem 'rails_layout'
 end
 
-# Following gems taken from Prof H's gemfiles
+# The following gems were taken straight from Prof H's gemfiles
+
 group :development do
 	gem 'quiet_assets'
   gem 'thin'
@@ -52,6 +53,7 @@ group :development do
 end
 
 # Gems used only in testing
+# single_test and factory_girl_rails are set up
 group :test do
 	gem 'shoulda'
 	gem 'shoulda-matchers'

@@ -1,5 +1,6 @@
 class UserKeysController < ApplicationController
-  before_action :set_user_key, only: [:show, :edit, :update, :destroy, :set_as_submitted]
+  before_action :set_user_key, only: [:show, :edit, :update, :destroy,
+                                      :set_as_submitted, :set_as_filtered]
 
   # GET /user_keys
   def index
@@ -47,18 +48,18 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/set_as_submitted
   def set_as_submitted
     if @user_key.set_key_as("submitted")
-      redirect_to @user_key, notice: 'User key was successfully submitted.'
+      redirect_to @user_key, notice: 'User key request was successfully submitted.'
     else
-      redirect_to @user_key, alert: 'User key has already been submitted.'
+      redirect_to @user_key, alert: 'User key request cannot be submitted.'
     end
   end
   
   # PATCH/PUT /user_keys/1/set_as_filtered
-  def set_as_submitted
+  def set_as_filtered
     if @user_key.set_key_as("filtered")
       redirect_to @user_key, notice: 'User key has had its filters assigned and is now visible to approvers.'
     else
-      redirect_to @user_key, alert: 'User key has already been made visible to approvers.'
+      redirect_to @user_key, alert: 'User key filters cannot be submitted for approvers.'
     end
   end
 

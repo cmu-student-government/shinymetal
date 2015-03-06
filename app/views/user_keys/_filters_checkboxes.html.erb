@@ -1,7 +1,12 @@
 <p>
-  <% for filter in Filter.alphabetical %>
+  <% if Filter.all.empty? %>
+  No filters can be selected because there are no filters in the system.
+  <% else %>
+    <% for filter in Filter.alphabetical %>
     <%= check_box_tag "user_key[filter_ids][]", filter.id, @user_key.filters.include?(filter) %>
-    <%= filter.name %>
-    <br />
-  <% end  %>
+      <%= filter.name %>
+      <br />
+    <% end  %>  
+  <% end %>
 </p>
+

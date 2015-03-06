@@ -1,8 +1,44 @@
-<p>
-  <b><%= pluralize(@user_key.comments.size, 'Comment') %></b><br />
-  <% for comment in @user_key.filters %>
-  <div class="comment">
-    <%= comment.message %>
+<!--Show existing comments -->
+<h3>Comments</h3>
+
+<br/>
+<% @comments.each do |comment| %>
   <div>
-  <% end  %>
-</p>
+    <strong><%= comment.user.andrew_id %></strong>
+    <br />
+    <p><%= comment.message %></p>
+  </div>
+<% end %>
+
+<!--All new comment to be added-->
+<%= form_for(@user_key, url: add_comment_path(@user_key) ) do |f| %>
+  <% if @user_key.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user_key.errors.count, "error") %> prohibited this user_key from being saved:</h2>
+
+      <ul>
+      <% @user_key.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <%= f.fields_for :comments, @comment do |p| %>
+
+	  <div class="row">
+		<%= p.label :user %><br>
+		<%= p.collection_select :user_id, User.alphabetical, :id, :andrew_id %>
+
+		<%= p.label :message %><br>
+		<%= p.text_field :message %>
+	  </div>
+  
+  <% end %>
+  
+  <div class="actions">
+    <%= f.submit class: "big-button success", value: "Add comment" %>
+  </div>
+  
+<% end %>

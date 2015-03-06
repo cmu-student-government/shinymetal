@@ -7,6 +7,8 @@ class UserKey < ActiveRecord::Base
   has_many :comments
   has_many :approvals
   
+  accepts_nested_attributes_for :comments
+  
   # Validations
   # Statuses for keys are currently:
   #     awaiting_submission, if started by requester but not submitted to admin

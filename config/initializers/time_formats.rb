@@ -1,1 +1,1 @@
-Time::DATE_FORMATS[:pretty] = '%H:%M, %B %d, %Y'
+Time::DATE_FORMATS[:pretty] = '%l:%M %p, %B %e %Y'

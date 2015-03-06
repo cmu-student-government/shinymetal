@@ -1,5 +1,5 @@
 class UserKeysController < ApplicationController
-  before_action :set_user_key, only: [:show, :edit, :update, :destroy,
+  before_action :set_user_key, only: [:show, :edit, :update, :destroy, :add_comment,
                                       :set_as_submitted, :set_as_filtered, :set_as_confirmed]
 
   # GET /user_keys
@@ -9,6 +9,7 @@ class UserKeysController < ApplicationController
 
   # GET /user_keys/1
   def show
+    get_comments
   end
 
   # GET /user_keys/new
@@ -26,7 +27,7 @@ class UserKeysController < ApplicationController
     if @user_key.save
       redirect_to @user_key, notice: 'User key was successfully created.'
     else
-      render new
+      render :new
     end
   end
 
@@ -36,6 +37,16 @@ class UserKeysController < ApplicationController
       redirect_to @user_key, notice: 'User key was successfully updated.'
     else
       render :edit
+    end
+  end
+  
+  # PATCH/PUT /user_keys/1/add_comment
+  def add_comment
+    if @user_key.update(user_key_params)
+      redirect_to @user_key, notice: 'User key was successfully updated.'
+    else
+      get_comments
+      render :show
     end
   end
 
@@ -73,13 +84,25 @@ class UserKeysController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    # Build a blank comment form 
+    def get_comments
+      @comments = @user_key.comments.chronological
+      @comment = @user_key.comments.build
+    end
+    
+    # On add_comment failure, add the comment's message back into built comment
+    def keep_failed_comment
+      @comment = @user_key.build(user_key_params[:comments_attributes][:message])
+    end
+      
     def set_user_key
       @user_key = UserKey.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_key_params
-      params.require(:user_key).permit(:user_id, :time_expired, :application_text, :filter_ids => [], :approval_ids => [], :comment_ids => [])
+      params.require(:user_key).permit(:user_id, :time_expired, :application_text,
+                                       :filter_ids => [], :approval_ids => [],
+                                       :comments_attributes => [:id, :message, :user_id])
     end
 end

@@ -18,7 +18,7 @@ class UserKey < ActiveRecord::Base
                  "awaiting_approval",
                  "approved"]
   
-  validates_inclusion_of :status, in: STATUS_LIST
+  validates_inclusion_of :status, in: STATUS_LIST, allow_blank: true
   
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
@@ -32,9 +32,9 @@ class UserKey < ActiveRecord::Base
   def set_key_as(param_status)
     case param_status
     when "submitted"
-      set_key_as_submitted
+      return set_key_as_submitted
     when "filtered"
-      set_key_as_filtered
+      return set_key_as_filtered
     #when approved
     #else #throw an error
     end
@@ -48,7 +48,6 @@ class UserKey < ActiveRecord::Base
   
   def validate_status_is(param_status)
     unless self.status == param_status
-      errors.add(:status, "is not a valid status for that action")
       return false
     end
     return true

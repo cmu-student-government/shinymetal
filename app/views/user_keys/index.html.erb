@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing User Keys</h1>
 
 <table>
@@ -7,7 +5,6 @@
     <tr>
       <th>Status</th>
       <th>Date requested</th>
-      <th>Expiration date</th>
       <th>Value</th>
       <th>Application text</th>
       <th colspan="3"></th>
@@ -18,8 +15,7 @@
     <% @user_keys.each do |user_key| %>
       <tr>
         <td><%= user_key.status %></td>
-        <td><%= user_key.date_requested %></td>
-        <td><%= user_key.expiration_date %></td>
+        <td><%= user_key.time_submitted %></td>
         <td><%= user_key.value %></td>
         <td><%= user_key.application_text %></td>
         <td><%= link_to 'Show', user_key %></td>

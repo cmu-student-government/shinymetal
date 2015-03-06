@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Status:</strong>
   <%= @user_key.status %>
@@ -22,5 +20,9 @@
 
 <%= render :partial => 'list_of_filters' %>
 
-<%= link_to 'Edit', edit_user_key_path(@user_key) %> |
-<%= link_to 'Back', user_keys_path %>
+<%= button_to 'Submit Request', set_as_submitted_path(@user_key), method: :patch %> |
+
+<br/>
+
+<%= button_to 'Edit', edit_user_key_path(@user_key), method: :get %> |
+<%= button_to 'Back', user_keys_path, method: :get %>

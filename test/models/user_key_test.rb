@@ -5,6 +5,7 @@ class UserKeyTest < ActiveSupport::TestCase
   should belong_to(:user)
   should have_many(:user_key_organizations)
   should have_many(:user_key_filters)
+  should have_many(:filters).through(:user_key_filters)
   should have_many(:comments)
   should have_many(:approvals)
   

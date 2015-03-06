@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   resources :user_keys
 
   resources :users
+  
+  patch 'user_keys/:id/set_as_submitted' => 'user_keys#set_as_submitted', as: :set_as_submitted
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

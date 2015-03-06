@@ -62,15 +62,15 @@ ActiveRecord::Schema.define(version: 20150304225636) do
 
   create_table "user_keys", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "status"
+    t.string   "status",           default: "awaiting_submission"
     t.datetime "time_submitted"
     t.datetime "time_filtered"
     t.datetime "time_approved"
     t.datetime "time_expired"
     t.string   "value"
     t.text     "application_text"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
   end
 
   create_table "users", force: :cascade do |t|

@@ -12,12 +12,15 @@
   <% end %>
 
   <div class="row">
-    <%= f.label :status %><br>
-    <%= f.text_field :status %>
+    <%= f.label :user %><br>
+    <%= f.select :user_id, User.all %>
   </div>
+  
   <div class="row">
     <%= f.label :time_expired %><br>
-    <%= f.time_select :time_expired %>
+    <%= f.date_field :time_expired, order: [:month, :day, :year], 
+                    start_year: Date.today.year, 
+                    end_year: 2.years.from_now %>
   </div>
   <div class="field">
     <%= f.label :application_text %><br>

@@ -2,8 +2,7 @@ class CreateUserKeys < ActiveRecord::Migration
   def change
     create_table :user_keys do |t|
       t.integer :user_id
-      t.integer :status
-      t.string :status
+      t.string :status, default: "awaiting_submission"
       t.datetime :time_submitted
       t.datetime :time_filtered
       t.datetime :time_approved

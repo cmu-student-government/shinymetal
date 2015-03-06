@@ -1,0 +1,8 @@
+<p>
+  <b><%= pluralize(@user_key.comments.size, 'Comment') %></b><br />
+  <% for comment in @user_key.filters %>
+  <div class="comment">
+    <%= comment.message %>
+  <div>
+  <% end  %>
+</p>

@@ -25,8 +25,16 @@ class UserKey < ActiveRecord::Base
   scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
   
   # Methods
-  def approved_by_all?
-    return true
+  def at_submit_stage?
+    return self.status == "awaiting_submission"
+  end
+  
+  def at_filter_stage?
+    return self.status == "awaiting_filters"
+  end
+  
+  def at_approval_stage?
+    return self.status == "awaiting_approval"
   end
   
   def name
@@ -50,13 +58,6 @@ class UserKey < ActiveRecord::Base
     self.save!
   end
   
-  def validate_status_is(param_status)
-    unless self.status == param_status
-      return false
-    end
-    return true
-  end
-  
   # When submitted, a key should be marked as ready for filters from admin
   # When filtered, a key should be marked as ready for approval
   def set_status_to(param_status)
@@ -70,7 +71,7 @@ class UserKey < ActiveRecord::Base
 
   # When a key is submitted by requester to admin
   def set_key_as_submitted
-    if validate_status_is("awaiting_submission")
+    if at_submit_stage?
       set_status_to("awaiting_filters")
       set_time_to_now(:time_submitted)
       save_changes
@@ -81,7 +82,7 @@ class UserKey < ActiveRecord::Base
   
   # When an admin submits the filter form so it can be approved by everyone
   def set_key_as_filtered
-    if validate_status_is("awaiting_filters")
+    if at_filter_stage?
       set_status_to("awaiting_approval")
       set_time_to_now(:time_filtered)
       save_changes

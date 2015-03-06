@@ -12,6 +12,10 @@
 
 <!--All new comment to be added-->
 <%= form_for(@user_key, url: add_comment_path(@user_key) ) do |f| %>
+  <fieldset>
+  	  
+  <legend>Add a comment</legend>
+	 
   <% if @user_key.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user_key.errors.count, "error") %> prohibited this user_key from being saved:</h2>
@@ -28,17 +32,21 @@
   <%= f.fields_for :comments, @comment do |p| %>
 
 	  <div class="row">
-		<%= p.label :user %><br>
+	    <div class="column">
+		<%= p.label :user %>
 		<%= p.collection_select :user_id, User.alphabetical, :id, :andrew_id %>
-
-		<%= p.label :message %><br>
+        </div>
+        <div class="column">
+		<%= p.label :message %>
 		<%= p.text_field :message %>
+		</div>
 	  </div>
-  
   <% end %>
   
   <div class="actions">
     <%= f.submit class: "big-button success", value: "Add comment" %>
   </div>
+  
+  </fieldset>
   
 <% end %>

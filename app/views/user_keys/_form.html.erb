@@ -1,4 +1,6 @@
 <%= form_for(@user_key) do |f| %>
+  <fieldset>
+
   <% if @user_key.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user_key.errors.count, "error") %> prohibited this user_key from being saved:</h2>
@@ -12,15 +14,17 @@
   <% end %>
 
   <div class="row">
-    <%= f.label :user %><br>
-    <%= f.collection_select :user_id, User.alphabetical, :id, :andrew_id %>
-  </div>
+    <div class="column">
+      <%= f.label :user %><br>
+      <%= f.collection_select :user_id, User.alphabetical, :id, :andrew_id %>
+    </div>
   
-  <div class="row">
-    <%= f.label :time_expired %><br>
-    <%= f.date_field :time_expired, order: [:month, :day, :year], 
-                    start_year: Date.today.year, 
-                    end_year: 2.years.from_now %>
+    <div class="column">
+      <%= f.label :time_expired %><br>
+      <%= f.date_field :time_expired, order: [:month, :day, :year], 
+                      start_year: Date.today.year, 
+                      end_year: 2.years.from_now %>
+    </div>
   </div>
   <div class="field">
     <%= f.label :application_text %><br>
@@ -32,4 +36,6 @@
   <div class="actions">
     <%= f.submit class: "big-button success" %>
   </div>
+  
+  </fieldset>
 <% end %>

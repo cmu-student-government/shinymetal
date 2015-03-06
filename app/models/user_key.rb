@@ -11,12 +11,12 @@ class UserKey < ActiveRecord::Base
   # Statuses for keys are currently:
   #     awaiting_submission, if started by requester but not submitted to admin
   #     awaiting_filters, if it hasn't had filters assigned
-  #     awaiting_approval, if not approved by everybody
-  # or  approved
+  #     awaiting_confirmation, if not approved by everybody
+  # or  confirmed
   STATUS_LIST = ["awaiting_submission",
                  "awaiting_filters",
-                 "awaiting_approval",
-                 "approved"]
+                 "awaiting_confirmation",
+                 "confirmed"]
   
   validates_inclusion_of :status, in: STATUS_LIST
   
@@ -33,8 +33,8 @@ class UserKey < ActiveRecord::Base
     return self.status == "awaiting_filters"
   end
   
-  def at_approval_stage?
-    return self.status == "awaiting_approval"
+  def at_confirmation_stage?
+    return self.status == "awaiting_confirmation"
   end
   
   def name
@@ -47,8 +47,8 @@ class UserKey < ActiveRecord::Base
       return set_key_as_submitted
     when "filtered"
       return set_key_as_filtered
-    #when approved
-    #else #throw an error
+    when "confirmed"
+      return set_key_as_confirmed
     end
   end
   
@@ -59,7 +59,7 @@ class UserKey < ActiveRecord::Base
   end
   
   # When submitted, a key should be marked as ready for filters from admin
-  # When filtered, a key should be marked as ready for approval
+  # When filtered, a key should be marked as ready for confirmation
   def set_status_to(param_status)
     self.status = param_status
   end
@@ -83,8 +83,19 @@ class UserKey < ActiveRecord::Base
   # When an admin submits the filter form so it can be approved by everyone
   def set_key_as_filtered
     if at_filter_stage?
-      set_status_to("awaiting_approval")
+      set_status_to("awaiting_confirmation")
       set_time_to_now(:time_filtered)
+      save_changes
+      return true
+    end
+    return false
+  end
+  
+  # When a key has been approved by everyone and is confirmed by admin
+  def set_key_as_confirmed
+    if at_confirmation_stage?
+      set_status_to("confirmed")
+      set_time_to_now(:time_confirmed)
       save_changes
       return true
     end

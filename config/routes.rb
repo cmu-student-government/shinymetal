@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :organizations
-
   resources :filters
 
   resources :user_keys
@@ -9,6 +7,7 @@ Rails.application.routes.draw do
   
   patch 'user_keys/:id/set_as_submitted' => 'user_keys#set_as_submitted', as: :set_as_submitted
   patch 'user_keys/:id/set_as_filtered' => 'user_keys#set_as_filtered', as: :set_as_filtered
+  patch 'user_keys/:id/set_as_confirmed' => 'user_keys#set_as_confirmed', as: :set_as_confirmed
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

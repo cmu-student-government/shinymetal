@@ -1,6 +1,6 @@
 class UserKeysController < ApplicationController
   before_action :set_user_key, only: [:show, :edit, :update, :destroy,
-                                      :set_as_submitted, :set_as_filtered]
+                                      :set_as_submitted, :set_as_filtered, :set_as_confirmed]
 
   # GET /user_keys
   def index
@@ -60,6 +60,15 @@ class UserKeysController < ApplicationController
       redirect_to @user_key, notice: 'User key has had its filters assigned and is now visible to approvers.'
     else
       redirect_to @user_key, alert: 'User key filters cannot be submitted for approvers.'
+    end
+  end
+  
+  # PATCH/PUT /user_keys/1/set_as_approved
+  def set_as_confirmed
+    if @user_key.set_key_as("confirmed")
+      redirect_to @user_key, notice: 'User key was successfully confirmed. All steps are complete.'
+    else
+      redirect_to @user_key, alert: 'User key cannot be confirmed.'
     end
   end
 

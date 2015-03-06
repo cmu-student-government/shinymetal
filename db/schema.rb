@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20150304225636) do
     t.string   "status",           default: "awaiting_submission"
     t.datetime "time_submitted"
     t.datetime "time_filtered"
-    t.datetime "time_approved"
+    t.datetime "time_confirmed"
     t.datetime "time_expired"
     t.string   "value"
     t.text     "application_text"

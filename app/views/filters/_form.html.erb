@@ -11,19 +11,31 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :resource %><br>
-    <%= f.text_field :resource %>
+  <div class="collapsed_row">
+    <div class="three-column">
+      <%= f.label :resource %>
+    </div>
+    <div class="nine-column">
+      <%= f.text_field :resource %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :filter_name %><br>
-    <%= f.text_field :filter_name %>
+  <div class="collapsed_row">
+    <div class="three-column">
+      <%= f.label :filter_name %><br>
+    </end>
+    <div class="nine-column"
+      <%= f.text_field :filter_name %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :filter_value %><br>
-    <%= f.text_field :filter_value %>
+  <div class="collapsed_row">
+    <div class="three-column">
+      <%= f.label :filter_value %>
+    </div>
+    <div class="nine-column">
+      <%= f.text_field :filter_value %>
+    </div>
   </div>
-  <div class="actions">
+  <div class="collapsed_row">
     <%= f.submit class: "big-button success" %>
   </div>
 <% end %>

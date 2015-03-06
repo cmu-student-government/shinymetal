@@ -32,7 +32,7 @@
 .form-centered {
   @include six-columns-centered;
   }
-.submit {
+.big-button {
   @extend .button;
   @extend .radius;
   }

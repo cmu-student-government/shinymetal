@@ -5,6 +5,7 @@ class UserKey < ActiveRecord::Base
   has_many :user_key_filters
   has_many :filters, through: :user_key_filters
   has_many :organizations, through: :user_key_organizations
+  has_many :users, through: :approvals
   has_many :comments
   has_many :approvals
   
@@ -40,8 +41,12 @@ class UserKey < ActiveRecord::Base
     return self.status == "awaiting_filters"
   end
   
-  def at_confirmation_stage?
+  def at_confirm_stage?
     return self.status == "awaiting_confirmation"
+  end
+  
+  def confirmed?
+    return self.status == "confirmed"
   end
   
   def name
@@ -98,11 +103,17 @@ class UserKey < ActiveRecord::Base
     return false
   end
   
+  def set_key_value
+    # NEEDS SOME HASHING ALGORITHM FOR UNIQUE KEY VALUES
+    self.value = "SECURE HASH VALUE!"
+  end
+  
   # When a key has been approved by everyone and is confirmed by admin
   def set_key_as_confirmed
-    if at_confirmation_stage?
+    if at_confirm_stage?
       set_status_to("confirmed")
       set_time_to_now(:time_confirmed)
+      set_key_value
       save_changes
       return true
     end

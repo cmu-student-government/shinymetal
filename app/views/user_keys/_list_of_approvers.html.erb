@@ -1,0 +1,33 @@
+<% unless @user_key.at_submit_stage? or @user_key.at_filter_stage? %>
+
+	<p>
+	  <b><%= "Approvers who have approved this key" %></b><br />
+	  <ul>
+		<% for approver in @user_key.users %>
+		  <li><%= link_to approver.andrew_id, approver %></li>
+		<% end  %>
+	  </ul>
+	</p>
+    
+  <% if @user_key.confirmed? %>
+  
+    <p>This key was approved by everyone.</p>
+  
+  <% elsif @user_key.approved_by_all? %>
+
+	<p>This key has been approved by everyone.</p>
+
+  <% else %>
+  
+	<p>
+	  <b><%= "Approvers who have not approved this key" %></b><br />
+	  <ul>
+		<% for approver in User.approvers - @user_key.users %>
+		  <li><%= link_to approver.andrew_id, @approver %></li>
+		<% end  %>
+	  </ul>
+	</p>
+
+  <% end %> 
+  
+<% end %>

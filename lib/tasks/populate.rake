@@ -45,7 +45,7 @@ namespace :db do
       org.save!
     end
     # now add approver users
-    (1..5).times do
+    1..5.times do
       # create a user
       user = User.new
       user.andrew_id = Faker::Internet.user_name
@@ -81,13 +81,13 @@ namespace :db do
         # submit some keys randomly
         if [true,false].sample #if submitted....
           # Submitted in past 30 days
-          user_key.time_submitted = Faker::Time.backward(30, :all)
+          user_key.time_submitted = 3.weeks.ago.to_date
           user_key.status = "awaiting_filters"
           if [true,false].sample #if filters applied...
-            user_key.time_filtered = user_key.time_submitted..Time.now
+            user_key.time_filtered = 2.weeks.ago.to_date
             user_key.status = "awaiting_confirmation"
             if [true,false].sample #if confirmed...
-              user_key.time_confirmed = user_key.time_confirmed..Time.now
+              user_key.time_confirmed = 1.week.ago.to_date
               # random characters for key hash
               user_key.value = Faker::Lorem.characters(10)
               user_key.status = "confirmed"
@@ -100,32 +100,30 @@ namespace :db do
         
         # Step 3B part 1: add between 0 to 3 comments for each submitted key
         # also add filters and orgs
-        unless user_key.status != "awaiting_submission"
+        unless user_key.status == "awaiting_submission"
           Comment.populate 0..3 do |comment|
-            comment.pet_id = pet.id
-            # set the visit to sometime between DOB and the present
-            comment.message = Fake::Hacker.say_something_smart
+            comment.message = Faker::Hacker.say_something_smart
             # pick random approver for comment
             comment.user_key_id = user_key.id
             comment.user_id = User.approvers.to_a.sample.id
             # randomize if true or false
             comment.is_private = [true,false]
             # random time in the past, up to 30 days in past
-            comment.time_posted = Faker::Time.backward(30, :all)
+            comment.time_posted = 10.days.ago.to_date
             # set the timestamps
             comment.created_at = Time.now
             comment.updated_at = Time.now
           end
           UserKeyFilter.populate 1..3 do |user_key_filter|
             user_key_filter.user_key_id = user_key.id 
-            user_key_filter.filter_id = Filter.to_a.sample.id
+            user_key_filter.filter_id = Filter.all.to_a.sample.id
             # set the timestamps
             user_key_filter.created_at = Time.now
             user_key_filter.updated_at = Time.now
           end
-          UserKeyOrganizations.populate 1..3 do |user_key_organization|
+          UserKeyOrganization.populate 1..3 do |user_key_organization|
             user_key_organization.user_key_id = user_key.id 
-            user_key_organization.organization_id = Organization.to_a.sample.id
+            user_key_organization.organization_id = Organization.all.to_a.sample.id
             # set the timestamps
             user_key_organization.created_at = Time.now
             user_key_organization.updated_at = Time.now

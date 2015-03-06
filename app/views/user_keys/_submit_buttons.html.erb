@@ -11,7 +11,7 @@
 
 <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button" %> 
 
-<% elsif @user_key.at_confirmation_stage? %>
+<% elsif @user_key.at_confirm_stage? %>
 
   <% if @user_key.approved_by_all? %>
   <%= link_to 'Confirm', set_as_confirmed_path(@user_key), method: :patch, class: "big-button" %> 

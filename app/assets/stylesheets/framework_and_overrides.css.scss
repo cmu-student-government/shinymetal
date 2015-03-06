@@ -37,6 +37,11 @@
   @extend .button;
   @extend .radius;
   }
+.small-button {
+  @extend .button;
+  @extend .radius;
+  @extend .small;
+}
   
 // apply styles to HTML elements
 // to make views framework-neutral

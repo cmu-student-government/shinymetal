@@ -1,3 +1,5 @@
+<h3>User Key</h3>
+
 <p>
   <strong>Status:</strong>
   <%= @user_key.status %>
@@ -5,7 +7,7 @@
 
 <p>
   <strong>Time submitted:</strong>
-  <%= @user_key.time_submitted %>
+  <%= @user_key.time_submitted.to_formatted_s(:pretty) %>
 </p>
 
 <p>

@@ -20,8 +20,8 @@
         <td><%= user_key.time_submitted.to_formatted_s(:pretty) %></td>
         <td><%= user_key.time_filtered.to_formatted_s(:pretty) %></td>
         <td><%= user_key.time_confirmed.to_formatted_s(:pretty) %></td>
-        <td><%= link_to 'Edit', edit_user_key_path(user_key) %></td>
-        <td><%= link_to 'Destroy', user_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Edit', edit_user_key_path(user_key), class: "small-button" %></td>
+        <td><%= link_to 'Destroy', user_key, method: :delete, data: { confirm: 'Are you sure?' }, class: "small-button" %></td>
       </tr>
     <% end %>
   </tbody>

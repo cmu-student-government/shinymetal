@@ -17,8 +17,8 @@
         <td><%= filter.filter_name %></td>
         <td><%= filter.filter_value %></td>
         <td><%= link_to 'Show', filter %></td>
-        <td><%= link_to 'Edit', edit_filter_path(filter) %></td>
-        <td><%= link_to 'Destroy', filter, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Edit', edit_filter_path(filter), class: "small-button" %></td>
+        <td><%= link_to 'Destroy', filter, method: :delete, data: { confirm: 'Are you sure?' }, class: "small-button" %></td>
       </tr>
     <% end %>
   </tbody>

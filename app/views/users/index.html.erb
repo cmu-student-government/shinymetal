@@ -13,12 +13,11 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= user.andrew_id %></td>
+        <td><%= link_to user.andrew_id, user %></td>
         <td><%= user.role %></td>
         <td><%= user.is_approver %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Edit', edit_user_path(user), class: "small-button" %></td>
+        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }, class: "small-button" %></td>
       </tr>
     <% end %>
   </tbody>

@@ -25,6 +25,10 @@ class UserKey < ActiveRecord::Base
   scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
   
   # Methods
+  def approved_by_all?
+    return self.approvals.size == User.approvers.all.size
+  end
+  
   def at_submit_stage?
     return self.status == "awaiting_submission"
   end

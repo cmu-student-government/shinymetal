@@ -13,11 +13,15 @@
 
 <% elsif @user_key.at_confirmation_stage? %>
 
-<%= link_to 'Confirm', set_as_confirmed_path(@user_key), method: :patch, class: "big-button" %> 
+  <% if @user_key.approved_by_all? %>
+  <%= link_to 'Confirm', set_as_confirmed_path(@user_key), method: :patch, class: "big-button" %> 
+  <% else %>
+  <p> Not approved by everyone yet </p>
+  <% end %>
 
 <% else %>
 
-<p> This key has been approved.</p>
+<p> This key was approved by everyone and has been confirmed.</p>
 
 <% end %>
 

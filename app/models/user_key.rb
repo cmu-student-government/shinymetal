@@ -18,7 +18,7 @@ class UserKey < ActiveRecord::Base
                  "awaiting_approval",
                  "approved"]
   
-  validates_inclusion_of :status, in: STATUS_LIST, allow_blank: true
+  validates_inclusion_of :status, in: STATUS_LIST
   
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
@@ -30,7 +30,7 @@ class UserKey < ActiveRecord::Base
   end
   
   def name
-    "Application Key #{id}" 
+    "Application Key #{self.id}" 
   end
   
   def set_key_as(param_status)

@@ -4,7 +4,8 @@
   <thead>
     <tr>
       <th>Status</th>
-      <th>Date requested</th>
+      <th>Time submitted</th>
+      <th>Time filtered</th>
       <th>Value</th>
       <th>Application text</th>
       <th colspan="3"></th>
@@ -16,6 +17,7 @@
       <tr>
         <td><%= user_key.status %></td>
         <td><%= user_key.time_submitted %></td>
+        <td><%= user_key.time_filtered %></td>
         <td><%= user_key.value %></td>
         <td><%= user_key.application_text %></td>
         <td><%= link_to 'Show', user_key %></td>

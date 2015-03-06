@@ -18,10 +18,12 @@
   <%= @user_key.application_text %>
 </p>
 
-<%= render :partial => 'list_of_filters' %>
+<%= render partial: 'list_of_filters' %>
 
-<%= button_to 'Submit Request', set_as_submitted_path(@user_key), method: :patch %> |
+<%= link_to 'Submit Request', set_as_submitted_path(@user_key), method: :patch, class: "button small" %> 
+<br/>
 
+<%= link_to 'Submit Filters for Approval', set_as_filtered_path(@user_key), method: :patch, class: "button small" %> 
 <br/>
 
 <%= link_to 'Edit', edit_user_key_path(@user_key), class: "button small" %> |

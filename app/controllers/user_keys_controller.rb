@@ -52,6 +52,15 @@ class UserKeysController < ApplicationController
       redirect_to @user_key, alert: 'User key has already been submitted.'
     end
   end
+  
+  # PATCH/PUT /user_keys/1/set_as_filtered
+  def set_as_submitted
+    if @user_key.set_key_as("filtered")
+      redirect_to @user_key, notice: 'User key has had its filters assigned and is now visible to approvers.'
+    else
+      redirect_to @user_key, alert: 'User key has already been made visible to approvers.'
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

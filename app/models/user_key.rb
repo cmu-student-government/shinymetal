@@ -29,6 +29,10 @@ class UserKey < ActiveRecord::Base
     return true
   end
   
+  def name
+    "Application Key #{id}" 
+  end
+  
   def set_key_as(param_status)
     case param_status
     when "submitted"

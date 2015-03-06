@@ -15,5 +15,7 @@
   <%= @user.is_approver %>
 </p>
 
+<%= render partial: 'list_of_user_keys' %>
+
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

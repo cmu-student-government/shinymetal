@@ -32,10 +32,12 @@
 .form-centered {
   @include six-columns-centered;
   }
+  
 .big-button {
   @extend .button;
   @extend .radius;
   }
+  
 // apply styles to HTML elements
 // to make views framework-neutral
 main {
@@ -46,3 +48,8 @@ section {
   @extend .row;
   margin-top: 20px;
   }
+footer {
+  background-color: #bbb;
+  font-size: 10pt;
+  color: #eee;
+}

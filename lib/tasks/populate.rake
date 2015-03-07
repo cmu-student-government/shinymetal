@@ -62,7 +62,7 @@ namespace :db do
     admin_user.is_approver = true
     admin_user.save!
     
-    # Step 3: add 20 users
+    # Step 3: add 20 requesters
     User.populate 20 do |user|
       # each key needs a role, is_approver, and andrew_id
       # get some fake data using the Faker gem
@@ -73,22 +73,21 @@ namespace :db do
       user.created_at = Time.now
       user.updated_at = Time.now
       
-      # Step 3A: add 0 to 3 keys for each user
+      # Step 3A: add 0 to 3 keys for each requester
       UserKey.populate 0..3 do |user_key|
         user_key.user_id = user.id
         # make sure all begin as awaiting submission
         user_key.status = "awaiting_submission"
-        # submit some keys randomly
-        if [true,false].sample #if submitted....
-          # Submitted in past 30 days
+        # now begin submitting some keys randomly
+        if [true,false].sample #50 percent change if this key was submitted....
           user_key.time_submitted = 3.weeks.ago.to_date
           user_key.status = "awaiting_filters"
-          if [true,false].sample #if filters applied...
+          if [true,false].sample # if filters applied...
             user_key.time_filtered = 2.weeks.ago.to_date
             user_key.status = "awaiting_confirmation"
-            if [true,false].sample #if confirmed...
+            if [true,false].sample # if the key was confirmed...
               user_key.time_confirmed = 1.week.ago.to_date
-              # random characters for key hash
+              # set 10 random characters for key hash
               user_key.value = Faker::Lorem.characters(10)
               user_key.status = "confirmed"
             end
@@ -114,16 +113,20 @@ namespace :db do
             comment.created_at = Time.now
             comment.updated_at = Time.now
           end
+          # get a list of filters to avoid repeat filters being assigned
+          filter_list = Filter.all.to_a.shuffle
           UserKeyFilter.populate 1..3 do |user_key_filter|
             user_key_filter.user_key_id = user_key.id 
-            user_key_filter.filter_id = Filter.all.to_a.sample.id
+            user_key_filter.filter_id = filter_list.pop
             # set the timestamps
             user_key_filter.created_at = Time.now
             user_key_filter.updated_at = Time.now
           end
+          # get a list of orgs to avoid repeat orgs being assigned
+          org_list = Organization.all.to_a.shuffle
           UserKeyOrganization.populate 1..3 do |user_key_organization|
             user_key_organization.user_key_id = user_key.id 
-            user_key_organization.organization_id = Organization.all.to_a.sample.id
+            user_key_organization.organization_id = org_list.pop
             # set the timestamps
             user_key_organization.created_at = Time.now
             user_key_organization.updated_at = Time.now
@@ -140,7 +143,7 @@ namespace :db do
             approval.updated_at = Time.now
           end
         elsif user_key.status == "confirmed"
-          #all approvers approved this key
+          #all approvers need to have approved this key
           list_of_approvers = User.approvers.to_a
           Approval.populate User.approvers.size do |approval|
             approval.user_key_id = user_key.id

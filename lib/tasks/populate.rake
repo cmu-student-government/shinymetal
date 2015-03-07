@@ -117,7 +117,7 @@ namespace :db do
           filter_list = Filter.all.to_a.shuffle
           UserKeyFilter.populate 1..3 do |user_key_filter|
             user_key_filter.user_key_id = user_key.id 
-            user_key_filter.filter_id = filter_list.pop
+            user_key_filter.filter_id = filter_list.pop.id
             # set the timestamps
             user_key_filter.created_at = Time.now
             user_key_filter.updated_at = Time.now
@@ -126,7 +126,7 @@ namespace :db do
           org_list = Organization.all.to_a.shuffle
           UserKeyOrganization.populate 1..3 do |user_key_organization|
             user_key_organization.user_key_id = user_key.id 
-            user_key_organization.organization_id = org_list.pop
+            user_key_organization.organization_id = org_list.pop.id
             # set the timestamps
             user_key_organization.created_at = Time.now
             user_key_organization.updated_at = Time.now

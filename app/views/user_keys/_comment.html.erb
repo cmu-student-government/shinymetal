@@ -1,0 +1,7 @@
+  <div>
+    <strong><%= comment.user.andrew_id %></strong>
+    &nbsp;<%= comment.time_posted.to_formatted_s(:pretty) %>
+    &nbsp;<%= "(private)" if comment.is_private %>
+    <br />
+    <p><%= comment.message %></p>
+  </div>

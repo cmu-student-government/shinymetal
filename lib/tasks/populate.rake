@@ -107,8 +107,8 @@ namespace :db do
             comment.user_id = User.approvers.to_a.sample.id
             # randomize if true or false
             comment.is_private = [true,false]
-            # random time in the past, up to 30 days in past
-            comment.time_posted = 10.days.ago.to_date
+            # random time in the past
+            comment.time_posted = (1..10).map{|num| num.days.ago.to_date}
             # set the timestamps
             comment.created_at = Time.now
             comment.updated_at = Time.now

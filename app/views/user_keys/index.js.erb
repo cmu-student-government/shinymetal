@@ -1,2 +1,3 @@
-  $('#user_keys').html('<%= escape_javascript render(@user_keys) %>');
-  $('#paginator').html('<%= escape_javascript paginate(@user_keys, remote: true).to_s %>');
+<!-- For use with ajax and pagination -->
+  $('#user_keys').html('<%= escape_javascript render @user_keys  %>');
+  $('#paginator').html('<%= escape_javascript paginate @user_keys, remote: true.to_s %>');

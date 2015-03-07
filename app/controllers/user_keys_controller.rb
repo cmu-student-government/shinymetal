@@ -42,12 +42,8 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
-    if @user_key.update(user_key_params)
-      redirect_to @user_key, notice: 'User key was successfully updated.'
-    else
-      get_comments
-      render :show
-    end
+    @user_key.update(user_key_params)
+    redirect_to @user_key
   end
 
   # DELETE /user_keys/1

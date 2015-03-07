@@ -11,7 +11,7 @@
   </thead>
 
   <tbody id="users">
-  <%= render @users %>
+  <%= render partial: 'users/index_partials/user', collection: @users %>
   </tbody>
 </table>
 

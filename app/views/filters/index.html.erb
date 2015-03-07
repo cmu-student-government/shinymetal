@@ -10,19 +10,15 @@
     </tr>
   </thead>
 
-  <tbody>
-    <% @filters.each do |filter| %>
-      <tr>
-        <td><%= filter.resource %></td>
-        <td><%= filter.filter_name %></td>
-        <td><%= filter.filter_value %></td>
-        <td><%= link_to 'Show', filter %></td>
-        <td><%= link_to 'Edit', edit_filter_path(filter), class: "small-button" %></td>
-        <td><%= link_to 'Destroy', filter, method: :delete, data: { confirm: 'Are you sure?' }, class: "small-button" %></td>
-      </tr>
-    <% end %>
+  <tbody id="filters">
+    <%= render partial: 'filters/index_partials/filter', collection: @filters %>
   </tbody>
 </table>
+
+<!-- Kaminari paginate -->
+<div id="paginator">
+  <%= paginate @filters, remote: true %>
+</div>
 
 <br>
 

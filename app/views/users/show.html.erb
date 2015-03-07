@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Andrew:</strong>
   <%= @user.andrew_id %>
@@ -15,5 +13,7 @@
   <%= @user.is_approver %>
 </p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= render partial: 'list_of_user_keys' %>
+
+<%= link_to 'Edit', edit_user_path(@user), class: "big-button" %> |
+<%= link_to 'Back', users_path, class: "big-button secondary" %>

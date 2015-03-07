@@ -5,6 +5,7 @@ class UserKeyTest < ActiveSupport::TestCase
   should belong_to(:user)
   should have_many(:user_key_organizations)
   should have_many(:user_key_filters)
+  should have_many(:filters).through(:user_key_filters)
   should have_many(:comments)
   should have_many(:approvals)
   
@@ -13,8 +14,8 @@ class UserKeyTest < ActiveSupport::TestCase
   # Status
   should allow_value("awaiting_submission").for(:status)
   should allow_value("awaiting_filters").for(:status)
-  should allow_value("awaiting_approval").for(:status)
-  should allow_value("approved").for(:status)
+  should allow_value("awaiting_confirmation").for(:status)
+  should allow_value("confirmed").for(:status)
   should_not allow_value("anything_else").for(:status)
   should_not allow_value(nil).for(:status)
   
@@ -26,10 +27,6 @@ class UserKeyTest < ActiveSupport::TestCase
     
     teardown do
       destroy_everything
-    end
-    
-    should "have a method that indicates that the key has been approved by all approvers" do
-      assert @bender_key.approved_by_all?
     end
     
     should "have a scope to sort by andrew_id" do
@@ -75,7 +72,7 @@ class UserKeyTest < ActiveSupport::TestCase
       @bender_key_submitted.set_key_as("filtered")
       # Reload to make sure changes were saved ot database
       @bender_key_submitted.reload
-      assert_equal "awaiting_approval",
+      assert_equal "awaiting_confirmation",
                    @bender_key_submitted.status
     end
     
@@ -87,7 +84,7 @@ class UserKeyTest < ActiveSupport::TestCase
     end
     
     should "not allow approval-ready key to be set as submitted again" do
-      # Try and fail to set it as approved
+      # Try and fail to set it as submitted again
       deny @bender_key_submitted.set_key_as("submitted")
       assert_equal "awaiting_filters",
                    @bender_key_submitted.status

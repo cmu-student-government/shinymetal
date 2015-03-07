@@ -1,4 +1,6 @@
 <%= form_for(@user) do |f| %>
+  <fieldset>
+
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -11,19 +13,36 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :andrew_id %><br>
-    <%= f.text_field :andrew_id %>
+  <div class="collapsed_row">
+    <div class="three-column">
+      <%= f.label :andrew_id, class: "prefix" %>
+    </div>
+    <div class="nine-column">
+      <%= f.text_field :andrew_id %>
+    </div>
+  <div class="collapsed_row">
+    <div class="three-column">
+      <%= f.label :role, class: "prefix" %>
+    </div>
+    <div class="nine-column">
+      <%= f.select :role, User::ROLE_LIST %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :role %><br>
-    <%= f.text_field :role %>
+  <div class="collapsed_row">
+    <div class="three-column">
+      <%= f.label :is_approver, class: "prefix" %>
+    </div>
+    <div class="nine-column">
+      <%= f.check_box :is_approver %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :is_approver %><br>
-    <%= f.check_box :is_approver %>
-  </div>
+  
+  <br/>
+  
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: "big-button success" %>
   </div>
+  
+  </fieldset>
+  
 <% end %>

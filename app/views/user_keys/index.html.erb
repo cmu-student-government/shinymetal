@@ -1,35 +1,27 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing User Keys</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Status</th>
-      <th>Date requested</th>
-      <th>Expiration date</th>
-      <th>Value</th>
-      <th>Application text</th>
+      <th>Key Id</th>
+      <th>User</th>
+      <th>Submitted</th>
+      <th>Shared with approvers</th>
+      <th>Confirmed</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
-  <tbody>
-    <% @user_keys.each do |user_key| %>
-      <tr>
-        <td><%= user_key.status %></td>
-        <td><%= user_key.date_requested %></td>
-        <td><%= user_key.expiration_date %></td>
-        <td><%= user_key.value %></td>
-        <td><%= user_key.application_text %></td>
-        <td><%= link_to 'Show', user_key %></td>
-        <td><%= link_to 'Edit', edit_user_key_path(user_key) %></td>
-        <td><%= link_to 'Destroy', user_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
+  <tbody id="user_keys">
+  <%= render @user_keys %>
   </tbody>
 </table>
 
+<!-- Kaminari paginate -->
+<div id="paginator">
+  <%= paginate @user_keys, remote: true %></div>
+</div>
+
 <br>
 
-<%= link_to 'New User key', new_user_key_path %>
+<%= link_to 'New User key', new_user_key_path, class: "big-button" %>

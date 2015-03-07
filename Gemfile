@@ -38,6 +38,9 @@ group :development do
   gem 'rails_layout'
 end
 
+# Pagination gem that is still being maintained
+gem 'kaminari'
+
 # The following gems were taken straight from Prof H's gemfiles
 
 group :development do

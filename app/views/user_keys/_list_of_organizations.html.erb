@@ -1,0 +1,8 @@
+<p>
+  <b><%= pluralize(@user_key.organizations.size, 'Organization') %></b><br />
+  <ul>
+    <% for org in @user_key.organizations %>
+      <li><%= org.name %></li>
+    <% end  %>
+  </ul>
+</p>

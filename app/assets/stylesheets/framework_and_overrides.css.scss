@@ -16,26 +16,48 @@
   @extend .small-12;
   @extend .columns;
   }
-@mixin six-columns-centered {
+@mixin six-columns {
   @extend .small-6;
   @extend .columns;
-  @extend .text-center;
+  }
+@mixin three-columns {
+  @extend .small-3;
+  @extend .columns;
+  }
+@mixin nine-columns {
+  @extend .small-9;
+  @extend .columns;
   }
 // create your own classes
 // to make views framework-neutral
 .column {
-  @include six-columns-centered;
+  @include six-columns;
+  }
+.three-column {
+  @include three-columns;
+  }
+.nine-column {
+  @include nine-columns;
   }
 .form {
   @include grid-column(6);
   }
-.form-centered {
-  @include six-columns-centered;
-  }
-.submit {
+.collapsed_row {
+  @extend .collapse;
+  @extend .row;
+  clear: both;
+}
+  
+.big-button {
   @extend .button;
   @extend .radius;
   }
+.small-button {
+  @extend .button;
+  @extend .radius;
+  @extend .small;
+}
+  
 // apply styles to HTML elements
 // to make views framework-neutral
 main {
@@ -46,3 +68,8 @@ section {
   @extend .row;
   margin-top: 20px;
   }
+footer {
+  background-color: #aaa;
+  font-size: 10pt;
+  color: #eee;
+}

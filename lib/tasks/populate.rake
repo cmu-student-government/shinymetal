@@ -1,6 +1,9 @@
 namespace :db do
   # Populate file and structure taken from PATS
-  # Unfinished
+  # First, this populate destroys everything in the database
+  # Second, this creates some filters, orgs, and users who are approvers
+  # Third, this creates normal users, their keys, their key's rights,
+  # their's keys comments, and their keys approvals if applicable
   
   desc "Erase and fill database"
   # creating a rake task within db namespace called 'populate'

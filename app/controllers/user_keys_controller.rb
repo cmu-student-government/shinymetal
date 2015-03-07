@@ -4,7 +4,7 @@ class UserKeysController < ApplicationController
 
   # GET /user_keys
   def index
-    @user_keys = UserKey.by_user.all
+    @user_keys = UserKey.by_user.page(params[:page])
   end
 
   # GET /user_keys/1

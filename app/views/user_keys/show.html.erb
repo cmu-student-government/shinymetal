@@ -30,15 +30,15 @@
   <%= @user_key.application_text %>
 </p>
 
-<%= render partial: 'list_of_filters' %>
+<%= render partial: 'user_keys/show_partials/list_of_filters' %>
 
-<%= render partial: 'list_of_organizations' %>
+<%= render partial: 'user_keys/show_partials/list_of_organizations' %>
 
-<%= render partial: 'submit_buttons' %>
+<%= render partial: 'user_keys/show_partials/submit_buttons' %>
 
 <%= link_to 'Edit', edit_user_key_path(@user_key), class: "big-button" %> |
 <%= link_to 'Back', user_keys_path, class: "big-button secondary" %>
 
-<%= render partial: 'list_of_approvers' %>
+<%= render partial: 'user_keys/show_partials/list_of_approvers' %>
 
-<%= render partial: 'list_of_comments' %>
+<%= render partial: 'user_keys/show_partials/list_of_comments' %>

@@ -34,7 +34,7 @@ class UserKeyTest < ActiveSupport::TestCase
     end
     
     should "have a scope to sort by time submitted" do
-      assert_equal [["bender", DateTime.now.to_formatted_s(:pretty)]],
+      assert_equal [["bender", DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty)]],
                    UserKey.by_user.by_time_submitted.all.map{|o| [o.user.andrew_id, o.time_submitted.to_formatted_s(:pretty)] }
     end
     
@@ -43,7 +43,7 @@ class UserKeyTest < ActiveSupport::TestCase
       @bender_key.set_key_as("submitted")
       # Uses to_s formatting to test, since DateTime changes too quickly to be tested...
       @bender_key.reload
-      assert_equal DateTime.now.to_formatted_s(:pretty),
+      assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
                    @bender_key.time_submitted.to_formatted_s(:pretty)
     end
     
@@ -62,7 +62,7 @@ class UserKeyTest < ActiveSupport::TestCase
       @bender_key_submitted.set_key_as("filtered")
       #uses to_s to test, since DateTime changes too quickly to be tested...
       @bender_key_submitted.reload
-      assert_equal DateTime.now.to_formatted_s(:pretty),
+      assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
                    @bender_key_submitted.time_filtered.to_formatted_s(:pretty)
     end
     

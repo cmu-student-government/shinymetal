@@ -13,7 +13,7 @@
   <%= @user.is_approver %>
 </p>
 
-<%= render partial: 'list_of_user_keys' %>
+<%= render partial: 'users/show_partials/list_of_user_keys' %>
 
 <%= link_to 'Edit', edit_user_path(@user), class: "big-button" %> |
 <%= link_to 'Back', users_path, class: "big-button secondary" %>

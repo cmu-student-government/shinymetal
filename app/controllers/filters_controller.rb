@@ -4,7 +4,7 @@ class FiltersController < ApplicationController
   # GET /filters
   # GET /filters.json
   def index
-    @filters = Filter.all
+    @filters = Filter.alphabetical.page(params[:page])
   end
 
   # GET /filters/1

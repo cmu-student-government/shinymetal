@@ -41,6 +41,9 @@ end
 # Pagination gem that is still being maintained
 gem 'kaminari'
 
+# Authorization gem 
+gem 'cancancan', '~> 1.10'
+
 # The following gems were taken straight from Prof H's gemfiles
 
 group :development do

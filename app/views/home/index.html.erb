@@ -1,5 +1,6 @@
-<h1>Welcome to the Shiny Metal API</h1>
-<p>
+<h1>Welcome to the ShinyMetal API</h1>
+<p> This API provides access to organization and event information at CMU from the Bridge. </p>
 
-This API provides access to information off the Bridge at CMU. Login to apply for a key or for admin access.
-</p>
+<% if can? :manage, :all %>
+ <%= render :partial => "admin_dashboard" %>
+<% end %>

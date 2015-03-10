@@ -1,0 +1,62 @@
+<div class="panel"> 
+
+<h5> Hi, [user]!  </h5>
+<br /> 
+
+<p> Here are the keys without any filter assignments yet: </p>
+<% if @pending_filter_keys.size > 0 %>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Date Submitted</th>
+  </tr>
+<% @pending_filter_keys.each do |key| %>
+  <tr>
+    <td><%= key.user_id %></td>
+    <td><%= key.time_submitted %></td>
+  </tr>
+<% end %>
+</table>
+
+<% else %>
+<% end %>
+
+<p> Here are the keys pending approval: </p>
+
+<% if @pending_approval.size > 0 %>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Date Submitted</th>
+  </tr>
+<% @pending_approval.each do |key| %>
+  <tr>
+    <td><%= key.user_id %></td>
+    <td><%= key.time_submitted %></td>
+  </tr>
+<% end %>
+</table>
+
+<% else %>
+<% end %>
+
+<p> Existing Keys </p> 
+
+<% if @confirmed_keys.size > 0 %>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Date Submitted</th>
+  </tr>
+<% @confirmed_keys.each do |key| %>
+  <tr>
+    <td><%= key.user_id %></td>
+    <td><%= key.time_submitted %></td>
+  </tr>
+<% end %>
+</table>
+
+<% else %>
+<% end %>
+
+</div>

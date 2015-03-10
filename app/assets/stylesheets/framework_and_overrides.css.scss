@@ -1,17 +1,26 @@
+// Overwrite default colors and font
+
+$body-font-family: "Avenir Roman", "Helvetica", Helvetica, Arial, sans-serif;
+
+$topbar-bg-color: #888;
+
+$body-bg: white;
+$body-font-color: #444;
+$heading-font-color: #444;
+
+$primary-color: #8C001A;
+$secondary-color: #444;
+$info-color: #888;
+$alert-color: #c60f13;
+$success-color: #5da423;
+
+$global-radius: 3px !default;
+
 // import the CSS framework
+
 @import "foundation";
 
-// override for the 'Home' navigation link
-.top-bar .name {
-  font-size: rem-calc(13);
-  line-height: 45px; }
-.top-bar .name a {
-  font-weight: normal;
-  color: white;
-  padding: 0 15px; }
-
-// THESE ARE EXAMPLES YOU CAN MODIFY
-// create mixins using Foundation classes
+// Create mixins using Foundation classes
 @mixin twelve-columns {
   @extend .small-12;
   @extend .columns;

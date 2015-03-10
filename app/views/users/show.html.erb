@@ -10,7 +10,11 @@
 
 <p>
   <strong>Is approver:</strong>
-  <%= @user.is_approver %>
+  <% if @user.is_approver %>
+    <i class="check fi-check"></i>
+  <% else %>
+    <i class="x fi-x"></i>
+  <% end %>
 </p>
 
 <%= render partial: 'users/show_partials/list_of_user_keys' %>

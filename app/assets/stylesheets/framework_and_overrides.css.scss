@@ -62,8 +62,18 @@ $success-color: #5da423;
   @extend .radius;
   @extend .small;
 }
-  
-// apply styles to HTML elements
+
+// Apply is_approver check and x styles
+.check {
+  color: $success-color;
+  font-size: 30px;
+}
+.x {
+  font-size: 30px;
+  color: $alert-color;
+}
+
+// Apply styles to HTML elements
 // to make views framework-neutral
 main {
   @include twelve-columns;

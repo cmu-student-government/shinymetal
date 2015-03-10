@@ -1,9 +1,11 @@
+<h3>Organizations</h3>
+
 <p>
   <% if Organization.all.empty? %>
   No organizations can be selected because there are none in the system.
   <% else %>
     <% for organization in Organization.alphabetical %>
-    <%= check_box_tag "user_key[organization_ids][]", filter.id, @user_key.organizations.include?(organization) %>
+    <%= check_box_tag "user_key[organization_ids][]", organization.id, @user_key.organizations.include?(organization) %>
       <%= organization.name %>
       <br />
     <% end  %>  

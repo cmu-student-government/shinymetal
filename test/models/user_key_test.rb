@@ -30,14 +30,36 @@ class UserKeyTest < ActiveSupport::TestCase
     end
     
     should "have a scope to sort by andrew_id" do
-      assert_equal ["bender", "bender"], UserKey.by_user.all.map{|o| o.user.andrew_id}
+      assert_equal ["bender", "bender", "bender", "bender", "bender"], UserKey.by_user.all.map{|o| o.user.andrew_id}
     end
     
     should "have a scope to sort by time submitted" do
-      assert_equal [["bender", DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty)]],
+      assert_equal [["bender", DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty)], 
+                    ["bender", DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty)], 
+                    ["bender", DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty)]],
                    UserKey.by_user.by_time_submitted.all.map{|o| [o.user.andrew_id, o.time_submitted.to_formatted_s(:pretty)] }
     end
-    
+
+    should "have a scope that returns keys awaiting filters" do 
+      assert_equal 1, UserKey.awaiting_filters.size
+    end
+
+    should "have a scope that returns keys awaiting confirmation" do 
+      assert_equal 1, UserKey.awaiting_confirmation.size
+    end
+
+    should "have a scope that returns confirmed keys" do
+      assert_equal 1, UserKey.confirmed.size
+    end
+
+    should "have a scope that returns keys awaiting submission" do
+      assert_equal 2, UserKey.awaiting_submission.size
+    end
+
+    should "have a scope that returns expired keys" do
+      assert_equal 1, UserKey.expired.size
+    end
+
     should "have time_requested set to now when request is submitted" do
       assert @bender_key.time_submitted.nil?
       @bender_key.set_key_as("submitted")

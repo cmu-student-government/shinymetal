@@ -7,8 +7,10 @@ class HomeController < ApplicationController
   		@confirmed_keys = UserKey.where("status LIKE ?", 'confirmed')
   		#placeholders to be modified with addition of sessions
   		#should add expired scope in user_key model
+  		@in_progress = UserKey.where("status LIKE ?", 'awaiting_submission')
   		@existing_keys = UserKey.where("value IS NOT NULL")
   		@expired_keys = UserKey.where("value IS NOT NULL")
+
   	end
   end
 

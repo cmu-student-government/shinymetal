@@ -4,7 +4,23 @@
 <br /> 
 
 <button> Apply for a key </button>
-<p> Applications in Progress </p>
+<p> Applications in Progress: </p>
+<% if @in_progress.size > 0 %>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Date Started</th>
+  </tr>
+<% @in_progress.each do |key| %>
+  <tr>
+    <td><%= link_to key.value, user_key_path(key) %></td>
+    <td><%= key.created_at.to_formatted_s(:pretty) %></td>
+  </tr>
+<% end %>
+</table>
+<% else %>
+None
+<% end %>
 
 <p> Your Existing Keys: </p>
 <% if @existing_keys.size > 0 %>
@@ -15,12 +31,14 @@
   </tr>
 <% @existing_keys.each do |key| %>
   <tr>
-    <td><%= key.value %></td>
+    <td><%= link_to key.value, user_key_path(key) %></td>
     <!-- add expiry date to approved keys-->
     <!-- <td><= key.time_expired.to_formatted_s(:pretty)%></td> -->
   </tr>
 <% end %>
 </table>
+<% else %>
+None
 <% end %>
 
 <p> Your Expired Keys: </p>
@@ -32,12 +50,14 @@
   </tr>
 <% @expired_keys.each do |key| %>
   <tr>
-    <td><%= key.value %></td> 
+    <td><%= link_to key.value, user_key_path(key) %></td> 
     <!-- add expiry date to approved keys-->
     <!-- <td><= key.time_expired.to_formatted_s(:pretty)%></td> -->
   </tr>
 <% end %>
 </table>
+<% else %>
+None
 <% end %>
 
 </div>

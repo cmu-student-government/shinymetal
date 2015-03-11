@@ -7,12 +7,14 @@
 <% if @pending_filter_keys.size > 0 %>
 <table>
   <tr>
+    <th>Key</th>
     <th>Requester</th>
     <th>Date Submitted</th>
   </tr>
 <% @pending_filter_keys.each do |key| %>
   <tr>
-    <td><%= key.user.andrew_id %></td>
+    <td><%= link_to key.value, user_key_path(key) %>
+    <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
     <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
   </tr>
 <% end %>
@@ -31,7 +33,8 @@
   </tr>
 <% @pending_approval.each do |key| %>
   <tr>
-    <td><%= key.user.andrew_id %></td>
+    <td><%= link_to key.value, user_key_path(key) %>
+    <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
     <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
   </tr>
 <% end %>
@@ -50,7 +53,8 @@
   </tr>
 <% @confirmed_keys.each do |key| %>
   <tr>
-    <td><%= key.user.andrew_id %></td>
+    <td><%= link_to key.value, user_key_path(key) %>
+    <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
     <td><%= key.time_confirmed.to_formatted_s(:pretty)%></td>
   </tr>
 <% end %>

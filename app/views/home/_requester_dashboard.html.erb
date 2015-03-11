@@ -23,13 +23,13 @@ None
 <% end %>
 
 <p> Your Existing Keys: </p>
-<% if @existing_keys.size > 0 %>
+<% if @confirmed_keys.size > 0 %>
 <table>
   <tr>
     <th>Key</th>
     <th>Expiry Date</th>
   </tr>
-<% @existing_keys.each do |key| %>
+<% @confirmed_keys.each do |key| %>
   <tr>
     <td><%= link_to key.value, user_key_path(key) %></td>
     <!-- add expiry date to approved keys-->

@@ -69,16 +69,17 @@ ActiveRecord::Schema.define(version: 20150304225636) do
     t.datetime "time_expired"
     t.string   "value"
     t.text     "application_text"
+    t.boolean  "agreed_to_terms",  default: false
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
   end
 
   create_table "users", force: :cascade do |t|
     t.string   "andrew_id"
-    t.string   "role"
-    t.boolean  "is_approver"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "role",        default: "requester"
+    t.boolean  "is_approver", default: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
 end

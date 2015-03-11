@@ -1,0 +1,43 @@
+<div class="panel"> 
+
+<h5> Hi, [user]!  </h5>
+<br /> 
+
+<button> Apply for a key </button>
+<p> Applications in Progress </p>
+
+<p> Your Existing Keys: </p>
+<% if @existing_keys.size > 0 %>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Expiry Date</th>
+  </tr>
+<% @existing_keys.each do |key| %>
+  <tr>
+    <td><%= key.value %></td>
+    <!-- add expiry date to approved keys-->
+    <!-- <td><= key.time_expired.to_formatted_s(:pretty)%></td> -->
+  </tr>
+<% end %>
+</table>
+<% end %>
+
+<p> Your Expired Keys: </p>
+<% if @expired_keys.size > 0 %>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Expiry Date</th>
+  </tr>
+<% @expired_keys.each do |key| %>
+  <tr>
+    <td><%= key.value %></td> 
+    <!-- add expiry date to approved keys-->
+    <!-- <td><= key.time_expired.to_formatted_s(:pretty)%></td> -->
+  </tr>
+<% end %>
+</table>
+<% end %>
+
+</div>

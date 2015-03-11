@@ -1,6 +1,13 @@
 <h1>Welcome to the ShinyMetal API</h1>
-<p> This API provides access to organization and event information at CMU from the Bridge. </p>
+<p> This API provides access to organization and event information at CMU from the Bridge. 
 
 <% if can? :manage, :all %>
  <%= render :partial => "admin_dashboard" %>
+
+<!-- this will be changed once sessions are implemented -->
+<% elsif @current_user == "requester" %>
+ <%= render :partial => "requester_dashboard" %>
+
+<% else %>
+Login to begin.  
 <% end %>

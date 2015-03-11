@@ -28,6 +28,13 @@ class UserKey < ActiveRecord::Base
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
   
+  #scopes dealing with status for dashboards
+  scope :awaiting_filters, -> { where("status LIKE ?", 'awaiting_filters')}
+  scope :awaiting_confirmation, -> { where("status LIKE ?", 'awaiting_confirmation')}
+  scope :confirmed, -> {where("status LIKE ?", 'confirmed')}
+  scope :awaiting_submission, -> {where("status LIKE ?", 'awaiting_submission')}
+
+  scope :expired, -> {where("time_expired < ?", DateTime.now)}
   # Methods
   def approved_by_all?
     return self.approvals.size == User.approvers.all.size

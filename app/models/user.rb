@@ -5,4 +5,5 @@ class User < ActiveRecord::Base
   scope :approvers, -> { where(is_approver: true) }
   
   ROLE_LIST = ["requester", "admin"]
+  
 end

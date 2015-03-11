@@ -28,7 +28,9 @@ class UserKey < ActiveRecord::Base
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
   
-  # Methods
+  # Simply counting all approvers and comparing approvals already earned
+  # would have a bug when someone approves it but is soon demoted from approver.
+  # So, only include the approvals from current approvers
   def approved_by_all?
     return self.approvals.size == User.approvers.all.size
   end

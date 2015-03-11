@@ -33,6 +33,18 @@ $success-color: #5da423;
   @extend .small-9;
   @extend .columns;
   }
+  
+@mixin five-columns {
+  @extend .small-5;
+  @extend .columns;
+  padding: 0;
+  }
+@mixin seven-columns {
+  @extend .small-7;
+  @extend .columns;
+  padding: 0;
+  }
+
 // create your own classes
 // to make views framework-neutral
 .column {
@@ -40,6 +52,12 @@ $success-color: #5da423;
   }
 .three-column {
   @include three-columns;
+  }
+.search-label {
+  @include five-columns;
+  }
+.search-param {
+  @include seven-columns;
   }
 .nine-column {
   @include nine-columns;
@@ -61,6 +79,12 @@ $success-color: #5da423;
   @extend .button;
   @extend .radius;
   @extend .small;
+}
+.search-button {
+  @extend .button;
+  @extend .radius;
+  line-height: 0px !important;
+  font-size: 0.7rem !important;
 }
 
 // Apply is_approver check and x styles

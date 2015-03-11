@@ -85,11 +85,6 @@ class UserKeysController < ApplicationController
       @comments = @user_key.comments.chronological
       @comment = @user_key.comments.build
     end
-    
-    # On add_comment failure, add the comment's message back into built comment
-    def keep_failed_comment
-      @comment = @user_key.build(user_key_params[:comments_attributes][:message])
-    end
       
     def set_user_key
       @user_key = UserKey.find(params[:id])

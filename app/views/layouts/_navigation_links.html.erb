@@ -1,5 +1,6 @@
-<!-- Needs admin/nonadmin authentication -->
-<% if logged_in? %>
+<!-- Needs better admin/nonadmin authentication for additional roles -->
+
+<% if logged_in? and current_user.role == "admin" %>
   <ul class="left"> 
     <li class="divider"></li>
     

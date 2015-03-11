@@ -30,9 +30,9 @@ class UserKey < ActiveRecord::Base
   
   # Simply counting all approvers and comparing approvals already earned
   # would have a bug when someone approves it but is soon demoted from approver.
-  # So, only include the approvals from current approvers
+  # So, only find the number of approvers who are currently still approvers
   def approved_by_all?
-    return self.approvals.size == User.approvers.all.size
+    return self.users.approvers.size == User.approvers.all.size
   end
   
   def at_submit_stage?

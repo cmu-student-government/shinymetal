@@ -31,7 +31,7 @@
   <% end %>
 
   <%= f.fields_for :comments, @comment do |p| %>
-        <%= p.hidden_field :user_id, value: current_user.id %>
+        <%= p.hidden_field :user_id, value: @current_user.id %>
 	<div class="row">
 	    <%= p.label :message %>
 	    <%= p.text_field :message %>

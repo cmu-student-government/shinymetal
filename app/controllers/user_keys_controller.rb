@@ -42,6 +42,8 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
+    # Set user_id of comment to current user's id
+    user_key_params[:comments_attributes][:user_id] = current_user.id
     @user_key.update(user_key_params)
     redirect_to @user_key
   end

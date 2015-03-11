@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   # GET /users
-  # search(iltering_params) used for search bar
+  # search(filtering_params) used for search bar
   def index
     search_param = params[:search]
     # First, did we find a single matching user?

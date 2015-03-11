@@ -26,17 +26,10 @@
 
 
   <%= f.fields_for :comments, @comment do |p| %>
-
-	  <div class="row">
-	    <div class="column">
-		<%= p.label :user %>
-		<%= p.collection_select :user_id, User.alphabetical, :id, :andrew_id %>
-        </div>
-        <div class="column">
-		<%= p.label :message %>
-		<%= p.text_field :message %>
-		</div>
-	  </div>
+	<div class="row">
+	    <%= p.label :message %>
+	    <%= p.text_field :message %>
+	</div>
   <% end %>
   
   <div class="actions">

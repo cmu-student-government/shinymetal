@@ -1,4 +1,5 @@
 class UserKeysController < ApplicationController
+  before_action :check_login
   before_action :set_user_key, only: [:show, :edit, :update, :destroy, :add_comment,
                                       :set_as_submitted, :set_as_filtered, :set_as_confirmed]
 
@@ -42,8 +43,7 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
-    # Set user_id of comment to current user's id
-    user_key_params[:comments_attributes][:user_id] = current_user.id
+    # Set user_id of comment to current user's id in view
     @user_key.update(user_key_params)
     redirect_to @user_key
   end

@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20150304225636) do
   create_table "comments", force: :cascade do |t|
     t.text     "message"
     t.boolean  "is_private"
-    t.datetime "time_posted", default: '2015-03-07 03:33:44'
+    t.datetime "time_posted", default: '2015-03-11 05:34:33'
     t.integer  "user_id"
     t.integer  "user_key_id"
     t.datetime "created_at",                                  null: false

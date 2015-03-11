@@ -6,4 +6,5 @@ class User < ActiveRecord::Base
   scope :search, ->(param) { where("andrew_id LIKE '%#{param.to_s.downcase}%'") }
   
   ROLE_LIST = ["requester", "admin"]
+  
 end

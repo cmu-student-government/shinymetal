@@ -40,12 +40,8 @@
   <%= render partial: 'user_keys/form_partials/terms' %>
   
   <div class="collapsed_row">
-    <div class="three-column">
-      <%= f.label :agreed_to_terms, value: "Agree", class: "prefix" %>
-    </div>
-    <div class="nine-column">
-      <%= f.check_box :agreed_to_terms %>
-    </div>
+      <%= f.check_box :agree %>
+      <%= f.label :agree %>
   </div>
 
   <br/>

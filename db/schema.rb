@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20150304225636) do
     t.datetime "time_expired"
     t.string   "value"
     t.text     "application_text"
-    t.boolean  "agreed_to_terms",  default: false
+    t.boolean  "agree",            default: false
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
   end

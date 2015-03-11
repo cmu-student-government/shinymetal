@@ -12,8 +12,6 @@
       <li><%= link_to "Add a filter", new_filter_path %></li>
     </ul>
   </li>
-</ul>
-<ul class="right"> 
   <li class="has-form">
   <div class="collapsed_row">
     <%= form_tag users_path, method: 'get' do %>
@@ -25,5 +23,14 @@
       </div>
     <% end %>
   </div>
+  </li>
+</ul>
+<ul class="right">
+  <% if logged_in? %>
+    <li><%= link_to "Welcome, #{current_user.andrew_id}", current_user %></li>
+    <li><%= link_to "Logout", logout_path %></li>
+  <% else %>
+    <li><%= link_to "Login", login_path %></li>
+  <% end %>
   </li>
 </ul>

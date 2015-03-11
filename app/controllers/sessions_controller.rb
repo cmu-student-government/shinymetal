@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    # TEMPORARILY allow anyone to login as anybody without authentication
     #user = User.authenticate(params[:login], params[:password])
     user = User.find_by_andrew_id(params[:login])
     if user

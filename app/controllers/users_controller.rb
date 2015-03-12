@@ -1,9 +1,19 @@
 class UsersController < ApplicationController
+  before_action :check_login
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   # GET /users
+  # search(filtering_params) used for search bar
   def index
-    @users = User.alphabetical.page(params[:page])
+    search_param = params[:search]
+    # First, did we find a single matching user?
+    matching_users = User.search(search_param).alphabetical
+    if matching_users.size==1
+      @user = matching_users.to_a.first
+      render :show
+    else # No single matching user, so list them instead
+      @users = matching_users.page(params[:page])
+    end
   end
 
   # GET /users/1
@@ -49,7 +59,7 @@ class UsersController < ApplicationController
     def set_user
       @user = User.find(params[:id])
     end
-
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:andrew_id, :role, :is_approver)

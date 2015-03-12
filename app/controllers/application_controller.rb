@@ -3,16 +3,20 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  # Copied from PATS like a boss
   private
-
-  #Needs to be changed once authentication is added
-  #this is just for for testing purposes to see the different views
+  # Handling authentication
   def current_user
-    #@current_user ||= User.find(session[:user_id]) if session[:user_id]
-    @current_user = "admin"
-    #@current_user = "requester"
-    #@current_user = "guest"
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
-
-
+  helper_method :current_user
+  
+  def logged_in?
+    current_user
+  end
+  helper_method :logged_in?
+  
+  def check_login
+    redirect_to login_url, alert: "Login to view this page." if current_user.nil?
+  end
 end

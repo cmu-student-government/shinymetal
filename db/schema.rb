@@ -24,11 +24,11 @@ ActiveRecord::Schema.define(version: 20150304225636) do
   create_table "comments", force: :cascade do |t|
     t.text     "message"
     t.boolean  "is_private"
-    t.datetime "time_posted", default: '2015-03-11 05:34:33'
+    t.datetime "time_posted"
     t.integer  "user_id"
     t.integer  "user_key_id"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "filters", force: :cascade do |t|
@@ -69,16 +69,17 @@ ActiveRecord::Schema.define(version: 20150304225636) do
     t.datetime "time_expired"
     t.string   "value"
     t.text     "application_text"
+    t.boolean  "agree",            default: false
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
   end
 
   create_table "users", force: :cascade do |t|
     t.string   "andrew_id"
-    t.string   "role"
-    t.boolean  "is_approver"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "role",        default: "requester"
+    t.boolean  "is_approver", default: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
 end

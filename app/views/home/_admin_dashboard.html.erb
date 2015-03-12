@@ -1,6 +1,6 @@
 <div class="panel"> 
 
-<h5> Hi, [user]!  </h5>
+<h5> Hi, <%="#{current_user.andrew_id}"%>!  </h5>
 <br /> 
 
 <p> These keys do not have filter assignments yet: </p>
@@ -28,6 +28,7 @@
 <% if @pending_approval.size > 0 %>
 <table>
   <tr>
+    <th>Key</th>
     <th>Requester</th>
     <th>Date Submitted</th>
   </tr>
@@ -48,6 +49,7 @@
 <% if @confirmed_keys.size > 0 %>
 <table>
   <tr>
+    <th>Key</th>
     <th>Requester</th>
     <th>Date Comfirmed</th>
   </tr>

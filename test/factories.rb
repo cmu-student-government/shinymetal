@@ -11,4 +11,11 @@ FactoryGirl.define do
     status "awaiting_submission"
   end
 
+  #factory blueprint for comments
+  factory :comment do
+  	association :user
+  	association :user_key
+  	message "Kiss my shiny metal API"
+  end
+
 end

@@ -1,7 +1,12 @@
 require 'test_helper'
 
 class FilterTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  #Relationships
+  should have_many(:user_key_filters)
+
+  #Validations
+
+  #Scopes
+
+  #Methods
 end

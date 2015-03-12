@@ -1,7 +1,11 @@
 require 'test_helper'
 
 class UserKeyFilterTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  #Relationships
+  should belong_to(:filter)
+  should belong_to(:user_key)
+
+  #Validations
+  #Scopes
+  #Methods
 end

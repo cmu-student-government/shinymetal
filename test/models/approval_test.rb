@@ -1,7 +1,13 @@
 require 'test_helper'
 
 class ApprovalTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  #Relationships
+  should belong_to(:user)
+  should belong_to(:user_key)
+
+  #Validations
+
+  #Scopes
+
+  #Methods
 end

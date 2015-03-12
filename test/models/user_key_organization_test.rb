@@ -1,7 +1,11 @@
 require 'test_helper'
 
 class UserKeyOrganizationTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  #Relationships
+  should belong_to(:organization)
+  should belong_to(:user_key)
+
+  #Validations
+  #Scopes
+  #Methods
 end

@@ -18,4 +18,15 @@ FactoryGirl.define do
   	message "Kiss my shiny metal API"
   end
 
+  factory :filter do
+  	resource "organizations"
+    filter_name "page"
+    filter_value 1
+  end
+
+  factory :organization do
+  	name "cmuTV"
+  	external_id 1
+  end
+
 end

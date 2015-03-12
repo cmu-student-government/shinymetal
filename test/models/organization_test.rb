@@ -7,7 +7,20 @@ class OrganizationTest < ActiveSupport::TestCase
 
   #Validations
 
-  #Scopes
+  #Scopes and methods
+  context "Creating a organizations context" do
+    setup do
+      create_organizations
+    end
+    
+    teardown do
+      destroy_organizations
+    end
 
-  #Methods
+    #Note: We probably want case insensitive behavior for this...
+    should "have a method to return the organizations alphabetically" do
+    	assert_equal ['AB Films', 'WRCT', 'cmuTV'], Organization.alphabetical.map { |o| o.name }
+    end
+
+  end
 end

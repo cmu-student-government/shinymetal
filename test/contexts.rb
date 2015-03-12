@@ -52,11 +52,37 @@ module Contexts
     @happycomment.destroy
   end
 
+  #Filters
+  def create_filters
+    @organizations_page_filter = FactoryGirl.create(:filter)
+    @organizations_page_filter2 = FactoryGirl.create(:filter, filter_value: '2')
+    @organizations_status_filter = FactoryGirl.create(:filter, filter_name: 'status', filter_value: 'inactive' )
+  end
+
+  def destroy_filters
+    @organizations_page_filter.destroy
+    @organizations_page_filter2.destroy
+    @organizations_status_filter.destroy
+  end
+
+  #Organizations
+  def create_organizations
+    @cmutv = FactoryGirl.create(:organization)
+    @wrct = FactoryGirl.create(:organization, name: "WRCT", external_id: 2)
+    @abfilms = FactoryGirl.create(:organization, name: "AB Films", external_id: 3)
+  end
+
+  def destroy_organizations
+    @cmutv.destroy
+  end
+
   # Create everything at once with one method call
   def create_everything
     create_users
     create_user_keys
     create_comments
+    create_filters
+    create_organizations
   end
   
   # Destroy everything at once
@@ -64,5 +90,7 @@ module Contexts
     destroy_user_keys
     destroy_users
     destroy_comments
+    destroy_filters
+    destroy_organizations
   end
 end

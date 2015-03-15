@@ -34,14 +34,15 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Foundation gems
 gem 'foundation-rails'
-group :development do
-  gem 'rails_layout'
-end
+gem 'rails_layout', group: :development
+
+# Bourbon SASS mixins
+gem 'bourbon'
 
 # Pagination gem that is still being maintained
 gem 'kaminari'
 
-# Authorization gem 
+# Authorization gem
 gem 'cancancan', '~> 1.10'
 
 # The following gems were taken straight from Prof H's gemfiles
@@ -67,7 +68,7 @@ group :test do
 	gem 'mocha', require: false
 	gem 'simplecov'
   gem 'single_test'
-  
+
   # This one is NOT from Prof H, replaces turn gem, turn gem is deprecated
   gem 'minitest-reporters'
 	# gem 'tconsole'  # issues with matchers and minitest, so skip for now

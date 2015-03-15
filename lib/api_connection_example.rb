@@ -21,7 +21,7 @@ optional_params = "&page=1"
 # Now we construct the full url
 url = URI.parse("#{base_url}?resource=#{resource}#{optional_params}")
 
-# Create our request object and set the Authentication header with our encrypted data
+# Establish HTTP connection info
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
 https.verify_mode = OpenSSL::SSL::VERIFY_NONE

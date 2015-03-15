@@ -28,9 +28,21 @@ class UserKey < ActiveRecord::Base
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
   
+  #scopes dealing with status for dashboards
+  scope :awaiting_filters, -> { where("status LIKE ?", 'awaiting_filters')}
+  scope :awaiting_confirmation, -> { where("status LIKE ?", 'awaiting_confirmation')}
+  scope :confirmed, -> {where("status LIKE ?", 'confirmed')}
+  scope :awaiting_submission, -> {where("status LIKE ?", 'awaiting_submission')}
+
+  scope :expired, -> {where("time_expired < ?", DateTime.now)}
+  
   # Methods
+  
+  # Simply counting all approvers and comparing approvals already earned
+  # would have a bug when someone approves it but is soon demoted from approver.
+  # So, only find the number of approvers who are currently still approvers
   def approved_by_all?
-    return self.approvals.size == User.approvers.all.size
+    return self.users.approvers.size == User.approvers.all.size
   end
   
   def at_submit_stage?

@@ -1,6 +1,42 @@
-<%# add navigation links to this file %>
-<%= link_to "User Keys", user_keys_path %>
+<!-- Needs better admin/nonadmin authentication for additional roles -->
 
-<%= link_to "Users", users_path %>
+<% if logged_in? and @current_user.role == "admin" %>
+  <ul class="left"> 
+    <li class="divider"></li>
+    
+    <li><%= link_to "Users", users_path %></li>
+    
+    <li class="has-dropdown"><%= link_to "User Keys", user_keys_path %>
+      <ul class="dropdown">
+        <li><%= link_to "Filters", filters_path %></li>
+        <li><%= link_to "Add a filter", new_filter_path %></li>
+      </ul>
+    </li>
+  
+    <li class="has-form">
+    <div class="collapsed_row">
+      <%= form_tag users_path, method: 'get' do %>
+        <div class="search-param">
+          <%= text_field_tag :search, params[:search] %>
+        </div>
+        <div class="search-label">
+          <%= submit_tag "Find User", :name => nil, class: "search-button info postfix" %>
+        </div>
+      <% end %>
+    </div>
+    </li>
+  </ul>
+<% end %>
 
-<%= link_to "Filters", filters_path %>
+<ul class="right">
+  <% if logged_in? %>
+    <li><%= link_to "Welcome, #{current_user.andrew_id}", @current_user %></li>
+    
+    <li class="divider"></li>
+    
+    <li><%= link_to "Logout", logout_path %></li>
+  <% else %>
+    <li><%= link_to "Login", login_path %></li>
+  <% end %>
+  </li>
+</ul>

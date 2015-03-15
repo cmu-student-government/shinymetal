@@ -1,6 +1,11 @@
 <h3>User Key</h3>
 
 <p>
+  <strong>User:</strong>
+  <%= link_to @user_key.user.andrew_id, @user_key.user  %>
+</p>
+
+<p>
   <strong>Status:</strong>
   <%= @user_key.status %>
 </p>
@@ -37,8 +42,11 @@
 <%= render partial: 'user_keys/show_partials/submit_buttons' %>
 
 <%= link_to 'Edit', edit_user_key_path(@user_key), class: "big-button" %> |
-<%= link_to 'Back', user_keys_path, class: "big-button secondary" %>
+<%= link_to 'Back', user_keys_path, class: "big-button secondary" %> |
+<%= link_to 'Destroy', @user_key, method: :delete, data: { confirm: 'Are you sure?' }, class: "small-button" %>
 
 <%= render partial: 'user_keys/show_partials/list_of_approvers' %>
 
+<div id="comments">
 <%= render partial: 'user_keys/show_partials/list_of_comments' %>
+</div>

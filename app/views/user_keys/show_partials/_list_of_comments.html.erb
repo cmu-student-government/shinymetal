@@ -2,9 +2,15 @@
 <h3>Comments</h3>
 
 <br/>
-<div id="comments">
-  <%= render partial: 'user_keys/show_partials/comment', collection: @comments %>
-</div>
+  <% for comment in @comments %>
+    <div>
+      <strong><%= comment.user.andrew_id %></strong>
+      &nbsp;<%= comment.time_posted.to_formatted_s(:pretty) %>
+      &nbsp;<%= "(private)" if comment.is_private %>
+      <br />
+      <p><%= comment.message %></p>
+    </div>
+  <% end %>
 
 <!--All new comment to be added-->
 <%= form_for(@user_key, url: add_comment_path(@user_key), remote: true ) do |f| %>
@@ -24,19 +30,12 @@
     </div>
   <% end %>
 
-
   <%= f.fields_for :comments, @comment do |p| %>
-
-	  <div class="row">
-	    <div class="column">
-		<%= p.label :user %>
-		<%= p.collection_select :user_id, User.alphabetical, :id, :andrew_id %>
-        </div>
-        <div class="column">
-		<%= p.label :message %>
-		<%= p.text_field :message %>
-		</div>
-	  </div>
+        <%= p.hidden_field :user_id, value: @current_user.id %>
+	<div class="row">
+	    <%= p.label :message %>
+	    <%= p.text_field :message %>
+	</div>
   <% end %>
   
   <div class="actions">

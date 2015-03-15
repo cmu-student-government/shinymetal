@@ -13,14 +13,9 @@
     </div>
   <% end %>
 
-  <div class="collapsed_row">
-    <div class="three-column">
-      <%= f.label :user, class: "prefix" %>
-    </div>
-    <div class="nine-column">
-      <%= f.collection_select :user_id, User.alphabetical, :id, :andrew_id %>
-    </div>
-  </div>
+  <!-- The key should belong to the current user when first created -->
+  <%= f.hidden_field :user_id, value: @current_user.id if @user_key.user.nil? %>
+  
   <div class="collapsed_row">
     <div class="three-column">
       <%= f.label :time_expired, class: "prefix" %>
@@ -41,6 +36,15 @@
   
   <%= render partial: 'user_keys/form_partials/filters_checkboxes' %>
   <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>
+
+  <%= render partial: 'user_keys/form_partials/terms' %>
+  
+  <div class="collapsed_row">
+      <%= f.check_box :agree %>
+      <%= f.label :agree %>
+  </div>
+
+  <br/>
   
   <div class="actions">
     <%= f.submit class: "big-button success" %>

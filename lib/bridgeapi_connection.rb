@@ -2,6 +2,10 @@ require 'base64'
 require 'openssl'
 require 'net/http'
 
+def tester(hi)
+  return hi
+end
+
 # call this function with the specific endpoint to hit
 # we can change this in the future to take in more options later
 def hit_api_endpoint(endpoint)
@@ -37,5 +41,5 @@ def hit_api_endpoint(endpoint)
   res = https.request(req)
 
   # Output result
-  puts res.body
+  return res.body
 end

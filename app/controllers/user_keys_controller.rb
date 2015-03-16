@@ -1,6 +1,7 @@
 class UserKeysController < ApplicationController
   before_action :check_login
   before_action :set_user_key, only: [:show, :edit, :update, :destroy, :add_comment,
+                                      :delete_comment,
                                       :set_as_submitted, :set_as_filtered, :set_as_confirmed]
 
   # GET /user_keys
@@ -45,7 +46,15 @@ class UserKeysController < ApplicationController
   def add_comment
     # Set user_id of comment to current user's id in view
     @user_key.update(user_key_params)
-    redirect_to @user_key
+    redirect_to @user_key, notice: 'Comment was successfully added.'
+  end
+  
+  # DELETE /user_keys/1/delete_comment/1
+  def delete_comment
+    # Delete single comment
+    @bad_comment = Comment.find(params[:comment_id])
+    @bad_comment.destroy
+    redirect_to @user_key, notice: 'Comment was successfully deleted.'
   end
 
   # DELETE /user_keys/1

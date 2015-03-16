@@ -4,6 +4,8 @@ module Api
 
       def index
         require "./lib/bridgeapi_connection.rb"
+        # modified the script to take in parameters to hit the
+        # specified endpoint
         res = hit_api_endpoint("users")
         # not really sure what to do in the case of
         # 404 status or some other error

@@ -1,19 +1,7 @@
 // Overwrite default colors and font
+@import "vars";
 
-$body-font-family: "Avenir Roman", "Helvetica", Helvetica, Arial, sans-serif;
-
-$body-bg: white;
-$body-font-color: #444;
-$heading-font-color: #444;
-
-$primary-color: #701;
-$secondary-color: #444;
-$info-color: #888;
-$alert-color: #c60f13;
-$success-color: #5da423;
-
-// import the CSS framework
-
+// Import foundation
 @import "foundation";
 
 // Create mixins using Foundation classes
@@ -33,7 +21,7 @@ $success-color: #5da423;
   @extend .small-9;
   @extend .columns;
   }
-  
+
 @mixin five-columns {
   @extend .small-5;
   @extend .columns;
@@ -70,7 +58,7 @@ $success-color: #5da423;
   @extend .row;
   clear: both;
 }
-  
+
 .big-button {
   @extend .button;
   @extend .radius;
@@ -92,6 +80,7 @@ $success-color: #5da423;
   color: $success-color;
   font-size: 30px;
 }
+
 .x {
   font-size: 30px;
   color: $alert-color;
@@ -102,13 +91,15 @@ $success-color: #5da423;
 main {
   @include twelve-columns;
   background-color: #eee;
-  }
+}
+
 section {
   @extend .row;
   margin-top: 20px;
-  }
+}
+
 footer {
-  background-color: #aaa;
+  // background-color: #aaa;
   font-size: 10pt;
   color: #eee;
 }

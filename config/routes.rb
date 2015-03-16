@@ -22,6 +22,10 @@ Rails.application.routes.draw do
   patch 'user_keys/:id/set_as_filtered' => 'user_keys#set_as_filtered', as: :set_as_filtered
   patch 'user_keys/:id/set_as_confirmed' => 'user_keys#set_as_confirmed', as: :set_as_confirmed
 
+  # Approve the key as current user
+  patch 'user_keys/:id/approve_key' => 'user_keys#approve_key', as: :approve_key
+  patch 'user_keys/:id/undo_approve_key' => 'user_keys#undo_approve_key', as: :undo_approve_key
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

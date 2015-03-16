@@ -45,6 +45,20 @@ class UserKey < ActiveRecord::Base
     return self.users.approvers.size == User.approvers.all.size
   end
   
+  def approved_by?(user)
+    return self.users.approvers.to_a.include?(user)
+  end
+  
+  def set_approved_by(user)
+    new_approval = Approval.new(user_key_id: self.id, user_id: user.id, time_approved: DateTime.now)
+    new_approval.save!
+  end
+  
+  def undo_set_approved_by(user)
+    old_approval = Approval.where(user_id: user.id).where(user_key_id: self.id).first
+    old_approval.destroy
+  end
+  
   def at_submit_stage?
     return self.status == "awaiting_submission"
   end

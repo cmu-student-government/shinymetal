@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
+  # Relationships
   has_many :user_keys
   
+  # Validations
   ROLE_LIST = ["requester", "admin"]
 
   validates :andrew_id, presence: true, uniqueness: true

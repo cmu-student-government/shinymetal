@@ -1,5 +1,11 @@
 <%= form_for(@user_key) do |f| %>
   <fieldset>
+    
+  <!-- Explain the text shown to admins as data that was entered by the requester-->
+  <% if @current_user.role == "admin" %>
+    <h3>Data entered by requester</h3>
+    <p><i>This information was seen and entered by the requester.</i></p>
+  <% end %>
 
   <% if @user_key.errors.any? %>
     <div id="error_explanation">
@@ -12,37 +18,54 @@
       </ul>
     </div>
   <% end %>
+  
+    <div class="collapsed_row">
+      <div class="three-column">
+        <%= f.label :application_text, class: "prefix" %>
+      </div>
+      <div class="nine-column">
+        <%= f.text_field :application_text %>
+      </div>
+    </div>
 
   <!-- The key should belong to the current user when first created -->
   <%= f.hidden_field :user_id, value: @current_user.id if @user_key.user.nil? %>
   
-  <div class="collapsed_row">
-    <div class="three-column">
-      <%= f.label :time_expired, class: "prefix" %>
-    </div>
-    <div class="nine-column">
-      <%= f.date_field :time_expired, order: [:month, :day, :year], 
-                      start_year: Date.today.year, end_year: 2.years.from_now %>
-    </div>
-  </div>
-  <div class="collapsed_row">
-    <div class="three-column">
-      <%= f.label :application_text, class: "prefix" %>
-    </div>
-    <div class="nine-column">
-      <%= f.text_field :application_text %>
-    </div>
-  </div>
-  
-  <%= render partial: 'user_keys/form_partials/filters_checkboxes' %>
-  <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>
 
   <%= render partial: 'user_keys/form_partials/terms' %>
   
+  <!-- Agree to sell your soul to Student Activities here -->
   <div class="collapsed_row">
       <%= f.check_box :agree %>
       <%= f.label :agree %>
   </div>
+  
+  </fieldset>
+  
+    
+  <!-- Only admins can assign filters, and they can do so at any time -->
+  <% if @current_user.role == "admin" %>
+    <fieldset>
+    
+    <h3>Admin only</h3>
+    
+    <p><i>Set filters and organizations that this key may have access to here.</i></p>
+  
+    <%= render partial: 'user_keys/form_partials/filters_checkboxes' %>
+    <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>    
+  
+    <div class="collapsed_row">
+      <div class="three-column">
+        <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
+      </div>
+      <div class="nine-column">
+        <%= f.date_field :time_expired, order: [:month, :day, :year], 
+                        start_year: Date.today.year, end_year: 2.years.from_now %>
+      </div>
+    </div>
+      
+    </fieldset>
+  <% end %>
 
   <br/>
   
@@ -50,5 +73,4 @@
     <%= f.submit class: "big-button success" %>
   </div>
   
-  </fieldset>
 <% end %>

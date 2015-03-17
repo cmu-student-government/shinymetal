@@ -5,18 +5,44 @@
 
 <% if @user_key.at_submit_stage? %>
 
-<%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button" %> 
+  <%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button" %> 
 
 <% elsif @user_key.at_filter_stage? %>
 
-<%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button" %> 
+  <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button" %> 
 
 <% elsif @user_key.at_confirm_stage? %>
 
   <% if @user_key.approved_by_all? %>
-  <%= link_to 'Confirm', set_as_confirmed_path(@user_key), method: :patch, class: "big-button" %> 
-  <% else %>
-  <p> Not approved by everyone yet </p>
+    
+    <p>This key has been approved by everyone and is ready to be released to the user.</p>
+    
+    <%= link_to 'Confirm and release key to user', set_as_confirmed_path(@user_key), method: :patch, class: "big-button" %> 
+  
+  <% else %> <!-- There are some approvers who have not approved the key -->
+    
+    <!-- Current user may be an approver, admin, or requester -->
+    <% if @current_user.is_approver %>
+      <p>This key has not been approved by everyone yet.</p>
+      
+      <% if @user_key.approved_by?(@current_user) %>
+        <p><strong>You have approved this key.</strong></p>
+        
+        <%= link_to 'Undo approve key', undo_approve_key_path(@user_key), method: :patch, class: "big-button secondary" %> 
+      
+      <% else %>
+        <p><strong>You have not approved this key yet.</strong></p> 
+        
+        <%= link_to 'Approve key', approve_key_path(@user_key), method: :patch, class: "big-button" %> 
+      
+        <p><i>You can undo your approval after you have approved the key.</i></p>
+      
+      <% end %>
+      
+    <% else %> <!-- Requester user who owns this key -->
+      <p>This key has not been approved yet.</p>
+    <% end %>
+  
   <% end %>
 
 <% else %>

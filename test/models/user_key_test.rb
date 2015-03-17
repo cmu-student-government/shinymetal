@@ -19,7 +19,6 @@ class UserKeyTest < ActiveSupport::TestCase
   should_not allow_value("anything_else").for(:status)
   should_not allow_value(nil).for(:status)
   
-  
   context "Creating a user key context" do
     setup do
       create_everything
@@ -30,14 +29,41 @@ class UserKeyTest < ActiveSupport::TestCase
     end
     
     should "have a scope to sort by andrew_id" do
-      assert_equal ["bender", "bender", "bender", "bender", "bender"], UserKey.by_user.all.map{|o| o.user.andrew_id}
+      assert_equal ["bender"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
+    end
+    
+    should "have a name method" do
+      assert_equal "Application Key 1", @bender_key.name
+    end
+    
+    should "have a confirmed? method" do
+      assert @bender_key_confirmed.confirmed?
+      deny @bender_key.confirmed?
+    end
+    
+    should "have an approved_by_all? method" do
+      assert @bender_key_awaiting_conf_approved.approved_by_all?
+      deny @bender_key_awaiting_conf.approved_by_all?
+    end
+    
+    should "have an approved_by?(user) method" do
+      assert @bender_key_awaiting_conf_approved.approved_by?(@leela)
+      deny @bender_key_awaiting_conf_approved.approved_by?(@bender)
+    end
+    
+    should "have methods to undo set approved by, and set approved by, a user" do
+      @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
+      deny @bender_key_awaiting_conf_approved.approved_by?(@leela)
+      @bender_key_awaiting_conf_approved.set_approved_by(@leela)
+      assert @bender_key_awaiting_conf_approved.approved_by?(@leela)
     end
     
     should "have a scope to sort by time submitted" do
-      assert_equal [["bender", DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty)], 
-                    ["bender", DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty)], 
-                    ["bender", DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty)]],
-                   UserKey.by_user.by_time_submitted.all.map{|o| [o.user.andrew_id, o.time_submitted.to_formatted_s(:pretty)] }
+      assert_equal [["bender", DateTime.now.to_date], 
+                    ["bender", 2.days.ago.to_date], 
+                    ["bender", 4.days.ago.to_date],
+                    ["bender", 6.days.ago.to_date]],
+                   UserKey.by_user.by_time_submitted.all.map{|o| [o.user.andrew_id, o.time_submitted.to_date] }
     end
 
     should "have a scope that returns keys awaiting filters" do 
@@ -45,7 +71,7 @@ class UserKeyTest < ActiveSupport::TestCase
     end
 
     should "have a scope that returns keys awaiting confirmation" do 
-      assert_equal 1, UserKey.awaiting_confirmation.size
+      assert_equal 2, UserKey.awaiting_confirmation.size
     end
 
     should "have a scope that returns confirmed keys" do
@@ -98,6 +124,16 @@ class UserKeyTest < ActiveSupport::TestCase
                    @bender_key_submitted.status
     end
     
+    should "have status changed when request is confirmed" do
+      assert_equal "awaiting_confirmation",
+                   @bender_key_awaiting_conf_approved.status
+      @bender_key_awaiting_conf_approved.set_key_as("confirmed")
+      # Reload to make sure changes were saved ot database
+      @bender_key_awaiting_conf_approved.reload
+      assert_equal "confirmed",
+                   @bender_key_awaiting_conf_approved.status
+    end
+    
     should "not allow submission-ready key to be set as filtered too early" do
       # Try and fail to set key as filtered
       deny @bender_key.set_key_as("filtered")
@@ -110,6 +146,13 @@ class UserKeyTest < ActiveSupport::TestCase
       deny @bender_key_submitted.set_key_as("submitted")
       assert_equal "awaiting_filters",
                    @bender_key_submitted.status
+    end
+    
+    should "not allow submission-ready key to be set as confirmed too early" do
+      # Try and fail to set key as filtered
+      deny @bender_key.set_key_as("confirmed")
+      assert_equal "awaiting_submission",
+                   @bender_key.status
     end
   end
 end

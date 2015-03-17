@@ -7,30 +7,33 @@
       <strong><%= comment.user.andrew_id %></strong>
       &nbsp;<%= comment.time_posted.to_formatted_s(:pretty) %>
       &nbsp;<%= "(private)" if comment.is_private %>
+      <%= link_to "X", delete_comment_path(id: @user_key.id, comment_id: comment.id),
+          method: :patch, data: { confirm: 'Are you sure you want to delete this comment?'}, class: "small-button" %>
       <br />
       <p><%= comment.message %></p>
     </div>
   <% end %>
 
 <!--All new comment to be added-->
-<%= form_for(@user_key, url: add_comment_path(@user_key), remote: true ) do |f| %>
+<%= form_for(@user_key, url: add_comment_path(@user_key)) do |f| %>
   <fieldset>
   	  
   <legend>Add a comment</legend>
-	 
-  <% if @user_key.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user_key.errors.count, "error") %> prohibited this user_key from being saved:</h2>
-
-      <ul>
-      <% @user_key.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
 
   <%= f.fields_for :comments, @comment do |p| %>
+  
+    <% if @user_key.errors.any? or @comment.errors.any? %>
+      <div id="error_explanation">
+	<h2><%= pluralize(@user_key.errors.count + @comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+  
+	<ul>
+	<% @user_key.errors.full_messages.concat(@comment.errors.full_messages).each do |message| %>
+	  <li><%= message %></li>
+	<% end %>
+	</ul>
+      </div>
+    <% end %>
+  
         <%= p.hidden_field :user_id, value: @current_user.id %>
 	<div class="row">
 	    <%= p.label :message %>

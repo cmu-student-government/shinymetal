@@ -13,9 +13,9 @@ FactoryGirl.define do
 
   #factory blueprint for comments
   factory :comment do
-  	association :user
-  	association :user_key
-  	message "Kiss my shiny metal API"
+      association :user
+      association :user_key
+      message "Kiss my shiny metal API"
   end
 
   factory :filter do
@@ -25,8 +25,13 @@ FactoryGirl.define do
   end
 
   factory :organization do
-  	name "cmuTV"
-  	external_id 1
+      name "cmuTV"
+      external_id 1
+  end
+  
+  factory :approval do
+    association :user
+    association :user_key
   end
 
 end

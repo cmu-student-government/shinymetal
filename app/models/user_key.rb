@@ -127,7 +127,7 @@ class UserKey < ActiveRecord::Base
   end
   
   def set_key_value
-    # NEEDS SOME HASHING ALGORITHM FOR UNIQUE KEY VALUES
+    # FIXME - add real hash values here later
     self.value = "SECURE HASH VALUE!"
   end
   

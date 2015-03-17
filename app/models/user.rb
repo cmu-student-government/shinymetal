@@ -1,7 +1,6 @@
 class User < ActiveRecord::Base
   # Relationships
   has_many :user_keys
-  has_many :user_keys, through: :approvals
   
   # Validations
   ROLE_LIST = ["requester", "admin"]

@@ -33,6 +33,20 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
+  # routes for the api and respective versions
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :users
+    end
+  
+    # in the future, we can simply do
+    # namespace :v2 do
+    #   resources :user
+    # end
+    # etc. for each endpoint
+  end
+
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

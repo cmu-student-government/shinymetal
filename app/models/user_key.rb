@@ -17,10 +17,7 @@ class UserKey < ActiveRecord::Base
   #     awaiting_filters, if it hasn't had filters assigned
   #     awaiting_confirmation, if not approved by everybody
   # or  confirmed
-  STATUS_LIST = ["awaiting_submission",
-                 "awaiting_filters",
-                 "awaiting_confirmation",
-                 "confirmed"]
+  STATUS_LIST = ["awaiting_submission", "awaiting_filters", "awaiting_confirmation", "confirmed"]
   
   validates_inclusion_of :status, in: STATUS_LIST
   

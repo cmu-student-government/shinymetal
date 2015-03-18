@@ -53,7 +53,7 @@ class UserKey < ActiveRecord::Base
   end
   
   def undo_set_approved_by(user)
-    old_approval = Approval.where(user_id: user.id).where(user_key_id: self.id).first
+    old_approval = self.approvals.by(user).first
     old_approval.destroy
   end
   

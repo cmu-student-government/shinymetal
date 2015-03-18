@@ -6,8 +6,11 @@ class UserKeyTest < ActiveSupport::TestCase
   should have_many(:user_key_organizations)
   should have_many(:user_key_filters)
   should have_many(:filters).through(:user_key_filters)
+  should have_many(:organizations).through(:user_key_organizations)
   should have_many(:comments)
   should have_many(:approvals)
+  should have_many(:approval_users).through(:approvals)
+  should have_many(:comment_users).through(:comments)
   
   # Validations
   
@@ -61,11 +64,14 @@ class UserKeyTest < ActiveSupport::TestCase
       deny @bender_key_awaiting_conf_approved.approved_by?(@bender)
     end
     
-    should "have methods to undo set approved by, and set approved by, a user" do
+    should "have method to undo set approved by a user" do
       @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
       deny @bender_key_awaiting_conf_approved.approved_by?(@leela)
-      @bender_key_awaiting_conf_approved.set_approved_by(@leela)
-      assert @bender_key_awaiting_conf_approved.approved_by?(@leela)
+    end
+    
+    should "have method to set approved by" do
+      @bender_key_awaiting_conf.set_approved_by(@leela)
+      assert @bender_key_awaiting_conf.approved_by?(@leela)
     end
     
     should "have a scope to sort by time submitted" do

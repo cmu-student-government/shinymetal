@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CommentTest < ActiveSupport::TestCase
   #Relationships
-  should belong_to(:user)
+  should belong_to(:comment_user)
   should belong_to(:user_key)
 
   #Validations

@@ -38,7 +38,8 @@ module Contexts
     @bender_key_confirmed = FactoryGirl.create(:user_key, user: @bender)
     @bender_key_confirmed.set_status_as :awaiting_filters
     @bender_key_confirmed.set_status_as :awaiting_confirmation
-    @bender_key_confirmed.set_status_as :confirmed
+    # Key cannot be marked as confirmed until it is given approvals;
+    # Thus, key is set to confirmed when approvals are created below.
     # Changing time_submitted to test for chronological scopes
     @bender_key_confirmed.time_submitted = 6.days.ago
     @bender_key_confirmed.save!
@@ -55,8 +56,8 @@ module Contexts
   
   #Comments
   def create_comments
-    @angrycomment = FactoryGirl.create(:comment, user: @bender, user_key: @bender_key)
-    @happycomment = FactoryGirl.create(:comment, user: @bender, user_key: @bender_key, message: "I love APIs so much")
+    @angrycomment = FactoryGirl.create(:comment, comment_user: @bender, user_key: @bender_key)
+    @happycomment = FactoryGirl.create(:comment, comment_user: @bender, user_key: @bender_key, message: "I love APIs so much")
     @happycomment.time_posted = 10.minutes.ago
   end
 
@@ -91,13 +92,20 @@ module Contexts
   
   # Approvals
   def create_approvals # Every approver in testing suite must approve bender's approved key
-    @leela_approval = FactoryGirl.create(:approval, user: @leela, user_key: @bender_key_awaiting_conf_approved)
-    @fry_approval = FactoryGirl.create(:approval, user: @fry, user_key: @bender_key_awaiting_conf_approved)
+    @leela_approval_for_confirmed = FactoryGirl.create(:approval, approval_user: @leela, user_key: @bender_key_confirmed)
+    @fry_approval_for_confirmed = FactoryGirl.create(:approval, approval_user: @fry, user_key: @bender_key_confirmed)
+    @leela_approval_for_awaiting = FactoryGirl.create(:approval, approval_user: @leela, user_key: @bender_key_awaiting_conf_approved)
+    @fry_approval_for_awaiting = FactoryGirl.create(:approval, approval_user: @fry, user_key: @bender_key_awaiting_conf_approved)
+    
+    # Now that approvals exist, we can confirm the key
+    @bender_key_confirmed.set_status_as :confirmed
   end
   
   def destroy_approvals
-    @leela_approval.destroy
-    @fry_approval.destroy
+    @leela_approval_for_confirmed.destroy
+    @fry_approval_for_confirmed.destroy
+    @leela_approval_for_awaiting.destroy
+    @fry_approval_for_awaiting.destroy
   end
 
   # Create everything at once with one method call

@@ -18,7 +18,9 @@ class ApprovalTest < ActiveSupport::TestCase
     end
     
     should "have scope by user" do
-      #test scope
+      assert_equal [["bender", "confirmed"], ["bender", "awaiting_confirmation"]],
+                   Approval.by(@leela).to_a.map{|a| [a.user_key.user.andrew_id, a.user_key.status ]}
+      assert_equal 0, Approval.by(@bender).size
     end
   end
 end

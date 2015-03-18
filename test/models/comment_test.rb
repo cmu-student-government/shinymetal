@@ -22,18 +22,5 @@ class CommentTest < ActiveSupport::TestCase
     should "have a scope to sort chronologically" do
     	assert_equal Comment.chronological, Comment.all.sort_by {|c| c.time_posted}
     end
-
-    #Methods
-    #NEED TO COME BACK TO THIS TEST CALLBACK STUFF TOO	
-    should "have a method to set the time posted to now" do
-      # @a_comment = FactoryGirl.build(:comment)
-      # @a_comment.update_attribute(:time_posted, 10.minutes.ago)
-      # assert_equal 10.minutes.ago, @a_comment.time_posted
-      # @a_comment.save!
-      # assert_equal DateTime.now,@a_comment.time_posted
-    end
-
   end
-
-  
 end

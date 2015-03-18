@@ -58,7 +58,7 @@ module Contexts
   def create_comments
     @angrycomment = FactoryGirl.create(:comment, comment_user: @bender, user_key: @bender_key)
     @happycomment = FactoryGirl.create(:comment, comment_user: @bender, user_key: @bender_key, message: "I love APIs so much")
-    @happycomment.time_posted = 10.minutes.ago
+    @happycomment.created_at = 10.minutes.ago
   end
 
   def destroy_comments

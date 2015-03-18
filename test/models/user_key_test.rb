@@ -51,6 +51,8 @@ class UserKeyTest < ActiveSupport::TestCase
       deny @bender_key_submitted.at_stage? :awaiting_submission
       # Test optional allow_past parameter
       assert @bender_key_submitted.at_stage?(:awaiting_submission, true)
+      assert @bender_key_submitted.at_stage?(:awaiting_filters, true)
+      assert @bender_key_awaiting_conf.at_stage?(:awaiting_filters, true)
       deny @bender_key_submitted.at_stage?(:awaiting_confirmation, true)
     end
     
@@ -169,6 +171,13 @@ class UserKeyTest < ActiveSupport::TestCase
       deny @bender_key.set_status_as :awaiting_confirmation
       assert_equal "awaiting_submission",
                    @bender_key.status
+    end
+    
+    should "not allow unapproved key to be set as confirmed" do
+      # Try and fail to set key as filtered
+      deny @bender_key_awaiting_conf.set_status_as :confirmed
+      assert_equal "awaiting_confirmation",
+                   @bender_key_awaiting_conf.status
     end
   end
 end

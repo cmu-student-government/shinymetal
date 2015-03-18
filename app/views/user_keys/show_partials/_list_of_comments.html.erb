@@ -5,7 +5,7 @@
   <% for comment in @comments %>
     <div>
       <strong><%= comment.user.andrew_id %></strong>
-      &nbsp;<%= comment.time_posted.to_formatted_s(:pretty) %>
+      &nbsp;<%= comment.created_at.to_formatted_s(:pretty) %>
       &nbsp;<%= "(private)" if comment.is_private %>
       <%= link_to "X", delete_comment_path(id: @user_key.id, comment_id: comment.id),
           method: :patch, data: { confirm: 'Are you sure you want to delete this comment?'}, class: "small-button" %>

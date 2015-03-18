@@ -73,7 +73,8 @@
   </p>
 <% end %>
 
-<% if @current_user.is_approver %>  
+<% if can? :read, :all %>  
+
     <%= render partial: 'user_keys/show_partials/list_of_filters' %>
 
     <%= render partial: 'user_keys/show_partials/list_of_organizations' %>

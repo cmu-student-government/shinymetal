@@ -52,8 +52,8 @@ namespace :db do
       # create a user
       user = User.new
       user.andrew_id = Faker::Internet.user_name
-      user.role = "requester"
-      user.is_approver = true
+      user.role = "staff_approver"
+      user.active = true
       # save with bang (!) so exception is thrown on failure
       user.save!
     end
@@ -62,15 +62,15 @@ namespace :db do
     admin_user = User.new
     admin_user.andrew_id = "admin"
     admin_user.role = "admin"
-    admin_user.is_approver = true
+    admin_user.active = true
     admin_user.save!
     
     # Step 3: add 20 requesters
     User.populate 20 do |user|
-      # each key needs a role, is_approver, and andrew_id
+      # each key needs a role, active, and andrew_id
       # get some fake data using the Faker gem
       user.andrew_id = Faker::Internet.user_name
-      user.is_approver = false
+      user.active = true
       user.role = "requester"
       # set the timestamps
       user.created_at = Time.now
@@ -107,13 +107,11 @@ namespace :db do
             comment.message = Faker::Hacker.say_something_smart
             # pick random approver for comment
             comment.user_key_id = user_key.id
-            comment.user_id = User.approvers.to_a.sample.id
+            comment.user_id = User.approvers_only.to_a.sample.id
             # randomize if true or false
             comment.is_private = [true,false]
-            # random time in the past
-            comment.time_posted = (1..10).map{|num| num.days.ago.to_date}
-            # set the timestamps
-            comment.created_at = Time.now
+            # set the random timestamps
+            comment.created_at = (1..10).map{|num| num.days.ago.to_date}
             comment.updated_at = Time.now
           end
           # get a list of filters to avoid repeat filters being assigned
@@ -140,19 +138,19 @@ namespace :db do
         if user_key.status == "awaiting_confirmation"
           Approval.populate 1..3 do |approval| #always less than 4 approvers
             approval.user_key_id = user_key.id 
-            approval.user_id = User.approvers.to_a.sample.id
+            approval.user_id = User.approvers_only.to_a.sample.id
             # set the timestamps
             approval.created_at = Time.now
             approval.updated_at = Time.now
           end
         elsif user_key.status == "confirmed"
           #all approvers need to have approved this key
-          list_of_approvers = User.approvers.to_a
-          Approval.populate User.approvers.size do |approval|
+          list_of_approvers = User.approvers_only.to_a
+          Approval.populate User.approvers_only.size do |approval|
             approval.user_key_id = user_key.id
             approval.user_id = list_of_approvers.pop.id
             # set the timestamps
-            approval.created_at = Time.now
+            approval.created_at = (1..5).map{|num| num.days.ago.to_date}
             approval.updated_at = Time.now
           end
         end

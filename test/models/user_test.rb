@@ -9,6 +9,8 @@ class UserTest < ActiveSupport::TestCase
 
   should allow_value("admin").for(:role)
   should allow_value("requester").for(:role)
+  should allow_value("staff_approver").for(:role)
+  should allow_value("staff_not_approver").for(:role)
   should_not allow_value("zoidberg").for(:role)
   should_not allow_value(10).for(:role)
   should_not allow_value(nil).for(:role)
@@ -28,7 +30,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     should "have a scope to return a list of approvers" do
-    	assert_equal ["fry", "leela"], User.approvers.alphabetical.map {|u| u.andrew_id}
+    	assert_equal ["fry", "leela"], User.approvers_only.alphabetical.map {|u| u.andrew_id}
     end
 
     should "have a scope to search for a given user" do

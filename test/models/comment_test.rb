@@ -20,7 +20,7 @@ class CommentTest < ActiveSupport::TestCase
 	#Scopes
     
     should "have a scope to sort chronologically" do
-    	assert_equal Comment.chronological, Comment.all.sort_by {|c| c.time_posted}
+    	assert_equal Comment.chronological, Comment.all.sort_by {|c| c.created_at}
     end
   end
 end

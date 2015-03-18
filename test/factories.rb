@@ -3,7 +3,8 @@ FactoryGirl.define do
   # factory blueprint for users
   factory :user do
     andrew_id "bender"
-    is_approver false
+    role "requester"
+    active true
   end
   
    # factory blueprint for user keys

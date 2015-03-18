@@ -2,8 +2,8 @@ module Contexts
   # Users
   def create_users
     @bender = FactoryGirl.create(:user)
-    @fry = FactoryGirl.create(:user, andrew_id: 'fry', role: 'admin', is_approver: true)
-    @leela = FactoryGirl.create(:user, andrew_id: 'leela', role: 'admin', is_approver: true)
+    @fry = FactoryGirl.create(:user, andrew_id: 'fry', role: 'admin')
+    @leela = FactoryGirl.create(:user, andrew_id: 'leela', role: 'admin')
     @zoidberg = FactoryGirl.create(:user, andrew_id: 'zoidberg')
   end
   

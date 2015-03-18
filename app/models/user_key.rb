@@ -40,11 +40,11 @@ class UserKey < ActiveRecord::Base
   # would have a bug when someone approves it but is soon demoted from approver.
   # So, only find the number of approvers who are currently still active "approvers"
   def approved_by_all?
-    return self.approval_users.approvers.size == User.approvers.all.size
+    return self.approval_users.approvers_only.size == User.approvers_only.all.size
   end
   
   def approved_by?(user)
-    return self.approval_users.approvers.to_a.include?(user)
+    return self.approval_users.approvers_only.to_a.include?(user)
   end
   
   def set_approved_by(user)

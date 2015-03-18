@@ -4,7 +4,7 @@
 <br/>
   <% for comment in @comments %>
     <div>
-      <strong><%= comment.user.andrew_id %></strong>
+      <strong><%= comment.comment_user.andrew_id %></strong>
       &nbsp;<%= comment.created_at.to_formatted_s(:pretty) %>
       &nbsp;<%= "(private)" if comment.is_private %>
       <%= link_to "X", delete_comment_path(id: @user_key.id, comment_id: comment.id),

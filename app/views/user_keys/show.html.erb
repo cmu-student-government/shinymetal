@@ -1,26 +1,9 @@
 <h3>User Key</h3>
 
-<p>
-  <strong>Approval Status:</strong>
-  <i class="fi-check success">
-    Begun by requester?
-  </i> &nbsp;
-  <i class="fi-arrow-right"></i> &nbsp;
-  <i class="<%= @user_key.at_stage?(:awaiting_filters, true) ? "fi-check success" : "fi-x alert" %>">
-    Submitted?
-  </i> &nbsp;
-  <i class="fi-arrow-right"></i> &nbsp;
-  <i class="<%= @user_key.at_stage?(:awaiting_confirmation, true) ? "fi-check success" : "fi-x alert" %>">
-    Assigned Filters?
-  </i> &nbsp;
-  <i class="fi-arrow-right"></i> &nbsp;
-  <i class="<%= @user_key.at_stage?(:confirmed) ? "fi-check success" : "fi-x alert" %>">
-    Confirmed?
-  </i>
-</p>
+<%= render partial: 'user_keys/show_partials/approval_status' %>
 
 <p>
-  <% if @user_key.at_stage?(:confirmed) %>
+  <% if @user_key.at_stage? :confirmed %>
     <i class="fi-check success"></i>&nbsp;This approval is complete.</i>
   <% else %>
     <i class="fi-x alert"></i>&nbsp;<i>This approval is incomplete.</i>
@@ -61,17 +44,6 @@
   <strong>Active:</strong>
   <%= @user_key.active %>
 </p>
-
-<% unless @user_key.active %>
-  <p>
-    <strong>Reason for inactivation:</strong>
-    <% if user_key.reason.blank? %>
-      <%= @user_key.reason %>
-    <% else %>
-    <p><i>No reason was given.</i></p>  
-    <% end %>
-  </p>
-<% end %>
 
 <% if can? :read, :all %>  
 

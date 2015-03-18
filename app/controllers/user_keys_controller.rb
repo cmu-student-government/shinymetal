@@ -53,7 +53,8 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
-    # Set user_id of comment to current user's id in view
+    # Set user_id of new comment to current user's id
+    params[:user_key][:comments_attributes]["0"][:user_id] ||= @current_user.id
     if @user_key.update(comment_user_key_params)
       redirect_to @user_key, notice: 'Comment was successfully added.'
     else

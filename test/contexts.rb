@@ -19,26 +19,26 @@ module Contexts
     @bender_key = FactoryGirl.create(:user_key, user: @bender)
     
     @bender_key_submitted = FactoryGirl.create(:user_key, user: @bender)
-    @bender_key_submitted.set_key_as("submitted")
+    @bender_key_submitted.set_status_as :awaiting_filters
 
     @bender_key_awaiting_conf = FactoryGirl.create(:user_key, user: @bender)
-    @bender_key_awaiting_conf.set_key_as("submitted")
-    @bender_key_awaiting_conf.set_key_as("filtered")
+    @bender_key_awaiting_conf.set_status_as :awaiting_filters
+    @bender_key_awaiting_conf.set_status_as :awaiting_confirmation
     # Changing time_submitted to test for chronological scopes
     @bender_key_awaiting_conf.time_submitted = 2.days.ago
     @bender_key_awaiting_conf.save!
     
     @bender_key_awaiting_conf_approved = FactoryGirl.create(:user_key, user: @bender, time_submitted: 4.days.ago)
-    @bender_key_awaiting_conf_approved.set_key_as("submitted")
-    @bender_key_awaiting_conf_approved.set_key_as("filtered")
+    @bender_key_awaiting_conf_approved.set_status_as :awaiting_filters
+    @bender_key_awaiting_conf_approved.set_status_as :awaiting_confirmation
     # Changing time_submitted to test for chronological scopes
     @bender_key_awaiting_conf_approved.time_submitted = 4.days.ago
     @bender_key_awaiting_conf_approved.save!
 
     @bender_key_confirmed = FactoryGirl.create(:user_key, user: @bender)
-    @bender_key_confirmed.set_key_as("submitted")
-    @bender_key_confirmed.set_key_as("filtered")
-    @bender_key_confirmed.set_key_as("confirmed")
+    @bender_key_confirmed.set_status_as :awaiting_filters
+    @bender_key_confirmed.set_status_as :awaiting_confirmation
+    @bender_key_confirmed.set_status_as :confirmed
     # Changing time_submitted to test for chronological scopes
     @bender_key_confirmed.time_submitted = 6.days.ago
     @bender_key_confirmed.save!

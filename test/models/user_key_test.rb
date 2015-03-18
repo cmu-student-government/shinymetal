@@ -36,9 +36,19 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal "Application Key 1", @bender_key.name
     end
     
-    should "have a confirmed? method" do
-      assert @bender_key_confirmed.confirmed?
-      deny @bender_key.confirmed?
+    should "have at_stage? method" do
+      # Test some positive cases
+      assert @bender_key.at_stage? :awaiting_submission
+      assert @bender_key_submitted.at_stage? :awaiting_filters
+      assert @bender_key_awaiting_conf.at_stage? :awaiting_confirmation
+      assert @bender_key_confirmed.at_stage? :confirmed
+      # Test negative cases
+      deny @bender_key.at_stage? :awaiting_confirmation
+      deny @bender_key_awaiting_conf.at_stage? :confirmed
+      deny @bender_key_submitted.at_stage? :awaiting_submission
+      # Test optional allow_past parameter
+      assert @bender_key_submitted.at_stage?(:awaiting_submission, true)
+      deny @bender_key_submitted.at_stage?(:awaiting_confirmation, true)
     end
     
     should "have an approved_by_all? method" do
@@ -88,7 +98,7 @@ class UserKeyTest < ActiveSupport::TestCase
 
     should "have time_requested set to now when request is submitted" do
       assert @bender_key.time_submitted.nil?
-      @bender_key.set_key_as("submitted")
+      @bender_key.set_status_as :awaiting_filters
       # Uses to_s formatting to test, since DateTime changes too quickly to be tested...
       @bender_key.reload
       assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
@@ -98,7 +108,7 @@ class UserKeyTest < ActiveSupport::TestCase
     should "have status changed when request is submitted" do
       assert_equal "awaiting_submission",
                    @bender_key.status
-      @bender_key.set_key_as("submitted")
+      @bender_key.set_status_as :awaiting_filters
       # Reload to make sure changes were saved ot database
       @bender_key.reload
       assert_equal "awaiting_filters",
@@ -107,7 +117,7 @@ class UserKeyTest < ActiveSupport::TestCase
     
     should "have time_filtered set to now when request is set as filtered by admin" do
       assert @bender_key_submitted.time_filtered.nil?
-      @bender_key_submitted.set_key_as("filtered")
+      @bender_key_submitted.set_status_as :awaiting_confirmation
       #uses to_s to test, since DateTime changes too quickly to be tested...
       @bender_key_submitted.reload
       assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
@@ -117,7 +127,7 @@ class UserKeyTest < ActiveSupport::TestCase
     should "have status changed when request is filtered" do
       assert_equal "awaiting_filters",
                    @bender_key_submitted.status
-      @bender_key_submitted.set_key_as("filtered")
+      @bender_key_submitted.set_status_as :awaiting_confirmation
       # Reload to make sure changes were saved ot database
       @bender_key_submitted.reload
       assert_equal "awaiting_confirmation",
@@ -127,7 +137,7 @@ class UserKeyTest < ActiveSupport::TestCase
     should "have status changed when request is confirmed" do
       assert_equal "awaiting_confirmation",
                    @bender_key_awaiting_conf_approved.status
-      @bender_key_awaiting_conf_approved.set_key_as("confirmed")
+      @bender_key_awaiting_conf_approved.set_status_as :confirmed
       # Reload to make sure changes were saved ot database
       @bender_key_awaiting_conf_approved.reload
       assert_equal "confirmed",
@@ -136,21 +146,21 @@ class UserKeyTest < ActiveSupport::TestCase
     
     should "not allow submission-ready key to be set as filtered too early" do
       # Try and fail to set key as filtered
-      deny @bender_key.set_key_as("filtered")
+      deny @bender_key.set_status_as :awaiting_confirmation
       assert_equal "awaiting_submission",
                    @bender_key.status
     end
     
     should "not allow approval-ready key to be set as submitted again" do
       # Try and fail to set it as submitted again
-      deny @bender_key_submitted.set_key_as("submitted")
+      deny @bender_key_submitted.set_status_as :awaiting_filters
       assert_equal "awaiting_filters",
                    @bender_key_submitted.status
     end
     
     should "not allow submission-ready key to be set as confirmed too early" do
       # Try and fail to set key as filtered
-      deny @bender_key.set_key_as("confirmed")
+      deny @bender_key.set_status_as :awaiting_confirmation
       assert_equal "awaiting_submission",
                    @bender_key.status
     end

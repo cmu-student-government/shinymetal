@@ -79,7 +79,7 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/set_as_submitted
   def set_as_submitted
-    if @user_key.set_key_as("submitted")
+    if @user_key.set_status_as :awaiting_filters
       redirect_to @user_key, notice: 'User key request was successfully submitted.'
     else
       redirect_to @user_key, alert: 'User key request cannot be submitted.'
@@ -88,7 +88,7 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/set_as_filtered
   def set_as_filtered
-    if @user_key.set_key_as("filtered")
+    if @user_key.set_status_as :awaiting_confirmation
       redirect_to @user_key, notice: 'User key has had its filters assigned and is now visible to approvers.'
     else
       redirect_to @user_key, alert: 'User key filters cannot be submitted for approvers.'
@@ -97,7 +97,7 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/set_as_approved
   def set_as_confirmed
-    if @user_key.set_key_as("confirmed")
+    if @user_key.set_status_as :confirmed
       redirect_to @user_key, notice: 'User key was successfully confirmed. All steps are complete.'
     else
       redirect_to @user_key, alert: 'User key cannot be confirmed.'

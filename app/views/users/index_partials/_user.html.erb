@@ -2,7 +2,7 @@
   <tr>
 	<td><%= link_to user.andrew_id, user %></td>
 	<td><%= user.role %></td>
-	<td><% if user.is_approver %>
+	<td><% if user.active %>
                <span class="success label">Yes</span>
                  <% else %>
                <span class="secondary label">No</span>

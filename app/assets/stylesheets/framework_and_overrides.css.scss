@@ -87,13 +87,11 @@ $success-color: #5da423;
   font-size: 0.7rem !important;
 }
 
-// Apply is_approver check and x styles
-.check {
+// Apply check, x, and right-arrow styles for status on user_key show page
+.success {
   color: $success-color;
-  font-size: 30px;
 }
-.x {
-  font-size: 30px;
+.alert {
   color: $alert-color;
 }
 

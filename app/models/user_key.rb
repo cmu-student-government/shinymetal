@@ -56,31 +56,46 @@ class UserKey < ActiveRecord::Base
     old_approval.destroy
   end
   
-  def at_submit_stage?
-    return self.status == "awaiting_submission"
+  # A key with 'allow_past' which is past the submission stage
+  # will be considered to be "at" the submission stage
+  # This is used in user_key show page
+  def at_stage?(sym, allow_past=false)
+    case sym
+    when :awaiting_submission
+      if allow_past
+        return true
+      else
+        return self.status == "awaiting_submission"
+      end   
+    when :awaiting_filters
+      if allow_past
+        # The only stage we cannot be at is awaiting_submission
+        return self.status != "awaiting_submission"
+      else
+        return self.status == "awaiting_filters"
+      end
+    when :awaiting_confirmation
+      if allow_past
+        # We must be at awaiting_confirmation stage or earlier
+        return (self.status != "awaiting_submission" and self.status != "awaiting_filters")
+      else
+        return self.status == "awaiting_confirmation"
+      end
+    else # confirmed
+      # We never pass confirmed stage, so only one case
+      return self.status == "confirmed"
+    end
   end
-  
-  def at_filter_stage?
-    return self.status == "awaiting_filters"
-  end
-  
-  def at_confirm_stage?
-    return self.status == "awaiting_confirmation"
-  end
-  
-  def confirmed?
-    return self.status == "confirmed"
-  end
-  
+
   def name
     "Application Key #{self.id}" 
   end
   
-  def set_key_as(param_status)
-    case param_status
-    when "submitted"
+  def set_status_as(sym)
+    case sym.to_s
+    when "awaiting_filters"
       return set_key_as_submitted
-    when "filtered"
+    when "awaiting_confirmation"
       return set_key_as_filtered
     when "confirmed"
       return set_key_as_confirmed
@@ -106,7 +121,7 @@ class UserKey < ActiveRecord::Base
 
   # When a key is submitted by requester to admin
   def set_key_as_submitted
-    if at_submit_stage?
+    if at_stage? :awaiting_submission
       set_status_to("awaiting_filters")
       set_time_to_now(:time_submitted)
       save_changes
@@ -117,7 +132,7 @@ class UserKey < ActiveRecord::Base
   
   # When an admin submits the filter form so it can be approved by everyone
   def set_key_as_filtered
-    if at_filter_stage?
+    if at_stage? :awaiting_filters
       set_status_to("awaiting_confirmation")
       set_time_to_now(:time_filtered)
       save_changes
@@ -133,7 +148,7 @@ class UserKey < ActiveRecord::Base
   
   # When a key has been approved by everyone and is confirmed by admin
   def set_key_as_confirmed
-    if at_confirm_stage?
+    if at_stage? :awaiting_confirmation
       set_status_to("confirmed")
       set_time_to_now(:time_confirmed)
       set_key_value

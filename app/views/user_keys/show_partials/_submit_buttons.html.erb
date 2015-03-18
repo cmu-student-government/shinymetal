@@ -1,5 +1,5 @@
-<!--Show the "submit request" button if the application is ready to be submitted
-    If it's at the admin filtering stage, showing the second button instead-->
+<!--Show the "submit request" button if the application is ready to be submitted.
+    If it's at the admin filtering stage, show the second button instead, etc.-->
 
 <br />
 
@@ -14,36 +14,12 @@
 <% elsif @user_key.at_stage? :awaiting_confirmation %>
 
   <% if @user_key.approved_by_all? %>
-    
-    <p>This key has been approved by everyone and is ready to be released to the user.</p>
-    
-    <%= link_to 'Confirm and release key to user', set_as_confirmed_path(@user_key), method: :patch, class: "big-button" %> 
-  
-  <% else %> <!-- There are some approvers who have not approved the key -->
-    
-    <!-- Current user may be an approver, admin, or requester -->
-    <% if @current_user.is_approver %>
-      <p>This key has not been approved by everyone yet.</p>
-      
-      <% if @user_key.approved_by?(@current_user) %>
-        <p><strong>You have approved this key.</strong></p>
-        
-        <%= link_to 'Undo approve key', undo_approve_key_path(@user_key), method: :patch, class: "big-button secondary" %> 
-      
-      <% else %>
-        <p><strong>You have not approved this key yet.</strong></p> 
-        
-        <%= link_to 'Approve key', approve_key_path(@user_key), method: :patch, class: "big-button" %> 
-      
-        <p><i>You can undo your approval after you have approved the key.</i></p>
-      
-      <% end %>
-      
-    <% else %> <!-- Requester user who owns this key -->
-      <p>This key has not been approved yet.</p>
-    <% end %>
-  
+    <p>This key has been approved by everyone and is ready to be released to the requester.</p>
+  <% else %>
+    <p>This key has not yet been approved by everyone and cannot be released to the requester.</p>
   <% end %>
+    
+    <%= link_to 'Confirm and release key to user', set_as_confirmed_path(@user_key), method: :patch, class: "big-button", disabled: !@user_key.approved_by_all? %> 
 
 <% else %> <!-- Must be at_stage? :confirmed -->
 

@@ -5,9 +5,10 @@ class UserKey < ActiveRecord::Base
   has_many :user_key_filters
   has_many :filters, through: :user_key_filters
   has_many :organizations, through: :user_key_organizations
-  has_many :users, through: :approvals
   has_many :comments
   has_many :approvals
+  has_many :approval_users, class_name: User, through: :approvals
+  has_many :comment_users, class_name: User, through: :comments
   
   accepts_nested_attributes_for :comments
   
@@ -37,13 +38,13 @@ class UserKey < ActiveRecord::Base
   
   # Simply counting all approvers and comparing approvals already earned
   # would have a bug when someone approves it but is soon demoted from approver.
-  # So, only find the number of approvers who are currently still approvers
+  # So, only find the number of approvers who are currently still active "approvers"
   def approved_by_all?
-    return self.users.approvers.size == User.approvers.all.size
+    return self.approval_users.approvers.size == User.approvers.all.size
   end
   
   def approved_by?(user)
-    return self.users.approvers.to_a.include?(user)
+    return self.approval_users.approvers.to_a.include?(user)
   end
   
   def set_approved_by(user)
@@ -148,7 +149,7 @@ class UserKey < ActiveRecord::Base
   
   # When a key has been approved by everyone and is confirmed by admin
   def set_key_as_confirmed
-    if at_stage? :awaiting_confirmation
+    if at_stage? :awaiting_confirmation and self.approved_by_all?
       set_status_to("confirmed")
       set_time_to_now(:time_confirmed)
       set_key_value

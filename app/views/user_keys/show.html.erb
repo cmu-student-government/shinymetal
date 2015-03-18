@@ -33,11 +33,6 @@
 </p>
 
 <p>
-  <strong>Status:</strong>
-  <%= @user_key.status %>
-</p>
-
-<p>
   <strong>Time submitted:</strong>
   <%= @user_key.time_submitted.nil? ? "Not submitted yet" : @user_key.time_submitted.to_formatted_s(:pretty) %>
 </p>
@@ -77,12 +72,17 @@
     <% end %>
   </p>
 <% end %>
-  
-<%= render partial: 'user_keys/show_partials/list_of_filters' %>
 
-<%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+<% if @current_user.is_approver %>  
+    <%= render partial: 'user_keys/show_partials/list_of_filters' %>
 
-<%= render partial: 'user_keys/show_partials/submit_buttons' %>
+    <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+
+    <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
+
+    <%= render partial: 'user_keys/show_partials/submit_buttons' %>
+    
+<% end %>  
 
 <%= link_to 'Edit', edit_user_key_path(@user_key), class: "big-button" %> |
 <%= link_to 'Back', user_keys_path, class: "big-button secondary" %> |

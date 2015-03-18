@@ -4,12 +4,12 @@
   <!-- Explain the text shown to admins as data that was entered by the requester-->
   <% if @current_user.role == "admin" %>
     <h3>Data entered by requester</h3>
-    <p><i>This information was seen and entered by the requester.</i></p>
+    <p><i>This information was entered by the requester.</i></p>
   <% end %>
 
   <% if @user_key.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@user_key.errors.count, "error") %> prohibited this user_key from being saved:</h2>
+      <h2><%= pluralize(@user_key.errors.count, "error") %>:</h2>
 
       <ul>
       <% @user_key.errors.full_messages.each do |message| %>
@@ -19,6 +19,7 @@
     </div>
   <% end %>
   
+    <!-- Application text boxes -->
     <div class="collapsed_row">
       <div class="three-column">
         <%= f.label :application_text, class: "prefix" %>
@@ -28,9 +29,7 @@
       </div>
     </div>
 
-  <!-- The key should belong to the current user when first created -->
-  <%= f.hidden_field :user_id, value: @current_user.id if @user_key.user.nil? %>
-  
+  <!-- The key should belong to the current user when first created, handled in controller -->
 
   <%= render partial: 'user_keys/form_partials/terms' %>
   
@@ -42,28 +41,53 @@
   
   </fieldset>
   
-    
-  <!-- Only admins can assign filters, and they can do so at any time -->
   <% if @current_user.role == "admin" %>
+    
+    <!-- Only admins can assign filters, and they can do so at any time -->
     <fieldset>
-    
-    <h3>Admin only</h3>
-    
-    <p><i>Set filters and organizations that this key may have access to here.</i></p>
-  
-    <%= render partial: 'user_keys/form_partials/filters_checkboxes' %>
-    <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>    
-  
-    <div class="collapsed_row">
-      <div class="three-column">
-        <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
-      </div>
-      <div class="nine-column">
-        <%= f.date_field :time_expired, order: [:month, :day, :year], 
-                        start_year: Date.today.year, end_year: 2.years.from_now %>
-      </div>
-    </div>
       
+      <h3>Admin only</h3>
+      
+      <p><i>Set filters and organizations that this key may have access to here.</i></p>
+    
+      <%= render partial: 'user_keys/form_partials/filters_checkboxes' %>
+      <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>    
+    
+      <div class="collapsed_row"> <!--Expiration date-->
+        <div class="three-column">
+          <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
+        </div>
+        <div class="nine-column">
+          <%= f.date_field :time_expired, order: [:month, :day, :year], 
+                          start_year: Date.today.year, end_year: 2.years.from_now %>
+        </div>
+      </div>
+      
+    </fieldset>
+    
+    <!-- Active or not active -->
+    <fieldset>
+      
+      <!-- Only admins can inactive a key -->
+      <div class="collapsed_row">
+        <%= f.check_box :active %>
+        <%= f.label :active %>
+      </div>
+    
+      <p><i>Optionally provide a reason for inactiving the key.</i></p>
+      
+      <div class="collapsed_row"> <!--Expiration date-->
+        <div class="three-column">
+          <%= f.label :reason, class: "prefix" %>
+        </div>
+        <div class="nine-column">
+          <%= f.text_field :reason %>
+        </div>
+      </div>
+        
+      <p>Note: marking a key application as <i>inactive</i>
+      suspends the application process. Marking a confirmed key as <i>inactive</i>
+      suspends all API use of the key.</p>
     </fieldset>
   <% end %>
 

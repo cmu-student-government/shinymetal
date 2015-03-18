@@ -25,7 +25,9 @@ class UserKeysController < ApplicationController
 
   # POST /user_keys
   def create
-    @user_key = UserKey.new(user_key_params)
+    # Set user_key's user to be the current user
+    params[:user_key][:user_id] = @current_user.id
+    @user_key = UserKey.new(create_user_key_params)
     if @user_key.save
       redirect_to @user_key, notice: 'User key was successfully created.'
     else
@@ -35,7 +37,14 @@ class UserKeysController < ApplicationController
 
   # PATCH/PUT /user_keys/1
   def update
-    if @user_key.update(user_key_params)
+    if can? :manage, :all
+      # Admin is allowed to add filters, orgs, active, etc.
+      whitelist = admin_update_user_key_params
+    else
+      # The key's owner can change the application text if it hasn't been submitted yet
+      whitelist = update_user_key_params
+    end
+    if @user_key.update(whitelist)
       redirect_to @user_key, notice: 'User key was successfully updated.'
     else
       render :edit
@@ -45,7 +54,7 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
     # Set user_id of comment to current user's id in view
-    if @user_key.update(user_key_params)
+    if @user_key.update(comment_user_key_params)
       redirect_to @user_key, notice: 'Comment was successfully added.'
     else
       # Have to reload comments also for the show page
@@ -114,9 +123,9 @@ class UserKeysController < ApplicationController
   end
 
   private
-    # Build a blank comment form 
     def get_comments
       @comments = @user_key.comments.chronological
+      # Build a blank comment form 
       @comment = @user_key.comments.build
     end
       
@@ -124,10 +133,20 @@ class UserKeysController < ApplicationController
       @user_key = UserKey.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def user_key_params
-      params.require(:user_key).permit(:user_id, :time_expired, :application_text,
-                                       :filter_ids => [],
-                                       :comments_attributes => [:id, :message, :user_id])
+    def create_user_key_params # Seperate, due to new and permanent user_id
+      params.require(:user_key).permit(:user_id, :application_text)
+    end
+    
+    def update_user_key_params # For requester, upon updating application text
+      params.require(:user_key).permit(:application_text)
+    end
+    
+    def comment_user_key_params # For anyone who can comment
+      params.require(:user_key).permit(:comments_attributes => [:id, :message, :user_id])
+    end
+    
+    def admin_update_user_key_params # For admin, upon updating filters or anything else
+      params.require(:user_key).permit(:time_expired, :active, :reason,
+                                       :filter_ids => [], :organization_ids => [])
     end
 end

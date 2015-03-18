@@ -6,7 +6,7 @@ class Ability
     user ||= User.new
     
     #will be changed once authentication & sessions are implemented
-    if user == 'admin'
+    if user.role == "admin"
         can :manage, :all
     else
         can :read, :all

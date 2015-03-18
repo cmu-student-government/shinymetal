@@ -42,7 +42,7 @@
 
 <p>
   <strong>Active:</strong>
-  <%= @user_key.active %>
+  <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.active } %>
 </p>
 
 <% if can? :read, :all %>  

@@ -10,11 +10,7 @@
 
 <p>
   <strong>Active:</strong>
-  <% if @user.active %>
-    <span class="success label">Yes</span>
-  <% else %>
-    <span class="secondary label">No</span>
-  <% end %>
+  <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user.active } %>
 </p>
 
 <%= render partial: 'users/show_partials/list_of_user_keys' %>

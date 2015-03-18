@@ -2,11 +2,8 @@
   <tr>
 	<td><%= link_to user.andrew_id, user %></td>
 	<td><%= user.role %></td>
-	<td><% if user.active %>
-               <span class="success label">Yes</span>
-                 <% else %>
-               <span class="secondary label">No</span>
-	   <% end %>
+	<td>
+        <%= render partial: 'shared/boolean_label', locals: { boolean_label: user.active } %>
         </td>
 	<td><%= link_to 'Edit', edit_user_path(user), class: "small-button" %></td>
   </tr>

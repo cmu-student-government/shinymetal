@@ -22,17 +22,7 @@
 
   <%= f.fields_for :comments, @comment do |p| %>
   
-    <% if @user_key.errors.any? or @comment.errors.any? %>
-      <div id="error_explanation">
-	<h2><%= pluralize(@user_key.errors.count + @comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
-  
-	<ul>
-	<% @user_key.errors.full_messages.concat(@comment.errors.full_messages).each do |message| %>
-	  <li><%= message %></li>
-	<% end %>
-	</ul>
-      </div>
-    <% end %>
+    <%= render 'shared/error_messages', object: @user_key %>
   
         <%= p.hidden_field :user_id, value: @current_user.id %>
 	<div class="row">

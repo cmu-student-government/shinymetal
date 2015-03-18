@@ -1,15 +1,7 @@
 <%= form_for(@filter) do |f| %>
-  <% if @filter.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@filter.errors.count, "error") %> prohibited this filter from being saved:</h2>
+  <fieldset>
 
-      <ul>
-      <% @filter.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render 'shared/error_messages', object: @filter %>
 
   <div class="collapsed_row">
     <div class="three-column">
@@ -38,4 +30,6 @@
   <div class="collapsed_row">
     <%= f.submit class: "big-button success" %>
   </div>
+  
+  </fieldset>
 <% end %>

@@ -33,7 +33,8 @@ class UserKeyTest < ActiveSupport::TestCase
     
     # FIXME: Test the scopes with keys belonging to different users
     should "have a scope to sort by andrew_id" do
-      assert_equal ["bender"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
+      assert_equal 7, UserKey.by_user.size
+      assert_equal ["bender", "hermes"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
     end
     
     should "have a scope to return only submitted keys" do
@@ -102,7 +103,7 @@ class UserKeyTest < ActiveSupport::TestCase
     end
 
     should "have a scope that returns keys awaiting submission" do
-      assert_equal 2, UserKey.awaiting_submission.size
+      assert_equal 3, UserKey.awaiting_submission.size
     end
 
     should "have a scope that returns expired keys" do

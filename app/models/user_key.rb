@@ -10,7 +10,7 @@ class UserKey < ActiveRecord::Base
   has_many :approval_users, class_name: User, through: :approvals
   has_many :comment_users, class_name: User, through: :comments
   
-  accepts_nested_attributes_for :comments
+  accepts_nested_attributes_for :comments, limit: 1
   
   # Validations
   # Statuses for keys are currently:

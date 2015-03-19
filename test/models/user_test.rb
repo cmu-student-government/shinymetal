@@ -26,7 +26,7 @@ class UserTest < ActiveSupport::TestCase
 	
     #Scopes
     should "have a scope to sort users alphabetically" do
-      assert_equal ["bender", "fry", "leela", "zoidberg"], User.alphabetical.map {|u| u.andrew_id}
+      assert_equal ["bender", "fry", "hermes", "leela", "zoidberg"], User.alphabetical.map {|u| u.andrew_id}
     end
 
     should "have a scope to return a list of approvers" do

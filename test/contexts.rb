@@ -1,6 +1,7 @@
 module Contexts
   # Users
   def create_users
+    @hermes = FactoryGirl.create(:user, andrew_id: 'hermes')
     @bender = FactoryGirl.create(:user)
     @fry = FactoryGirl.create(:user, andrew_id: 'fry', role: 'admin')
     @leela = FactoryGirl.create(:user, andrew_id: 'leela', role: 'staff_approver')
@@ -8,6 +9,7 @@ module Contexts
   end
   
   def destroy_users
+    @hermes.destroy
     @bender.destroy
     @fry.destroy
     @leela.destroy
@@ -17,6 +19,8 @@ module Contexts
   # User keys
   def create_user_keys
     @bender_key = FactoryGirl.create(:user_key, user: @bender)
+    
+    @hermes_key = FactoryGirl.create(:user_key, user: @hermes)
     
     @bender_key_submitted = FactoryGirl.create(:user_key, user: @bender)
     @bender_key_submitted.set_status_as :awaiting_filters
@@ -48,6 +52,7 @@ module Contexts
   end
   
   def destroy_user_keys
+    @hermes_key.destroy
     @bender_key.destroy
     @bender_key_submitted.destroy
     @bender_key_awaiting_conf.destroy

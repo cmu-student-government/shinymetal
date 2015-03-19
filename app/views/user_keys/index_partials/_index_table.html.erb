@@ -1,8 +1,25 @@
-  <tr>
+<table>
+  <thead>
+    <tr>
+      <th>Key Id</th>
+      <th>User</th>
+      <th>Submitted</th>
+      <th>Shared with approvers</th>
+      <th>Confirmed</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% for user_key in @user_keys %>
+      <tr>
 	<td><%= link_to user_key.name, user_key %></td>
 	<td><%= link_to user_key.user.andrew_id, user_key.user %></td>
 	<td><%= user_key.time_submitted.nil? ? "N/A" : user_key.time_submitted.to_formatted_s(:pretty) %></td>
 	<td><%= user_key.time_filtered.nil? ? "N/A" : user_key.time_filtered.to_formatted_s(:pretty) %></td>
 	<td><%= user_key.time_confirmed.nil? ? "N/A" : user_key.time_confirmed.to_formatted_s(:pretty) %></td>
 	<td><%= link_to 'Edit', edit_user_key_path(user_key), class: "small-button" %></td>
-  </tr>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,13 +1,20 @@
 <h3>User Key</h3>
 
+<%= render 'shared/error_messages', object: @user_key %>
+
+<%= render partial: 'user_keys/show_partials/approval_status' %>
+
 <p>
-  <strong>User:</strong>
-  <%= link_to @user_key.user.andrew_id, @user_key.user  %>
+  <% if @user_key.at_stage? :confirmed %>
+    <i class="fi-check success"></i>&nbsp;This approval is complete.</i>
+  <% else %>
+    <i class="fi-x alert"></i>&nbsp;<i>This approval is incomplete.</i>
+  <% end %>
 </p>
 
 <p>
-  <strong>Status:</strong>
-  <%= @user_key.status %>
+  <strong>User:</strong>
+  <%= link_to @user_key.user.andrew_id, @user_key.user  %>
 </p>
 
 <p>
@@ -35,11 +42,22 @@
   <%= @user_key.application_text %>
 </p>
 
-<%= render partial: 'user_keys/show_partials/list_of_filters' %>
+<p>
+  <strong>Active:</strong>
+  <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.active } %>
+</p>
 
-<%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+<% if can? :read, :all %>  
 
-<%= render partial: 'user_keys/show_partials/submit_buttons' %>
+    <%= render partial: 'user_keys/show_partials/list_of_filters' %>
+
+    <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+
+    <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
+
+    <%= render partial: 'user_keys/show_partials/submit_buttons' %>
+    
+<% end %>  
 
 <%= link_to 'Edit', edit_user_key_path(@user_key), class: "big-button" %> |
 <%= link_to 'Back', user_keys_path, class: "big-button secondary" %> |

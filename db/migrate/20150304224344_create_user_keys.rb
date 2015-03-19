@@ -7,6 +7,8 @@ class CreateUserKeys < ActiveRecord::Migration
       t.datetime :time_filtered
       t.datetime :time_confirmed
       t.datetime :time_expired
+      t.boolean :active, default: true
+      t.text :reason
       t.string :value
       t.text :application_text
       t.boolean :agree, default: false

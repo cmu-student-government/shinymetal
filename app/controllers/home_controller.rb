@@ -1,19 +1,17 @@
 class HomeController < ApplicationController
   def index
-  	unless current_user.nil?
-  		#for admin dashboard
-  		@pending_filter_keys = UserKey.awaiting_filters
-  		@pending_approval = UserKey.awaiting_confirmation
-  		@confirmed_keys = UserKey.confirmed
-  		
-  		#for requester dashboard
-  		#currently pulls from list of all keys
-  		#to be modified with addition of sessions
-  		@in_progress = UserKey.awaiting_submission
-  		@awaiting_admin_review = @pending_approval + @pending_filter_keys
-  		@expired_keys = UserKey.expired
-
-  	end
+    if logged_in?
+      #for admin dashboard
+      @pending_filter_keys = UserKey.awaiting_filters
+      @pending_approval = UserKey.awaiting_confirmation
+      
+      #for requester dashboard
+      current_user_keys = @current_user.user_keys
+      @confirmed_keys = current_user_keys.confirmed
+      @in_progress = current_user_keys.awaiting_submission
+      @awaiting_admin_review = current_user_keys.awaiting_filters + current_user_keys.awaiting_confirmation
+      @expired_keys = current_user_keys.expired
+    end
   end
 
 end

@@ -17,10 +17,7 @@ class UserKey < ActiveRecord::Base
   #     awaiting_filters, if it hasn't had filters assigned
   #     awaiting_confirmation, if not approved by everybody
   # or  confirmed
-  STATUS_LIST = ["awaiting_submission",
-                 "awaiting_filters",
-                 "awaiting_confirmation",
-                 "confirmed"]
+  STATUS_LIST = ["awaiting_submission", "awaiting_filters", "awaiting_confirmation", "confirmed"]
   
   validates_inclusion_of :status, in: STATUS_LIST
   
@@ -43,6 +40,20 @@ class UserKey < ActiveRecord::Base
   # So, only find the number of approvers who are currently still approvers
   def approved_by_all?
     return self.users.approvers.size == User.approvers.all.size
+  end
+  
+  def approved_by?(user)
+    return self.users.approvers.to_a.include?(user)
+  end
+  
+  def set_approved_by(user)
+    new_approval = Approval.new(user_key_id: self.id, user_id: user.id, time_approved: DateTime.now)
+    new_approval.save!
+  end
+  
+  def undo_set_approved_by(user)
+    old_approval = Approval.where(user_id: user.id).where(user_key_id: self.id).first
+    old_approval.destroy
   end
   
   def at_submit_stage?
@@ -116,7 +127,7 @@ class UserKey < ActiveRecord::Base
   end
   
   def set_key_value
-    # NEEDS SOME HASHING ALGORITHM FOR UNIQUE KEY VALUES
+    # FIXME - add real hash values here later
     self.value = "SECURE HASH VALUE!"
   end
   

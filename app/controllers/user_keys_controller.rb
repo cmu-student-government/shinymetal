@@ -1,6 +1,7 @@
 class UserKeysController < ApplicationController
   before_action :check_login
   before_action :set_user_key, only: [:show, :edit, :update, :destroy, :add_comment,
+                                      :delete_comment, :approve_key, :undo_approve_key,
                                       :set_as_submitted, :set_as_filtered, :set_as_confirmed]
 
   # GET /user_keys
@@ -44,8 +45,21 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
     # Set user_id of comment to current user's id in view
-    @user_key.update(user_key_params)
-    redirect_to @user_key
+    if @user_key.update(user_key_params)
+      redirect_to @user_key, notice: 'Comment was successfully added.'
+    else
+      # Have to reload comments also for the show page
+      get_comments
+      render :show
+    end
+  end
+  
+  # DELETE /user_keys/1/delete_comment/1
+  def delete_comment
+    # Delete single comment
+    @bad_comment = Comment.find(params[:comment_id])
+    @bad_comment.destroy
+    redirect_to @user_key, notice: 'Comment was successfully deleted.'
   end
 
   # DELETE /user_keys/1
@@ -80,6 +94,24 @@ class UserKeysController < ApplicationController
       redirect_to @user_key, alert: 'User key cannot be confirmed.'
     end
   end
+  
+  # PATCH/PUT /user_keys/1/approve_key/
+  def approve_key
+    if @user_key.set_approved_by(current_user)
+      redirect_to @user_key, notice: 'You have successfully approved this key.'
+    else
+      redirect_to @user_key, alert: 'User key cannot be approved.'
+    end
+  end
+  
+  # PATCH/PUT /user_keys/1/undo_approve_key/
+  def undo_approve_key
+    if @user_key.undo_set_approved_by(current_user)
+      redirect_to @user_key, notice: 'You have successfully revoked your approval for this key.'
+    else
+      redirect_to @user_key, alert: 'Approval for user key cannot be revoked approved.'
+    end
+  end
 
   private
     # Build a blank comment form 
@@ -95,7 +127,7 @@ class UserKeysController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_key_params
       params.require(:user_key).permit(:user_id, :time_expired, :application_text,
-                                       :filter_ids => [], :approval_ids => [],
+                                       :filter_ids => [],
                                        :comments_attributes => [:id, :message, :user_id])
     end
 end

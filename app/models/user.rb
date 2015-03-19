@@ -12,4 +12,8 @@ class User < ActiveRecord::Base
   scope :approvers, -> { where(is_approver: true) }
   scope :search, ->(param) { where("andrew_id LIKE '%#{param.to_s.downcase}%'") }
 
+  def is_admin?
+    self.role == "admin"
+  end
+
 end

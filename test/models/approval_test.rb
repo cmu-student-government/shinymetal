@@ -6,6 +6,7 @@ class ApprovalTest < ActiveSupport::TestCase
   should belong_to(:user_key)
 
   #Validations
+  should validate_uniqueness_of(:user_id).scoped_to(:user_key_id)
 
   #Scopes
   context "Creating a user key context" do
@@ -21,6 +22,12 @@ class ApprovalTest < ActiveSupport::TestCase
       assert_equal [["bender", "confirmed"], ["bender", "awaiting_confirmation"]],
                    Approval.by(@leela).to_a.map{|a| [a.user_key.user.andrew_id, a.user_key.status ]}
       assert_equal 0, Approval.by(@bender).size
+    end
+    
+    should "be made by an approver on create" do
+      # Bender is not an approver
+      @bad_approval = FactoryGirl.build(:approval, user_key: @bender_key_submitted, approval_user: @bender)
+      #deny @bad_approval.valid?
     end
   end
 end

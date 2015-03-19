@@ -48,8 +48,7 @@ class UserKey < ActiveRecord::Base
   end
   
   def set_approved_by(user)
-    new_approval = Approval.new(user_key_id: self.id, user_id: user.id)
-    new_approval.save!
+    return Approval.create(user_key_id: self.id, user_id: user.id)
   end
   
   def undo_set_approved_by(user)

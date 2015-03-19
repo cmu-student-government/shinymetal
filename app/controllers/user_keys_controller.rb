@@ -2,7 +2,8 @@ class UserKeysController < ApplicationController
   before_action :check_login
   before_action :set_user_key, only: [:show, :edit, :update, :destroy, :add_comment,
                                       :delete_comment, :approve_key, :undo_approve_key,
-                                      :set_as_submitted, :set_as_filtered, :set_as_confirmed]
+                                      :set_as_submitted, :set_as_filtered,
+                                      :set_as_confirmed, :set_as_reset]
 
   # GET /user_keys
   def index
@@ -109,6 +110,16 @@ class UserKeysController < ApplicationController
       redirect_to @user_key, notice: 'User key was successfully confirmed. All steps are complete.'
     else
       redirect_to @user_key, alert: 'User key cannot be confirmed.'
+    end
+  end
+  
+  # PATCH/PUT /user_keys/1/set_as_reset
+  def set_as_reset
+    if @user_key.set_status_as :awaiting_submission
+      redirect_to user_keys_url, notice: 'User key application was successfully returned to the requester with comments,
+                                          and is no longer visible to staff.'
+    else
+      redirect_to @user_key, alert: 'User key cannot be reset.'
     end
   end
   

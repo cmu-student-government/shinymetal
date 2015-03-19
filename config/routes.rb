@@ -25,6 +25,9 @@ Rails.application.routes.draw do
   patch 'user_keys/:id/set_as_filtered' => 'user_keys#set_as_filtered', as: :set_as_filtered
   patch 'user_keys/:id/set_as_confirmed' => 'user_keys#set_as_confirmed', as: :set_as_confirmed
 
+  # Path to reset a ket back to the awaiting_submission stage
+  patch 'user_keys/:id/set_as_reset' => 'user_keys#set_as_reset', as: :set_as_reset
+
   # Approve the key as current user
   patch 'user_keys/:id/approve_key' => 'user_keys#approve_key', as: :approve_key
   patch 'user_keys/:id/undo_approve_key' => 'user_keys#undo_approve_key', as: :undo_approve_key

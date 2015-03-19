@@ -60,8 +60,13 @@
 <% end %>  
 
 <%= link_to 'Edit', edit_user_key_path(@user_key), class: "big-button" %> |
-<%= link_to 'Back', user_keys_path, class: "big-button secondary" %> |
-<%= link_to 'Destroy', @user_key, method: :delete, data: { confirm: 'Are you sure?' }, class: "small-button" %>
+<%= link_to 'Back', user_keys_path, class: "big-button secondary" %>
+<br/>
+<%= link_to 'Reset', set_as_reset_path(@user_key), method: :patch,
+             data: { confirm: 'Are you sure? The key application and comments will be returned to the requester.' },
+             class: "small-button" %> |
+<%= link_to 'Delete', @user_key, method: :delete,
+             data: { confirm: 'Are you sure? The application will be deleted, and the requester will be notified that their application has been terminated.' }, class: "small-button" %>
 
 <%= render partial: 'user_keys/show_partials/list_of_approvers' %>
 

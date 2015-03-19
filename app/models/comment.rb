@@ -11,6 +11,8 @@ class Comment < ActiveRecord::Base
   
   # Scope
   scope :chronological, -> { order(:created_at) }
+  scope :public_only, -> { where(is_private: false) }
+  scope :private_only, -> { where(is_private: true) }
   
   private
   def user_id_valid

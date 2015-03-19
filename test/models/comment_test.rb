@@ -30,6 +30,17 @@ class CommentTest < ActiveSupport::TestCase
       assert_equal "Kiss my shiny metal API", Comment.private_only.to_a.first.message
     end
     
+    # Validation for valid user
+    should "fail when is built with a requester user" do
+      bad_comment = FactoryGirl.build(:comment, user_key: @bender_key_awaiting_conf, comment_user: @bender )
+      deny bad_comment.valid?
+    end
+    
+    should "fail when is built with a staff user and is public" do
+      bad_comment = FactoryGirl.build(:comment, user_key: @bender_key_awaiting_conf, comment_user: @leela, is_private: false)
+      deny bad_comment.valid?
+    end
+    
     # Validations for foreign key ids
     should "not allow invalid user_id" do
       bad_comment = FactoryGirl.build(:comment, user_key: @bender_key_awaiting_conf, comment_user: @leela, user_id: "something_invalid")

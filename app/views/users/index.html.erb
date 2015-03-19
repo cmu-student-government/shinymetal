@@ -1,34 +1,19 @@
-<h1>Listing Users</h1>
-
-<% if @users.empty? %>
-
-<p>No users found.</p>
-
-<% else %>
-
-<table>
-  <thead>
-    <tr>
-      <th>Andrew</th>
-      <th>Role</th>
-      <th>Active?</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody id="users">
-  <%= render partial: 'users/index_partials/user', collection: @users %>
-  </tbody>
-</table>
-
+<h1>All Users</h1>
+  
+<!-- Begin @requesters-->
+<div id="requesters">
+  <%= render partial: 'users/index_partials/requesters' %>
+</div>
+    
 <!-- Kaminari paginate -->
 <div id="paginator">
-  <%= paginate @users, remote: true %>
+  <%= paginate @requesters, remote: true %>
 </div>
 
-<% end %>
+<br/>
 
-<br>
-
+<!-- Begin @staff-->
+<!-- anyone looking at @staff is staff, so @staff is never empty -->
+<%= render partial: 'users/index_partials/staff' %>
 
 <%= link_to 'New User', new_user_path, class: "big-button" %>

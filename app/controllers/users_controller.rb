@@ -12,7 +12,8 @@ class UsersController < ApplicationController
       @user = matching_users.to_a.first
       redirect_to @user
     else # No single matching user, so list them instead
-      @users = matching_users.page(params[:page])
+      @requesters = matching_users.requesters_only.page(params[:page])
+      @staff = matching_users.staff_only.page(params[:page])
     end
   end
 

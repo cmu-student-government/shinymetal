@@ -1,9 +1,0 @@
-<!--Each user is passed in as part of the collection-->
-  <tr>
-	<td><%= link_to user.andrew_id, user %></td>
-	<td><%= user.role %></td>
-	<td>
-        <%= render partial: 'shared/boolean_label', locals: { boolean_label: user.active } %>
-        </td>
-	<td><%= link_to 'Edit', edit_user_path(user), class: "small-button" %></td>
-  </tr>

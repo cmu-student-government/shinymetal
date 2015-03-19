@@ -74,11 +74,13 @@ $success-color: #5da423;
 .big-button {
   @extend .button;
   @extend .radius;
+  @extend .small;
   }
 .small-button {
   @extend .button;
   @extend .radius;
-  @extend .small;
+  @extend .tiny;
+  margin: 0;
 }
 .search-button {
   @extend .button;
@@ -96,7 +98,9 @@ $success-color: #5da423;
 }
 
 // Apply styles to HTML elements
-// to make views framework-neutral
+// to make views framework-neutral.
+// (This part came default with foundation.)
+
 main {
   @include twelve-columns;
   background-color: #eee;

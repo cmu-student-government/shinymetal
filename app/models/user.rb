@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
 
   scope :alphabetical, -> { order(:andrew_id) }
   scope :approvers_only, -> { where("role = 'admin' or role = 'staff_approver'") }
+  scope :staff_only, ->  { where("role <> 'requester'") }
+  scope :requesters_only, ->  { where("role == 'requester'") }
   scope :search, ->(param) { where("andrew_id LIKE '%#{param.to_s.downcase}%'") }
   
   # Methods

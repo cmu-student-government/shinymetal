@@ -1,4 +1,6 @@
 <!--Show existing comments -->
+<fieldset>
+
 <h3>Comments</h3>
 
 <br/>
@@ -23,13 +25,11 @@
   <!--Allow new comment to be added-->
   <%= f.fields_for :comments, @comment do |p| %>
   
-    <%= render 'shared/error_messages', object: @user_key %>
-  
-        <%= p.hidden_field :user_id, value: @current_user.id %>
-	<div class="row">
-	    <%= p.label :message %>
-	    <%= p.text_field :message %>
-	</div>
+    <div class="row">
+	<%= p.label :message %>
+	<%= p.text_field :message %>
+    </div>
+    
   <% end %>
   
   <div class="actions">
@@ -39,3 +39,5 @@
   </fieldset>
   
 <% end %>
+
+</fieldset>

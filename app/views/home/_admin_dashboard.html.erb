@@ -47,26 +47,4 @@
   <p> All keys that have been made public to approvers have been approved and confirmed.</p>
 <% end %>
 
-<% if @confirmed_keys.size > 0 %>
-  <p> Existing keys: </p> 
-  
-  <table>
-    <tr>
-      <th>Key</th>
-      <th>Requester</th>
-      <th>Date Comfirmed</th>
-    </tr>
-  <% @confirmed_keys.each do |key| %>
-    <tr>
-      <td><%= link_to key.name, user_key_path(key) %>
-      <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
-      <td><%= key.time_confirmed.to_formatted_s(:pretty)%></td>
-    </tr>
-  <% end %>
-  </table>
-
-<% else %>
-  <p>There are currently no confirmed keys in the system.</p>
-<% end %>
-
 </div>

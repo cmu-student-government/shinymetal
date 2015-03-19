@@ -1,10 +1,8 @@
-<!-- FIXME Needs better admin/nonadmin authentication for additional roles -->
-
   <ul class="left"> 
     <li class="divider"></li>
     
     <!-- Begin admin login check-->
-    <% if logged_in? and (@current_user.role == "admin" or @current_user.is_approver) %>
+    <% if logged_in? and @current_user.role? :is_staff %>
     <li><%= link_to "Users", users_path %></li>
     
     <li class="has-dropdown"><%= link_to "User Keys", user_keys_path %>
@@ -25,9 +23,10 @@
           </div>
         <% end %>
       </div>
-    </li> 
-    <% elsif logged_in? %> <!--End admin login check, begin user login check-->
-      <li><%= link_to "Your API keys", user_keys_path %></li>
+    </li>
+    <% end %>
+    <% if logged_in? %> <!--End admin login check, begin basic user login check-->
+      <li><%= link_to "Your API keys", user_own_keys_path %></li>
     <% end %>
   </ul>
 

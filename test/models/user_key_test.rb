@@ -31,8 +31,13 @@ class UserKeyTest < ActiveSupport::TestCase
       destroy_everything
     end
     
+    # FIXME: Test the scopes with keys belonging to different users
     should "have a scope to sort by andrew_id" do
       assert_equal ["bender"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
+    end
+    
+    should "have a scope to return only submitted keys" do
+      assert_equal 4, UserKey.submitted.size
     end
     
     should "have a name method" do

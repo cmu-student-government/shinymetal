@@ -187,6 +187,36 @@ class UserKeyTest < ActiveSupport::TestCase
                    @bender_key_awaiting_conf.status
     end
     
+    should "not allow approved key to be set as reset" do
+      # Try and fail to set key as reset
+      deny @bender_key_confirmed.set_status_as :awaiting_submission
+      assert_equal "confirmed",
+                   @bender_key_confirmed.status
+    end
+    
+    # Reset a key awaiting confirmation. Check that:
+    # -Time is rest, approvals reset
+    # -Admin comment remains
+    # -Status changed correctly
+    should "have a method to reset a key" do
+      # Prove it had approvals and comments already
+      assert_equal 2, @bender_key_awaiting_conf_approved.comments.size
+      assert_equal 2, @bender_key_awaiting_conf_approved.approvals.size
+      assert_equal "awaiting_confirmation",
+                    @bender_key_awaiting_conf_approved.status
+      @bender_key_awaiting_conf_approved.set_status_as :awaiting_submission
+      # Reload to make sure changes were saved ot database
+      @bender_key_awaiting_conf_approved.reload
+      assert_equal "awaiting_submission",
+                   @bender_key_awaiting_conf_approved.status
+      # No approvals remaining; comments remain
+      assert_equal 0, @bender_key_awaiting_conf_approved.approvals.size
+      assert_equal 2, @bender_key_awaiting_conf_approved.comments.size
+      # Time_submitted, time_filtered reset
+      assert @bender_key_awaiting_conf_approved.time_submitted.nil?
+      assert @bender_key_awaiting_conf_approved.time_filtered.nil?
+    end
+    
     # Validations for foreign key ids
     should "not allow invalid user_id" do
       bad_key = FactoryGirl.build(:user_key, user_id: "invalid")

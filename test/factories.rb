@@ -31,6 +31,18 @@ FactoryGirl.define do
     external_id 1
   end
   
+  # factory blueprint for user key organizations
+  factory :user_key_organization do
+    association :organization
+    association :user_key
+  end
+
+  # factory blueprint for user key filter
+  factory :user_key_filter do
+    association :filter
+    association :user_key
+  end
+  
   factory :approval do
     association :approval_user #user, renamed to approval_user for clarity
     association :user_key

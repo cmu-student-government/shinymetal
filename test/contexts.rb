@@ -112,6 +112,24 @@ module Contexts
     @leela_approval_for_awaiting.destroy
     @fry_approval_for_awaiting.destroy
   end
+  
+  # User_key_organizations
+  def create_user_key_organizations
+    @bender_key_submitted_cmutv = FactoryGirl.create(:user_key_organization, user_key: @bender_key_submitted, organization: @cmutv)
+  end
+  
+  def destroy_user_key_organizations
+    @bender_key_submitted_cmutv.destroy
+  end
+    
+  # User_key_filters
+  def create_user_key_filters
+    @bender_key_submitted_org_page = FactoryGirl.create(:user_key_filter, user_key: @bender_key_submitted, filter: @organizations_page_filter)
+  end
+  
+  def destroy_user_key_filters
+    @bender_key_submitted_org_page.destroy
+  end
 
   # Create everything at once with one method call
   def create_everything
@@ -121,10 +139,14 @@ module Contexts
     create_filters
     create_organizations
     create_approvals
+    create_user_key_filters
+    create_user_key_organizations
   end
   
   # Destroy everything at once
   def destroy_everything
+    destroy_user_key_filters
+    destroy_user_key_organizations
     destroy_approvals
     destroy_user_keys
     destroy_users

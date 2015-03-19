@@ -6,7 +6,7 @@ class UserTest < ActiveSupport::TestCase
 
   #Validations
   should validate_presence_of(:andrew_id)
-
+  
   should allow_value("admin").for(:role)
   should allow_value("requester").for(:role)
   should allow_value("staff_approver").for(:role)

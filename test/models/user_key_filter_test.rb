@@ -1,20 +1,28 @@
 require 'test_helper'
 
 class UserKeyFilterTest < ActiveSupport::TestCase
-  #Relationships
+  # Relationships
   should belong_to(:filter)
   should belong_to(:user_key)
 
-  #Validations from chess camp lol
-  should validate_presence_of(:filter_id)
-  should validate_presence_of(:user_key_id)
-  should validate_numericality_of(:filter_id)
-  should validate_numericality_of(:user_key_id)
-  should_not allow_value(-1).for(:filter_id)
-  should_not allow_value(0).for(:filter_id)
-  should_not allow_value(50.50).for(:filter_id)
-  should_not allow_value(-1).for(:user_key_id)
-  should_not allow_value(0).for(:user_key_id)
-  should_not allow_value(50.50).for(:user_key_id)
-
+  context "Creating a organizations context" do
+    setup do
+      create_organizations
+    end
+    
+    teardown do
+      destroy_organizations
+    end
+    
+    # Validations for foreign key ids
+    should "not allow invalid filter_id" do
+      bad_key_filter = FactoryGirl.build(:user_key_filter, user_key: @bender_key_submitted, filter_id: "something_invalid")
+      deny bad_key_filter.valid?
+    end
+    
+    should "not allow invalid user_key_id" do
+      bad_key_filter = FactoryGirl.build(:user_key_filter, user_key_id: "something_invalid", filter: @organizations_page_filter)
+      deny bad_key_filter.valid?
+    end
+  end
 end

@@ -13,6 +13,7 @@ class UserKeyTest < ActiveSupport::TestCase
   should have_many(:comment_users).through(:comments)
   
   # Validations
+  should accept_nested_attributes_for(:comments).limit(1)
   
   # Status
   should allow_value("awaiting_submission").for(:status)
@@ -184,6 +185,12 @@ class UserKeyTest < ActiveSupport::TestCase
       deny @bender_key_awaiting_conf.set_status_as :confirmed
       assert_equal "awaiting_confirmation",
                    @bender_key_awaiting_conf.status
+    end
+    
+    # Validations for foreign key ids
+    should "not allow invalid user_id" do
+      bad_key = FactoryGirl.build(:user_key, user_id: "invalid")
+      deny bad_key.valid?
     end
   end
 end

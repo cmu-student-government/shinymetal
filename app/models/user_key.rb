@@ -22,6 +22,8 @@ class UserKey < ActiveRecord::Base
   
   validates_inclusion_of :status, in: STATUS_LIST
   
+  validate :user_id_valid
+  
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
@@ -158,4 +160,11 @@ class UserKey < ActiveRecord::Base
     return false
   end
 
+  def user_id_valid
+    unless User.all.to_a.map{|o| o.id}.include?(self.user_id)
+      errors.add(:user_id, "is invalid")
+      return false
+    end
+    return true
+  end
 end

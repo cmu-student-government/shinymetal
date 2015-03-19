@@ -4,9 +4,9 @@ class Ability
   def initialize(user)
     #user is passed in from application controller, this is if guest
     user ||= User.new
-    
+
     #will be changed once authentication & sessions are implemented
-    if user == 'admin'
+    if user.is_admin?
         can :manage, :all
     else
         can :read, :all

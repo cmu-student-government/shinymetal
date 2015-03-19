@@ -1,18 +1,18 @@
 <!-- Needs better admin/nonadmin authentication for additional roles -->
 
-<% if logged_in? and @current_user.role == "admin" %>
-  <ul class="left"> 
+<% if logged_in? and @current_user.is_admin? %>
+  <ul class="left">
     <li class="divider"></li>
-    
+
     <li><%= link_to "Users", users_path %></li>
-    
+
     <li class="has-dropdown"><%= link_to "User Keys", user_keys_path %>
       <ul class="dropdown">
         <li><%= link_to "Filters", filters_path %></li>
         <li><%= link_to "Add a filter", new_filter_path %></li>
       </ul>
     </li>
-  
+
     <li class="has-form">
     <div class="collapsed_row">
       <%= form_tag users_path, method: 'get' do %>
@@ -31,9 +31,9 @@
 <ul class="right">
   <% if logged_in? %>
     <li><%= link_to "Welcome, #{current_user.andrew_id}", @current_user %></li>
-    
+
     <li class="divider"></li>
-    
+
     <li><%= link_to "Logout", logout_path %></li>
   <% else %>
     <li><%= link_to "Login", login_path %></li>

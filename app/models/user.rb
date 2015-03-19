@@ -20,13 +20,13 @@ class User < ActiveRecord::Base
   def role?(sym)
     case sym
       when :is_staff
-        return !(user.role == "requester")
-      when is_approver
-        return (user.role == "admin" || user.role == "staff_approver")
+        return !(self.role == "requester")
+      when :is_approver
+        return (self.role == "admin" || self.role == "staff_approver")
       when :requester
-        return user.role == "requester"
+        return self.role == "requester"
       when :admin
-        return user.role == "admin"
+        return self.role == "admin"
     end
   end
 

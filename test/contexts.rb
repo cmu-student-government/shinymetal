@@ -3,8 +3,8 @@ module Contexts
   def create_users
     @bender = FactoryGirl.create(:user)
     @fry = FactoryGirl.create(:user, andrew_id: 'fry', role: 'admin')
-    @leela = FactoryGirl.create(:user, andrew_id: 'leela', role: 'admin')
-    @zoidberg = FactoryGirl.create(:user, andrew_id: 'zoidberg')
+    @leela = FactoryGirl.create(:user, andrew_id: 'leela', role: 'staff_approver')
+    @zoidberg = FactoryGirl.create(:user, andrew_id: 'zoidberg', role: 'staff_not_approver')
   end
   
   def destroy_users

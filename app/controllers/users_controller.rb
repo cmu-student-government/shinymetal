@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     matching_users = User.search(search_param).alphabetical
     if matching_users.size==1
       @user = matching_users.to_a.first
-      render :show
+      redirect_to @user
     else # No single matching user, so list them instead
       @users = matching_users.page(params[:page])
     end
@@ -18,6 +18,12 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
+    if @user.id == @current_user.id
+      # This user is looking at their own data, so they see all their keys
+      @user_keys = @user.user_keys
+    else # This is a staffmember, so they only see submitted keys
+      @user_keys = @user.user_keys.submitted
+    end
   end
 
   # GET /users/new

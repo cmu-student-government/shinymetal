@@ -93,12 +93,12 @@ class UserKey < ActiveRecord::Base
   end
   
   def set_status_as(sym)
-    case sym.to_s
-    when "awaiting_filters"
+    case sym
+    when :awaiting_filters
       return set_key_as_submitted
-    when "awaiting_confirmation"
+    when :awaiting_confirmation
       return set_key_as_filtered
-    when "confirmed"
+    when :confirmed
       return set_key_as_confirmed
     end
   end

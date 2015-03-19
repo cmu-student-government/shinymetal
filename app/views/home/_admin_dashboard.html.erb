@@ -33,12 +33,14 @@
       <th>Key</th>
       <th>Requester</th>
       <th>Date Submitted</th>
+      <th>Approvals (<%= User.approvers_only.size %> Needed)</th>
     </tr>
   <% @pending_approval.each do |key| %>
     <tr>
       <td><%= link_to key.name, user_key_path(key) %>
       <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
       <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
+      <td><%= key.approval_users.approvers_only.size %></td>
     </tr>
   <% end %>
   </table>

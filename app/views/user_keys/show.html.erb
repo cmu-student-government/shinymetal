@@ -71,34 +71,20 @@
   <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
 <% end  %>
 
-<!-- Key owner can submit the key-->
+<!-- Key owner can submit the key or edit the application before submitting. -->
 <% if (@current_user.owns?(@user_key) and @user_key.at_stage? :awaiting_submission) %> 
+  <%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button success" %>
+  | 
+  <%= link_to 'Edit application', edit_user_key_path(@user_key), class: "big-button" %> | 
 <% end %>
- 
-<% if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission) %>
-  <fieldset>
-    <h3>Admin only</h3>
-    
-    <!-- Buttons for progressing approval process -->
-    <!-- Only the key owner can submit it. Only the admin can do anything else. -->
-      <%= render partial: 'user_keys/show_partials/submit_buttons' %>
-    <% end %> 
-    
-  
-    <%= link_to 'Edit', edit_user_key_path(@user_key), class: "big-button" %> |
-    <%= link_to 'Back', user_keys_path, class: "big-button secondary" %>
-    <br/>
-    
-    <!-- These two are admin-only. Reset is only available after submission and before confirmation.-->
-    <% if @current_user.role? :admin %>
-      <%= link_to 'Reset', set_as_reset_path(@user_key), method: :patch,
-                 data: { confirm: 'Are you sure? The key application and comments will be returned to the requester.' },
-                 class: "small-button" %> |
-    <!-- Currently no restrictions exist for delete.-->
-      <%= link_to 'Delete', @user_key, method: :delete,
-                 data: { confirm: 'Are you sure? The application will be deleted, and the requester will be notified that their application has been terminated.' }, class: "small-button" %>
-    <% end %>
-  </fieldset>
+<!-- Requester gets a different back button than the admin.-->
+<% if @current_user.role? :requester %>
+  <%= link_to 'Back to my keys', own_user_keys_path, class: "big-button secondary" %>
 <% end %>
              
 <%= render partial: 'user_keys/show_partials/list_of_comments' %>
+
+<!-- Confirm, reset, delete, and apply filters here -->
+<% if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission) %>
+  <%= render partial: 'user_keys/show_partials/admin_only' %>
+<% end %>

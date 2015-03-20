@@ -108,8 +108,18 @@ namespace :db do
             # pick random approver for comment
             comment.user_key_id = user_key.id
             comment.user_id = User.approvers_only.to_a.sample.id
+            comment.public = false
+            # set the random timestamps
+            comment.created_at = (1..10).map{|num| num.days.ago.to_date}
+            comment.updated_at = Time.now
+          end
+          # Admin comments
+          Comment.populate 0..2 do |comment|
+            comment.message = Faker::Hacker.say_something_smart
+            comment.user_key_id = user_key.id
+            comment.user_id = admin_user.id
             # randomize if true or false
-            comment.is_private = [true,false]
+            comment.public = [true,false]
             # set the random timestamps
             comment.created_at = (1..10).map{|num| num.days.ago.to_date}
             comment.updated_at = Time.now

@@ -45,7 +45,7 @@ class UserKeysController < ApplicationController
 
   # PATCH/PUT /user_keys/1
   def update
-    if can? :manage, :all
+    if @current_user.role? :admin
       # Admin is allowed to add filters, orgs, active, etc.
       whitelist = admin_update_user_key_params
     else
@@ -143,7 +143,8 @@ class UserKeysController < ApplicationController
 
   private
     def get_comments
-      @comments = @user_key.comments.chronological
+      @public_comments = @user_key.comments.public_only.chronological
+      @private_comments = @user_key.comments.private_only.chronological
       # Build a blank comment form 
       @comment = @user_key.comments.build
     end
@@ -165,7 +166,7 @@ class UserKeysController < ApplicationController
     end
     
     def comment_user_key_params # For anyone who can comment
-      params.require(:user_key).permit(:comments_attributes => [:id, :message, :user_id])
+      params.require(:user_key).permit(:comments_attributes => [:id, :message, :public, :user_id])
     end
     
     def admin_update_user_key_params # For admin, upon updating filters or anything else

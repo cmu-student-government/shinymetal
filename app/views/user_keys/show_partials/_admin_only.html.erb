@@ -1,0 +1,20 @@
+  <fieldset>
+    <h3>Admin only</h3>
+    
+    <!-- Buttons for progressing approval process -->
+    <%= render partial: 'user_keys/show_partials/submit_buttons' %>
+    
+    <%= link_to 'Edit access rights', edit_user_key_path(@user_key), class: "big-button" %> |
+    <%= link_to 'Back to keys list', user_keys_path, class: "big-button secondary" %>
+    <br/>
+    
+    <!-- Currently no restrictions exist for delete.-->
+      <%= link_to 'Delete', @user_key, method: :delete,
+                 data: { confirm: 'Are you sure? The application will be deleted, and the requester will be notified that their application has been terminated.' }, class: "small-button" %>
+    <!--  Reset is currently only available after submission and before confirmation.-->
+    <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :awaiting_filters %>
+      | <%= link_to 'Reset', set_as_reset_path(@user_key), method: :patch,
+                 data: { confirm: 'Are you sure? The key application and comments will be returned to the requester.' },
+                 class: "small-button" %>
+    <% end %>
+  </fieldset>

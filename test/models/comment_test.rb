@@ -37,7 +37,7 @@ class CommentTest < ActiveSupport::TestCase
     end
     
     should "fail when is built with a staff user and is public" do
-      bad_comment = FactoryGirl.build(:comment, user_key: @bender_key_awaiting_conf, comment_user: @leela, is_private: false)
+      bad_comment = FactoryGirl.build(:comment, user_key: @bender_key_awaiting_conf, comment_user: @leela, public: true)
       deny bad_comment.valid?
     end
     

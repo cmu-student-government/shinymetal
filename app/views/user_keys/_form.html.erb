@@ -1,37 +1,43 @@
 <%= form_for(@user_key) do |f| %>
-  <fieldset>
-    
-  <!-- Explain the text shown to admins as data that was entered by the requester-->
-  <% if @current_user.role == "admin" %>
-    <h3>Data entered by requester</h3>
-    <p><i>This information was entered by the requester.</i></p>
-  <% end %>
-
+  
+  <!-- Begin requester form -->
+  
   <%= render 'shared/error_messages', object: @user_key %>
   
-  <!-- Application text boxes. -->
-  <!-- Note that the form object is passed in as :f-->
-  <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
-
-  <!-- The key should belong to the current user when first created, handled in controller -->
-
-  <%= render partial: 'user_keys/form_partials/terms', locals: {:f=>f} %>
+  <!-- On create, @user_key.id is nil -->
+  <% @user_key.id.nil? or if @current_user.owns? @user_key %>
   
-  </fieldset>
+    <fieldset>
+    <!-- Application text boxes. Note that the form object is passed in as :f-->
+    <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
   
-  <% if @current_user.role == "admin" %>
+    <!-- The key should belong to the current user when first created. This is handled in controller. -->
+
+    <%= render partial: 'user_keys/form_partials/terms', locals: {:f=>f} %>
+     </fieldset>
+   
+  <% end %> 
+  
+  <!-- End requester -->
+  
+  <!-- Begin admin form -->
+  
+  <!-- @current_user can only see both above and below if they are both admin and key owner-->
+  <% if @current_user.role? :admin %>
     
     <!-- Only admins can assign filters, and they can do so at any time -->
     <fieldset>
       
-      <h3>Admin only</h3>
+      <h2>Admin only</h2>
       
       <p><i>Set filters and organizations that this key may have access to here.</i></p>
     
       <%= render partial: 'user_keys/form_partials/filters_checkboxes' %>
       <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>    
     
-      <div class="collapsed_row"> <!--Expiration date-->
+      <!--Expiration date-->
+      <p><i>Set the expiration date for the key here.</i></p>
+      <div class="collapsed_row">
         <div class="three-column">
           <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
         </div>
@@ -47,21 +53,31 @@
     <fieldset>
       
       <!-- Only admins can inactive a key -->
+      <p><i>Marking a key application as inactive
+      suspends the application process. Marking a confirmed key as inactive
+      suspends all API use of the key.</i></p>
+      
       <div class="collapsed_row">
         <%= f.check_box :active %>
         <%= f.label :active %>
+        <% if @user_key.active %>
+          &nbsp; <i class="success">This key is active and has not been suspended.</i>
+        <% else %>
+          &nbsp; <i class="alert">This key is inactive and has been suspended.</i>
+        <% end %>
       </div>
-      
-      <p>Note: marking a key application as <i>inactive</i>
-      suspends the application process. Marking a confirmed key as <i>inactive</i>
-      suspends all API use of the key.</p>
     </fieldset>
+    
   <% end %>
+  
+  <!-- End admin form -->
 
   <br/>
   
+  <!-- "cancel_url" is passed as a local variable from new and edit-->
   <div class="actions">
-    <%= f.submit class: "big-button success" %>
+    <%= f.submit class: "big-button success" %> | 
+    <%= link_to 'Cancel', cancel_url, class: "big-button secondary" %>
   </div>
   
 <% end %>

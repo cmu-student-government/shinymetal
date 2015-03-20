@@ -6,13 +6,10 @@ class Ability
     user ||= User.new
 
     #will be changed once authentication & sessions are implemented
-    if user.role == "admin"
-      can :manage, :all
-    elsif user.role == "staff_approver"
-      can :read, :all
-    elsif user.role == "staff_not_approver"
-      can :read, :all
-    elsif user.role == "requester"
+    if user.is_admin?
+        can :manage, :all
+    else
+        can :read, :all
     end
 
     # Define abilities for the passed in user here. For example:

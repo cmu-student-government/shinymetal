@@ -1,0 +1,18 @@
+<p>
+  <strong>Approval Status:</strong>
+  <i class="fi-check success">
+    Begun by requester?
+  </i> &nbsp;
+  <i class="fi-arrow-right"></i> &nbsp;
+  <i class="<%= @user_key.at_stage?(:awaiting_filters, true) ? "fi-check success" : "fi-x alert" %>">
+    Submitted?
+  </i> &nbsp;
+  <i class="fi-arrow-right"></i> &nbsp;
+  <i class="<%= @user_key.at_stage?(:awaiting_confirmation, true) ? "fi-check success" : "fi-x alert" %>">
+    Assigned Filters?
+  </i> &nbsp;
+  <i class="fi-arrow-right"></i> &nbsp;
+  <i class="<%= @user_key.at_stage?(:confirmed) ? "fi-check success" : "fi-x alert" %>">
+    Confirmed?
+  </i>
+</p>

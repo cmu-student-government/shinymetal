@@ -1,68 +1,52 @@
 <div class="panel"> 
 
 <h5> Hi, <%="#{current_user.andrew_id}"%>!  </h5>
-<br /> 
+<br />
 
-<p> These keys do not have filter assignments yet: </p>
 <% if @pending_filter_keys.size > 0 %>
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Requester</th>
-    <th>Date Submitted</th>
-  </tr>
-<% @pending_filter_keys.each do |key| %>
-  <tr>
-    <td><%= link_to key.name, user_key_path(key) %>
-    <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
-    <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
-  </tr>
-<% end %>
-</table>
+  <p> These keys do not have filter assignments yet: </p>
+  
+  <table>
+    <tr>
+      <th>Key</th>
+      <th>Requester</th>
+      <th>Date Submitted</th>
+    </tr>
+  <% @pending_filter_keys.each do |key| %>
+    <tr>
+      <td><%= link_to key.name, user_key_path(key) %>
+      <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
+      <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
+    </tr>
+  <% end %>
+  </table>
 
 <% else %>
+  <p>All submitted keys have been assigned filters and shared with approvers.</p>
 <% end %>
-
-<p> These keys are pending approval: </p>
 
 <% if @pending_approval.size > 0 %>
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Requester</th>
-    <th>Date Submitted</th>
-  </tr>
-<% @pending_approval.each do |key| %>
-  <tr>
-    <td><%= link_to key.name, user_key_path(key) %>
-    <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
-    <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
-  </tr>
-<% end %>
-</table>
+  <p> These keys are pending approval: </p>
+  
+  <table>
+    <tr>
+      <th>Key</th>
+      <th>Requester</th>
+      <th>Date Submitted</th>
+      <th>Approvals (<%= User.approvers_only.size %> Needed)</th>
+    </tr>
+  <% @pending_approval.each do |key| %>
+    <tr>
+      <td><%= link_to key.name, user_key_path(key) %>
+      <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
+      <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
+      <td><%= key.approval_users.approvers_only.size %></td>
+    </tr>
+  <% end %>
+  </table>
 
 <% else %>
-<% end %>
-
-<p> Existing keys: </p> 
-
-<% if @confirmed_keys.size > 0 %>
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Requester</th>
-    <th>Date Comfirmed</th>
-  </tr>
-<% @confirmed_keys.each do |key| %>
-  <tr>
-    <td><%= link_to key.name, user_key_path(key) %>
-    <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
-    <td><%= key.time_confirmed.to_formatted_s(:pretty)%></td>
-  </tr>
-<% end %>
-</table>
-
-<% else %>
+  <p> All keys that have been made public to approvers have been approved and confirmed.</p>
 <% end %>
 
 </div>

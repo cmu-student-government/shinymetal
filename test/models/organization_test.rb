@@ -17,9 +17,8 @@ class OrganizationTest < ActiveSupport::TestCase
       destroy_organizations
     end
 
-    #Note: We probably want case insensitive behavior for this...
     should "have a method to return the organizations alphabetically" do
-    	assert_equal ['AB Films', 'WRCT', 'cmuTV'], Organization.alphabetical.map { |o| o.name }
+    	assert_equal ['AB Films', 'cmuTV', 'WRCT'], Organization.alphabetical.map { |o| o.name }
     end
 
   end

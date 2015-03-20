@@ -74,11 +74,13 @@ $success-color: #5da423;
 .big-button {
   @extend .button;
   @extend .radius;
+  @extend .small;
   }
 .small-button {
   @extend .button;
   @extend .radius;
-  @extend .small;
+  @extend .tiny;
+  margin: 0;
 }
 .search-button {
   @extend .button;
@@ -87,18 +89,18 @@ $success-color: #5da423;
   font-size: 0.7rem !important;
 }
 
-// Apply is_approver check and x styles
-.check {
+// Apply check, x, and right-arrow styles for status on user_key show page
+.success {
   color: $success-color;
-  font-size: 30px;
 }
-.x {
-  font-size: 30px;
+.alert {
   color: $alert-color;
 }
 
 // Apply styles to HTML elements
-// to make views framework-neutral
+// to make views framework-neutral.
+// (This part came default with foundation.)
+
 main {
   @include twelve-columns;
   background-color: #eee;

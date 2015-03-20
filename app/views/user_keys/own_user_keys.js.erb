@@ -1,0 +1,3 @@
+<!-- For use with ajax and pagination -->
+$('#user_keys').html('<%= escape_javascript render partial: 'user_keys/own_user_keys_partials/own_user_keys_table', object: @user_keys %>');
+  $('#paginator').html('<%= escape_javascript paginate(@user_keys, remote: true).to_s %>');

@@ -1,9 +1,8 @@
-<!-- Needs better admin/nonadmin authentication for additional roles -->
-
-<% if logged_in? and @current_user.is_admin? %>
   <ul class="left">
     <li class="divider"></li>
 
+    <!-- Begin admin login check-->
+    <% if logged_in? and @current_user.role? :is_staff %>
     <li><%= link_to "Users", users_path %></li>
 
     <li class="has-dropdown"><%= link_to "User Keys", user_keys_path %>
@@ -14,19 +13,22 @@
     </li>
 
     <li class="has-form">
-    <div class="collapsed_row">
-      <%= form_tag users_path, method: 'get' do %>
-        <div class="search-param">
-          <%= text_field_tag :search, params[:search] %>
-        </div>
-        <div class="search-label">
-          <%= submit_tag "Find User", :name => nil, class: "search-button info postfix" %>
-        </div>
-      <% end %>
-    </div>
+      <div class="collapsed_row">
+        <%= form_tag users_path, method: 'get' do %>
+          <div class="search-param">
+            <%= text_field_tag :search, params[:search] %>
+          </div>
+          <div class="search-label">
+            <%= submit_tag "Find User", :name => nil, class: "search-button info postfix" %>
+          </div>
+        <% end %>
+      </div>
     </li>
+    <% end %>
+    <% if logged_in? %> <!--End admin login check, begin basic user login check-->
+      <li><%= link_to "Your API keys", own_user_keys_path %></li>
+    <% end %>
   </ul>
-<% end %>
 
 <ul class="right">
   <% if logged_in? %>

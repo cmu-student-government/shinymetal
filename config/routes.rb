@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   get 'logout' => 'sessions#destroy', as: :logout
   get 'login' => 'sessions#new', as: :login
   
+  # Path to see a user's own keys
+  get 'own_user_keys' => 'user_keys#own_user_keys', as: :own_user_keys
+  
   # User key comment adding
   patch 'user_keys/:id/add_comment' => 'user_keys#add_comment', as: :add_comment
   patch 'user_keys/:id/delete_comment/:comment_id' => 'user_keys#delete_comment', as: :delete_comment

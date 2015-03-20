@@ -3,7 +3,7 @@ class CreateUsers < ActiveRecord::Migration
     create_table :users do |t|
       t.string :andrew_id
       t.string :role, default: "requester"
-      t.boolean :is_approver, default: false
+      t.boolean :active, default: true
 
       t.timestamps null: false
     end

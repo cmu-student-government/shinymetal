@@ -1,16 +1,31 @@
 class Comment < ActiveRecord::Base
-  before_save :set_time, on: :create
-  
+  # Relationships
   belongs_to :user_key
-  belongs_to :user
+  belongs_to :comment_user, class_name: User, foreign_key: :user_id
   
-  validates_presence_of :message, message: "Message cannot be blank."
+  # Validations
+  validates_presence_of :message, message: "cannot be blank."
+
+  validate :user_key_id_valid
+  validate :user_id_valid
   
-  scope :chronological, -> { order(:time_posted) }
+  # Scope
+  scope :chronological, -> { order(:created_at) }
   
   private
+  def user_id_valid
+    unless User.all.to_a.map{|o| o.id}.include?(self.user_id)
+      errors.add(:user_id, "is invalid")
+      return false
+    end
+    return true
+  end
   
-  def set_time
-    self.time_posted = DateTime.now
+  def user_key_id_valid
+    unless UserKey.all.to_a.map{|o| o.id}.include?(self.user_key_id)
+      errors.add(:user_key_id, "is invalid")
+      return false
+    end
+    return true
   end
 end

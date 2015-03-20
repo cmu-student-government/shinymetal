@@ -1,15 +1,15 @@
-<% unless @user_key.at_submit_stage? or @user_key.at_filter_stage? %>
+<% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
 
 	<p>
 	  <b><%= "Approvers who have approved this key" %></b><br />
 	  <ul>
-		<% for approver in @user_key.users %>
+		<% for approver in @user_key.approval_users %>
 		  <li><%= link_to approver.andrew_id, approver %></li>
 		<% end  %>
 	  </ul>
 	</p>
     
-  <% if @user_key.confirmed? %>
+  <% if @user_key.at_stage? :confirmed %>
   
     <p>This key was approved by everyone.</p>
   
@@ -22,7 +22,7 @@
 	<p>
 	  <b><%= "Approvers who have not approved this key" %></b><br />
 	  <ul>
-		<% for approver in User.approvers - @user_key.users %>
+		<% for approver in User.approvers_only - @user_key.approval_users %>
 		  <li><%= link_to approver.andrew_id, @approver %></li>
 		<% end  %>
 	  </ul>

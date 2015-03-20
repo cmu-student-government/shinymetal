@@ -157,7 +157,11 @@ class UserKeysController < ApplicationController
     end
     
     def update_user_key_params # For requester, upon updating application text
-      params.require(:user_key).permit(:application_text)
+      
+      params.require(:user_key).permit(:agree, :proposal_text_one, :proposal_text_two,
+                                       :proposal_text_three, :proposal_text_four,
+                                       :proposal_text_five, :proposal_text_six,
+                                       :proposal_text_seven, :proposal_text_eight)
     end
     
     def comment_user_key_params # For anyone who can comment

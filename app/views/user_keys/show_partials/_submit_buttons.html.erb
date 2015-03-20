@@ -1,25 +1,27 @@
-<!--Show the "submit request" button if the application is ready to be submitted
-    If it's at the admin filtering stage, showing the second button instead-->
+<!--Show the "submit request" button if the application is ready to be submitted.
+    If it's at the admin filtering stage, show the second button instead, etc.-->
 
 <br />
 
-<% if @user_key.at_submit_stage? %>
+<% if @user_key.at_stage? :awaiting_submission %>
 
-<%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button" %> 
+  <%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button" %> 
 
-<% elsif @user_key.at_filter_stage? %>
+<% elsif @user_key.at_stage? :awaiting_filters %>
 
-<%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button" %> 
+  <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button" %> 
 
-<% elsif @user_key.at_confirm_stage? %>
+<% elsif @user_key.at_stage? :awaiting_confirmation %>
 
   <% if @user_key.approved_by_all? %>
-  <%= link_to 'Confirm', set_as_confirmed_path(@user_key), method: :patch, class: "big-button" %> 
+    <p>This key has been approved by everyone and is ready to be released to the requester.</p>
   <% else %>
-  <p> Not approved by everyone yet </p>
+    <p>This key has not yet been approved by everyone and cannot be released to the requester.</p>
   <% end %>
+    
+    <%= link_to 'Confirm and release key to user', set_as_confirmed_path(@user_key), method: :patch, class: "big-button", disabled: !@user_key.approved_by_all? %> 
 
-<% else %>
+<% else %> <!-- Must be at_stage? :confirmed -->
 
 <p> This key was approved by everyone and has been confirmed.</p>
 

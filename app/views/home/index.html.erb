@@ -2,7 +2,7 @@
 <p> This API provides access to organization and event information at CMU via The Bridge.
 
 <% if logged_in? %>
-  <% if @current_user.role == "admin" %>
+  <% if @current_user.is_admin? %>
    <%= render :partial => "admin_dashboard" %>
 
   <% else %>

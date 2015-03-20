@@ -1,2 +1,2 @@
-  $('#users').html('<%= escape_javascript render partial: 'users/index_partials/user', collection: @users %>');
-  $('#paginator').html('<%= escape_javascript paginate(@users, remote: true).to_s %>');
+  $('#requesters').html('<%= escape_javascript render partial: 'users/index_partials/requesters' %>');
+  $('#paginator').html('<%= escape_javascript paginate(@requesters, remote: true).to_s %>');

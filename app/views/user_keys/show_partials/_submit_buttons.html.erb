@@ -1,13 +1,6 @@
-<!--Show the "submit request" button if the application is ready to be submitted.
-    If it's at the admin filtering stage, show the second button instead, etc.-->
-
 <br />
 
-<% if @user_key.at_stage? :awaiting_submission %>
-
-  <%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button" %> 
-
-<% elsif @user_key.at_stage? :awaiting_filters %>
+<% if @user_key.at_stage? :awaiting_filters %>
 
   <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button" %> 
 

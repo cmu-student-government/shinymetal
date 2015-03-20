@@ -61,8 +61,8 @@ module Contexts
   
   #Comments
   def create_comments
-    @angrycomment = FactoryGirl.create(:comment, comment_user: @bender, user_key: @bender_key)
-    @happycomment = FactoryGirl.create(:comment, comment_user: @bender, user_key: @bender_key, message: "I love APIs so much")
+    @angrycomment = FactoryGirl.create(:comment, comment_user: @leela, user_key: @bender_key_awaiting_conf_approved, public: false)
+    @happycomment = FactoryGirl.create(:comment, comment_user: @fry, user_key: @bender_key_awaiting_conf_approved, message: "I love APIs so much", public: true)
     @happycomment.created_at = 10.minutes.ago
   end
 

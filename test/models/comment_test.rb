@@ -19,7 +19,26 @@ class CommentTest < ActiveSupport::TestCase
 	
     #Scopes
     should "have a scope to sort chronologically" do
-    	assert_equal Comment.chronological, Comment.all.sort_by {|c| c.created_at}
+      assert_equal Comment.chronological, Comment.all.sort_by {|c| c.created_at}
+    end
+    
+    should "have a scope to get only public comments" do
+      assert_equal "I love APIs so much", Comment.public_only.to_a.first.message
+    end
+    
+    should "have a scope to get only private comments" do
+      assert_equal "Kiss my shiny metal API", Comment.private_only.to_a.first.message
+    end
+    
+    # Validation for valid user
+    should "fail when is built with a requester user" do
+      bad_comment = FactoryGirl.build(:comment, user_key: @bender_key_awaiting_conf, comment_user: @bender )
+      deny bad_comment.valid?
+    end
+    
+    should "fail when is built with a staff user and is public" do
+      bad_comment = FactoryGirl.build(:comment, user_key: @bender_key_awaiting_conf, comment_user: @leela, public: true)
+      deny bad_comment.valid?
     end
     
     # Validations for foreign key ids

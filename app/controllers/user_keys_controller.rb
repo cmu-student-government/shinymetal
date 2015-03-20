@@ -2,7 +2,8 @@ class UserKeysController < ApplicationController
   before_action :check_login
   before_action :set_user_key, only: [:show, :edit, :update, :destroy, :add_comment,
                                       :delete_comment, :approve_key, :undo_approve_key,
-                                      :set_as_submitted, :set_as_filtered, :set_as_confirmed]
+                                      :set_as_submitted, :set_as_filtered,
+                                      :set_as_confirmed, :set_as_reset]
 
   # GET /user_keys
   def index
@@ -44,7 +45,7 @@ class UserKeysController < ApplicationController
 
   # PATCH/PUT /user_keys/1
   def update
-    if can? :manage, :all
+    if @current_user.role? :admin
       # Admin is allowed to add filters, orgs, active, etc.
       whitelist = admin_update_user_key_params
     else
@@ -112,6 +113,16 @@ class UserKeysController < ApplicationController
     end
   end
   
+  # PATCH/PUT /user_keys/1/set_as_reset
+  def set_as_reset
+    if @user_key.set_status_as :awaiting_submission
+      redirect_to user_keys_url, notice: 'User key application was successfully returned to the requester with comments,
+                                          and is no longer visible to staff.'
+    else
+      redirect_to @user_key, alert: 'User key cannot be reset.'
+    end
+  end
+  
   # PATCH/PUT /user_keys/1/approve_key/
   def approve_key
     if @user_key.set_approved_by(current_user)
@@ -132,7 +143,8 @@ class UserKeysController < ApplicationController
 
   private
     def get_comments
-      @comments = @user_key.comments.chronological
+      @public_comments = @user_key.comments.public_only.chronological
+      @private_comments = @user_key.comments.private_only.chronological
       # Build a blank comment form 
       @comment = @user_key.comments.build
     end
@@ -146,11 +158,15 @@ class UserKeysController < ApplicationController
     end
     
     def update_user_key_params # For requester, upon updating application text
-      params.require(:user_key).permit(:application_text)
+      
+      params.require(:user_key).permit(:agree, :proposal_text_one, :proposal_text_two,
+                                       :proposal_text_three, :proposal_text_four,
+                                       :proposal_text_five, :proposal_text_six,
+                                       :proposal_text_seven, :proposal_text_eight)
     end
     
     def comment_user_key_params # For anyone who can comment
-      params.require(:user_key).permit(:comments_attributes => [:id, :message, :user_id])
+      params.require(:user_key).permit(:comments_attributes => [:id, :message, :public, :user_id])
     end
     
     def admin_update_user_key_params # For admin, upon updating filters or anything else

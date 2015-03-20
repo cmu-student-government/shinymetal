@@ -22,11 +22,11 @@ ActiveRecord::Schema.define(version: 20150304225636) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "message"
-    t.boolean  "is_private"
+    t.boolean  "public",      default: false
     t.integer  "user_id"
     t.integer  "user_key_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "filters", force: :cascade do |t|
@@ -60,18 +60,24 @@ ActiveRecord::Schema.define(version: 20150304225636) do
 
   create_table "user_keys", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "status",           default: "awaiting_submission"
+    t.string   "status",              default: "awaiting_submission"
     t.datetime "time_submitted"
     t.datetime "time_filtered"
     t.datetime "time_confirmed"
     t.datetime "time_expired"
-    t.boolean  "active",           default: true
-    t.text     "reason"
+    t.boolean  "active",              default: true
     t.string   "value"
-    t.text     "application_text"
-    t.boolean  "agree",            default: false
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
+    t.text     "proposal_text_one"
+    t.text     "proposal_text_two"
+    t.text     "proposal_text_three"
+    t.text     "proposal_text_four"
+    t.text     "proposal_text_five"
+    t.text     "proposal_text_six"
+    t.text     "proposal_text_seven"
+    t.text     "proposal_text_eight"
+    t.boolean  "agree",               default: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
   end
 
   create_table "users", force: :cascade do |t|

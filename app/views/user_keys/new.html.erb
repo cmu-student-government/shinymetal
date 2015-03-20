@@ -1,5 +1,3 @@
 <h1>New User Key</h1>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', user_keys_path, class: "big-button secondary" %>
+<%= render partial: 'form', locals: {cancel_url: user_keys_path} %>

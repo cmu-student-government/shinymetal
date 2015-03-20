@@ -89,6 +89,7 @@ class UserKey < ActiveRecord::Base
     end
   end
 
+  # Used for index and show pages
   def name
     "Application Key #{self.id}" 
   end
@@ -101,6 +102,9 @@ class UserKey < ActiveRecord::Base
       return set_key_as_filtered
     when :confirmed
       return set_key_as_confirmed
+    # Key can be reset to the very beginning of its lifecycle here
+    when :awaiting_submission
+      return set_key_as_awaiting_submission
     end
   end
   
@@ -108,6 +112,11 @@ class UserKey < ActiveRecord::Base
   # Save changes to Ruby object to the database
   def save_changes
     self.save!
+  end
+  
+  # Requirement for resetting a key
+  def has_public_comments?
+    return self.comments.public_only.size > 0
   end
   
   # When submitted, a key should be marked as ready for filters from admin
@@ -119,6 +128,18 @@ class UserKey < ActiveRecord::Base
   # When submitted, a key should have its requested date marked
   def set_time_to_now(param_time_attribute)
     self[param_time_attribute] = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
+  end
+  
+  # For a key being reset
+  def reset_times
+    self.time_submitted = nil
+    self.time_filtered = nil
+  end
+  
+  # For a key being reset
+  def reset_approvals
+    # Delete all existing approvals
+    self.approvals.destroy_all
   end
 
   # When a key is submitted by requester to admin
@@ -159,7 +180,23 @@ class UserKey < ActiveRecord::Base
     end
     return false
   end
+  
+  # When a key has rejected and sent back to the requester
+  # Can only be sent back after submission but before "confirmed" stage
+  # Note: a key can only be reset if it has comments made by admin for the requester's benefit.
+  def set_key_as_awaiting_submission
+    if (at_stage? :awaiting_filters or at_stage? :awaiting_confirmation) and has_public_comments?
+      set_status_to("awaiting_submission")
+      reset_times
+      reset_approvals
+      # Keep any filters/comments that were applied, so dont reset those
+      save_changes
+      return true
+    end
+    return false
+  end
 
+  # Simple foreign key validation
   def user_id_valid
     unless User.all.to_a.map{|o| o.id}.include?(self.user_id)
       errors.add(:user_id, "is invalid")

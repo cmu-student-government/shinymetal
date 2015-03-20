@@ -2,8 +2,12 @@
 
 <%= render 'shared/error_messages', object: @user_key %>
 
-<%= render partial: 'user_keys/show_partials/approval_status' %>
+<!-- Only Staff should see this status bar.-->
+<% if @current_user.role? :is_staff %>
+  <%= render partial: 'user_keys/show_partials/approval_status' %>
+<% end %> 
 
+<!-- Everyone can see the following information.-->
 <p>
   <% if @user_key.at_stage? :confirmed %>
     <i class="fi-check success"></i>&nbsp;This approval is complete.</i>
@@ -13,58 +17,76 @@
 </p>
 
 <p>
-  <strong>User:</strong>
-  <%= link_to @user_key.user.andrew_id, @user_key.user  %>
-</p>
-
-<p>
-  <strong>Time submitted:</strong>
-  <%= @user_key.time_submitted.nil? ? "Not submitted yet" : @user_key.time_submitted.to_formatted_s(:pretty) %>
-</p>
-
-<p> 
-  <strong>Time shared with approvers:</strong>
-  <%= @user_key.time_filtered.nil? ? "Not shared with approvers yet" : @user_key.time_filtered.to_formatted_s(:pretty) %>
-</p>
-
-<p>
-  <strong>Time confirmed:</strong>
-  <%= @user_key.time_confirmed.nil? ? "Not confirmed yet" : @user_key.time_confirmed.to_formatted_s(:pretty) %>
-</p>
-
-<p>
   <strong>Value:</strong>
   <%= @user_key.value %>
 </p>
 
 <p>
   <strong>Application text:</strong>
-  <%= @user_key.application_text %>
+  <%= render partial: 'user_keys/show_partials/application_text' %>
 </p>
 
 <p>
   <strong>Active:</strong>
   <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.active } %>
 </p>
+<!-- End of public information. -->
 
-<% if can? :read, :all %>  
+<!-- Staffmembers see private information -->
+<% if @current_user.role? :is_staff %>
+  
+  <p>
+    <strong>User:</strong>
+    <%= link_to @user_key.user.andrew_id, @user_key.user  %>
+  </p>
+  
+  <p>
+    <strong>Time submitted:</strong>
+    <%= @user_key.time_submitted.nil? ? "Not submitted yet" : @user_key.time_submitted.to_formatted_s(:pretty) %>
+  </p>
+  
+  <p> 
+    <strong>Time shared with approvers:</strong>
+    <%= @user_key.time_filtered.nil? ? "Not shared with approvers yet" : @user_key.time_filtered.to_formatted_s(:pretty) %>
+  </p>
+  
+  <p>
+    <strong>Time confirmed:</strong>
+    <%= @user_key.time_confirmed.nil? ? "Not confirmed yet" : @user_key.time_confirmed.to_formatted_s(:pretty) %>
+  </p>
+  
+  <%= render partial: 'user_keys/show_partials/list_of_filters' %>
 
-    <%= render partial: 'user_keys/show_partials/list_of_filters' %>
+  <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+  
+  <!-- Show the key's approvers if the key is at the approval stage or later. -->
+  <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
+    <%= render partial: 'user_keys/show_partials/list_of_approvers' %> 
+  <% end %>
+  
+<% end %>
 
-    <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+<!-- End of general staff-only information. -->
 
-    <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
+<!-- Approvers submit their approval here -->
+<% if @user_key.at_stage? :awaiting_confirmation and @current_user.role? :is_approver %>
+  <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
+<% end  %>
 
-    <%= render partial: 'user_keys/show_partials/submit_buttons' %>
-    
-<% end %>  
-
-<%= link_to 'Edit', edit_user_key_path(@user_key), class: "big-button" %> |
-<%= link_to 'Back', user_keys_path, class: "big-button secondary" %> |
-<%= link_to 'Destroy', @user_key, method: :delete, data: { confirm: 'Are you sure?' }, class: "small-button" %>
-
-<%= render partial: 'user_keys/show_partials/list_of_approvers' %>
-
-<div id="comments">
+<!-- Key owner can submit the key or edit the application before submitting. -->
+<% if (@current_user.owns?(@user_key) and @user_key.at_stage? :awaiting_submission) %> 
+  <%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button success" %>
+  | 
+  <%= link_to 'Edit application', edit_user_key_path(@user_key), class: "big-button" %> | 
+<% end %>
+<!-- Requester gets a different back button than the admin.-->
+<% if @current_user.role? :requester %>
+  <%= link_to 'Back to my keys', own_user_keys_path, class: "big-button secondary" %>
+<% end %>
+             
 <%= render partial: 'user_keys/show_partials/list_of_comments' %>
-</div>
+
+<!-- Confirm, reset, delete, and apply filters here -->
+<% if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission) %>
+  <%= render partial: 'user_keys/show_partials/admin_only' %>
+<% end %>

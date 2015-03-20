@@ -84,11 +84,11 @@ class UserKeyTest < ActiveSupport::TestCase
     end
     
     should "have a scope to sort by time submitted" do
-      assert_equal [["bender", DateTime.now.to_date], 
-                    ["bender", 2.days.ago.to_date], 
-                    ["bender", 4.days.ago.to_date],
-                    ["bender", 6.days.ago.to_date]],
-                   UserKey.by_user.by_time_submitted.all.map{|o| [o.user.andrew_id, o.time_submitted.to_date] }
+      assert_equal [["bender", 0.days.ago.day], 
+                    ["bender", 2.days.ago.day], 
+                    ["bender", 4.days.ago.day],
+                    ["bender", 6.days.ago.day]],
+                   UserKey.by_user.by_time_submitted.all.map{|o| [o.user.andrew_id, o.time_submitted.day] }
     end
 
     should "have a scope that returns keys awaiting filters" do 

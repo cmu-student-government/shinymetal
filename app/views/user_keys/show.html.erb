@@ -2,9 +2,19 @@
 
 <%= render 'shared/error_messages', object: @user_key %>
 
-<!-- Everyone can see the following information.-->
+<!-- Only Staff should see this status bar.-->
+<% if @current_user.role? :is_staff %>
+  <%= render partial: 'user_keys/show_partials/approval_status' %>
+<% end %> 
 
-<%= render partial: 'user_keys/show_partials/approval_status' %>
+<!-- Everyone can see the following information.-->
+<p>
+  <% if @user_key.at_stage? :confirmed %>
+    <i class="fi-check success"></i>&nbsp;This approval is complete.</i>
+  <% else %>
+    <i class="fi-x alert"></i>&nbsp;<i>This approval is incomplete.</i>
+  <% end %>
+</p>
 
 <p>
   <strong>Value:</strong>
@@ -24,14 +34,6 @@
 
 <!-- Staffmembers see private information -->
 <% if @current_user.role? :is_staff %>
-
-  <p>
-    <% if @user_key.at_stage? :confirmed %>
-      <i class="fi-check success"></i>&nbsp;This approval is complete.</i>
-    <% else %>
-      <i class="fi-x alert"></i>&nbsp;<i>This approval is incomplete.</i>
-    <% end %>
-  </p>
   
   <p>
     <strong>User:</strong>

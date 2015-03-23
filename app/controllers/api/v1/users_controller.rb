@@ -1,3 +1,6 @@
+# use POST via HTTPS
+# symlink protected
+# double handshake
 module Api
   module V1
     class UsersController < ApplicationController

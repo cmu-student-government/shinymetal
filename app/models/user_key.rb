@@ -107,7 +107,26 @@ class UserKey < ActiveRecord::Base
       return set_key_as_awaiting_submission
     end
   end
-  
+
+  def gen_api_key
+    if at_stage?(:confirmed)
+      # the datetime of when the user_key was first requested
+      date_string = self.time_submitted.to_s.split("")
+      # the andrew_id of the user who requested the user_key
+      andrew_id = self.user.andrew_id.split("")
+      # add some spice (salt) to the key as well 
+      salt = SETTINGS[:api_key_salt].split("")
+      # intertwine the string of the andrewid and the date together to build
+      # the hash. This is so we can compare the passed in token to a hash
+      # we can recompute to ensure security and not have the key stored in 
+      # the database. (ex: intertwining "hello" and "woo" => "hweololo")
+      # eventually add in the salt
+      hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
+      # hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
+      self.value = Digest::SHA2.hexdigest hash_string
+    end
+  end
+
   private
   # Save changes to Ruby object to the database
   def save_changes
@@ -164,26 +183,11 @@ class UserKey < ActiveRecord::Base
     return false
   end
   
-  def set_key_value
-    # FIXME - add real hash values here later
-    # the datetime of when the user_key was first requested
-    date_string = self.time_submitted.to_s.split("")
-    # the andrew_id of the user who requested the user_key
-    andrew_id = self.user.andrew_id.split("")
-    # intertwine the string of the andrewid and the date together to build
-    # the hash. This is so we can compare the passed in token to a hash
-    # we can recompute to ensure security and not have the key stored in 
-    # the database. (ex: intertwining "hello" and "woo" => "hweololo")
-    hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
-    self.value = Digest::SHA2.hexdigest hash_string
-  end
-  
   # When a key has been approved by everyone and is confirmed by admin
   def set_key_as_confirmed
     if at_stage? :awaiting_confirmation and self.approved_by_all?
       set_status_to("confirmed")
       set_time_to_now(:time_confirmed)
-      set_key_value
       save_changes
       return true
     end

@@ -4,6 +4,8 @@ class UserKeysController < ApplicationController
                                       :delete_comment, :approve_key, :undo_approve_key,
                                       :set_as_submitted, :set_as_filtered,
                                       :set_as_confirmed, :set_as_reset]
+  # CanCan checks
+  authorize_resource
 
   # GET /user_keys
   def index

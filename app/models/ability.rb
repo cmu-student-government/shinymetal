@@ -2,44 +2,115 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    #user is passed in from application controller, this is if guest
+    # Remember that the user is a guest
+    logged_in = !user.nil?
+    
+    # User is passed in from application controller, this is if the user is a guest
     user ||= User.new
     
-    #will be changed once authentication & sessions are implemented
-    if user.role == "admin"
-      can :manage, :all
-    elsif user.role == "staff_approver"
-      can :read, :all
-    elsif user.role == "staff_not_approver"
-      can :read, :all
-    elsif user.role == "requester"
+    # Authorize user keys, users, filters, and
+    # the comments in User Keys.
+    
+    # Approver rights
+    if user.role? :is_approver
+      can :approve_key, UserKey do |key|
+        key.at_stage? :awaiting_confirmation
+      end
+      
+      can :undo_approve_key, UserKey do |key|
+        key.at_stage? :awaiting_confirmation
+      end
     end
+    
+    # Admin-only rights
+    # Admin can do everything EXCEPT view other requester's keys,
+    # which have not yet been submitted.
+    if user.role? :admin
 
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
-    #
-    # The first argument to `can` is the action you are giving the user
-    # permission to do.
-    # If you pass :manage it will apply to every action. Other common actions
-    # here are :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on.
-    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
-    # class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the
-    # objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details:
-    # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+      # User
+      # Admins should not be able to create or destroy users.
+      # Users should be created automatically when logging in via shibboleth.
+      can :read, User
+      can :update, User
+      
+      # Filter
+      # Admin can do anything they want with filters.
+      can :manage, Filter
+      
+      # UserKey
+      # Comments cant be changed at awaiting_sub stage
+      can :add_comment, UserKey do |key|
+        !(key.at_stage? :awaiting_submission)
+      end
+      can :delete_comment, UserKey do |key|
+        !(key.at_stage? :awaiting_submission)
+      end
+      # Only allow filter completion when at awaiting_filters stage
+      can :set_as_filtered, UserKey do |key|
+        key.at_stage? :awaiting_filters
+      end
+      # Only allow confirm when at awaiting_confirmation stage
+      can :set_as_confirmed, UserKey do |key|
+        key.at_stage? :awaiting_confirmation
+      end
+      # Only allow reset when awaiting confirmation or awaiting filters
+      can :set_as_reset, UserKey do |key|
+        key.at_stage? :awaiting_filters or key.at_stage? :awaiting_confirmation
+      end
+    end
+    # End Admin rights
+    
+    # Staff rights
+    # These are common rights among staff so that any staffmember can read most information.
+    if user.role? :is_staff
+      
+      # Users
+      # Can read (show, index) any user
+      can :read, User
+      
+      # Filters
+      # Can read (show, index) filters
+      can :read, Filter
+      
+      # User Keys
+      # Can read (show, index) any submitted UserKeys
+      can :read, UserKey do |key|
+        !(key.at_stage? :awaiting_submission)
+      end
+      
+    end
+    
+    # Requester and Key Owner rights
+    # These rights are universally available to anyone who is logged in
+    if logged_in
+      
+      # Users
+      # Can see their own profile 
+      can :show, User do |accessed_user|
+        accessed_user.id == user.id
+      end
+      
+      # UserKey
+      # Can see their own user keys
+      can :show, UserKey do |key|
+        user.owns?(key)
+      end
+      # Can submit their own keys
+      can :set_as_submitted, UserKey do |key|
+        user.owns?(key) and key.at_stage?(:awaiting_submission)
+      end
+      # Can see their own keys
+      can :own_user_keys, UserKey do |key|
+        user.owns?(key)
+      end
+      # Can create a new key for themselves
+      can :create, UserKey
+      
+      # No universal Filter key rights for requesters
+      
+    #End basic logged_in rights
+    end
+  
+  ##End def initialize
   end
 end

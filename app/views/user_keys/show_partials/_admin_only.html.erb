@@ -2,7 +2,7 @@
     <h3>Admin only</h3>
     
     <!-- Buttons for progressing approval process -->
-    <%= render partial: 'user_keys/show_partials/submit_buttons' %>
+    <%= render partial: 'user_keys/show_partials/approval_buttons' %>
     
     <%= link_to 'Edit access rights', edit_user_key_path(@user_key), class: "big-button" %> |
     <%= link_to 'Back to keys list', user_keys_path, class: "big-button secondary" %>

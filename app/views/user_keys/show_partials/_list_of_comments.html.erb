@@ -4,19 +4,19 @@
   <!--Show existing comments -->
   <% if @public_comments.size == 0 %>
   None
-  <%else%>
-  <% for comment in @public_comments %>
-  <fieldset>
-    <strong>Administrator</strong>
-    &nbsp;<%= comment.created_at.to_formatted_s(:pretty) %>
-    <% if @current_user.role? :admin %>
-      <%= link_to "X", delete_comment_path(id: @user_key.id, comment_id: comment.id),
-	method: :patch, data: { confirm: 'Are you sure you want to delete this comment?'}, class: "small-button right" %>
+  <% else %>
+    <% for comment in @public_comments %>
+    <fieldset>
+      <strong>Administrator</strong>
+      &nbsp;<%= comment.created_at.to_formatted_s(:pretty) %>
+      <% if @current_user.role? :admin %>
+	<%= link_to "X", delete_comment_path(id: @user_key.id, comment_id: comment.id),
+	  method: :patch, data: { confirm: 'Are you sure you want to delete this comment?'}, class: "small-button right" %>
+      <% end %>
+      <br />
+      <p><%= comment.message %></p>
+    </fieldset>
     <% end %>
-    <br />
-    <p><%= comment.message %></p>
-  </fieldset>
-  <% end %>
   <% end %>
 </fieldset>
   
@@ -25,7 +25,7 @@
     <h3>Staff Discussion (Private)</h3>
   <% if @private_comments.size == 0 %>
       None
-  <%else%>
+  <% else %>
     <!--Show existing comments -->
     <% for comment in @private_comments %>
       <strong><%= comment.comment_user.andrew_id %></strong>
@@ -33,7 +33,7 @@
 	<% if @current_user.role? :admin %>
 	  <%= link_to "X", delete_comment_path(id: @user_key.id, comment_id: comment.id),
 	    method: :patch, data: { confirm: 'Are you sure you want to delete this comment?'}, class: "small-button right" %>
-  <% end %>
+        <% end %>
 	<br />
 	<p><%= comment.message %></p>
     <% end %>
@@ -41,35 +41,42 @@
 
   </fieldset>
   
-  <%= form_for(@user_key, url: add_comment_path(@user_key)) do |f| %>
-    <fieldset>
-	    
-    <legend>Add a comment</legend>
-  
-    <!--Allow new comment to be added-->
-    <%= f.fields_for :comments, @comment do |p| %>
+  <!-- Staff submitting their own keys can't comment until the key is submitted.-->
+  <% if !(@user_key.at_stage? :awaiting_submission) %>
+    <%= form_for(@user_key, url: add_comment_path(@user_key)) do |f| %>
+      <fieldset>
+	      
+      <legend>Add a comment</legend>
     
-      <div class="row">
-	  <%= p.label :message %>
-	  <%= p.text_field :message %>
-      </div>
+      <!--Allow new comment to be added-->
+      <%= f.fields_for :comments, @comment do |p| %>
       
-      <!-- Only admin is allowed to make a post visible to the requester-->
-      <% if @current_user.role? :admin %>
-      <div class="row">
-	  <%= p.label "Check here to post this comment as a note to the requester." %>
-	  <%= p.check_box :public %>
-      </div>
+	<div class="row">
+	    <%= p.label :message %>
+	    <%= p.text_field :message %>
+	</div>
+	
+	<!-- Only admin is allowed to make a post visible to the requester-->
+	<% if @current_user.role? :admin %>
+	<div class="row">
+	    <%= p.label "Check here to post this comment as a note to the requester." %>
+	    <%= p.check_box :public %>
+	</div>
+	<% end %>
+	
       <% end %>
       
+      <div class="actions">
+	<%= f.submit class: "big-button success", value: "Add comment" %>
+      </div>
+      
+      </fieldset>
+    <!-- End form -->
     <% end %>
-    
-    <div class="actions">
-      <%= f.submit class: "big-button success", value: "Add comment" %>
-    </div>
-    
-    </fieldset>
-  <!-- End form -->
+  <% else %>
+  
+  <p><i>Comments cannot be made until the key request has been submitted.</i></p>  
+  
   <% end %>
   
 <!-- End staff-only comment area-->

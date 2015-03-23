@@ -1,23 +1,11 @@
-<br />
+<!-- Key owner can submit the key or edit the application before submitting. -->
+<%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button success" %>
+|
+<%= link_to 'Edit application', edit_user_key_path(@user_key), class: "big-button" %> | 
 
-<% if @user_key.at_stage? :awaiting_filters %>
-
-  <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button" %> 
-
-<% elsif @user_key.at_stage? :awaiting_confirmation %>
-
-  <% if @user_key.approved_by_all? %>
-    <p>This key has been approved by everyone and is ready to be released to the requester.</p>
-  <% else %>
-    <p>This key has not yet been approved by everyone and cannot be released to the requester.</p>
-  <% end %>
-    
-    <%= link_to 'Confirm and release key to user', set_as_confirmed_path(@user_key), method: :patch, class: "big-button", disabled: !@user_key.approved_by_all? %> 
-
-<% else %> <!-- Must be at_stage? :confirmed -->
-
-<p> This key was approved by everyone and has been confirmed.</p>
-
+<% if @current_user.role? :admin %>
+  <%= link_to 'Back to all keys', user_keys_path, class: "big-button secondary" %>
+<% else %>
+<!-- Requester gets a different back button than the admin.-->
+  <%= link_to 'Back to your keys', own_user_keys_path, class: "big-button secondary" %>
 <% end %>
-
-<br />

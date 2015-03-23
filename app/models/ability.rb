@@ -20,7 +20,9 @@ class Ability
       can :undo_approve_key, UserKey do |key|
         key.at_stage? :awaiting_confirmation
       end
+      
     end
+    #End of approver rights
     
     # Admin-only rights
     # Admin can do everything EXCEPT view other requester's keys,
@@ -28,21 +30,17 @@ class Ability
     if user.role? :admin
 
       # User
-      # Admins should not be able to create or destroy users.
+      # Admins should not be able to create or destroy users, since these routes don't exist.
       # Users should be created automatically when logging in via shibboleth.
-      can :read, User
-      can :update, User
+      can :manage, User
       
       # Filter
-      # Admin can do anything they want with filters.
+      # Admin can do anything they want to with filters.
       can :manage, Filter
       
       # UserKey
       # Comments cant be changed at awaiting_sub stage
-      can :add_comment, UserKey do |key|
-        !(key.at_stage? :awaiting_submission)
-      end
-      can :delete_comment, UserKey do |key|
+      can :update, UserKey do |key|
         !(key.at_stage? :awaiting_submission)
       end
       # Only allow filter completion when at awaiting_filters stage
@@ -57,6 +55,9 @@ class Ability
       can :set_as_reset, UserKey do |key|
         key.at_stage? :awaiting_filters or key.at_stage? :awaiting_confirmation
       end
+      # Admins can destroy keys
+      can :destroy, UserKey
+      
     end
     # End Admin rights
     
@@ -77,8 +78,17 @@ class Ability
       can :read, UserKey do |key|
         !(key.at_stage? :awaiting_submission)
       end
+      # Staffmembers can comment on any unsubmitted key
+      # Edge case: If a staffmember has their own key pending, they still can't comment on it.
+      can :add_comment, UserKey do |key|
+        !(key.at_stage? :awaiting_submission)
+      end
+      can :delete_comment, UserKey do |key|
+        !(key.at_stage? :awaiting_submission)
+      end
       
     end
+    # End is_staff rights
     
     # Requester and Key Owner rights
     # These rights are universally available to anyone who is logged in
@@ -91,6 +101,10 @@ class Ability
       end
       
       # UserKey
+      # Can edit their own unsubmitted applications
+      can :update, UserKey do |key|
+        user.owns?(key) and key.at_stage?(:awaiting_submission)
+      end
       # Can see their own user keys
       can :show, UserKey do |key|
         user.owns?(key)

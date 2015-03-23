@@ -77,20 +77,12 @@
   <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
 <% end  %>
 
-<!-- Key owner can submit the key or edit the application before submitting. -->
-<% if (@current_user.owns?(@user_key) and @user_key.at_stage? :awaiting_submission) %> 
-  <%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch, class: "big-button success" %>
-  | 
-  <%= link_to 'Edit application', edit_user_key_path(@user_key), class: "big-button" %> | 
-<% end %>
-<!-- Requester gets a different back button than the admin.-->
-<% if @current_user.role? :requester %>
-  <%= link_to 'Back to my keys', own_user_keys_path, class: "big-button secondary" %>
+<!-- Confirm, reset, delete, and apply filters here. -->
+<% if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission) %>
+  <%= render partial: 'user_keys/show_partials/admin_only' %>
+<!-- Otherwise, key owner can submit the key or edit request.-->
+<% elsif @current_user.owns?(@user_key) and @user_key.at_stage? :awaiting_submission %>
+  <%= render partial: 'user_keys/show_partials/submit_buttons' %>
 <% end %>
              
 <%= render partial: 'user_keys/show_partials/list_of_comments' %>
-
-<!-- Confirm, reset, delete, and apply filters here -->
-<% if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission) %>
-  <%= render partial: 'user_keys/show_partials/admin_only' %>
-<% end %>

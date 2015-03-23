@@ -90,9 +90,9 @@ class UserKey < ActiveRecord::Base
   end
 
   # Used for index and show pages
-  def name
-    "Application Key #{self.id}" 
-  end
+  # def name
+  #   "Application Key #{self.id}" 
+  # end
   
   def set_status_as(sym)
     case sym

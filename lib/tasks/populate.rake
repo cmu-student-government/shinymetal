@@ -79,6 +79,7 @@ namespace :db do
       # Step 3A: add 0 to 3 keys for each requester
       UserKey.populate 0..3 do |user_key|
         user_key.user_id = user.id
+        user_key.name = Faker::Company.name + " key"
         # make sure all begin as awaiting submission
         user_key.status = "awaiting_submission"
         # now begin submitting some keys randomly
@@ -91,7 +92,6 @@ namespace :db do
             if [true,false].sample # if the key was confirmed...
               user_key.time_confirmed = 1.week.ago.to_date
               # Set a random name for the key
-              user_key.name = Faker::Company.name
               user_key.status = "confirmed"
             end
           end

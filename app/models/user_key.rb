@@ -166,7 +166,16 @@ class UserKey < ActiveRecord::Base
   
   def set_key_value
     # FIXME - add real hash values here later
-    self.value = "SECURE HASH VALUE!"
+    # the datetime of when the user_key was first requested
+    date_string = self.time_submitted.to_s.split("")
+    # the andrew_id of the user who requested the user_key
+    andrew_id = self.user.andrew_id.split("")
+    # intertwine the string of the andrewid and the date together to build
+    # the hash. This is so we can compare the passed in token to a hash
+    # we can recompute to ensure security and not have the key stored in 
+    # the database. (ex: intertwining "hello" and "woo" => "hweololo")
+    hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
+    self.value = Digest::SHA2.hexdigest hash_string
   end
   
   # When a key has been approved by everyone and is confirmed by admin

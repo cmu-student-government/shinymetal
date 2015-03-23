@@ -2,7 +2,7 @@
   <fieldset>
 
   <!-- Explain the text shown to admins as data that was entered by the requester-->
-  <% if @current_user.is_admin? %>
+  <% if @current_user.role? :admin %>
     <h3>Data entered by requester</h3>
     <p><i>This information was entered by the requester.</i></p>
   <% end %>
@@ -41,41 +41,41 @@
 
   </fieldset>
 
-  <% if @current_user.role == "admin" %>
+  <% if @current_user.role? :admin %>
 
     <!-- Only admins can assign filters, and they can do so at any time -->
     <fieldset>
-      
+
       <h3>Admin only</h3>
-      
+
       <p><i>Set filters and organizations that this key may have access to here.</i></p>
-  
+
       <%= render partial: 'user_keys/form_partials/filters_checkboxes' %>
-      <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>    
-    
+      <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>
+
       <div class="collapsed_row"> <!--Expiration date-->
         <div class="three-column">
           <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
         </div>
         <div class="nine-column">
-          <%= f.date_field :time_expired, order: [:month, :day, :year], 
+          <%= f.date_field :time_expired, order: [:month, :day, :year],
                           start_year: Date.today.year, end_year: 2.years.from_now %>
         </div>
       </div>
 
     </fieldset>
-    
+
     <!-- Active or not active -->
     <fieldset>
-      
+
       <!-- Only admins can inactive a key -->
       <div class="collapsed_row">
         <%= f.check_box :active %>
         <%= f.label :active %>
       </div>
-    
+
       <p><i>Optionally provide a reason for inactiving the key.</i></p>
-      
+
       <div class="collapsed_row"> <!--Expiration date-->
         <div class="three-column">
           <%= f.label :reason, class: "prefix" %>
@@ -84,7 +84,7 @@
           <%= f.text_field :reason %>
         </div>
       </div>
-        
+
       <p>Note: marking a key application as <i>inactive</i>
       suspends the application process. Marking a confirmed key as <i>inactive</i>
       suspends all API use of the key.</p>

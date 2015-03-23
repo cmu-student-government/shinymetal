@@ -42,7 +42,7 @@ class FiltersController < ApplicationController
   # DELETE /filters/1
   def destroy
     @filter.destroy
-    redirect_to filters_url, notice: 'Filter was successfully destroyed.' }
+    redirect_to filters_url, notice: 'Filter was successfully destroyed.'
   end
 
   private

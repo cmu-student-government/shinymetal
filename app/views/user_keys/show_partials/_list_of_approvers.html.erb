@@ -10,7 +10,7 @@
 	  <b><%= "Approvers who have not approved yet this key:" %></b><br />
 	  <ul>
 		<% for approver in User.approvers_only - @user_key.approval_users %>
-		  <li><%= link_to approver.andrew_id, @approver %></li>
+		  <li><%= link_to approver.andrew_id, approver %></li>
 		<% end  %>
 	  </ul>
 	</p>

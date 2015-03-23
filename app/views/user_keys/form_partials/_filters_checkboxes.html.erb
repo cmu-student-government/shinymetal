@@ -4,10 +4,15 @@
   <% if Filter.all.empty? %>
   No filters can be selected because there are no filters in the system.
   <% else %>
-    <% for filter in Filter.alphabetical %>
-    <%= check_box_tag "user_key[filter_ids][]", filter.id, @user_key.filters.include?(filter) %>
-      <%= filter.name %>
-      <br />
-    <% end  %>  
+    <% for resourceName in Filter.all.map{|f| f.resource} %>
+      <h5><%= resourceName.capitalize + " Filters" %></h5>
+      <% for filter in Filter.alphabetical %>
+        <% if filter.resource == resourceName %>
+          <%= check_box_tag "user_key[filter_ids][]", filter.id, @user_key.filters.include?(filter) %>
+            <%= filter.name %>
+          <br />
+        <% end %>
+      <% end %>
+    <% end %>  
   <% end %>
 </p>

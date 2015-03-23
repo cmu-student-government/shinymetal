@@ -2,6 +2,9 @@
   <h3>Administrator Notes to User</h3>
   
   <!--Show existing comments -->
+  <% if @public_comments.size == 0 %>
+  None
+  <%else%>
   <% for comment in @public_comments %>
   <fieldset>
     <strong>Administrator</strong>
@@ -14,12 +17,15 @@
     <p><%= comment.message %></p>
   </fieldset>
   <% end %>
+  <% end %>
 </fieldset>
   
 <% if @current_user.role? :is_staff %> 
   <fieldset>
     <h3>Staff Discussion (Private)</h3>
-  
+  <% if @private_comments.size == 0 %>
+      None
+  <%else%>
     <!--Show existing comments -->
     <% for comment in @private_comments %>
       <strong><%= comment.comment_user.andrew_id %></strong>
@@ -27,10 +33,12 @@
 	<% if @current_user.role? :admin %>
 	  <%= link_to "X", delete_comment_path(id: @user_key.id, comment_id: comment.id),
 	    method: :patch, data: { confirm: 'Are you sure you want to delete this comment?'}, class: "small-button right" %>
-	<% end %>
+  <% end %>
 	<br />
 	<p><%= comment.message %></p>
     <% end %>
+  <% end %>
+
   </fieldset>
   
   <%= form_for(@user_key, url: add_comment_path(@user_key)) do |f| %>

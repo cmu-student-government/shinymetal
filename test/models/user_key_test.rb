@@ -38,13 +38,13 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal ["bender", "hermes"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
     end
     
-    should "have a scope to return only submitted keys" do
+    should "have assert scope to return only submitted keys" do
       assert_equal 4, UserKey.submitted.size
     end
     
-    should "have a name method" do
-      assert_equal "Application Key 1", @bender_key.name
-    end
+    # should "have a name method" do
+    #   assert_equal "Application Key 1", @bender_key.name
+    # end
     
     should "have at_stage? method" do
       # Test some positive cases

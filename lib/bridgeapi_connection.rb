@@ -6,14 +6,14 @@ require 'net/http'
 # we can change this in the future to take in more options later
 def hit_api_endpoint(endpoint)
   # Authentication info, don't share this!
-  pass = "SH1NY-M3T4L!"
-  priv = "54ef594bd7298"
+  pass = SETTINGS[:stugov_api_user]
+  priv = SETTINGS[:stugov_api_pass]
+
+  # Our base URL hosted on stugov's server
+  base_url = SETTINGS[:stugov_api_base_url]
 
   # We make a sha256 hash of this in binary format, then base64 encode that
   digest = Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new("sha256"), priv, pass)).chomp
-
-  # Our base URL hosted on stugov's server
-  base_url = "https://stugov.andrew.cmu.edu/bridgeapi/test.php"
 
   # Specify which endpoint we'd like to request from. If you want a specific
   #   id from this endpoint, just do <endpoint>/<id>, for example: events/105
@@ -21,6 +21,7 @@ def hit_api_endpoint(endpoint)
 
   # Any optional parameters that are listed for this endpoint in the API docs
   optional_params = "&page=1"
+
   # Now we construct the full url
   url = URI.parse("#{base_url}?resource=#{resource}#{optional_params}")
 

@@ -1,7 +1,7 @@
 <h1>Submitted User Keys</h1>
 
-<div id="user_keys">
-  <%= render partial: 'user_keys/index_partials/index_table' %>
+<div id="all_user_keys">
+  <%= render partial: 'user_keys/index_partials/index_table', locals: { keys: @user_keys, list_all: true } %>
 </div>
 
 <!-- Kaminari paginate -->

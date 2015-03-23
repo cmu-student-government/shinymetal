@@ -5,7 +5,7 @@
   <%= render 'shared/error_messages', object: @user_key %>
   
   <!-- On create, @user_key.id is nil -->
-  <% @user_key.id.nil? or if @current_user.owns? @user_key %>
+  <% if @user_key.id.nil? or @current_user.owns? @user_key %>
   
     <fieldset>
     <!-- Application text boxes. Note that the form object is passed in as :f-->

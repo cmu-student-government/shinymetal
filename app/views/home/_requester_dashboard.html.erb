@@ -3,9 +3,9 @@
 <h4> Hi, <%="#{current_user.andrew_id}"%>!  </h4>
 <br /> 
 
-<%= link_to "Apply for a new key", new_user_key_path, class: "big-button" %>
+<%= link_to  'Apply for a new key', new_user_key_path, class: "big-button" %>
 
-<p> My Existing Keys: </p>
+<p> Your Existing Keys: </p>
 <% if @confirmed_keys.size > 0 %>
 <table>
   <tr>
@@ -62,7 +62,7 @@ None
 <% end %>
 
 
-<p> My Expired Keys: </p>
+<p> Your Expired Keys: </p>
 <% if @expired_keys.size > 0 %>
 <table>
   <tr>

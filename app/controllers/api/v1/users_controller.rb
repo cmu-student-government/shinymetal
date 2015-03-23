@@ -9,6 +9,8 @@ module Api
       before_filter :verify_access_with_api_key
 
       def index
+        # FIXME need to modify to consider related filters and build 
+        # appropriate query to hit the collegiate link api
         require "./lib/bridgeapi_connection.rb"
         # modified the script to hit only the specified endpoint
         render json: hit_api_endpoint("users"), status: 200

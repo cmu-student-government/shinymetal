@@ -22,8 +22,9 @@
   
   <!-- Begin admin form -->
   
-  <!-- @current_user can only see both above and below if they are both admin and key owner-->
-  <% if @current_user.role? :admin %>
+  <!-- @current_user can only see both above and below if they are both admin and key owner. -->
+  <!-- Admin rights should be unavailable if the key is not submitted or created yet. -->
+  <% if @current_user.role? :admin and !(@user_key.id.nil? or @user_key.at_stage? :awaiting_submission) %>
     
     <!-- Only admins can assign filters, and they can do so at any time -->
     <fieldset>

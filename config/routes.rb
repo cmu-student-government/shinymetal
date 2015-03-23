@@ -5,7 +5,8 @@ Rails.application.routes.draw do
   resources :user_keys
   
   # Users are not deleted, only inactivated.
-  resources :users, except: [:destroy]
+  # They are not created directly; they 
+  resources :users, except: [:destroy, :create, :new]
   
   # Authentication routes
   get 'logout' => 'sessions#destroy', as: :logout

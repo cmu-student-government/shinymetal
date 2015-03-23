@@ -18,7 +18,11 @@
 
 <p>
   <strong>Value:</strong>
-  <%= @user_key.gen_user_key %>
+  <% if @user_key.at_stage? :confirmed %>
+    <%=@user_key.gen_api_key %>
+  <%else%>
+    The key will be generated upon approval. 
+  <% end %>
 </p>
 
 <p>

@@ -90,8 +90,8 @@ namespace :db do
             user_key.status = "awaiting_confirmation"
             if [true,false].sample # if the key was confirmed...
               user_key.time_confirmed = 1.week.ago.to_date
-              # set 10 random characters for key hash
-              user_key.value = Faker::Lorem.characters(10)
+              # Set a random name for the key
+              user_key.name = Faker::Company.name
               user_key.status = "confirmed"
             end
           end

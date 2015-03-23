@@ -1,7 +1,7 @@
-<h1>My Keys</h1>
+<h1>Your Keys</h1>
 
 <div id="user_keys">
-  <%= render partial: 'user_keys/own_user_keys_partials/own_user_keys_table', object: @user_keys %>
+  <%= render partial: 'user_keys/index_partials/index_table', locals: { keys: @user_keys, list_all: false } %>
 </div>
 
 <!-- Kaminari paginate -->

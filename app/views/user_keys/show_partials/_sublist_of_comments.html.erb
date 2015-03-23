@@ -1,0 +1,27 @@
+<!-- Local variables passed in: comment_type, comments-->
+<fieldset>
+
+<h3><%= comment_type %></h3>
+
+  <% if comments.size == 0 %>
+  None
+  <% else %>
+    <% for comment in comments %>
+    <fieldset>
+      <% if comment_type == "Messages from Administrator" %>
+      <strong><%= link_to comment.comment_user.andrew_id, comment.comment_user %></strong>
+      <% else %>
+        <strong>Administrator</strong>
+      <% end%>
+      &nbsp;<%= comment.created_at.to_formatted_s(:pretty) %>
+      <% if @current_user.role? :admin %>
+	<%= link_to "X", delete_comment_path(id: @user_key.id, comment_id: comment.id),
+	  method: :patch, data: { confirm: 'Are you sure you want to delete this comment?'}, class: "small-button right" %>
+      <% end %>
+      <br />
+      <p><%= comment.message %></p>
+    </fieldset>
+    <% end %>
+  <% end %>
+  
+</fieldset>

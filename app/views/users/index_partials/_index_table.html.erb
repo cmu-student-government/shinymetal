@@ -1,8 +1,11 @@
-<h2>Requesters</h2>
+<!-- Pass in users @requesters or @staff from index page -->
+<!-- 'user_type' is 'requesters' or 'staff' -->
 
-<% if @requesters.empty? %>
+<h2><%= user_type.capitalize %></h2>
 
- <p>No requesters found.</p>
+<% if users.empty? %>
+
+ <p>No <%= user_type %> found.</p>
 
 <% else %>
   
@@ -16,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-    <% for user in @requesters %>
+    <% for user in users %>
       <tr>
 	<td><%= link_to user.andrew_id, user %></td>
 	<td><%= user.role %></td>

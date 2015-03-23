@@ -2,7 +2,7 @@
   
 <!-- Begin @requesters-->
 <div id="requesters">
-  <%= render partial: 'users/index_partials/requesters' %>
+  <%= render partial: 'users/index_partials/index_table', locals: {user_type: "requesters", users: @requesters } %>
 </div>
     
 <!-- Kaminari paginate -->
@@ -14,6 +14,6 @@
 
 <!-- Begin @staff-->
 <!-- anyone looking at @staff is staff, so @staff is never empty -->
-<%= render partial: 'users/index_partials/staff' %>
+<%= render partial: 'users/index_partials/index_table', locals: {user_type: "staff", users: @staff } %>
 
 <%= link_to 'New User', new_user_path, class: "big-button" %>

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :user_keys
   
+  resources :sessions
   # Users are not deleted, only inactivated.
   # They are not created directly; they 
   resources :users, except: [:destroy, :create, :new]

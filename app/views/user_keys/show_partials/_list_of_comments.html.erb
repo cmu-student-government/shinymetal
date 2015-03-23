@@ -1,42 +1,16 @@
 <!--Show existing comments -->
 <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
   
+<!-- Begin staff-only comment area-->
 <% if @current_user.role? :is_staff %> 
     <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @private_comments, comment_type: "Staff Discussion (Private)" } %>
   
   
   <!-- Staff submitting their own keys can't comment until the key is submitted.-->
   <% if !(@user_key.at_stage? :awaiting_submission) %>
-    <%= form_for(@user_key, url: add_comment_path(@user_key)) do |f| %>
-      <fieldset>
-	      
-      <legend>Add a comment</legend>
     
-      <!--Allow new comment to be added-->
-      <%= f.fields_for :comments, @comment do |p| %>
-      
-	<div class="row">
-	    <%= p.label :message %>
-	    <%= p.text_field :message %>
-	</div>
-	
-	<!-- Only admin is allowed to make a post visible to the requester-->
-	<% if @current_user.role? :admin %>
-	  <div class="row">
-	      <%= p.label "Check here to post this comment as a note to the requester." %>
-	      <%= p.check_box :public %>
-	  </div>
-	<% end %>
-	
-      <% end %>
-      
-      <div class="actions">
-	<%= f.submit class: "big-button success", value: "Add comment" %>
-      </div>
-      
-      </fieldset>
-    <!-- End form -->
-    <% end %>
+    <%= render partial: 'user_keys/show_partials/add_comment' %>
+    
   <% else %>
   
   <p><i>Comments cannot be made until the key request has been submitted.</i></p>  

@@ -9,9 +9,9 @@
     <% for comment in comments %>
     <fieldset>
       <% if comment_type == "Messages from Administrator" %>
-      <strong><%= link_to comment.comment_user.andrew_id, comment.comment_user %></strong>
+      <strong>Administrator</strong>
       <% else %>
-        <strong>Administrator</strong>
+      <strong><%= link_to comment.comment_user.andrew_id, comment.comment_user %></strong>
       <% end%>
       &nbsp;<%= comment.created_at.to_formatted_s(:pretty) %>
       <% if @current_user.role? :admin %>

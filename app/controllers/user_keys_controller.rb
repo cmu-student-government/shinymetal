@@ -154,7 +154,7 @@ class UserKeysController < ApplicationController
     end
 
     def create_user_key_params # Seperate, due to new and permanent user_id
-      params.require(:user_key).permit(:user_id, :agree, :proposal_text_one, :proposal_text_two,
+      params.require(:user_key).permit(:user_id, :name, :agree, :proposal_text_one, :proposal_text_two,
                                        :proposal_text_three, :proposal_text_four,
                                        :proposal_text_five, :proposal_text_six,
                                        :proposal_text_seven, :proposal_text_eight)
@@ -162,7 +162,7 @@ class UserKeysController < ApplicationController
     
     def update_user_key_params # For requester, upon updating application text
       
-      params.require(:user_key).permit(:agree, :proposal_text_one, :proposal_text_two,
+      params.require(:user_key).permit(:agree, :name, :proposal_text_one, :proposal_text_two,
                                        :proposal_text_three, :proposal_text_four,
                                        :proposal_text_five, :proposal_text_six,
                                        :proposal_text_seven, :proposal_text_eight)

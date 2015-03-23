@@ -25,15 +25,15 @@ development:
   db: db/development.sqlite3
   # currently using sqlite3 for dev db, no auth needed
 
-production:
-  <<: *default
-  db: bridge_api_production # We don't want the public knowing how we name our dbs
-  db_user: username
-  db_pass: password
-
 staging:
   <<: *default
   db: bridge_api_staging
   db_user: username
   db_pass: password
 
+production:
+  <<: *default
+  db: bridge_api_production # We don't want the public knowing how we name our dbs
+  db_user: username
+  db_pass: password
+  secret_key_base: put_secret_key_base_here

@@ -123,7 +123,9 @@ class UserKey < ActiveRecord::Base
       # eventually add in the salt
       hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
       # hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
-      self.value = Digest::SHA2.hexdigest hash_string
+      return Digest::SHA2.hexdigest hash_string
+    else
+      return "A key will be generated upon approval."
     end
   end
 

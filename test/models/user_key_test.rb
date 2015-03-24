@@ -83,12 +83,14 @@ class UserKeyTest < ActiveSupport::TestCase
       assert @bender_key_awaiting_conf.approved_by?(@leela)
     end
     
+    # Test time_submitted filter, to be used on index pages
+    # @bender_key_confirmed always has a day of 1
     should "have a scope to sort by time submitted" do
-      assert_equal [["bender", 0.days.ago.day], 
-                    ["bender", 2.days.ago.day], 
-                    ["bender", 4.days.ago.day],
-                    ["bender", 6.days.ago.day]],
-                   UserKey.by_user.by_time_submitted.all.map{|o| [o.user.andrew_id, o.time_submitted.day] }
+      assert_equal ["Bender Submitted", 
+                    "Bender Awaiting Conf", 
+                    "Bender Awaiting Conf Approved",
+                    "Bender Confirmed"],
+                   UserKey.by_user.by_time_submitted.all.map{|o| o.name }
     end
 
     should "have a scope that returns keys awaiting filters" do 
@@ -221,6 +223,19 @@ class UserKeyTest < ActiveSupport::TestCase
     should "not allow invalid user_id" do
       bad_key = FactoryGirl.build(:user_key, user_id: "invalid")
       deny bad_key.valid?
+    end
+    
+    # Validating API key is properly generated
+    should "have a gen_api_key method for confirmed keys" do
+      assert_equal "cd13c6e6a3c9ff4d3d54c08133f5bac001acfd2a1c904af5fcdf744dfb699f5a",
+                    @bender_key_confirmed.gen_api_key
+    end
+  
+    should "not have a gen_api_key method for non-confirmed keys" do
+      expected = "A key will be generated upon approval."
+      assert_equal expected, @bender_key.gen_api_key
+      assert_equal expected, @bender_key_submitted.gen_api_key
+      assert_equal expected, @bender_key_awaiting_conf.gen_api_key
     end
   end
 end

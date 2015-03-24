@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :user_keys
   
   # Users are not deleted, only inactivated.
-  # They are not created directly; they 
+  # They are not created directly; they are meant to be created automatically via shibboleth login.
   resources :users, except: [:destroy, :create, :new]
   
   # Authentication routes

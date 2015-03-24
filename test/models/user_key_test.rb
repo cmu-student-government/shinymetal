@@ -227,8 +227,15 @@ class UserKeyTest < ActiveSupport::TestCase
     
     # Validating API key is properly generated
     should "have a gen_api_key method for confirmed keys" do
-      assert_equal "cd13c6e6a3c9ff4d3d54c08133f5bac001acfd2a1c904af5fcdf744dfb699f5a",
-                    @bender_key_confirmed.gen_api_key
+      key = @bender_key_confirmed
+      # Algorithm used here mimics algorithm used in model
+      date_string = key.time_submitted.to_s.split("")
+      andrew_id = key.user.andrew_id.split("")
+      salt = SETTINGS[:api_key_salt].split("")
+      hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
+      # hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
+      answer = Digest::SHA2.hexdigest hash_string
+      assert_equal answer, key.gen_api_key
     end
   
     should "not have a gen_api_key method for non-confirmed keys" do

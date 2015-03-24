@@ -1,9 +1,13 @@
 class UserKeysController < ApplicationController
   before_action :check_login
-  before_action :set_user_key, only: [:show, :edit, :update, :destroy, :add_comment,
-                                      :delete_comment, :approve_key, :undo_approve_key,
-                                      :set_as_submitted, :set_as_filtered,
-                                      :set_as_confirmed, :set_as_reset]
+  before_action :set_user_key, except: [:index, :own_user_keys, :new,
+                                        :create]
+  
+  # add_comment gets it own method because comments.build overwrites added comment with blank comment.
+  # Use 'after_action' so that the blank comment, added to @user_key, isn't saved when during set_as_submitted action.
+  after_action :build_empty_comment, except: [:index, :own_user_keys, :new,
+                                               :create, :add_comment]
+  
   # CanCan checks
   authorize_resource
 
@@ -68,8 +72,6 @@ class UserKeysController < ApplicationController
     if @user_key.update(comment_user_key_params)
       redirect_to @user_key, notice: 'Comment was successfully added.'
     else
-      # Have to reload comments also for the show page
-      get_comments
       render :show
     end
   end
@@ -95,7 +97,7 @@ class UserKeysController < ApplicationController
       UserKeyMailer.submitted_msg(@current_user).deliver
       redirect_to @user_key, notice: 'User key request was successfully submitted.'
     else
-      redirect_to @user_key, alert: 'User key request cannot be submitted.'
+      render :show
     end
   end
   
@@ -104,7 +106,7 @@ class UserKeysController < ApplicationController
     if @user_key.set_status_as :awaiting_confirmation
       redirect_to @user_key, notice: 'User key has had its filters assigned and is now visible to approvers.'
     else
-      redirect_to @user_key, alert: 'User key filters cannot be submitted for approvers.'
+      render :show
     end
   end
   
@@ -113,7 +115,7 @@ class UserKeysController < ApplicationController
     if @user_key.set_status_as :confirmed
       redirect_to @user_key, notice: 'User key was successfully confirmed. All steps are complete.'
     else
-      redirect_to @user_key, alert: 'User key cannot be confirmed.'
+      render :show
     end
   end
   
@@ -123,7 +125,7 @@ class UserKeysController < ApplicationController
       redirect_to user_keys_url, notice: 'User key application was successfully returned to the requester with comments,
                                           and is no longer visible to staff.'
     else
-      redirect_to @user_key, alert: 'User key cannot be reset.'
+      render :show
     end
   end
   
@@ -132,7 +134,7 @@ class UserKeysController < ApplicationController
     if @user_key.set_approved_by(current_user)
       redirect_to @user_key, notice: 'You have successfully approved this key.'
     else
-      redirect_to @user_key, alert: 'User key cannot be approved.'
+      render :show
     end
   end
   
@@ -141,20 +143,25 @@ class UserKeysController < ApplicationController
     if @user_key.undo_set_approved_by(current_user)
       redirect_to @user_key, notice: 'You have successfully revoked your approval for this key.'
     else
-      redirect_to @user_key, alert: 'Approval for user key cannot be revoked approved.'
+      render :show
     end
   end
 
   private
+    def build_empty_comment
+      # Build a blank comment form.
+      # Overwrites any new comment passed in, so don't use for add_comment.
+      @comment = @user_key.comments.build
+    end
+  
     def get_comments
       @public_comments = @user_key.comments.public_only.chronological
       @private_comments = @user_key.comments.private_only.chronological
-      # Build a blank comment form 
-      @comment = @user_key.comments.build
     end
       
     def set_user_key
       @user_key = UserKey.find(params[:id])
+      get_comments
     end
 
     def create_user_key_params # Seperate, due to new and permanent user_id

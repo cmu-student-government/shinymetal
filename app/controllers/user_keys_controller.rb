@@ -91,6 +91,8 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/set_as_submitted
   def set_as_submitted
     if @user_key.set_status_as :awaiting_filters
+      # Email confirmation and page confirmation
+      UserKeyMailer.submitted_msg(@current_user).deliver
       redirect_to @user_key, notice: 'User key request was successfully submitted.'
     else
       redirect_to @user_key, alert: 'User key request cannot be submitted.'

@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
+  resources :sessions, only: [:create, :new, :destroy]
   
   resources :filters
 
   resources :user_keys
   
-  resources :sessions
   # Users are not deleted, only inactivated.
-  # They are not created directly; they 
+  # They are not created directly; they are meant to be created automatically via shibboleth login.
   resources :users, except: [:destroy, :create, :new]
   
   # Authentication routes

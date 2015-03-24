@@ -66,7 +66,7 @@ class UserTest < ActiveSupport::TestCase
       assert_equal ["fry"], User.search('fry').map{|u| u.andrew_id}
       assert_equal ["zoidberg"], User.search('zoid').map{|u| u.andrew_id}
     end
-
+    
   end
 
 end

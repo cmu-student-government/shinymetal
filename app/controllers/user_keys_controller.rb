@@ -25,7 +25,6 @@ class UserKeysController < ApplicationController
 
   # GET /user_keys/1
   def show
-    get_comments
   end
 
   # GET /user_keys/new
@@ -67,8 +66,11 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
-    # Set user_id of new comment to current user's id
-    params[:user_key][:comments_attributes]["0"][:user_id] ||= @current_user.id
+    # Set user_id of new comment to current user's id.
+    # This takes the single nested comment_attribute;
+    # always set the commenter's id to the current user's id.
+    params[:user_key][:comments_attributes]["0"][:user_id] = @current_user.id
+    # FIXME Adding a user_key_comment note from administrator should send email to requester?
     if @user_key.update(comment_user_key_params)
       redirect_to @user_key, notice: 'Comment was successfully added.'
     else
@@ -78,7 +80,11 @@ class UserKeysController < ApplicationController
   
   # DELETE /user_keys/1/delete_comment/1
   def delete_comment
-    # Delete single comment
+    # Delete single comment;
+    # It should usually be the case that comment cannot be deleted
+    # if role? requester and at_stage? :awaiting_submission stage,
+    # Since admin can't see the comments
+    # FIXME: should this be validated?
     @bad_comment = Comment.find(params[:comment_id])
     @bad_comment.destroy
     redirect_to @user_key, notice: 'Comment was successfully deleted.'
@@ -161,6 +167,7 @@ class UserKeysController < ApplicationController
       
     def set_user_key
       @user_key = UserKey.find(params[:id])
+      # Always pair the userkey object with its existing comments
       get_comments
     end
 

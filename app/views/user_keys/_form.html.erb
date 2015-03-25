@@ -27,9 +27,10 @@
   <% if @current_user.role? :admin and !(@user_key.id.nil? or @user_key.at_stage? :awaiting_submission) %>
     
     <!-- Only admins can assign filters, and they can do so at any time -->
-    <fieldset>
-      
+    <fieldset class="admin_only">
       <h2>Admin only</h2>
+      
+      <hr/>
       
       <p><i>Set filters and organizations that this key may have access to here.</i></p>
     

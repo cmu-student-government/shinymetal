@@ -34,38 +34,39 @@
 
 <!-- Staffmembers see private information -->
 <% if @current_user.role? :is_staff %>
+  <div class="staff_only">
+    
+    <p>
+      <strong>User:</strong>
+      <%= link_to @user_key.user.andrew_id, @user_key.user  %>
+    </p>
+    
+    <p>
+      <strong>Time submitted:</strong>
+      <%= @user_key.time_submitted.nil? ? "Not submitted yet" : @user_key.time_submitted.to_formatted_s(:pretty) %>
+    </p>
+    
+    <p> 
+      <strong>Time shared with approvers:</strong>
+      <%= @user_key.time_filtered.nil? ? "Not shared with approvers yet" : @user_key.time_filtered.to_formatted_s(:pretty) %>
+    </p>
+    
+    <p>
+      <strong>Time confirmed:</strong>
+      <%= @user_key.time_confirmed.nil? ? "Not confirmed yet" : @user_key.time_confirmed.to_formatted_s(:pretty) %>
+    </p>
+    
+    <%= render partial: 'user_keys/show_partials/list_of_filters' %>
   
-  <p>
-    <strong>User:</strong>
-    <%= link_to @user_key.user.andrew_id, @user_key.user  %>
-  </p>
-  
-  <p>
-    <strong>Time submitted:</strong>
-    <%= @user_key.time_submitted.nil? ? "Not submitted yet" : @user_key.time_submitted.to_formatted_s(:pretty) %>
-  </p>
-  
-  <p> 
-    <strong>Time shared with approvers:</strong>
-    <%= @user_key.time_filtered.nil? ? "Not shared with approvers yet" : @user_key.time_filtered.to_formatted_s(:pretty) %>
-  </p>
-  
-  <p>
-    <strong>Time confirmed:</strong>
-    <%= @user_key.time_confirmed.nil? ? "Not confirmed yet" : @user_key.time_confirmed.to_formatted_s(:pretty) %>
-  </p>
-  
-  <%= render partial: 'user_keys/show_partials/list_of_filters' %>
-
-  <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
-  
-  <!-- Show the key's approvers if the key is at the approval stage or later. -->
-  <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
-    <%= render partial: 'user_keys/show_partials/list_of_approvers' %> 
-  <% end %>
-  
+    <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+    
+    <!-- Show the key's approvers if the key is at the approval stage or later. -->
+    <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
+      <%= render partial: 'user_keys/show_partials/list_of_approvers' %> 
+    <% end %>
+    
+  </div>
 <% end %>
-
 <!-- End of general staff-only information. -->
 
 <!-- Approvers submit their approval here -->

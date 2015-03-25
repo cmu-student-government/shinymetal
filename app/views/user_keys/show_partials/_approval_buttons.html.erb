@@ -1,8 +1,6 @@
-<br />
-
 <% if @user_key.at_stage? :awaiting_filters %>
 
-  <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button" %> 
+  <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key), method: :patch, class: "big-button success" %> 
 
 <% elsif @user_key.at_stage? :awaiting_confirmation %>
 
@@ -13,12 +11,10 @@
     <p>This key has not yet been approved by everyone and cannot be released to the requester.</p>
   <% end %>
     
-    <%= link_to 'Confirm and release key to user', set_as_confirmed_path(@user_key), method: :patch, class: "big-button", disabled: !@user_key.approved_by_all? %> 
+    <%= link_to 'Confirm and release key to user', set_as_confirmed_path(@user_key), method: :patch, class: "big-button success", disabled: !@user_key.approved_by_all? %> 
 
 <% else %> <!-- Must be at_stage? :confirmed -->
 
 <p> This key was approved by everyone and has been confirmed.</p>
 
 <% end %>
-
-<br />

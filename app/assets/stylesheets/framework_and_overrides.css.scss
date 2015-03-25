@@ -109,7 +109,7 @@ $success-color: #5da423;
 // Apply styles to HTML elements
 // to make views framework-neutral.
 // (This part came default with foundation.)
-fieldset {
+fieldset, hr {
   border: 1px solid; 
 }
 main {
@@ -124,4 +124,7 @@ footer {
   background-color: #aaa;
   font-size: 10pt;
   color: #eee;
+}
+ol li {
+  margin-bottom: 20px;
 }

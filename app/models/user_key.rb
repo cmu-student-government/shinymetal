@@ -137,7 +137,7 @@ class UserKey < ActiveRecord::Base
   
   # Requirement for resetting a key
   def has_public_comments?
-    return self.comments.public_only.size > 0
+    return !self.comments.public_only.empty?
   end
   
   # When submitted, a key should be marked as ready for filters from admin
@@ -171,6 +171,7 @@ class UserKey < ActiveRecord::Base
       save_changes
       return true
     end
+    errors.add(:user_key, "cannot be submitted at this stage")
     return false
   end
   
@@ -182,6 +183,7 @@ class UserKey < ActiveRecord::Base
       save_changes
       return true
     end
+    errors.add(:user_key, "cannot be shared with approvers at this stage")
     return false
   end
   
@@ -193,6 +195,7 @@ class UserKey < ActiveRecord::Base
       save_changes
       return true
     end
+    errors.add(:user_key, "cannot be confirmed at this stage")
     return false
   end
   
@@ -208,6 +211,7 @@ class UserKey < ActiveRecord::Base
       save_changes
       return true
     end
+    errors.add(:user_key, "cannot be reset at this stage")
     return false
   end
 

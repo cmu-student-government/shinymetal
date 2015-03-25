@@ -50,10 +50,13 @@ gem 'kaminari'
 # Authorization gem
 gem 'cancancan', '~> 1.10'
 
+# Error handler
+gem 'gaffe'
+
 # The following gems were taken straight from Prof H's gemfiles
 
 group :development do
-	gem 'quiet_assets'
+  gem 'quiet_assets'
   gem 'thin'
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -62,6 +65,9 @@ group :development do
   gem 'hirb'
   gem 'populator3'
   gem 'faker'
+  # letter_opener safely opens development emails in browser, does not send.
+  # Dev emails are stored in tmp/letter_opener
+  gem 'letter_opener'
 end
 
 # Gems used only in testing

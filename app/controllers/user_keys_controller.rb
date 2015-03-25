@@ -1,9 +1,8 @@
 class UserKeysController < ApplicationController
   before_action :check_login
-  before_action :set_user_key, only: [:show, :edit, :update, :destroy, :add_comment,
-                                      :delete_comment, :approve_key, :undo_approve_key,
-                                      :set_as_submitted, :set_as_filtered,
-                                      :set_as_confirmed, :set_as_reset]
+  before_action :set_user_key, except: [:index, :own_user_keys, :new,
+                                        :create]
+  
   # CanCan checks
   authorize_resource
 
@@ -63,12 +62,14 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
-    # Set user_id of new comment to current user's id
-    params[:user_key][:comments_attributes]["0"][:user_id] ||= @current_user.id
+    # Set user_id of new comment to current user's id.
+    # This takes the single nested comment_attribute;
+    # always set the commenter's id to the current user's id.
+    params[:user_key][:comments_attributes]["0"][:user_id] = @current_user.id
+    # FIXME Adding a user_key_comment note from administrator should send email to requester?
     if @user_key.update(comment_user_key_params)
       redirect_to @user_key, notice: 'Comment was successfully added.'
     else
-      # Have to reload comments also for the show page
       get_comments
       render :show
     end
@@ -76,7 +77,11 @@ class UserKeysController < ApplicationController
   
   # DELETE /user_keys/1/delete_comment/1
   def delete_comment
-    # Delete single comment
+    # Delete single comment;
+    # It should usually be the case that comment cannot be deleted
+    # if role? requester and at_stage? :awaiting_submission stage,
+    # Since admin can't see the comments
+    # FIXME: should this be validated?
     @bad_comment = Comment.find(params[:comment_id])
     @bad_comment.destroy
     redirect_to @user_key, notice: 'Comment was successfully deleted.'
@@ -91,9 +96,12 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/set_as_submitted
   def set_as_submitted
     if @user_key.set_status_as :awaiting_filters
+      # Email confirmation and page confirmation
+      UserKeyMailer.submitted_msg(@current_user).deliver
       redirect_to @user_key, notice: 'User key request was successfully submitted.'
     else
-      redirect_to @user_key, alert: 'User key request cannot be submitted.'
+      get_comments
+      render :show
     end
   end
   
@@ -102,7 +110,8 @@ class UserKeysController < ApplicationController
     if @user_key.set_status_as :awaiting_confirmation
       redirect_to @user_key, notice: 'User key has had its filters assigned and is now visible to approvers.'
     else
-      redirect_to @user_key, alert: 'User key filters cannot be submitted for approvers.'
+      get_comments
+      render :show
     end
   end
   
@@ -111,7 +120,8 @@ class UserKeysController < ApplicationController
     if @user_key.set_status_as :confirmed
       redirect_to @user_key, notice: 'User key was successfully confirmed. All steps are complete.'
     else
-      redirect_to @user_key, alert: 'User key cannot be confirmed.'
+      get_comments
+      render :show
     end
   end
   
@@ -121,7 +131,8 @@ class UserKeysController < ApplicationController
       redirect_to user_keys_url, notice: 'User key application was successfully returned to the requester with comments,
                                           and is no longer visible to staff.'
     else
-      redirect_to @user_key, alert: 'User key cannot be reset.'
+      get_comments
+      render :show
     end
   end
   
@@ -130,7 +141,8 @@ class UserKeysController < ApplicationController
     if @user_key.set_approved_by(current_user)
       redirect_to @user_key, notice: 'You have successfully approved this key.'
     else
-      redirect_to @user_key, alert: 'User key cannot be approved.'
+      get_comments
+      render :show
     end
   end
   
@@ -139,15 +151,19 @@ class UserKeysController < ApplicationController
     if @user_key.undo_set_approved_by(current_user)
       redirect_to @user_key, notice: 'You have successfully revoked your approval for this key.'
     else
-      redirect_to @user_key, alert: 'Approval for user key cannot be revoked approved.'
+      get_comments
+      render :show
     end
   end
 
   private
+    # get_comments doesn't work well as a callback, because
+    # empty built @comment gets saved as part of set_as_submitted-type updates.
+    # Also, the other comments need to be loaded before the blank form is built,
+    # otherwise @comment becomes all existing comments plus the blank form.
     def get_comments
       @public_comments = @user_key.comments.public_only.chronological
       @private_comments = @user_key.comments.private_only.chronological
-      # Build a blank comment form 
       @comment = @user_key.comments.build
     end
       

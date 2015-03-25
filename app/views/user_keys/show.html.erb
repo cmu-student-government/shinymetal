@@ -10,9 +10,9 @@
 <!-- Everyone can see the following information.-->
 <p>
   <% if @user_key.at_stage? :confirmed %>
-    <i class="fi-check success"></i>&nbsp;This approval is complete.</i>
+    <i class="fi-check success"></i>&nbsp;The request for this key has been completed.</i>
   <% else %>
-    <i class="fi-x alert"></i>&nbsp;<i>This approval is incomplete.</i>
+    <i class="fi-x alert"></i>&nbsp;<i>This key request is incomplete.</i>
   <% end %>
 </p>
 
@@ -27,45 +27,57 @@
 </p>
 
 <p>
-  <strong>Active:</strong>
-  <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.active } %>
+  <strong>Agreed to terms:</strong>
+  <% if @user_key.agree %>
+  <i class="fi-check success"></i>
+  <% else %>
+    <i class="fi-x alert"></i>
+  <% end %>
 </p>
 <!-- End of public information. -->
 
 <!-- Staffmembers see private information -->
 <% if @current_user.role? :is_staff %>
+  <div class="staff_only panel">
+  <h3>Staff only</h3>
+  <hr/>
+        
+    <p>
+      <strong>User:</strong>
+      <%= link_to @user_key.user.andrew_id, @user_key.user  %>
+    </p>
+    
+    <p>
+      <strong>Time submitted:</strong>
+      <%= @user_key.time_submitted.nil? ? "Not submitted yet" : @user_key.time_submitted.to_formatted_s(:pretty) %>
+    </p>
+    
+    <p> 
+      <strong>Time shared with approvers:</strong>
+      <%= @user_key.time_filtered.nil? ? "Not shared with approvers yet" : @user_key.time_filtered.to_formatted_s(:pretty) %>
+    </p>
+    
+    <p>
+      <strong>Time confirmed:</strong>
+      <%= @user_key.time_confirmed.nil? ? "Not confirmed yet" : @user_key.time_confirmed.to_formatted_s(:pretty) %>
+    </p>
+    
+    <p>
+      <strong>Active:</strong>
+      <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.active } %>
+    </p>
+    
+    <%= render partial: 'user_keys/show_partials/list_of_filters' %>
   
-  <p>
-    <strong>User:</strong>
-    <%= link_to @user_key.user.andrew_id, @user_key.user  %>
-  </p>
-  
-  <p>
-    <strong>Time submitted:</strong>
-    <%= @user_key.time_submitted.nil? ? "Not submitted yet" : @user_key.time_submitted.to_formatted_s(:pretty) %>
-  </p>
-  
-  <p> 
-    <strong>Time shared with approvers:</strong>
-    <%= @user_key.time_filtered.nil? ? "Not shared with approvers yet" : @user_key.time_filtered.to_formatted_s(:pretty) %>
-  </p>
-  
-  <p>
-    <strong>Time confirmed:</strong>
-    <%= @user_key.time_confirmed.nil? ? "Not confirmed yet" : @user_key.time_confirmed.to_formatted_s(:pretty) %>
-  </p>
-  
-  <%= render partial: 'user_keys/show_partials/list_of_filters' %>
-
-  <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
-  
-  <!-- Show the key's approvers if the key is at the approval stage or later. -->
-  <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
-    <%= render partial: 'user_keys/show_partials/list_of_approvers' %> 
-  <% end %>
-  
+    <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+    
+    <!-- Show the key's approvers if the key is at the approval stage or later. -->
+    <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
+      <%= render partial: 'user_keys/show_partials/list_of_approvers' %> 
+    <% end %>
+    
+  </div>
 <% end %>
-
 <!-- End of general staff-only information. -->
 
 <!-- Approvers submit their approval here -->

@@ -80,6 +80,16 @@ namespace :db do
       UserKey.populate 0..3 do |user_key|
         user_key.user_id = user.id
         user_key.name = Faker::Company.name + " key"
+        # I tried to DRY this, but Populator gem wouldn't let me
+        user_key.proposal_text_one = Faker::Lorem.paragraph
+        user_key.proposal_text_two = Faker::Lorem.paragraph
+        user_key.proposal_text_three = Faker::Lorem.paragraph
+        user_key.proposal_text_four = Faker::Lorem.paragraph
+        user_key.proposal_text_five = Faker::Lorem.paragraph
+        user_key.proposal_text_six = Faker::Lorem.paragraph
+        user_key.proposal_text_seven = Faker::Lorem.paragraph
+        user_key.proposal_text_eight = Faker::Lorem.paragraph
+
         # make sure all begin as awaiting submission
         user_key.status = "awaiting_submission"
         # now begin submitting some keys randomly

@@ -50,6 +50,9 @@ gem 'kaminari'
 # Authorization gem
 gem 'cancancan', '~> 1.10'
 
+# Error handler
+gem 'gaffe'
+
 # The following gems were taken straight from Prof H's gemfiles
 
 group :development do

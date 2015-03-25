@@ -3,13 +3,7 @@
 
   <%= render 'shared/error_messages', object: @user %>
 
-  <div class="collapsed_row">
-    <div class="three-column">
-      <%= f.label :andrew_id, class: "prefix" %>
-    </div>
-    <div class="nine-column">
-      <%= f.text_field :andrew_id %>
-    </div>
+  <p>@user.andrew_id</p>
   <div class="collapsed_row">
     <div class="three-column">
       <%= f.label :role, class: "prefix" %>

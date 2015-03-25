@@ -97,7 +97,7 @@ $success-color: #5da423;
   color: $alert-color;
 }
 .admin_only {
-  background-color: lighten($primary-color, 60)
+  background-color: lighten($primary-color, 65)
 }
 .staff_only {
   background-color: lighten($primary-color, 70);

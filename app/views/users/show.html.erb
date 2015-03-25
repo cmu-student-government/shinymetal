@@ -13,7 +13,7 @@
   <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user.active } %>
 </p>
 
-<%= render partial: 'users/show_partials/list_of_user_keys' %>
+<%= render partial: 'shared/list_of_user_keys' %>
 
-<%= link_to 'Edit', edit_user_path(@user), class: "big-button" %> |
-<%= link_to 'Back', users_path, class: "big-button secondary" %>
+<%= link_to 'Edit user', edit_user_path(@user), class: "big-button" %> |
+<%= link_to 'Back to users list', users_path, class: "big-button secondary" %>

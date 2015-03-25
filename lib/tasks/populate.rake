@@ -21,7 +21,7 @@ namespace :db do
     
     # Step 2: Add Filters, Orgs, and Approvers
     # Define resources, filter_names, filter_values
-    filter_lists = [["organizations","membershipType","closed"],
+    filter_lists = [["organizations","type","closed"],
                  ["events","currentEventsOnly","true"],
                  ["attendees","status","active"],
                  ["memberships","currentMembershipsOnly","true"],

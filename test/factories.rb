@@ -22,8 +22,8 @@ FactoryGirl.define do
 
   factory :filter do
     resource "organizations"
-    filter_name "page"
-    filter_value 1
+    filter_name "status"
+    filter_value "active"
   end
 
   factory :organization do

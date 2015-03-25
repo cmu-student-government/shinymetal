@@ -75,8 +75,8 @@ module Contexts
   #Filters
   def create_filters
     @organizations_page_filter = FactoryGirl.create(:filter)
-    @organizations_page_filter2 = FactoryGirl.create(:filter, filter_value: '2')
-    @organizations_status_filter = FactoryGirl.create(:filter, filter_name: 'status', filter_value: 'inactive' )
+    @organizations_page_filter2 = FactoryGirl.create(:filter, filter_value: 'inactive')
+    @organizations_status_filter = FactoryGirl.create(:filter, filter_name: 'category', filter_value: 'sports' )
   end
 
   def destroy_filters

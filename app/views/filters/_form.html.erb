@@ -5,30 +5,31 @@
 
   <div class="collapsed_row">
     <div class="three-column">
-      <%= f.label :resource %>
+      <%= f.label :resource, class: "prefix" %>
     </div>
     <div class="nine-column">
-      <%= f.text_field :resource %>
+      <%= f.select :resource, Resource::RESOURCE_LIST %>
     </div>
   </div>
   <div class="collapsed_row">
     <div class="three-column">
-      <%= f.label :filter_name %><br>
-    </end>
+      <%= f.label :filter_name, class: "prefix" %>
+    </div>
     <div class="nine-column">
-      <%= f.text_field :filter_name %>
+      <%= f.select :filter_name, Resource::PARAM_LIST %>
     </div>
   </div>
   <div class="collapsed_row">
     <div class="three-column">
-      <%= f.label :filter_value %>
+      <%= f.label :filter_value, class: "prefix" %>
     </div>
     <div class="nine-column">
       <%= f.text_field :filter_value %>
     </div>
   </div>
   <div class="collapsed_row">
-    <%= f.submit class: "big-button success" %>
+    <%= f.submit class: "big-button success" %> | 
+    <%= link_to 'Cancel', cancel_url, class: "big-button secondary" %>
   </div>
   
   </fieldset>

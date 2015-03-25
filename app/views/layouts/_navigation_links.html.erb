@@ -8,7 +8,9 @@
     <li class="has-dropdown"><%= link_to "User Keys", user_keys_path %>
       <ul class="dropdown">
         <li><%= link_to "Filters", filters_path %></li>
-        <li><%= link_to "Add a filter", new_filter_path %></li>
+        <% if @current_user.role? :admin %>
+          <li><%= link_to "Add a filter", new_filter_path %></li>
+        <% end %>
       </ul>
     </li>
   

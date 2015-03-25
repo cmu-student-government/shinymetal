@@ -16,6 +16,8 @@ Rails.application.configure do
   # For Gaffe gem:
   # Make Rails use `exceptions_app` in development
   config.consider_all_requests_local = false
+  # To restore chatty errors, set the above variable to true:
+  # config.consider_all_requests_local = true
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true

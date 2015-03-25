@@ -154,19 +154,19 @@ namespace :db do
           end
         end
         
+        list_of_approvers = User.approvers_only.to_a
         # Step 3B part 2: add approvals to keys awaiting approval
         if user_key.status == "awaiting_confirmation"
-          Approval.populate 1..3 do |approval| #always less than 4 approvers
+          Approval.populate 1..(list_of_approvers.size) do |approval|
             approval.user_key_id = user_key.id 
-            approval.user_id = User.approvers_only.to_a.sample.id
+            approval.user_id = list_of_approvers.pop.id
             # set the timestamps
             approval.created_at = Time.now
             approval.updated_at = Time.now
           end
         elsif user_key.status == "confirmed"
           #all approvers need to have approved this key
-          list_of_approvers = User.approvers_only.to_a
-          Approval.populate User.approvers_only.size do |approval|
+          Approval.populate list_of_approvers.size do |approval|
             approval.user_key_id = user_key.id
             approval.user_id = list_of_approvers.pop.id
             # set the timestamps

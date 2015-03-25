@@ -1,11 +1,12 @@
 <div class="panel"> 
 
-<h4> Hi, <%="#{current_user.andrew_id}"%>!  </h4>
-<br /> 
+<h3>Hi, <%="#{@current_user.andrew_id}"%>!</h3>
 
-<%= link_to  'Apply for a new key', new_user_key_path, class: "big-button" %>
+<br/>
 
-<p> Your Existing Keys: </p>
+<p><%= link_to  'Apply for a new key', new_user_key_path, class: "big-button" %></p>
+
+<h3>Your Existing Keys</h3>
 <% if @confirmed_keys.size > 0 %>
 <table>
   <tr>
@@ -23,10 +24,11 @@
 <% end %>
 </table>
 <% else %>
-None
+<p>None</p>
 <% end %>
+<br/>
 
-<p> Incomplete Applications: </p>
+<h3>Your Incomplete Applications</h3>
 <% if @in_progress.size > 0 %>
 <table>
   <tr>
@@ -41,10 +43,11 @@ None
 <% end %>
 </table>
 <% else %>
-None
+<p>None</p>
 <% end %>
+<br/>
 
-<p> Applications Awaiting Administrator Review: </p>
+<h3>Your Pending Key Requests</h3>
 <% if @awaiting_admin_review.size > 0 %>
 <table>
   <tr>
@@ -59,11 +62,12 @@ None
 <% end %>
 </table>
 <% else %>
-None
+<p>None</p>
 <% end %>
+<br/>
 
 
-<p> Your Expired Keys: </p>
+<h3>Your Expired Keys</h3>
 <% if @expired_keys.size > 0 %>
 <table>
   <tr>
@@ -78,7 +82,7 @@ None
 <% end %>
 </table>
 <% else %>
-None
+<p>None</p>
 <% end %>
 
 </div>

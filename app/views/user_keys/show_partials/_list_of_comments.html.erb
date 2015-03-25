@@ -1,8 +1,3 @@
-<!--Show existing comments -->
-<div class="public_comments">
-  <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
-</div> 
-  
 <!-- Begin staff-only comment area-->
 <% if @current_user.role? :is_staff %>
   <div class="staff_only">

@@ -34,6 +34,11 @@
     <i class="fi-x alert"></i>
   <% end %>
 </p>
+
+<!--Show notes from Admin -->
+<div class="public_comments">
+  <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
+</div> 
 <!-- End of public information. -->
 
 <!-- Staffmembers see private information -->
@@ -78,6 +83,7 @@
     
   </div>
 <% end %>
+
 <!-- End of general staff-only information. -->
 
 <!-- Approvers submit their approval here -->

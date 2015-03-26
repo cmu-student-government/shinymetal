@@ -1,21 +1,24 @@
 <!-- Pass in object_symbol i.e. :filters, object_name i.e. "Filter"-->
 
 <p>
-  <b><%= pluralize(@user_key.send(object_symbol).size, object_name) %></b><br />
-  <ul style="list-style: none; margin: 0; padding: 0;">
-    <% for resourceName in @user_key.send(object_symbol).map{|f| f.resource} %>
-      <li><%= resourceName.capitalize + " " + pluralize(@user_key.send(object_symbol).size, object_name)%></li>
-      <ul>
-        <% for obj in @user_key.send(object_symbol) %>
-          <% if obj.resource == resourceName %>
-            <% if object_name == "Filter" %>
-              <li><%= link_to((obj.name), filter_path(obj))%></li>
-            <% else %>
-              <li><%= obj.name %></li>
-            <% end %>
+  <h3><%= object_name.pluralize %></h3><br />
+  <ul class="no_bullets">
+    <% for resourceName in Resource::RESOURCE_LIST %>
+      <li><strong><%= resourceName.capitalize %></strong></li>
+      <% obj_list = @user_key.send(object_symbol).restrict_to(resourceName) %>
+      <% if !obj_list.empty? %>
+        <ul>
+          <% for obj in obj_list %>
+              <% if object_name == "Filter" %>
+                <li><%= link_to((obj.name), filter_path(obj))%></li>
+              <% else %>
+                <li><%= obj.name %></li> <!-- There are no column pages-->
+              <% end %>
           <% end %>
-        <% end %>
-      </ul>
+        </ul>
+      <% else %>
+        <p>None</p>
+      <% end %>
     <% end %>
   </ul>
 </p>

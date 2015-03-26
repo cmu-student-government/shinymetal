@@ -15,6 +15,17 @@ namespace :db do
     # Docs at: http://faker.rubyforge.org/rdoc/
     require 'faker'
     
+    # Step 0: Create every possible column
+    Resource::COLUMN_NAME_HASH.each do |resource_sym, resource_column_list|
+      resource = resource_sym.to_s
+      for item in resource_column_list
+        column = Column.new
+        column.resource = resource
+        column.column_name = item
+        column.save!
+      end
+    end
+    
     # Step 1: clear any old data in the db
     [Approval, Comment, Filter, Organization, UserKeyFilter, UserKeyOrganization, User, UserKey].each(&:delete_all)
     

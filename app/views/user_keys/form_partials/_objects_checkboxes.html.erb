@@ -6,14 +6,14 @@
   <% if object_class.all.empty? %>
   No <%= object_name.pluralize %> can be selected because there are none in the system.
   <% else %>
-    <% for resourceName in object_class.all.map{|f| f.resource} %>
+    <% for resourceName in Resource::RESOURCE_LIST %>
       <h5><%= resourceName.capitalize + " " + object_name.capitalize.pluralize %></h5>
-      <% for object in object_class.alphabetical %>
-        <% if object.resource == resourceName %>
+      <% for object in object_class.restrict_to(resourceName).alphabetical %>
+
           <%= check_box_tag "user_key[#{object_name}_ids][]", object.id, @user_key.send(object_symbol).include?(object) %>
             <%= object.name %>
           <br />
-        <% end %>
+          
       <% end %>
     <% end %>  
   <% end %>

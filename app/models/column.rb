@@ -10,10 +10,11 @@ class Column < ActiveRecord::Base
   
   # Scopes
   scope :alphabetical, -> { order(:column_name) }
+  scope :restrict_to, ->(param) { where(resource: param) }
   
   # Methods
   def name
-    column_name + ' : ' + column_value
+    column_name
   end
   
   def column_name_is_valid

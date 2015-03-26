@@ -105,7 +105,11 @@ $success-color: #5da423;
 .public_comments {
   background-color: lighten($body-font-color, 60)
 }
-
+.no_bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 // Apply styles to HTML elements
 // to make views framework-neutral.
 // (This part came default with foundation.)

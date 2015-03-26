@@ -11,11 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150304225636) do
+ActiveRecord::Schema.define(version: 20150325232951) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "user_key_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "columns", force: :cascade do |t|
+    t.string   "resource"
+    t.string   "column_name"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -40,6 +47,13 @@ ActiveRecord::Schema.define(version: 20150304225636) do
   create_table "organizations", force: :cascade do |t|
     t.string   "name"
     t.integer  "external_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "user_key_columns", force: :cascade do |t|
+    t.integer  "user_key_id"
+    t.integer  "column_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

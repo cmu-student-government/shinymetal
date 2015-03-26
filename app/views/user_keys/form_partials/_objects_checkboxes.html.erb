@@ -1,0 +1,20 @@
+<!--Pass in object_class and object_name = "filter" or "column"-->
+
+<h3><%= object_name.capitalize %>s</h3>
+
+<p>
+  <% if object_class.all.empty? %>
+  No <%= object_name %> can be selected because there are none in the system.
+  <% else %>
+    <% for resourceName in object_class.all.map{|f| f.resource} %>
+      <h5><%= resourceName.capitalize + " " + object_name.capitalize + "s" %></h5>
+      <% for object in object_class.alphabetical %>
+        <% if object.resource == resourceName %>
+          <%= check_box_tag "user_key[#{object_name}_ids][]", object.id, @user_key.send("#{object_name}s".to_sym).include?(object) %>
+            <%= object.name %>
+          <br />
+        <% end %>
+      <% end %>
+    <% end %>  
+  <% end %>
+</p>

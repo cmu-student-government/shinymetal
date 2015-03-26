@@ -33,7 +33,17 @@ class Resource < ActiveRecord::Base
                        users: ["userId","username","cardId","sisId","affiliation",
                                "enrollmentStatus","primarySchoolOfEnrollment","status"],
                        # These parameters are available to all endpoints
+                       # Currently they are unused, just here for documentation purposes
                        all: ["page","pageSize"] }
   PARAM_LIST = PARAM_NAME_HASH::values.flatten.uniq
+  
+  COLUMN_NAME_HASH = { organizations: [],
+                       events: [],
+                       attendees: [],
+                       memberships: [],
+                       positions: [],
+                       users: [] }
+  
+  COLUMN_LIST = COLUMN_NAME_HASH::values.flatten.uniq
   
 end

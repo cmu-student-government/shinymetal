@@ -83,14 +83,12 @@ class UserKeyTest < ActiveSupport::TestCase
       assert @bender_key_awaiting_conf.approved_by?(@leela)
     end
     
-    # Test time_submitted filter, to be used on index pages
-    # @bender_key_confirmed always has a day of 1
-    should "have a scope to sort by time submitted" do
-      assert_equal ["Bender Submitted", 
-                    "Bender Awaiting Conf", 
-                    "Bender Awaiting Conf Approved",
-                    "Bender Confirmed"],
-                   UserKey.by_user.by_time_submitted.all.map{|o| o.name }
+    # Test chronological filter, to be used on index pages
+    should "have a scope to sort by time" do
+      assert_equal ["Bender Submitted", "Bender Awaiting Conf",
+                    "Bender Awaiting Conf Approved", "Bender Expired",
+                    "Bender Confirmed", "Bender Key"],
+                   @bender.user_keys.chronological.all.map{|o| o.name }
     end
 
     should "have a scope that returns keys awaiting filters" do 

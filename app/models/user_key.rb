@@ -28,7 +28,7 @@ class UserKey < ActiveRecord::Base
   
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
-  scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
+  scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc) }
   
   #scopes dealing with status for dashboards
   scope :awaiting_filters, -> { where("status == ?", 'awaiting_filters')}

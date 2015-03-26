@@ -20,7 +20,7 @@ module Contexts
   def create_user_keys
     @bender_key = FactoryGirl.create(:user_key, user: @bender)
     
-    @hermes_key = FactoryGirl.create(:user_key, user: @hermes)
+    @hermes_key = FactoryGirl.create(:user_key, name: "Hermes Key", user: @hermes)
     
     @bender_key_submitted = FactoryGirl.create(:user_key, user: @bender, name: "Bender Submitted")
     @bender_key_submitted.set_status_as :awaiting_filters
@@ -36,7 +36,8 @@ module Contexts
     @bender_key_awaiting_conf_approved.set_status_as :awaiting_filters
     @bender_key_awaiting_conf_approved.set_status_as :awaiting_confirmation
     # Changing time_submitted to test for chronological scopes
-    @bender_key_awaiting_conf_approved.time_submitted = 4.days.ago
+    @bender_key_awaiting_conf_approved.time_submitted = DateTime.new(2000,1,2)
+    @bender_key_awaiting_conf_approved.time_filtered = 2.days.ago
     @bender_key_awaiting_conf_approved.save!
 
     @bender_key_confirmed = FactoryGirl.create(:user_key, user: @bender, name: "Bender Confirmed")
@@ -49,7 +50,10 @@ module Contexts
     @bender_key_confirmed.time_submitted = DateTime.new(2000,1,1)
     @bender_key_confirmed.save!
 
-    @expired_key = FactoryGirl.create(:user_key, user: @bender, time_expired: DateTime.yesterday)
+    @expired_key = FactoryGirl.create(:user_key, user: @bender, name: "Bender Expired", time_expired: 1.day.ago)
+    @expired_key.time_submitted = DateTime.new(2000,1,2)
+    @expired_key.time_filtered = 4.days.ago
+    @expired_key.save!
   end
   
   def destroy_user_keys

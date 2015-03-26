@@ -12,7 +12,7 @@ class FiltersController < ApplicationController
 
   # GET /filters/1
   def show
-    @user_keys = @filter.user_keys
+    @user_keys = @filter.user_keys.chronological
   end
 
   # GET /filters/new

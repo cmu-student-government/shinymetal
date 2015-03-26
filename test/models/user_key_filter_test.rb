@@ -5,13 +5,19 @@ class UserKeyFilterTest < ActiveSupport::TestCase
   should belong_to(:filter)
   should belong_to(:user_key)
 
-  context "Creating a organizations context" do
+  context "Creating a user key filters context" do
     setup do
-      create_organizations
+      create_users
+      create_filters
+      create_user_keys
+      create_user_key_filters
     end
     
     teardown do
-      destroy_organizations
+      destroy_user_key_filters
+      destroy_user_keys
+      destroy_filters
+      destroy_users
     end
     
     # Validations for foreign key ids

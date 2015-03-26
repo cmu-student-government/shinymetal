@@ -77,12 +77,35 @@ module Contexts
     @organizations_page_filter = FactoryGirl.create(:filter)
     @organizations_page_filter2 = FactoryGirl.create(:filter, filter_value: 'inactive')
     @organizations_status_filter = FactoryGirl.create(:filter, filter_name: 'category', filter_value: 'sports' )
+    @positions_type_filter = FactoryGirl.create(:filter, resource: 'positions', filter_name: 'type')
   end
 
   def destroy_filters
     @organizations_page_filter.destroy
     @organizations_page_filter2.destroy
     @organizations_status_filter.destroy
+  end
+  
+  #Columns
+  def create_columns
+    @organizations_description_column = FactoryGirl.create(:column)
+    @events_eventname_column = FactoryGirl.create(:column, resource: 'events', column_name: 'EventName')
+  end
+
+  def destroy_columns
+    @organizations_description_column.destroy
+    @events_eventname_column.destroy 
+  end
+  
+  #UserKeyColumns
+  def create_user_key_columns
+    @organizations_description_column_bender = FactoryGirl.create(:user_key_column, user_key: @bender_key_submitted, column: @organizations_description_column)
+    @events_eventname_column_bender = FactoryGirl.create(:user_key_column, user_key: @bender_key_submitted, column: @events_eventname_column)
+  end
+
+  def destroy_user_key_columns
+    @organizations_description_column_bender.destroy
+    @events_eventname_column_bender.destroy 
   end
 
   #Organizations
@@ -94,6 +117,8 @@ module Contexts
 
   def destroy_organizations
     @cmutv.destroy
+    @wrct.destroy
+    @abfilms.destroy
   end
   
   # Approvals
@@ -138,21 +163,25 @@ module Contexts
     create_user_keys
     create_comments
     create_filters
+    create_columns
     create_organizations
     create_approvals
     create_user_key_filters
+    create_user_key_columns
     create_user_key_organizations
   end
   
   # Destroy everything at once
   def destroy_everything
     destroy_user_key_filters
+    destroy_user_key_columns
     destroy_user_key_organizations
     destroy_approvals
     destroy_user_keys
     destroy_users
     destroy_comments
     destroy_filters
+    destroy_columns
     destroy_organizations
   end
 end

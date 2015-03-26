@@ -25,6 +25,11 @@ FactoryGirl.define do
     filter_name "status"
     filter_value "active"
   end
+  
+  factory :column do
+    resource "organizations"
+    column_name "Description"
+  end
 
   factory :organization do
     name "cmuTV"
@@ -40,6 +45,12 @@ FactoryGirl.define do
   # factory blueprint for user key filter
   factory :user_key_filter do
     association :filter
+    association :user_key
+  end
+  
+  # factory blueprint for user key column
+  factory :user_key_column do
+    association :column
     association :user_key
   end
   

@@ -9,13 +9,13 @@ class UserKeysController < ApplicationController
   # GET /user_keys
   def index
     # Staffmember only wants to see key applications that have been submitted.
-    @user_keys = UserKey.submitted.by_user.page(params[:page])
+    @user_keys = UserKey.submitted.chronological.by_user.page(params[:page])
   end
   
   # GET /own_user_keys
   def own_user_keys
     # Any logged-in user can see all of their own keys.
-    @user_keys = @current_user.user_keys.page(params[:page])
+    @user_keys = @current_user.user_keys.chronological.page(params[:page])
   end
 
   # GET /user_keys/1

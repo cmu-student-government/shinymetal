@@ -4,6 +4,8 @@ class UserKey < ActiveRecord::Base
   has_many :user_key_organizations
   has_many :user_key_filters
   has_many :filters, through: :user_key_filters
+  has_many :user_key_columns
+  has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
   has_many :comments
   has_many :approvals

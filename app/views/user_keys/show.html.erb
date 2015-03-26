@@ -72,7 +72,9 @@
       <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.active } %>
     </p>
     
-    <%= render partial: 'user_keys/show_partials/list_of_filters' %>
+    <%= render partial: 'user_keys/show_partials/list_of_objects', locals: { object_name: "Column", object_symbol: :columns} %>
+    
+    <%= render partial: 'user_keys/show_partials/list_of_objects', locals: { object_name: "Filter", object_symbol: :filters} %>
   
     <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
     

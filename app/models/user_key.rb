@@ -4,6 +4,8 @@ class UserKey < ActiveRecord::Base
   has_many :user_key_organizations
   has_many :user_key_filters
   has_many :filters, through: :user_key_filters
+  has_many :user_key_columns
+  has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
   has_many :comments
   has_many :approvals
@@ -26,7 +28,7 @@ class UserKey < ActiveRecord::Base
   
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
-  scope :by_time_submitted, -> { where("time_submitted IS NOT NULL").order(time_submitted: :desc) }
+  scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc) }
   
   #scopes dealing with status for dashboards
   scope :awaiting_filters, -> { where("status == ?", 'awaiting_filters')}

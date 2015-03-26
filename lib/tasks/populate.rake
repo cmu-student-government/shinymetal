@@ -15,13 +15,24 @@ namespace :db do
     # Docs at: http://faker.rubyforge.org/rdoc/
     require 'faker'
     
+    # Step 0: Create every possible column
+    Resource::COLUMN_NAME_HASH.each do |resource_sym, resource_column_list|
+      resource = resource_sym.to_s
+      for item in resource_column_list
+        column = Column.new
+        column.resource = resource
+        column.column_name = item
+        column.save!
+      end
+    end
+    
     # Step 1: clear any old data in the db
     [Approval, Comment, Filter, Organization, UserKeyFilter, UserKeyOrganization, User, UserKey].each(&:delete_all)
     
     
     # Step 2: Add Filters, Orgs, and Approvers
     # Define resources, filter_names, filter_values
-    filter_lists = [["organizations","membershipType","closed"],
+    filter_lists = [["organizations","type","closed"],
                  ["events","currentEventsOnly","true"],
                  ["attendees","status","active"],
                  ["memberships","currentMembershipsOnly","true"],
@@ -154,19 +165,19 @@ namespace :db do
           end
         end
         
+        list_of_approvers = User.approvers_only.to_a
         # Step 3B part 2: add approvals to keys awaiting approval
         if user_key.status == "awaiting_confirmation"
-          Approval.populate 1..3 do |approval| #always less than 4 approvers
+          Approval.populate 3..6 do |approval|
             approval.user_key_id = user_key.id 
-            approval.user_id = User.approvers_only.to_a.sample.id
+            approval.user_id = list_of_approvers.pop.id
             # set the timestamps
             approval.created_at = Time.now
             approval.updated_at = Time.now
           end
         elsif user_key.status == "confirmed"
           #all approvers need to have approved this key
-          list_of_approvers = User.approvers_only.to_a
-          Approval.populate User.approvers_only.size do |approval|
+          Approval.populate list_of_approvers.size do |approval|
             approval.user_key_id = user_key.id
             approval.user_id = list_of_approvers.pop.id
             # set the timestamps

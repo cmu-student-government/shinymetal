@@ -10,6 +10,7 @@ FactoryGirl.define do
    # factory blueprint for user keys
   factory :user_key do
     association :user
+    name "Bender Key"
     status "awaiting_submission"
   end
 
@@ -22,8 +23,13 @@ FactoryGirl.define do
 
   factory :filter do
     resource "organizations"
-    filter_name "page"
-    filter_value 1
+    filter_name "status"
+    filter_value "active"
+  end
+  
+  factory :column do
+    resource "organizations"
+    column_name "Description"
   end
 
   factory :organization do
@@ -40,6 +46,12 @@ FactoryGirl.define do
   # factory blueprint for user key filter
   factory :user_key_filter do
     association :filter
+    association :user_key
+  end
+  
+  # factory blueprint for user key column
+  factory :user_key_column do
+    association :column
     association :user_key
   end
   

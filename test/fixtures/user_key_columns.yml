@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_key_id: 1
+  column: 1
+
+two:
+  user_key_id: 1
+  column: 1

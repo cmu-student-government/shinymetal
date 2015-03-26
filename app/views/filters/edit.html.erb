@@ -1,6 +1,3 @@
 <h1>Editing Filter</h1>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @filter, class: "big-button" %> |
-<%= link_to 'Back', filters_path, class: "big-button secondary" %>
+<%= render partial: 'form', locals: { cancel_url: @filter } %>

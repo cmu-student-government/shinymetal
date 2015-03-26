@@ -9,13 +9,13 @@ class UserKeysController < ApplicationController
   # GET /user_keys
   def index
     # Staffmember only wants to see key applications that have been submitted.
-    @user_keys = UserKey.submitted.by_user.page(params[:page])
+    @user_keys = UserKey.submitted.chronological.by_user.page(params[:page])
   end
   
   # GET /own_user_keys
   def own_user_keys
     # Any logged-in user can see all of their own keys.
-    @user_keys = @current_user.user_keys.page(params[:page])
+    @user_keys = @current_user.user_keys.chronological.page(params[:page])
   end
 
   # GET /user_keys/1
@@ -191,7 +191,7 @@ class UserKeysController < ApplicationController
     end
     
     def admin_update_user_key_params # For admin, upon updating filters or anything else
-      params.require(:user_key).permit(:time_expired, :active, :reason,
+      params.require(:user_key).permit(:time_expired, :active, :reason, :column_ids => [],
                                        :filter_ids => [], :organization_ids => [])
     end
 end

@@ -24,9 +24,9 @@ class UsersController < ApplicationController
   def show
     if @user.id == @current_user.id
       # This user is looking at their own data, so they see all their keys
-      @user_keys = @user.user_keys
+      @user_keys = @user.user_keys.chronological
     else # This is a staffmember, so they only see submitted keys
-      @user_keys = @user.user_keys.submitted
+      @user_keys = @user.user_keys.submitted.chronological
     end
   end
 

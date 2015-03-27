@@ -29,6 +29,7 @@ class UserKey < ActiveRecord::Base
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc) }
+  scope :active, -> { where(active: true) }
   
   #scopes dealing with status for dashboards
   scope :awaiting_filters, -> { where("status == ?", 'awaiting_filters')}
@@ -37,6 +38,7 @@ class UserKey < ActiveRecord::Base
   scope :awaiting_submission, -> { where("status == ?", 'awaiting_submission')}
   scope :submitted, -> { where("status <> 'awaiting_submission'") }
   scope :expired, -> { where("time_expired < ?", DateTime.now)}
+  scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
   
   # Methods
   

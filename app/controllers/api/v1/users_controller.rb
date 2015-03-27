@@ -38,7 +38,9 @@ module Api
           # safe because we know the andrew_id is in the system, and must be
           # first because all andrew_ids are guaranteed to be unique
           @cur_user = User.search(andrew_id)[0] 
-          return @cur_user.user_keys.map{|uk| uk.gen_api_key}.include?(api_key)
+          # should really be checking the expired field, but they're all nil right now
+          # return @cur_user.user_keys.active.not_expired.map{|uk| uk.gen_api_key}.include?(api_key)
+          return @cur_user.user_keys.active.map{|uk| uk.gen_api_key}.include?(api_key)
         end
         return false
       end

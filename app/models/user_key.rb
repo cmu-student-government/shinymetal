@@ -28,7 +28,7 @@ class UserKey < ActiveRecord::Base
   
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
-  scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc) }
+  scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc).order(time_expired: :desc) }
   
   #scopes dealing with status for dashboards
   scope :awaiting_filters, -> { where("status == ?", 'awaiting_filters')}
@@ -58,6 +58,11 @@ class UserKey < ActiveRecord::Base
   def undo_set_approved_by(user)
     old_approval = self.approvals.by(user).first
     old_approval.destroy
+  end
+  
+  def expired?
+    return true if self.time_expired.nil?
+    return self.time_expired < DateTime.now
   end
   
   # A key with 'allow_past' which is past the submission stage

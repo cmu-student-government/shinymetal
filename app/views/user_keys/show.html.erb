@@ -22,6 +22,13 @@
 </p>
 
 <p>
+  <strong>Expires:</strong>
+  <%= @user_key.time_expired.nil? ? "N/A" : @user_key.time_expired.to_formatted_s(:pretty) %>
+  <!-- Green/red expired label-->
+  <%= render partial: 'shared/boolean_label', locals: { boolean_label: !@user_key.expired?, true_message: "Currently Available for Use", false_message: "Expired" } %>
+</p>
+
+<p>
   <strong>Application text:</strong>
   <%= render partial: 'user_keys/show_partials/application_text' %>
 </p>
@@ -69,7 +76,7 @@
     
     <p>
       <strong>Active:</strong>
-      <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.active } %>
+      <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.active, true_message: "Yes", false_message: "No" } %>
     </p>
     
     <%= render partial: 'user_keys/show_partials/list_of_objects', locals: { object_name: "Column", object_symbol: :columns} %>

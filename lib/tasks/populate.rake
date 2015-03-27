@@ -118,6 +118,8 @@ namespace :db do
           end
         end
         
+        # time_expired is randomly 1..10 months from now, or 1..2 months ago
+        user_key.time_expired = (1..10).map{|d| d.months.from_now}.append((1..2).map{ |d| d.months.ago})
         user_key.created_at = Time.now
         user_key.updated_at = Time.now        
         

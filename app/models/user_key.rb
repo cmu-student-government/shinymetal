@@ -39,6 +39,7 @@ class UserKey < ActiveRecord::Base
   scope :submitted, -> { where("status <> 'awaiting_submission'") }
   scope :expired, -> { where("time_expired < ?", DateTime.now)}
   scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
+  scope :find_by_id, ->(param_id) { where("id == ?", param_id) }
   
   # Methods
   

@@ -10,7 +10,7 @@
 
 <p>
   <strong>Active:</strong>
-  <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user.active } %>
+  <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user.active, true_message: "Yes", false_message: "No" } %>
 </p>
 
 <%= render partial: 'shared/list_of_user_keys' %>

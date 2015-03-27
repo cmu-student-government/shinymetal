@@ -26,6 +26,8 @@
       <th>Shared with approvers</th>
       <% end %>
       <th>Confirmed</th>
+      <th>Expires</th>
+      <th>Active?</th>
       <!-- Only admin can edit if submitted. Only owner can edit if not submitted. -->
       <th colspan="3"></th>
     </tr>
@@ -43,6 +45,13 @@
 	  <td><%= user_key.time_filtered.nil? ? "N/A" : user_key.time_filtered.to_formatted_s(:pretty) %></td>
 	<% end %>
 	<td><%= user_key.time_confirmed.nil? ? "N/A" : user_key.time_confirmed.to_formatted_s(:pretty) %></td>
+	<td>
+	  <%= user_key.time_expired.nil? ? "N/A" : user_key.time_expired.to_formatted_s(:pretty) %>
+	  <!-- Green/red expired label-->
+	  <%= render partial: 'shared/boolean_label', locals: { boolean_label: !user_key.expired?, true_message: "Currently Available", false_message: "Expired" } %>
+	</td>
+	<td><%= render partial: 'shared/boolean_label', locals: { boolean_label: user_key.active, true_message: "Yes", false_message: "No" } %>
+        </td>
 	<% if ((@current_user.role? :admin) or (@current_user.owns?(user_key) and user_key.at_stage? :awaiting_submission)) %>
 	  <td><%= link_to 'Edit', edit_user_key_path(user_key), class: "small-button" %></td>
         <% end %>

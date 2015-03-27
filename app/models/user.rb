@@ -5,7 +5,8 @@ class User < ActiveRecord::Base
   # Validations
   ROLE_LIST = ["requester", "admin", "staff_approver", "staff_not_approver"]
 
-  validates :andrew_id, presence: true, uniqueness: true
+  # No need to validate andrew_id; this is not user input
+  #validates :andrew_id, presence: true, uniqueness: true
   validates :role, inclusion: { in: ROLE_LIST, message: "is not a recognized role in system" }
 
   scope :alphabetical, -> { order(:andrew_id) }

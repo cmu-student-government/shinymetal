@@ -23,7 +23,7 @@
       <th>Submitted</th>
       <!-- Only staff should see extra details. -->
       <% if @current_user.role? :is_staff %>
-      <th>Shared with approvers</th>
+      <th>Ready for approval</th>
       <% end %>
       <th>Confirmed</th>
       <th>Expires</th>
@@ -36,21 +36,14 @@
   <tbody>
     <% for user_key in keys %>
       <tr>
-	<td><%= link_to user_key.name, user_key %></td>      
+	<td><%= link_to user_key.display_name, user_key %></td>      
 	<% if list_all %>
 	  <td><%= link_to user_key.user.andrew_id, user_key.user %></td>
 	<% end %>
-	<td><%= user_key.time_submitted.nil? ? "N/A" : user_key.time_submitted.to_formatted_s(:pretty) %></td>
-	<% if @current_user.role? :is_staff %>
-	  <td><%= user_key.time_filtered.nil? ? "N/A" : user_key.time_filtered.to_formatted_s(:pretty) %></td>
-	<% end %>
-	<td><%= user_key.time_confirmed.nil? ? "N/A" : user_key.time_confirmed.to_formatted_s(:pretty) %></td>
-	<td>
-	  <%= user_key.time_expired.nil? ? "N/A" : user_key.time_expired.to_formatted_s(:pretty) %>
-	  <!-- Green/red expired label-->
-	  <%= render partial: 'shared/boolean_label', locals: { boolean_label: !user_key.expired?, true_message: "Currently Available", false_message: "Expired" } %>
-	</td>
-	<td><%= render partial: 'shared/boolean_label', locals: { boolean_label: user_key.active, true_message: "Yes", false_message: "No" } %>
+	
+	<!-- The time labels and stamps get their own partial -->
+	<%= render partial: 'user_keys/index_partials/row_times', locals: { user_key: user_key } %>
+
         </td>
 	<% if ((@current_user.role? :admin) or (@current_user.owns?(user_key) and user_key.at_stage? :awaiting_submission)) %>
 	  <td><%= link_to 'Edit', edit_user_key_path(user_key), class: "small-button" %></td>

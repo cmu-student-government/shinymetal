@@ -107,8 +107,13 @@ namespace :db do
         if [true,false].sample #50 percent change if this key was submitted....
           user_key.time_submitted = 3.weeks.ago.to_date
           user_key.status = "awaiting_filters"
+          
           if [true,false].sample # if filters applied...
             user_key.time_filtered = 2.weeks.ago.to_date
+            
+            # time_expired is randomly 1..3 months from now, or 1..2 months ago
+            user_key.time_expired = (1..5).map{|d| d.months.from_now}.append((1..2).map{ |d| d.months.ago})
+            
             user_key.status = "awaiting_confirmation"
             if [true,false].sample # if the key was confirmed...
               user_key.time_confirmed = 1.week.ago.to_date
@@ -118,8 +123,6 @@ namespace :db do
           end
         end
         
-        # time_expired is randomly 1..10 months from now, or 1..2 months ago
-        user_key.time_expired = (1..10).map{|d| d.months.from_now}.append((1..2).map{ |d| d.months.ago})
         user_key.created_at = Time.now
         user_key.updated_at = Time.now        
         

@@ -13,7 +13,6 @@ module Api
         # appropriate query to hit the collegiate link api
         require "./lib/bridgeapi_connection.rb"
 
-        puts find_user_key_id_by_andrew_id(params[:andrew_id])
         # modified the script to hit only the specified endpoint
         # parse the JSON string from the collegiate link API into a hash
         body = JSON.parse(hit_api_endpoint("users"))

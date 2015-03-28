@@ -36,7 +36,7 @@ class UserKeysController < ApplicationController
   def create
     # Set user_key's user to be the current user
     params[:user_key][:user_id] = @current_user.id
-    @user_key = UserKey.new(create_user_key_params)
+    @user_key = UserKey.new(owner_user_key_params)
     if @user_key.save
       redirect_to @user_key, notice: 'User key was successfully created.'
     else
@@ -46,12 +46,12 @@ class UserKeysController < ApplicationController
 
   # PATCH/PUT /user_keys/1
   def update
-    if @current_user.role? :admin
-      # Admin is allowed to add filters, orgs, active, etc.
+    if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission)
+      # Admin is allowed to add filters, orgs, active, etc. after the text fields are submitted
       whitelist = admin_update_user_key_params
     else
-      # The key's owner can change the application text if it hasn't been submitted yet
-      whitelist = update_user_key_params
+      # The key's owner (admin or requester) can change the application text if it isn't submitted yet
+      whitelist = owner_user_key_params
     end
     if @user_key.update(whitelist)
       redirect_to @user_key, notice: 'User key was successfully updated.'
@@ -80,7 +80,7 @@ class UserKeysController < ApplicationController
     # Delete single comment;
     # It should usually be the case that comment cannot be deleted
     # if role? requester and at_stage? :awaiting_submission stage,
-    # Since admin can't see the comments
+    # Since admin can't see the comments at that point in time.
     # FIXME: should this be validated?
     @bad_comment = Comment.find(params[:comment_id])
     @bad_comment.destroy
@@ -171,19 +171,9 @@ class UserKeysController < ApplicationController
       @user_key = UserKey.find(params[:id])
     end
 
-    def create_user_key_params # Seperate, due to new and permanent user_id
-      params.require(:user_key).permit(:user_id, :name, :agree, :proposal_text_one, :proposal_text_two,
-                                       :proposal_text_three, :proposal_text_four,
-                                       :proposal_text_five, :proposal_text_six,
-                                       :proposal_text_seven, :proposal_text_eight)
-    end
-    
-    def update_user_key_params # For requester, upon updating application text
-      
-      params.require(:user_key).permit(:agree, :name, :proposal_text_one, :proposal_text_two,
-                                       :proposal_text_three, :proposal_text_four,
-                                       :proposal_text_five, :proposal_text_six,
-                                       :proposal_text_seven, :proposal_text_eight)
+    def owner_user_key_params
+      # For requester, upon creating or updating application text
+      params.require(:user_key).permit(:agree, :name, *UserKey::TEXT_FIELD_LIST)
     end
     
     def comment_user_key_params # For anyone who can comment

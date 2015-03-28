@@ -2,7 +2,7 @@
   <b><%= pluralize(@user_keys.size, 'User Key') %></b><br />
   <ul>
     <% for user_key in @user_keys %>
-      <li><%= link_to((user_key.name), user_key_path(user_key)) %></li>
+      <li><%= link_to((user_key.display_name), user_key_path(user_key)) %></li>
     <% end  %>
   </ul>
 </p>

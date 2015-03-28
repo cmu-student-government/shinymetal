@@ -30,7 +30,7 @@ module Api
 
       def find_user_key_id_by_andrew_id(andrew_id)
         @cur_user = User.search(andrew_id)[0]
-        @user_keys_to_ids = @cur_user.user_keys.active.not_expired.map{|uk| {uk.gen_api_key => uk.id} }
+        @user_keys_to_ids = @cur_user.user_keys.active.not_expired.confirmed.map{|uk| {uk.gen_api_key => uk.id} }
         api_key = params[:api_key]
         # map to a list of ids where if the id matches, then return that id else 0
         result = @user_keys_to_ids.map{|d| !d[api_key].nil? ? d[api_key] : 0}

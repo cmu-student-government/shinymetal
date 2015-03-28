@@ -21,10 +21,20 @@ class UserKey < ActiveRecord::Base
   #     awaiting_confirmation, if not approved by everybody
   # or  confirmed
   STATUS_LIST = ["awaiting_submission", "awaiting_filters", "awaiting_confirmation", "confirmed"]
+  # Quick list for the 8 proposal_text symbols
+  TEXT_FIELD_LIST = ["one","two","three","four","five","six","seven","eight"].map{|num| "proposal_text_#{num}".to_sym }
   
   validates_inclusion_of :status, in: STATUS_LIST
   
   validate :user_id_valid
+  
+  # validate that steps that have been passed remain passing
+  for status in STATUS_LIST
+    unless status == "awaiting_submission"
+      validate Proc.new { |key| key.can_be_set_to?(status.to_sym) },
+               if: Proc.new { |key| key.at_stage?(status.to_sym, true) }
+    end
+  end
   
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
@@ -39,14 +49,6 @@ class UserKey < ActiveRecord::Base
   scope :expired, -> { where("time_expired < ?", DateTime.now)}
   
   # Methods
-  
-  # Simply counting all approvers and comparing approvals already earned
-  # would have a bug when someone approves it but is soon demoted from approver.
-  # So, only find the number of approvers who are currently still active "approvers"
-  def approved_by_all?
-    return self.approval_users.approvers_only.size == User.approvers_only.all.size
-  end
-  
   def approved_by?(user)
     return self.approval_users.approvers_only.to_a.include?(user)
   end
@@ -61,8 +63,26 @@ class UserKey < ActiveRecord::Base
   end
   
   def expired?
-    return true if self.time_expired.nil?
+    return false if self.time_expired.nil?
     return self.time_expired < DateTime.now
+  end
+  
+  # The form is ready to be submitted by the requester, or approved, or confirmed?
+  def can_be_set_to? sym
+    case sym # Do false cases first
+    when :awaiting_filters
+      # Each proposal_text_thing (except number 8) is not blank, name is not blank, terms agreed to
+      TEXT_FIELD_LIST.each {|attr|  return false if self.send(attr).blank? and attr != :proposal_text_eight}
+      return false if (self.name.blank? or !self.agree)
+    when :awaiting_confirmation
+      return false if self.time_expired.nil?
+    when :confirmed 
+      # Simply counting all approvers and comparing approvals already earned
+      # would have a bug when someone approves it but is soon demoted from approver.
+      # So, only find the number of approvers who are currently still active "approvers"
+      return false if !(self.approval_users.approvers_only.size == User.approvers_only.size)
+    end
+    return true
   end
   
   # A key with 'allow_past' which is past the submission stage
@@ -96,10 +116,15 @@ class UserKey < ActiveRecord::Base
     end
   end
 
-  # Used for index and show pages
-  # def name
-  #   "Application Key #{self.id}" 
-  # end
+  # Used for index and show pages; overwrites displayed name if name is blank 
+  # Note that this method is overwriting the :name attribute getter.
+  def display_name
+    if name.blank? # No name given yet, make up a temporary one
+      return "Unnamed Application"
+    else
+      return name
+    end
+  end
   
   def set_status_as(sym)
     case sym
@@ -147,12 +172,6 @@ class UserKey < ActiveRecord::Base
     return !self.comments.public_only.empty?
   end
   
-  # When submitted, a key should be marked as ready for filters from admin
-  # When filtered, a key should be marked as ready for confirmation
-  def set_status_to(param_status)
-    self.status = param_status
-  end
-  
   # When submitted, a key should have its requested date marked
   def set_time_to_now(param_time_attribute)
     self[param_time_attribute] = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
@@ -172,53 +191,54 @@ class UserKey < ActiveRecord::Base
 
   # When a key is submitted by requester to admin
   def set_key_as_submitted
-    if at_stage? :awaiting_submission
-      set_status_to("awaiting_filters")
+    if at_stage? :awaiting_submission and self.can_be_set_to? :awaiting_filters
+      self.status = "awaiting_filters"
       set_time_to_now(:time_submitted)
       save_changes
       return true
     end
-    errors.add(:user_key, "cannot be submitted at this stage")
+    errors.add(:user_key, "cannot be submitted. Please check that you
+               have completed all fields of the form and agreed to API usage terms")
     return false
   end
   
-  # When an admin submits the filter form so it can be approved by everyone
+  # When an admin submits the filter form so it can be approved by everyone.
+  # Require an expiration date and at least one filter at this stage
   def set_key_as_filtered
-    if at_stage? :awaiting_filters
-      set_status_to("awaiting_confirmation")
+    if at_stage? :awaiting_filters and self.can_be_set_to? :awaiting_confirmation
+      self.status = "awaiting_confirmation"
       set_time_to_now(:time_filtered)
       save_changes
       return true
     end
-    errors.add(:user_key, "cannot be shared with approvers at this stage")
+    errors.add(:user_key, "needs an expiration date")
     return false
   end
   
   # When a key has been approved by everyone and is confirmed by admin
   def set_key_as_confirmed
-    if at_stage? :awaiting_confirmation and self.approved_by_all?
-      set_status_to("confirmed")
+    if at_stage? :awaiting_confirmation and self.can_be_set_to? :confirmed
+      self.status = "confirmed"
       set_time_to_now(:time_confirmed)
       save_changes
       return true
     end
-    errors.add(:user_key, "cannot be confirmed at this stage")
+    errors.add(:user_key, "has not been approved by everyone yet")
     return false
   end
   
-  # When a key has rejected and sent back to the requester
+  # This is for Reset, when a key has rejected and sent back to the requester
   # Can only be sent back after submission but before "confirmed" stage
   # Note: a key can only be reset if it has comments made by admin for the requester's benefit.
   def set_key_as_awaiting_submission
     if (at_stage? :awaiting_filters or at_stage? :awaiting_confirmation) and has_public_comments?
-      set_status_to("awaiting_submission")
+      self.status = "awaiting_submission"
       reset_times
-      reset_approvals
-      # Keep any filters/comments that were applied, so dont reset those
+      reset_approvals # Keep any filters/comments that were applied, so dont reset those
       save_changes
       return true
     end
-    errors.add(:user_key, "cannot be reset at this stage")
+    errors.add(:user_key, "cannot be reset without providing an Administrator note")
     return false
   end
 

@@ -27,13 +27,18 @@ module Contexts
 
     @bender_key_awaiting_conf = FactoryGirl.create(:user_key, user: @bender, name: "Bender Awaiting Conf")
     @bender_key_awaiting_conf.set_status_as :awaiting_filters
-    @bender_key_awaiting_conf.set_status_as :awaiting_confirmation
-    # Changing time_submitted to test for chronological scopes
+    @bender_key_awaiting_conf.time_expired = 2.months.from_now
     @bender_key_awaiting_conf.time_submitted = 2.days.ago
     @bender_key_awaiting_conf.save!
+    @bender_key_awaiting_conf.set_status_as :awaiting_confirmation
+    # Changing time_submitted to test for chronological scopes
+    @bender_key_awaiting_conf.save!
     
-    @bender_key_awaiting_conf_approved = FactoryGirl.create(:user_key, user: @bender, time_submitted: 4.days.ago, name: "Bender Awaiting Conf Approved")
+    @bender_key_awaiting_conf_approved = FactoryGirl.create(:user_key, user: @bender, name: "Bender Awaiting Conf Approved")
     @bender_key_awaiting_conf_approved.set_status_as :awaiting_filters
+    @bender_key_awaiting_conf_approved.time_submitted = 4.days.ago
+    @bender_key_awaiting_conf_approved.time_expired = 2.months.from_now
+    @bender_key_awaiting_conf_approved.save!
     @bender_key_awaiting_conf_approved.set_status_as :awaiting_confirmation
     # Changing time_submitted to test for chronological scopes
     @bender_key_awaiting_conf_approved.time_submitted = DateTime.new(2000,1,2)
@@ -42,6 +47,8 @@ module Contexts
 
     @bender_key_confirmed = FactoryGirl.create(:user_key, user: @bender, name: "Bender Confirmed")
     @bender_key_confirmed.set_status_as :awaiting_filters
+    @bender_key_confirmed.time_expired = 2.months.from_now
+    @bender_key_confirmed.save!
     @bender_key_confirmed.set_status_as :awaiting_confirmation
     # Key cannot be marked as confirmed until it is given approvals;
     # Thus, key is set to confirmed when approvals are created below.

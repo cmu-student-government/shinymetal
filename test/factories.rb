@@ -10,7 +10,17 @@ FactoryGirl.define do
    # factory blueprint for user keys
   factory :user_key do
     association :user
+    agree true
     name "Bender Key"
+    proposal_text_one "Test"
+    proposal_text_two "Test"
+    proposal_text_three "Test"
+    proposal_text_four "Test"
+    proposal_text_five "Test"
+    proposal_text_six "Test"
+    proposal_text_seven "Test"
+    # Eight is optional
+    proposal_text_eight nil
     status "awaiting_submission"
   end
 

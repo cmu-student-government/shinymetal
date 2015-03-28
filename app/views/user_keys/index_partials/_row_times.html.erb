@@ -1,0 +1,24 @@
+<!-- user_key passed in from partial call. -->
+<!-- This partial is used by both own_user_keys, index, and show pages. -->
+
+
+<td>
+  <%= render partial: 'user_keys/index_partials/time_label', locals: { stage_to_show_label: :awaiting_submission, stage_to_show_time: :awaiting_filters, user_key: user_key, time_attr: :time_submitted} %>
+</td>
+<% if @current_user.role? :is_staff %>
+  <td>
+    <%= render partial: 'user_keys/index_partials/time_label', locals: { stage_to_show_label: :awaiting_filters, stage_to_show_time: :awaiting_confirmation, user_key: user_key, time_attr: :time_filtered} %>
+  </td>
+<% end %>
+<td>
+  <%= render partial: 'user_keys/index_partials/time_label', locals: { stage_to_show_label: :awaiting_confirmation, stage_to_show_time: :confirmed, user_key: user_key, time_attr: :time_confirmed} %>
+</td>
+<td>
+  <!-- :time_expired is a special case, show that to staffmembers if before confirmed stage also -->
+  <%= render partial: 'user_keys/index_partials/time_label', locals: { stage_to_show_label: :confirmed, stage_to_show_time: :confirmed, user_key: user_key,
+								      time_attr: :time_expired, temp_false_message: "Expired", temp_true_message: "Not Expired"} %>
+</td>
+<!-- Show active too-->
+<% if @current_user.role? :is_staff %>
+  <td><%= render partial: 'shared/boolean_label', locals: { boolean_label: user_key.active, true_message: "Yes", false_message: "No" } %>
+<% end %>

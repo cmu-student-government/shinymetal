@@ -173,7 +173,7 @@ class UserKeysController < ApplicationController
 
     def owner_user_key_params
       # For requester, upon creating or updating application text
-      params.require(:user_key).permit(:agree, :name, *UserKey::TEXT_FIELD_LIST)
+      params.require(:user_key).permit(:agree, :name, *UserKey::TEXT_FIELD_LIST, :user_id)
     end
     
     def comment_user_key_params # For anyone who can comment

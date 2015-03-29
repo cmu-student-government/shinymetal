@@ -110,6 +110,13 @@ $success-color: #5da423;
   margin: 0;
   padding: 0;
 }
+
+#error_explanation {
+  background-color: lighten($primary-color, 55);
+  border-radius: 8px;
+
+}
+
 // Apply styles to HTML elements
 // to make views framework-neutral.
 // (This part came default with foundation.)

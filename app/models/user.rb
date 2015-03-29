@@ -31,5 +31,4 @@ class User < ActiveRecord::Base
         return self.role == "admin"
     end
   end
-
 end

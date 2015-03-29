@@ -15,6 +15,9 @@
 //= require turbolinks
 //= require foundation
 //= require_tree .
+
+$(document).on('page:load', function() { $(document).foundation(); }); // http://stackoverflow.com/a/27385622/2557082
+
 $(function() {
   $(document).foundation();
 });

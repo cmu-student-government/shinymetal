@@ -1,17 +1,14 @@
-  <ul class="left">
+  <ul class="left"> 
     <li class="divider"></li>
-
+    
     <!-- Begin admin login check-->
     <% if logged_in? and @current_user.role? :is_staff %>
     <li><%= link_to "Users", users_path %></li>
-
-    <li class="has-dropdown"><%= link_to "User Keys", user_keys_path %>
-      <ul class="dropdown">
-        <li><%= link_to "Filters", filters_path %></li>
-        <li><%= link_to "Add a filter", new_filter_path %></li>
-      </ul>
-    </li>
-
+    
+    <li><%= link_to "User Keys", user_keys_path %>
+    
+    <li><%= link_to "Filters", filters_path %></li>
+  
     <li class="has-form">
       <div class="collapsed_row">
         <%= form_tag users_path, method: 'get' do %>
@@ -26,17 +23,16 @@
     </li>
     <% end %>
     <% if logged_in? %> <!--End admin login check, begin basic user login check-->
-      <li><%= link_to "My Keys", own_user_keys_path %></li>
+      <li><%= link_to "Your Keys", own_user_keys_path %></li>
     <% end %>
   </ul>
-<% end %>
 
 <ul class="right">
   <% if logged_in? %>
     <li><%= link_to "Welcome, #{current_user.andrew_id}", @current_user %></li>
-
+    
     <li class="divider"></li>
-
+    
     <li><%= link_to "Logout", logout_path %></li>
   <% else %>
     <li><%= link_to "Login", login_path %></li>

@@ -10,11 +10,10 @@
 
 <p>
   <strong>Active:</strong>
-  <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user.active } %>
+  <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user.active, true_message: "Yes", false_message: "No" } %>
 </p>
 
-<%= render partial: 'users/show_partials/list_of_user_keys' %>
+<%= render partial: 'shared/list_of_user_keys' %>
 
-<%= link_to 'Edit', edit_user_path(@user), class: "big-button" %> |
-<%= link_to 'Back', users_path, class: "big-button secondary" %> |
-<%= link_to 'Destroy', @user, method: :delete, data: { confirm: 'Are you sure?' }, class: "small-button" %>
+<%= link_to 'Edit user', edit_user_path(@user), class: "big-button" %> |
+<%= link_to 'Back to users list', users_path, class: "big-button secondary" %>

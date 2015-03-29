@@ -16,12 +16,13 @@
     <%= favicon_link_tag "favicon.ico", rel: "apple-touch-icon" %>
 
     <%= csrf_meta_tags %>
+    <%= favicon_link_tag 'benderface.jpg' %>
   </head>
   <body>
     <header class="contain-to-grid">
       <%= render 'layouts/navigation' %>
     </header>
-    <main role="main">
+    <main role="main" class="panel">
        <%= render 'layouts/messages' %>
        <%= yield %>
     </main>

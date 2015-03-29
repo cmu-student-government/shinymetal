@@ -5,13 +5,12 @@
 
 <p>
   <strong>Filter name:</strong>
-  <%= @filter.filter_name %>
+  <%= @filter.name %>
 </p>
 
-<p>
-  <strong>Filter value:</strong>
-  <%= @filter.filter_value %>
-</p>
+<%= render partial: 'shared/list_of_user_keys' %>
 
-<%= link_to 'Edit', edit_filter_path(@filter), class: "big-button" %> |
-<%= link_to 'Back', filters_path, class: "big-button secondary" %>
+<%= link_to 'Edit filter', edit_filter_path(@filter), class: "big-button" %> |
+<%= link_to 'Back to filters list', filters_path, class: "big-button secondary" %>
+<br/>
+<%= link_to 'Delete filter', @filter, method: :delete, data: { confirm: 'Are you sure that you want to delete this filter?' }, class: "small-button" %></td>

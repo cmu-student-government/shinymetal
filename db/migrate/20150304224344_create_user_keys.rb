@@ -8,7 +8,7 @@ class CreateUserKeys < ActiveRecord::Migration
       t.datetime :time_confirmed
       t.datetime :time_expired
       t.boolean :active, default: true
-      t.string :value
+      t.string :name
       t.text :proposal_text_one
       t.text :proposal_text_two
       t.text :proposal_text_three

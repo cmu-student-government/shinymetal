@@ -5,7 +5,8 @@ class UserTest < ActiveSupport::TestCase
   should have_many(:user_keys)
 
   #Validations
-  should validate_presence_of(:andrew_id)
+  # This is not user input so it does't need to be validated
+  #should validate_presence_of(:andrew_id)
   
   should allow_value("admin").for(:role)
   should allow_value("requester").for(:role)
@@ -66,7 +67,7 @@ class UserTest < ActiveSupport::TestCase
       assert_equal ["fry"], User.search('fry').map{|u| u.andrew_id}
       assert_equal ["zoidberg"], User.search('zoid').map{|u| u.andrew_id}
     end
-
+    
   end
 
 end

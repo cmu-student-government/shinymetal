@@ -1,0 +1,17 @@
+<h2><%="Error: #{@status_code} #{@rescue_response.to_s.capitalize.gsub('_',' ')}"%>
+
+<br/><br/>
+
+<% case "#{@status_code}" when "404" %>
+
+  <p>We're sorry, the page you are looking for does not exist or has been moved.</p>
+
+<% when "403" %>
+
+  <p>You are not authorized to access this page.</p>
+
+<% else %>
+
+  <p>We're sorry, there has been an error. Please return to the home page.</p>  
+  
+<% end %>

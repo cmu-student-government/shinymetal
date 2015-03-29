@@ -25,6 +25,9 @@ module Shinymetal
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    # Treat CanCan's error like a typical Forbidden error
+    config.action_dispatch.rescue_responses.merge! 'CanCan::AccessDenied' => :forbidden
+
     # For Foundation 5
     config.assets.precompile += %w( vendor/modernizr )
 

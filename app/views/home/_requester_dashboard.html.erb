@@ -1,11 +1,12 @@
 <div class="panel"> 
 
-<h4> Hi, <%="#{current_user.andrew_id}"%>!  </h4>
-<br /> 
+<h3>Hi, <%="#{@current_user.andrew_id}"%>!</h3>
 
-<%= link_to  'Apply for a new key', new_user_key_path, class: "big-button" %>
+<br/>
 
-<p> Your Existing Keys: </p>
+<p><%= link_to  'Apply for a new key', new_user_key_path, class: "big-button" %></p>
+
+<h3>Your Existing Keys</h3>
 <% if @confirmed_keys.size > 0 %>
 <table>
   <tr>
@@ -15,17 +16,19 @@
   </tr>
 <% @confirmed_keys.each do |key| %>
   <tr>
-    <td><%= link_to key.name, user_key_path(key) %></td>
-    <td><%= key.value %></td>
+    <td><%= link_to key.display_name, user_key_path(key) %></td>
+    <%# FIXME add a "click here to view to have the CSS play nicely" %>
+    <td><%= key.gen_api_key %></td>
     <td><%= key.time_expired ? key.time_expired.to_formatted_s(:pretty) : "N/A" %></td>
   </tr>
 <% end %>
 </table>
 <% else %>
-None
+<p>None</p>
 <% end %>
+<br/>
 
-<p> Incomplete Applications: </p>
+<h3>Your Incomplete Applications</h3>
 <% if @in_progress.size > 0 %>
 <table>
   <tr>
@@ -34,16 +37,17 @@ None
   </tr>
 <% @in_progress.each do |key| %>
   <tr>
-    <td><%= link_to key.name, user_key_path(key) %></td>
+    <td><%= link_to key.display_name, user_key_path(key) %></td>
     <td><%= key.created_at.to_formatted_s(:pretty) %></td>
   </tr>
 <% end %>
 </table>
 <% else %>
-None
+<p>None</p>
 <% end %>
+<br/>
 
-<p> Applications Awaiting Administrator Review: </p>
+<h3>Your Pending Key Requests</h3>
 <% if @awaiting_admin_review.size > 0 %>
 <table>
   <tr>
@@ -52,17 +56,17 @@ None
   </tr>
 <% @awaiting_admin_review.each do |key| %>
   <tr>
-    <td><%= link_to key.name, user_key_path(key) %></td>
+    <td><%= link_to key.display_name, user_key_path(key) %></td>
     <td><%= key.created_at.to_formatted_s(:pretty) %></td>
   </tr>
 <% end %>
 </table>
 <% else %>
-None
+<p>None</p>
 <% end %>
+<br/>
 
-
-<p> Your Expired Keys: </p>
+<h3>Your Expired Keys</h3>
 <% if @expired_keys.size > 0 %>
 <table>
   <tr>
@@ -71,13 +75,13 @@ None
   </tr>
 <% @expired_keys.each do |key| %>
   <tr>
-    <td><%= link_to key.name, user_key_path(key) %></td> 
+    <td><%= link_to key.display_name, user_key_path(key) %></td> 
     <td><%= key.time_expired ? key.time_expired.to_formatted_s(:pretty) : "N/A" %></td>
   </tr>
 <% end %>
 </table>
 <% else %>
-None
+<p>None</p>
 <% end %>
 
 </div>

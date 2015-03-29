@@ -15,13 +15,24 @@ namespace :db do
     # Docs at: http://faker.rubyforge.org/rdoc/
     require 'faker'
     
+    # Step 0: Create every possible column
+    Resource::COLUMN_NAME_HASH.each do |resource_sym, resource_column_list|
+      resource = resource_sym.to_s
+      for item in resource_column_list
+        column = Column.new
+        column.resource = resource
+        column.column_name = item
+        column.save!
+      end
+    end
+    
     # Step 1: clear any old data in the db
     [Approval, Comment, Filter, Organization, UserKeyFilter, UserKeyOrganization, User, UserKey].each(&:delete_all)
     
     
     # Step 2: Add Filters, Orgs, and Approvers
     # Define resources, filter_names, filter_values
-    filter_lists = [["organizations","membershipType","closed"],
+    filter_lists = [["organizations","type","closed"],
                  ["events","currentEventsOnly","true"],
                  ["attendees","status","active"],
                  ["memberships","currentMembershipsOnly","true"],
@@ -79,19 +90,34 @@ namespace :db do
       # Step 3A: add 0 to 3 keys for each requester
       UserKey.populate 0..3 do |user_key|
         user_key.user_id = user.id
+        user_key.name = Faker::Company.name + " key"
+        # I tried to DRY this, but Populator gem wouldn't let me
+        user_key.proposal_text_one = Faker::Lorem.paragraph
+        user_key.proposal_text_two = Faker::Lorem.paragraph
+        user_key.proposal_text_three = Faker::Lorem.paragraph
+        user_key.proposal_text_four = Faker::Lorem.paragraph
+        user_key.proposal_text_five = Faker::Lorem.paragraph
+        user_key.proposal_text_six = Faker::Lorem.paragraph
+        user_key.proposal_text_seven = Faker::Lorem.paragraph
+        user_key.proposal_text_eight = Faker::Lorem.paragraph
+
         # make sure all begin as awaiting submission
         user_key.status = "awaiting_submission"
         # now begin submitting some keys randomly
         if [true,false].sample #50 percent change if this key was submitted....
           user_key.time_submitted = 3.weeks.ago.to_date
           user_key.status = "awaiting_filters"
+          
           if [true,false].sample # if filters applied...
             user_key.time_filtered = 2.weeks.ago.to_date
+            
+            # time_expired is randomly 1..3 months from now, or 1..2 months ago
+            user_key.time_expired = (1..5).map{|d| d.months.from_now}.append((1..2).map{ |d| d.months.ago})
+            
             user_key.status = "awaiting_confirmation"
             if [true,false].sample # if the key was confirmed...
               user_key.time_confirmed = 1.week.ago.to_date
-              # set 10 random characters for key hash
-              user_key.value = Faker::Lorem.characters(10)
+              # Set a random name for the key
               user_key.status = "confirmed"
             end
           end
@@ -142,21 +168,29 @@ namespace :db do
             user_key_organization.created_at = Time.now
             user_key_organization.updated_at = Time.now
           end
+          # get a list of columns to avoid repeat columns being assigned
+          column_list = Column.all.to_a.shuffle
+          UserKeyColumn.populate 3..6 do |user_key_column|
+            user_key_column.user_key_id = user_key.id
+            user_key_column.column_id = column_list.pop.id
+            user_key_column.created_at = Time.now
+            user_key_column.updated_at = Time.now
+          end
         end
         
+        list_of_approvers = User.approvers_only.to_a
         # Step 3B part 2: add approvals to keys awaiting approval
         if user_key.status == "awaiting_confirmation"
-          Approval.populate 1..3 do |approval| #always less than 4 approvers
+          Approval.populate 3..6 do |approval|
             approval.user_key_id = user_key.id 
-            approval.user_id = User.approvers_only.to_a.sample.id
+            approval.user_id = list_of_approvers.pop.id
             # set the timestamps
             approval.created_at = Time.now
             approval.updated_at = Time.now
           end
         elsif user_key.status == "confirmed"
           #all approvers need to have approved this key
-          list_of_approvers = User.approvers_only.to_a
-          Approval.populate User.approvers_only.size do |approval|
+          Approval.populate list_of_approvers.size do |approval|
             approval.user_key_id = user_key.id
             approval.user_id = list_of_approvers.pop.id
             # set the timestamps

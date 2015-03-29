@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
-  get 'home/index'
-
+  resources :sessions, only: [:create, :new, :destroy]
+  
   resources :filters
 
   resources :user_keys
-
-  resources :users
   
-  resources :sessions
+  # Users are not deleted, only inactivated.
+  # They are not created directly; they are meant to be created automatically via shibboleth login.
+  resources :users, except: [:destroy, :create, :new]
   
   # Authentication routes
   get 'logout' => 'sessions#destroy', as: :logout
@@ -31,11 +31,6 @@ Rails.application.routes.draw do
   # Approve the key as current user
   patch 'user_keys/:id/approve_key' => 'user_keys#approve_key', as: :approve_key
   patch 'user_keys/:id/undo_approve_key' => 'user_keys#undo_approve_key', as: :undo_approve_key
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
 
   root 'home#index'
 

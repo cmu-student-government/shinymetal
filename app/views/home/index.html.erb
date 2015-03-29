@@ -1,14 +1,14 @@
-<h1>Welcome to The Bridge API</h1>
-<p> This API provides access to organization and event information at CMU via The Bridge.
+<h1>Welcome to the ShinyMetal API</h1>
+<p> This API provides access to organization and event information at CMU from the Bridge. 
 
 <% if logged_in? %>
-  <% if @current_user.role? :admin %>
-   <%= render :partial => "admin_dashboard" %>
+  <% if @current_user.role? :is_staff %>
+   <%= render :partial => "staff_dashboard" %>
 
   <% else %>
    <%= render :partial => "requester_dashboard" %>
   <% end %>
 
 <% else %>
-Login to begin.
+Login to begin.  
 <% end %>

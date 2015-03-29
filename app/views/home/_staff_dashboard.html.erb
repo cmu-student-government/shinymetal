@@ -1,0 +1,51 @@
+<div class="panel"> 
+
+<h3>Hi, <%="#{@current_user.andrew_id}"%>!  </h3>
+<br />
+
+<h3>Keys Awaiting Approval or Confirmation</h3>
+<% if @pending_approval.size > 0 %>
+  <table>
+    <tr>
+      <th>Key</th>
+      <th>Requester</th>
+      <th>Date Submitted</th>
+      <th>Approvals Given (of <%= User.approvers_only.size %> Needed)</th>
+    </tr>
+  <% @pending_approval.each do |key| %>
+    <tr>
+      <td><%= link_to key.name, user_key_path(key) %>
+      <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
+      <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
+      <td><%= key.approval_users.approvers_only.size %></td>
+    </tr>
+  <% end %>
+  </table>
+
+<% else %>
+  <p> All keys that have been made public to approvers have been approved and confirmed.</p>
+<% end %>
+<br/>
+
+<h3>Keys Awaiting Administrator Review</h3>
+<% if @pending_filter_keys.size > 0 %>
+  <table>
+    <tr>
+      <th>Key</th>
+      <th>Requester</th>
+      <th>Date Submitted</th>
+    </tr>
+  <% @pending_filter_keys.each do |key| %>
+    <tr>
+      <td><%= link_to key.display_name, user_key_path(key) %>
+      <td><%= link_to key.user.andrew_id, user_path(key.user) %></td>
+      <td><%= key.time_submitted.to_formatted_s(:pretty)%></td>
+    </tr>
+  <% end %>
+  </table>
+
+<% else %>
+<p>All submitted keys have been assigned filters and shared with approvers.</p>
+<% end %>
+
+</div>

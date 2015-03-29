@@ -20,6 +20,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
+
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
@@ -34,10 +35,14 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Foundation gems
 gem 'foundation-rails'
-gem 'rails_layout', group: :development
 
-# Bourbon SASS mixins
-gem 'bourbon'
+group :development do
+  gem 'rails_layout'
+
+  # rake diagram:all
+  # You need to install other system dependencies. See https://github.com/preston/railroady
+  gem 'railroady'
+end
 
 # Pagination gem that is still being maintained
 gem 'kaminari'
@@ -45,10 +50,13 @@ gem 'kaminari'
 # Authorization gem
 gem 'cancancan', '~> 1.10'
 
+# Error handler
+gem 'gaffe'
+
 # The following gems were taken straight from Prof H's gemfiles
 
 group :development do
-	gem 'quiet_assets'
+  gem 'quiet_assets'
   gem 'thin'
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -57,6 +65,9 @@ group :development do
   gem 'hirb'
   gem 'populator3'
   gem 'faker'
+  # letter_opener safely opens development emails in browser, does not send.
+  # Dev emails are stored in tmp/letter_opener
+  gem 'letter_opener'
 end
 
 # Gems used only in testing

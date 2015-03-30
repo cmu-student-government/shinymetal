@@ -17,8 +17,7 @@
 <% @confirmed_keys.each do |key| %>
   <tr>
     <td><%= link_to key.display_name, user_key_path(key) %></td>
-    <%# FIXME add a "click here to view to have the CSS play nicely" %>
-    <td><%= key.gen_api_key %></td>
+    <td><input id="key" type="text" value =<%= key.gen_api_key %>> </input></td>
     <td><%= key.time_expired ? key.time_expired.to_formatted_s(:pretty) : "N/A" %></td>
   </tr>
 <% end %>

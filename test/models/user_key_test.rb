@@ -117,9 +117,9 @@ class UserKeyTest < ActiveSupport::TestCase
     end
 
     #FIXME uncomment when corrected
-    # should "have a scope that returns keys that expire in a month" do 
-    #   assert_equal 1, UserKey.expires_in_a_month
-    # end
+    should "have a scope that returns keys that expire in a month" do 
+      assert_equal 1, UserKey.expires_in_a_month.size
+    end
 
     should "have a scope that returns keys that expire today" do
       assert_equal 1, UserKey.expires_today.size

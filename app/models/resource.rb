@@ -39,36 +39,36 @@ class Resource < ActiveRecord::Base
   
   # Theoretically these could also be temporary, and taken from calls to collegiatelinkapi?
   # FIXME we need to figure out which ones are important. 
-  COLUMN_NAME_HASH = { organizations: ["OrganizationId",
-                                       "Name",
-                                       "Status",
-                                       "ShortName",
-                                       "Summary",
-                                       "Description"
+  COLUMN_NAME_HASH = { organizations: ["organizationId",
+                                       "name",
+                                       "status",
+                                       "shortName",
+                                       "summary",
+                                       "description"
                                        # FIXME there are others for orgs
                                        ],
-                       events: ["EventId",
-                                   "EventName",
-                                   "OrganizationId",
-                                   "OrganizationName",
-                                   "StartDate",
-                                   "EndDate"
+                       events: ["eventId",
+                                   "eventName",
+                                   "organizationId",
+                                   "organizationName",
+                                   "startDate",
+                                   "endDate"
                                    # FIXME there are others for events
                                    ],
-                       attendees: ["EventId",
-                                   "EventName",
-                                   "OrganizationId",
-                                   "OrganizationName",
-                                   "StartDate",
-                                   "EndDate",
-                                   "AttendanceId",
-                                   "UserId"
+                       attendees: ["eventId",
+                                   "eventName",
+                                   "organizationId",
+                                   "organizationName",
+                                   "startDate",
+                                   "endDate",
+                                   "attendanceId",
+                                   "userId"
                                    # FIXME again, what do attendees need?
                                     ],
-                       memberships: ["MembershipId",
-                                     "OrganizationId",
-                                     "OrganizationName",
-                                     "OrganizationShortName"
+                       memberships: ["membershipId",
+                                     "organizationId",
+                                     "organizationName",
+                                     "organizationShortName"
                                     # FIXME there are others for mem too
                                      ],
                        positions: ["positionId",
@@ -76,11 +76,16 @@ class Resource < ActiveRecord::Base
                                    "positionNameLocked"
                                    #FIXME others for positions too
                                    ],
-                       users: ["UserId",
-                               "Username",
-                               "Status"
-                               # FIXME again, there are others for users
+                       users: ["userId",
+                               "username",
+                               "status",
+                               "lastLogin",
+                               "firstName",
+                               "lastName",
+                               "campusEmail",
+                               "customFields"
                                ] }
+                              # FIXME again, there are others for users
   # This isn't used because a columns controller hasn't been created yet
   #COLUMN_LIST = COLUMN_NAME_HASH::values.flatten.uniq
   

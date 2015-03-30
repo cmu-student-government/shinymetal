@@ -17,6 +17,8 @@
 <% if @current_user.role? :admin %>
 
 <%= link_to 'Edit user', edit_user_path(@user), class: "big-button" %> |
-<%= link_to 'Back to users list', users_path, class: "big-button secondary" %>
 
 <% end %>
+
+<%= link_to 'Back to users list', users_path, class: "big-button secondary" %>
+

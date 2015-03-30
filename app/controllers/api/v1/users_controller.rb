@@ -16,10 +16,11 @@ module Api
         # modified the script to hit only the specified endpoint
         # parse the JSON string from the collegiate link API into a hash
         body = JSON.parse(hit_api_endpoint("users"))
-        # once we have entries in user_key_columns, we can say
-        # filter_columns = UserKey.find_by_id(find_user_key_id_by_andrew_id(params[:andrew_id])).columns
+        # find the appropriate filter_columns for a given user key
+        user_key_array = UserKey.find_by_id(find_user_key_id_by_andrew_id(params[:andrew_id])).to_a
+        filter_columns = user_key_array.length > 0 ? user_key_array[0].columns.map{|c| c.column_name } : []
         # these are temporary columns our API will white list
-        filter_columns = ["username", "firstName", "lastName", "campusEmail", "status"]
+        # filter_columns = ["username", "firstName", "lastName", "campusEmail", "status"]
         result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| filter_columns.include?(k) } } }
 
         render json: JSON(result_hash), status: 200

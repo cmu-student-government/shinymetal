@@ -110,6 +110,22 @@ $success-color: #5da423;
   margin: 0;
   padding: 0;
 }
+
+#error_explanation {
+  background-color: lighten($primary-color, 55);
+  border-radius: 8px;
+}
+
+.tabs dd.active a, .tabs .tab-title.active a {
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}
+
+.tabs-content > .content {
+  padding: 2em;
+}
+
 // Apply styles to HTML elements
 // to make views framework-neutral.
 // (This part came default with foundation.)

@@ -61,6 +61,17 @@ module Contexts
     @expired_key.time_submitted = DateTime.new(2000,1,2)
     @expired_key.time_filtered = 4.days.ago
     @expired_key.save!
+
+    @expires_in_month_key = FactoryGirl.create(:user_key, user: @bender, name: "Bender Expires in a Month", time_expired: 30.days.from_now)
+    @expires_in_month_key.time_submitted = DateTime.new(2000,1,2)
+    @expires_in_month_key.time_filtered = 4.days.ago
+    @expires_in_month_key.save!
+
+    @expires_today = FactoryGirl.create(:user_key, user: @bender, name: "Bender Expires Today", time_expired: DateTime.now)
+    @expires_today.time_submitted = DateTime.new(2000,1,2)
+    @expires_today.time_filtered = 4.days.ago
+    @expires_today.save!
+
   end
   
   def destroy_user_keys

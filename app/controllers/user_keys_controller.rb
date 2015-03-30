@@ -66,7 +66,6 @@ class UserKeysController < ApplicationController
     # This takes the single nested comment_attribute;
     # always set the commenter's id to the current user's id.
     params[:user_key][:comments_attributes]["0"][:user_id] = @current_user.id
-    # FIXME Adding a user_key_comment note from administrator should send email to requester?
     if @user_key.update(comment_user_key_params)
       redirect_to @user_key, notice: 'Comment was successfully added.'
     else
@@ -128,6 +127,7 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/set_as_reset
   def set_as_reset
     if @user_key.set_status_as :awaiting_submission
+      UserKeyMailer.app_reset_msg(@user_key.user, @user_key).deliver
       redirect_to user_keys_url, notice: 'User key application was successfully returned to the requester with comments,
                                           and is no longer visible to staff.'
     else
@@ -173,7 +173,7 @@ class UserKeysController < ApplicationController
 
     def owner_user_key_params
       # For requester, upon creating or updating application text
-      params.require(:user_key).permit(:agree, :name, *UserKey::TEXT_FIELD_LIST)
+      params.require(:user_key).permit(:agree, :name, *UserKey::TEXT_FIELD_LIST, :user_id)
     end
     
     def comment_user_key_params # For anyone who can comment

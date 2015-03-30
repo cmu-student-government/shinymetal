@@ -20,4 +20,15 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      user_key:
+        proposal_text_one: "Team info"
+        proposal_text_two: "Sponsor info"
+        proposal_text_three: "Project description"
+        proposal_text_four: "Goals"
+        proposal_text_five: "Data requirements"
+        proposal_text_six: "Security"
+        proposal_text_seven: "Responsibility"
+        proposal_text_eight: "Additional info"
+        agree: "Terms and conditions"

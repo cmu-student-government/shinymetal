@@ -111,7 +111,7 @@ module Contexts
   #Columns
   def create_columns
     @organizations_description_column = FactoryGirl.create(:column)
-    @events_eventname_column = FactoryGirl.create(:column, resource: 'events', column_name: 'EventName')
+    @events_eventname_column = FactoryGirl.create(:column, resource: 'events', column_name: 'eventName')
   end
 
   def destroy_columns

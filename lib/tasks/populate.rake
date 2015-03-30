@@ -90,7 +90,7 @@ namespace :db do
       # Step 3A: add 0 to 3 keys for each requester
       UserKey.populate 0..3 do |user_key|
         user_key.user_id = user.id
-        user_key.name = Faker::Company.name + " key"
+        user_key.name = Faker::Company.name
         # I tried to DRY this, but Populator gem wouldn't let me
         user_key.proposal_text_one = Faker::Lorem.paragraph
         user_key.proposal_text_two = Faker::Lorem.paragraph
@@ -99,7 +99,7 @@ namespace :db do
         user_key.proposal_text_five = Faker::Lorem.paragraph
         user_key.proposal_text_six = Faker::Lorem.paragraph
         user_key.proposal_text_seven = Faker::Lorem.paragraph
-        user_key.proposal_text_eight = Faker::Lorem.paragraph
+        user_key.proposal_text_eight = [Faker::Lorem.paragraph, nil]
 
         # make sure all begin as awaiting submission
         user_key.status = "awaiting_submission"
@@ -150,14 +150,20 @@ namespace :db do
             comment.created_at = (1..10).map{|num| num.days.ago.to_date}
             comment.updated_at = Time.now
           end
-          # get a list of filters to avoid repeat filters being assigned
-          filter_list = Filter.all.to_a.shuffle
-          UserKeyFilter.populate 1..3 do |user_key_filter|
-            user_key_filter.user_key_id = user_key.id 
-            user_key_filter.filter_id = filter_list.pop.id
-            # set the timestamps
-            user_key_filter.created_at = Time.now
-            user_key_filter.updated_at = Time.now
+          # Create 1 to 3 whitelists for each key
+          Whitelist.populate 1..3 do |whitelist|
+             whitelist.user_key_id = user_key.id
+             whitelist.created_at = Time.now
+             whitelist.updated_at = Time.now
+             # get a list of filters to avoid repeat filters being assigned to a single whitelist
+             filter_list = Filter.all.to_a.shuffle
+             WhitelistFilter.populate 1..3 do |whitelist_filter|
+               whitelist_filter.whitelist_id = whitelist.id 
+               whitelist_filter.filter_id = filter_list.pop.id
+               # set the timestamps
+               whitelist_filter.created_at = Time.now
+               whitelist_filter.updated_at = Time.now
+             end
           end
           # get a list of orgs to avoid repeat orgs being assigned
           org_list = Organization.all.to_a.shuffle

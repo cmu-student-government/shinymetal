@@ -1,7 +1,7 @@
 class Filter < ActiveRecord::Base
   #Relationships
-  has_many :user_key_filters
-  has_many :user_keys, through: :user_key_filters
+  has_many :whitelist_filters
+  has_many :whitelists, through: :whitelist_filters
   
   # Validations
   validates :resource, inclusion: { in: Resource::RESOURCE_LIST, message: "is not a valid resource" }

@@ -2,8 +2,8 @@ require 'test_helper'
 
 class FilterTest < ActiveSupport::TestCase
   #Relationships
-  should have_many(:user_key_filters)
-  should have_many(:user_keys).through(:user_key_filters)
+  should have_many(:whitelist_filters)
+  should have_many(:whitelists).through(:whitelist_filters)
 
   context "Creating a filters context" do
     setup do

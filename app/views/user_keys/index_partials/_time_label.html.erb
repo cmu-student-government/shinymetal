@@ -16,7 +16,7 @@
                    !(user_key.at_stage? :confirmed)) %>
 
 <% if special_case %>
-  <%= user_key.send(time_attr).to_formatted_s(:pretty) %>
+  <%= user_key.send(time_attr).to_formatted_s(:long_ordinal) %>
 
 <% elsif user_key.at_stage?(stage_to_show_label, true) %>
   <% if user_key.at_stage?(stage_to_show_time, true) %>

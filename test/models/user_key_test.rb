@@ -277,5 +277,14 @@ class UserKeyTest < ActiveSupport::TestCase
       deny @bender_key.expired?
       assert @expired_key.expired?
     end
+    
+    should "not allow Unnamed Application name" do
+      # Set name to nil if someone tries
+      @bender_key.name = "Unnamed Application"
+      @bender_key.save!
+      @bender_key.reload
+      assert @bender_key.name.nil?
+    end
+    
   end
 end

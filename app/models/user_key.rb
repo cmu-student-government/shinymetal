@@ -1,4 +1,6 @@
 class UserKey < ActiveRecord::Base
+  before_save :check_name
+  
   # Relationships
   belongs_to :user
   has_many :user_key_organizations
@@ -252,5 +254,11 @@ class UserKey < ActiveRecord::Base
       return false
     end
     return true
+  end
+  
+  # Callbacks
+  # don't allow "Unnamed Application" to be the name; set to nil
+  def check_name
+    self.name = nil if self.name == "Unnamed Application"
   end
 end

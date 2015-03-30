@@ -35,8 +35,8 @@ class UserKeysController < ApplicationController
   # POST /user_keys
   def create
     # Set user_key's user to be the current user
-    params[:user_key][:user_id] = @current_user.id
     @user_key = UserKey.new(owner_user_key_params)
+    @user_key.user_id = @current_user.id
     if @user_key.save
       redirect_to @user_key, notice: 'User key was successfully created.'
     else

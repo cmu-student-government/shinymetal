@@ -27,7 +27,14 @@
   <% if @current_user.role? :admin and !(@user_key.id.nil? or @user_key.at_stage? :awaiting_submission) %>
     
     <!-- Only admins can assign filters, and they can do so at any time -->
-    <fieldset class="admin_only">
+    <!-- Added tab for admin to view application text while editing access -->
+    <ul class="tabs" data-tab>
+      <li class="tab-title active"><a href="#accessPanel">Edit Access</a></li>
+      <li class="tab-title"><a href="#applicationPanel">View Application</a></li>
+    </ul>
+
+<div class="tabs-content active">
+    <div class="admin_only content active" id="accessPanel">
       <h2>Admin only</h2>
       
       <hr/>
@@ -50,7 +57,13 @@
         </div>
       </div>
       
-    </fieldset>
+    </div>
+    <div class="content" id="applicationPanel">
+        <strong>Application text:</strong>
+        <%= render partial: 'user_keys/show_partials/application_text' %>
+
+    </div>
+</div>
     
     <!-- Active or not active -->
     <fieldset>

@@ -12,6 +12,21 @@
 
 <%= render 'shared/error_messages', object: @user_key %>
 
+<ul class="tabs" data-tab>
+  <li class="tab-title active"><a href="#statusPanel">Status</a></li>
+  <% if @current_user.role? :is_staff %>
+  <li class="tab-title"><a href="#permissionsPanel">Permissions</a></li>
+  <%else%>
+    <li class="tab-title"><a href="#documentationPanel">Documentation</a></li>
+  <%end%>
+  <li class="tab-title"><a href="#commentsPanel">Comments</a></li>
+</ul>
+
+<div class="tabs-content">
+
+
+<div class="content active" id="statusPanel">
+
 <!-- Only Staff should see this status bar.-->
 <% if @current_user.role? :is_staff %>
   <%= render partial: 'user_keys/show_partials/approval_status' %>
@@ -59,17 +74,18 @@
   <%= render partial: 'user_keys/show_partials/application_text' %>
 </p>
 
-<!--Show notes from Admin -->
-<div class="public_comments">
-  <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
 </div> 
+<!-- End of status panel -->
+
+
 <!-- End of public information. -->
+
+<div class="content" id="permissionsPanel">
+
 
 <!-- Staffmembers see private information -->
 <% if @current_user.role? :is_staff %>
   <div class="staff_only panel">
-  <h3>Staff only</h3>
-  <hr/>
     
     <%= render partial: 'user_keys/show_partials/list_of_objects', locals: { object_name: "Column", object_symbol: :columns} %>
     
@@ -92,6 +108,26 @@
   <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
 <% end  %>
 
+
+</div>
+<!-- End of permisisons panel -->
+
+<div class="content" id="documentationPanel">
+
+<!-- FIXME add dynamic documentation content here -->
+
+</div>
+
+
+<div class="content" id="commentsPanel">
+<!--Show notes from Admin -->
+<div class="public_comments">
+  <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
+</div> 
+<%= render partial: 'user_keys/show_partials/list_of_comments' %>
+</div>
+<!-- End of comments panel -->
+
 <!-- Confirm, reset, delete, and apply filters here. -->
 <% if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission) %>
   <%= render partial: 'user_keys/show_partials/admin_only' %>
@@ -99,5 +135,5 @@
 <% elsif @current_user.owns?(@user_key) and @user_key.at_stage? :awaiting_submission %>
   <%= render partial: 'user_keys/show_partials/submit_buttons' %>
 <% end %>
-             
-<%= render partial: 'user_keys/show_partials/list_of_comments' %>
+
+</div>

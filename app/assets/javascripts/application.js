@@ -15,6 +15,13 @@
 //= require turbolinks
 //= require foundation
 //= require_tree .
+
+
 $(function() {
   $(document).foundation();
 });
+
+// adds 
+$(document).on("click", '#key', function() {
+    $(this).select();
+ })

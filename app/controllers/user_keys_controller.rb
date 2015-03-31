@@ -35,8 +35,8 @@ class UserKeysController < ApplicationController
   # POST /user_keys
   def create
     # Set user_key's user to be the current user
-    params[:user_key][:user_id] = @current_user.id
     @user_key = UserKey.new(owner_user_key_params)
+    @user_key.user_id = @current_user.id
     if @user_key.save
       redirect_to @user_key, notice: 'User key was successfully created.'
     else
@@ -97,6 +97,7 @@ class UserKeysController < ApplicationController
     if @user_key.set_status_as :awaiting_filters
       # Email confirmation and page confirmation
       UserKeyMailer.submitted_msg(@current_user).deliver
+      UserKeyMailer.admin_submit_msg(User.admin.first, @current_user, @user_key).deliver
       redirect_to @user_key, notice: 'User key request was successfully submitted.'
     else
       get_comments
@@ -107,6 +108,7 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/set_as_filtered
   def set_as_filtered
     if @user_key.set_status_as :awaiting_confirmation
+      UserKeyMailer.share_with_approver_msg(@user_key.user, @user_key).deliver
       redirect_to @user_key, notice: 'User key has had its filters assigned and is now visible to approvers.'
     else
       get_comments
@@ -117,6 +119,7 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/set_as_approved
   def set_as_confirmed
     if @user_key.set_status_as :confirmed
+      UserKeyMailer.key_approved_msg(@user_key.user, @user_key).deliver
       redirect_to @user_key, notice: 'User key was successfully confirmed. All steps are complete.'
     else
       get_comments
@@ -173,7 +176,7 @@ class UserKeysController < ApplicationController
 
     def owner_user_key_params
       # For requester, upon creating or updating application text
-      params.require(:user_key).permit(:agree, :name, *UserKey::TEXT_FIELD_LIST, :user_id)
+      params.require(:user_key).permit(:agree, :name, *UserKey::TEXT_FIELD_LIST)
     end
     
     def comment_user_key_params # For anyone who can comment

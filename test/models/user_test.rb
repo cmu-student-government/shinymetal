@@ -34,6 +34,10 @@ class UserTest < ActiveSupport::TestCase
       assert_equal ["fry", "leela"], User.approvers_only.alphabetical.map {|u| u.andrew_id}
     end
     
+    should "have a scope to return admin" do 
+      assert_equal ["fry"], User.admin.map{|u| u.andrew_id}
+    end
+
     should "have an owns? method" do
       assert @bender.owns? (@bender_key)
       deny @leela.owns? (@bender_key)

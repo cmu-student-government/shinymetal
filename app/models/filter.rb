@@ -1,6 +1,6 @@
 class Filter < ActiveRecord::Base
   #Relationships
-  has_many :whitelist_filters
+  has_many :whitelist_filters, autosave: true
   has_many :whitelists, through: :whitelist_filters
   
   # Validations

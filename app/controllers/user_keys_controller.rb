@@ -185,6 +185,6 @@ class UserKeysController < ApplicationController
     
     def admin_update_user_key_params # For admin, upon updating filters or anything else
       params.require(:user_key).permit(:time_expired, :active, :reason, :column_ids => [],
-                                       :organization_ids => [])
+                                       :organization_ids => [], :whitelists_attributes => [:id, :resource, :_destroy, :filter_ids => []])
     end
 end

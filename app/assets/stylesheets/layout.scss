@@ -1,0 +1,98 @@
+@import "vars";
+
+// Default styling
+  fieldset, hr { border: 1px solid; }
+
+  main {
+    @include twelve-columns("small");
+    background-color: white;
+  }
+
+  section {
+    @extend .row;
+    margin-top: 20px;
+  }
+
+  footer {
+    background-color: #aaa;
+    font-size: 10pt;
+    color: #eee;
+  }
+
+  ol li { margin-bottom: 20px; }
+
+// Navbar
+  nav.top-bar {
+    #search-form {
+      @media screen and (max-width: rem-calc(805)) { display: none; }
+
+      input.postfix.search-button {
+        padding: 0;
+        line-height: 0px;
+        font-size: 0.7rem;
+        color: $body-dark;
+        background: $white;
+        border: none;
+        border-radius: 0;
+      }
+
+      input.postfix.search-button:hover {
+        color: $body-dark;
+        background: $white;
+      }
+
+      .search-label {
+        padding-right: 0;
+        padding-left: 0;
+      }
+
+      .search-param {
+        padding-left: 0;
+
+        #search {
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
+
+    .name h1 { font-size: 1.1875rem; }
+
+  }
+
+// Layout styling for forms
+  .form { @include grid-column(6); }
+
+  .collapsed_row {
+    @extend .collapse;
+    @extend .row; clear: both;
+  }
+
+  .big-button {
+    @extend .button;
+    @extend .radius;
+    @extend .small;
+  }
+
+  .small-button {
+    @extend .button;
+    @extend .radius;
+    @extend .tiny;
+    margin: 0;
+  }
+
+// Success/alert classes
+  .success {
+    color: $success-color;
+  }
+
+  .alert {
+    color: $alert-color;
+  }
+
+// Misc classes
+  .no_bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }

@@ -4,33 +4,33 @@
   <%= render 'shared/error_messages', object: @filter %>
 
   <div class="collapsed_row">
-    <div class="three-column">
+    <div class="s3">
       <%= f.label :resource, class: "prefix" %>
     </div>
-    <div class="nine-column">
+    <div class="s9">
       <%= f.select :resource, Resource::RESOURCE_LIST %>
     </div>
   </div>
   <div class="collapsed_row">
-    <div class="three-column">
+    <div class="s3">
       <%= f.label :filter_name, class: "prefix" %>
     </div>
-    <div class="nine-column">
+    <div class="s9">
       <%= f.select :filter_name, Resource::PARAM_LIST %>
     </div>
   </div>
   <div class="collapsed_row">
-    <div class="three-column">
+    <div class="s3">
       <%= f.label :filter_value, class: "prefix" %>
     </div>
-    <div class="nine-column">
+    <div class="s9">
       <%= f.text_field :filter_value %>
     </div>
   </div>
   <div class="collapsed_row">
-    <%= f.submit class: "big-button success" %> | 
+    <%= f.submit class: "big-button success" %> |
     <%= link_to 'Cancel', cancel_url, class: "big-button secondary" %>
   </div>
-  
+
   </fieldset>
 <% end %>

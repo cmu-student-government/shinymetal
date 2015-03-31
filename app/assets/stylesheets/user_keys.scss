@@ -1,0 +1,11 @@
+.admin_only {
+  background-color: lighten($primary-color, 65)
+}
+
+.staff_only {
+  background-color: lighten($primary-color, 70);
+}
+
+.public_comments {
+  background-color: lighten($body-font-color, 60)
+}

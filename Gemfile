@@ -1,8 +1,15 @@
 source 'https://rubygems.org'
 gem 'rails', '4.2.0'
 
+# Database gems
+  # Mysql is being used on our production server
+  gem 'mysql2', group: :production
 
-# Assets
+  # Use sqlite3 in development for easy use
+  gem 'sqlite3', group: [:development, :test]
+
+
+# Asset gems
   # Use SCSS for stylesheets
   gem 'sass-rails', '~> 5.0'
 
@@ -78,9 +85,6 @@ group :development do
   # letter_opener safely opens development emails in browser, does not send.
   # Dev emails are stored in tmp/letter_opener
   gem 'letter_opener'
-
-  # sqlite3 as dev db
-  gem 'sqlite3'
 end
 
 group :test do

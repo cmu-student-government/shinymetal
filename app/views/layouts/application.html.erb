@@ -18,16 +18,19 @@
     <%= csrf_meta_tags %>
     <%= favicon_link_tag 'benderface.jpg' %>
   </head>
+
   <body>
-    <header class="contain-to-grid">
-      <%= render 'layouts/navigation' %>
-    </header>
-    <main role="main" class="panel">
-       <%= render 'layouts/messages' %>
-       <%= yield %>
-    </main>
-    <footer>
-       <%= render 'layouts/footer' %>
-    </footer>
+
+    <%= render 'layouts/navigation' %>
+
+    <div class="row">
+      <main role="main" class="panel s12">
+         <%= render 'layouts/messages' %>
+         <%= yield %>
+      </main>
+    </div>
+
+   <%= render 'layouts/footer' %>
+
   </body>
 </html>

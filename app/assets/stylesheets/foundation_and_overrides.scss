@@ -1,123 +1,59 @@
-// Overwrite default colors and font
-@import "vars";
+@import "vars",
+        "foundation/functions";
 
-// Import foundation
-@import "foundation";
+@import url(https://fonts.googleapis.com/css?family=Asap:400,700,400italic);
+$body-font-family: 'Asap', verdana, arial, helvetica, sans-serif;
 
 // Create mixins using Foundation classes
-@mixin twelve-columns {
-  @extend .small-12;
-  @extend .columns;
-  }
-@mixin six-columns {
-  @extend .small-6;
-  @extend .columns;
-  }
-@mixin three-columns {
-  @extend .small-3;
-  @extend .columns;
-  }
-@mixin nine-columns {
-  @extend .small-9;
-  @extend .columns;
-  }
-  
-@mixin five-columns {
-  @extend .small-5;
-  @extend .columns;
-  padding: 0;
-  }
-@mixin seven-columns {
-  @extend .small-7;
-  @extend .columns;
-  padding: 0;
-  }
+  @mixin one-columns    ($size) { @extend .#{$size}-1;  @extend .columns; }
+  @mixin two-columns    ($size) { @extend .#{$size}-2;  @extend .columns; }
+  @mixin three-columns  ($size) { @extend .#{$size}-3;  @extend .columns; }
+  @mixin four-columns   ($size) { @extend .#{$size}-4;  @extend .columns; }
+  @mixin five-columns   ($size) { @extend .#{$size}-5;  @extend .columns; }
+  @mixin six-columns    ($size) { @extend .#{$size}-6;  @extend .columns; }
+  @mixin seven-columns  ($size) { @extend .#{$size}-7;  @extend .columns; }
+  @mixin eight-columns  ($size) { @extend .#{$size}-8;  @extend .columns; }
+  @mixin nine-columns   ($size) { @extend .#{$size}-9;  @extend .columns; }
+  @mixin ten-columns    ($size) { @extend .#{$size}-10; @extend .columns; }
+  @mixin eleven-columns ($size) { @extend .#{$size}-11; @extend .columns; }
+  @mixin twelve-columns ($size) { @extend .#{$size}-12; @extend .columns; }
 
-// create your own classes
-// to make views framework-neutral
-.column {
-  @include six-columns;
-  }
-.three-column {
-  @include three-columns;
-  }
-.search-label {
-  @include five-columns;
-  }
-.search-param {
-  @include seven-columns;
-  }
-.nine-column {
-  @include nine-columns;
-  }
-.form {
-  @include grid-column(6);
-  }
-.collapsed_row {
-  @extend .collapse;
-  @extend .row;
-  clear: both;
-}
-  
-.big-button {
-  @extend .button;
-  @extend .radius;
-  @extend .small;
-  }
-.small-button {
-  @extend .button;
-  @extend .radius;
-  @extend .tiny;
-  margin: 0;
-}
-.search-button {
-  @extend .button;
-  @extend .radius;
-  line-height: 0px !important;
-  font-size: 0.7rem !important;
-}
+// Create custom column classes so we're framework neutral
+  .s1  { @include one-columns    ("small"); }
+  .s2  { @include two-columns    ("small"); }
+  .s3  { @include three-columns  ("small"); }
+  .s4  { @include four-columns   ("small"); }
+  .s5  { @include five-columns   ("small"); }
+  .s6  { @include six-columns    ("small"); }
+  .s7  { @include seven-columns  ("small"); }
+  .s8  { @include eight-columns  ("small"); }
+  .s9  { @include nine-columns   ("small"); }
+  .s10 { @include ten-columns    ("small"); }
+  .s11 { @include eleven-columns ("small"); }
+  .s12 { @include twelve-columns ("small"); }
 
-// Apply check, x, and right-arrow styles for status on user_key show page
-.success {
-  color: $success-color;
-  font-size: 30px;
-}
-.alert {
-  color: $alert-color;
-}
-.admin_only {
-  background-color: lighten($primary-color, 65)
-}
-.staff_only {
-  background-color: lighten($primary-color, 70);
-}
-.public_comments {
-  background-color: lighten($body-font-color, 60)
-}
-.no_bullets {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-// Apply styles to HTML elements
-// to make views framework-neutral.
-// (This part came default with foundation.)
-fieldset, hr {
-  border: 1px solid; 
-}
-main {
-  @include twelve-columns;
-  background-color: white;
-  }
-section {
-  @extend .row;
-  margin-top: 20px;
-  }
-footer {
-  background-color: #aaa;
-  font-size: 10pt;
-  color: #eee;
-}
-ol li {
-  margin-bottom: 20px;
-}
+// Topbar overrides
+  $topbar-bg-color: $primary;
+  $topbar-bg: $topbar-bg-color;
+
+  $topbar-link-bg-hover: darken($primary, 5%);
+  $topbar-dropdown-link-bg-hover: darken($primary, 5%);
+  $topbar-dropdown-link-bg: $primary;
+  $topbar-dropdown-bg: transparent;
+
+  $topbar-height: rem-calc(50);
+
+// Color overrides
+  $body-bg: $white;
+  $body-font-color: $body;
+  $heading-font-color: $body-dark;
+  $primary-color: $primary;
+  $alert-color: $alert;
+  $secondary-color: $secondary;
+  $info-color: #888;
+  $success-color: #5da423;
+
+$row-width: rem-calc(1280);
+
+
+@import "foundation";

@@ -76,7 +76,7 @@ class UserKey < ActiveRecord::Base
   
   def expired?
     return false if self.time_expired.nil?
-    return self.time_expired < DateTime.now
+    return self.time_expired < Date.today
   end
   
   # The form is ready to be submitted by the requester, or approved, or confirmed?

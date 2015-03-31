@@ -272,7 +272,7 @@ class UserKeyTest < ActiveSupport::TestCase
     
     should "have expired? method" do
       deny @bender_key.expired?
-      @bender_key.time_expired = 1.day.from_now
+      @bender_key.time_expired = 1.day.from_now.to_date
       @bender_key.save!
       deny @bender_key.expired?
       assert @expired_key.expired?

@@ -1,1 +1,1 @@
-<p>The <%= @user_key.name %> key will expire on <%= @user_key.time_expired %> 30 days. You will need to reapply for continued access. </p>
+<p>The <%= @user_key.name %> key will expire in 30 days, on <%= @user_key.time_expired.to_formatted_s(:long_ordinal) %>. You will need to reapply for continued access. </p>

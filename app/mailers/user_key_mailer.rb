@@ -50,7 +50,16 @@ class UserKeyMailer < ApplicationMailer
   	@user_key = user_key
   	email = "#{@recipient.andrew_id}@andrew.cmu.edu"
   	mail(:to => email, 
-  		:subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Application Has Been Reopened")
+  		   :subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Application Has Been Reopened")
   end
+
+  def key_approved_msg(user, user_key)
+    @recipient = user
+    @user_key = user_key
+    email = "#{@recipient.andrew_id}@andrew.cmu.edu"
+    mail(:to => email, 
+         :subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Application Has Been Approved!")
+  end
+
 
 end

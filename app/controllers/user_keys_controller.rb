@@ -119,6 +119,7 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/set_as_approved
   def set_as_confirmed
     if @user_key.set_status_as :confirmed
+      UserKeyMailer.key_approved_msg(@user_key.user, @user_key).deliver
       redirect_to @user_key, notice: 'User key was successfully confirmed. All steps are complete.'
     else
       get_comments

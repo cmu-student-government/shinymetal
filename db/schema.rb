@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 20150325232951) do
     t.datetime "time_submitted"
     t.datetime "time_filtered"
     t.datetime "time_confirmed"
-    t.datetime "time_expired"
+    t.date     "time_expired"
     t.boolean  "active",              default: true
     t.string   "name"
     t.text     "proposal_text_one"

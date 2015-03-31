@@ -76,7 +76,7 @@ class UserKey < ActiveRecord::Base
   
   def expired?
     return false if self.time_expired.nil?
-    return self.time_expired < DateTime.now
+    return self.time_expired < Date.today
   end
   
   # The form is ready to be submitted by the requester, or approved, or confirmed?
@@ -159,7 +159,7 @@ class UserKey < ActiveRecord::Base
       # the andrew_id of the user who requested the user_key
       andrew_id = self.user.andrew_id.split("")
       # add some spice (salt) to the key as well 
-      salt = SETTINGS[:api_key_salt].split("")
+      salt = SETTINGS[:default]["api_key_salt"].split("")
       # intertwine the string of the andrewid and the date together to build
       # the hash. This is so we can compare the passed in token to a hash
       # we can recompute to ensure security and not have the key stored in 

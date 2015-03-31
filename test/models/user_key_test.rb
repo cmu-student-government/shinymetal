@@ -117,9 +117,9 @@ class UserKeyTest < ActiveSupport::TestCase
     end
 
     #FIXME uncomment when corrected
-    # should "have a scope that returns keys that expire in a month" do 
-    #   assert_equal 1, UserKey.expires_in_a_month
-    # end
+    should "have a scope that returns keys that expire in a month" do 
+      assert_equal 1, UserKey.expires_in_a_month.size
+    end
 
     should "have a scope that returns keys that expire today" do
       assert_equal 1, UserKey.expires_today.size
@@ -256,7 +256,7 @@ class UserKeyTest < ActiveSupport::TestCase
       # Algorithm used here mimics algorithm used in model
       date_string = key.time_submitted.to_s.split("")
       andrew_id = key.user.andrew_id.split("")
-      salt = SETTINGS[:api_key_salt].split("")
+      salt = SETTINGS[:default]["api_key_salt"].split("")
       hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
       # hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
       answer = Digest::SHA2.hexdigest hash_string
@@ -272,7 +272,7 @@ class UserKeyTest < ActiveSupport::TestCase
     
     should "have expired? method" do
       deny @bender_key.expired?
-      @bender_key.time_expired = 1.day.from_now
+      @bender_key.time_expired = 1.day.from_now.to_date
       @bender_key.save!
       deny @bender_key.expired?
       assert @expired_key.expired?

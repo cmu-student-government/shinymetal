@@ -1,0 +1,16 @@
+<h3>Columns</h3>
+
+<p>
+  <% if Column.all.empty? %>
+  No columns can be selected because there are none in the system.
+  <% else %>
+    <% for resourceName in Resource::RESOURCE_LIST %>
+      <h5><%= resourceName.capitalize %></h5>
+      <% for column in Column.restrict_to(resourceName).alphabetical %>
+          <%= check_box_tag "user_key[column_ids][]", column.id, @user_key.columns.include?(column) %>
+          <%= column.name %>
+          <br />
+      <% end %>
+    <% end %>  
+  <% end %>
+</p>

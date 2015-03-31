@@ -27,17 +27,23 @@ namespace :db do
     end
     
     # Step 1: clear any old data in the db
-    [Approval, Comment, Filter, Organization, UserKeyFilter, UserKeyOrganization, User, UserKey].each(&:delete_all)
+    [Approval, Comment, Filter, Organization, WhitelistFilter, Whitelist, UserKeyOrganization, User, UserKey].each(&:delete_all)
     
     
     # Step 2: Add Filters, Orgs, and Approvers
     # Define resources, filter_names, filter_values
     filter_lists = [["organizations","type","closed"],
+                 ["organizations","type","somewhat closed"],
                  ["events","currentEventsOnly","true"],
+                 ["events","currentEventsOnly","somewhat true"],
                  ["attendees","status","active"],
+                 ["attendees","status","somewhat active"],
                  ["memberships","currentMembershipsOnly","true"],
+                 ["memberships","currentMembershipsOnly","somewhat true"],
                  ["positions","type","public"],
-                 ["users","status","active"]]
+                 ["positions","type","somewhat public"],
+                 ["users","status","active"],
+                 ["users","status","somewhat active"]]
     filter_lists.each do |fl|
       # create a filter
       filter = Filter.new
@@ -150,16 +156,19 @@ namespace :db do
             comment.created_at = (1..10).map{|num| num.days.ago.to_date}
             comment.updated_at = Time.now
           end
-          # Create 1 to 3 whitelists for each key
+          # Create 1 to 3 whitelists for each key, each a different resource
+          resource_list = Resource::RESOURCE_LIST.shuffle
           Whitelist.populate 1..3 do |whitelist|
              whitelist.user_key_id = user_key.id
+             # Make it one of the resources
+             whitelist.resource = resource_list.pop
              whitelist.created_at = Time.now
              whitelist.updated_at = Time.now
              # get a list of filters to avoid repeat filters being assigned to a single whitelist
-             filter_list = Filter.all.to_a.shuffle
-             WhitelistFilter.populate 1..3 do |whitelist_filter|
+             filter_list = Filter.restrict_to(whitelist.resource).to_a.shuffle
+             WhitelistFilter.populate 1..2 do |whitelist_filter|
                whitelist_filter.whitelist_id = whitelist.id 
-               whitelist_filter.filter_id = filter_list.pop.id
+               whitelist_filter.filter_id = filter_list.pop
                # set the timestamps
                whitelist_filter.created_at = Time.now
                whitelist_filter.updated_at = Time.now

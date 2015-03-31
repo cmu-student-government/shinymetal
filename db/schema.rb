@@ -103,7 +103,10 @@ ActiveRecord::Schema.define(version: 20150330171619) do
   end
 
   create_table "whitelists", force: :cascade do |t|
-    t.integer "user_key_id"
+    t.integer  "user_key_id"
+    t.string   "resource"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
 end

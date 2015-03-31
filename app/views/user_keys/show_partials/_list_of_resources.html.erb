@@ -1,0 +1,55 @@
+
+<% for resourceName in Resource::RESOURCE_LIST %>
+  
+  <hr/>
+  
+  <h3><strong><%= resourceName.capitalize %></strong></h3>
+  
+  <!-- Whitelists -->
+  <% whitelists = @user_key.whitelists.restrict_to(resourceName).chronological %>
+
+  <br/>
+  
+  <div class="row">
+    <div class="column">
+    <h4>Whitelists</h4>
+      
+    <% if !whitelists.empty? %>
+      <ul class="no_bullets">
+        <% for whitelist in whitelists %>
+          <fieldset>
+            <ul>
+              <% for filter in whitelist.filters %>
+                <li><%= filter.name %></li>
+              <% end %>
+            </ul>
+          <li><%= link_to "Edit Whitelist", edit_user_key_whitelist_path(@user_key, whitelist), class: "small-button" %>
+          | <%= link_to "Delete Whitelist", user_key_whitelist_path(@user_key, whitelist), method: :delete,
+                data: {confirm: "Are you sure?"}, class: "small-button" %>
+          </li>
+          </fieldset>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No whitelists for this resource</p>
+    <% end %>
+    </div>
+    
+      <!-- Columns -->
+      <div class="column">
+      <h4>Columns</h4>
+      <% columns = @user_key.columns.restrict_to(resourceName).alphabetical %>
+      <% if !columns.empty? %>
+        <ul>
+          <% for col in columns %>
+            <li><%= col.name %></li>
+          <% end %>
+        </ul>
+      <% else %>
+      <p>No columns for this resource</p>
+      <% end %>
+    
+      </div>
+  </div>
+  
+<% end %>

@@ -5,6 +5,11 @@ Rails.application.routes.draw do
 
   resources :user_keys
   
+  # Whitelist routes for destroy, create, new, edit, update
+  resources :user_keys do
+    resources :whitelists, except: [:index, :show]
+  end
+  
   # Users are not deleted, only inactivated.
   # They are not created directly; they are meant to be created automatically via shibboleth login.
   resources :users, except: [:destroy, :create, :new]

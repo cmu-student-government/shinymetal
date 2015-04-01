@@ -44,16 +44,17 @@ $body-font-family: 'Asap', verdana, arial, helvetica, sans-serif;
   $topbar-height: rem-calc(50);
 
 // Color overrides
+  $primary-color: $primary;
+  $secondary-color: $secondary;
+  $alert-color: $alert;
+  $info-color: $info;
+  $success-color: $success;
   $body-bg: $white;
   $body-font-color: $body;
   $heading-font-color: $body-dark;
-  $primary-color: $primary;
-  $alert-color: $alert;
-  $secondary-color: $secondary;
-  $info-color: #888;
-  $success-color: #5da423;
 
-$row-width: rem-calc(1280);
+// Misc overrides
+  $row-width: rem-calc(1280);
 
 
 @import "foundation";

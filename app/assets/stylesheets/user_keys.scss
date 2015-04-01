@@ -1,11 +1,102 @@
-.admin_only {
-  background-color: lighten($primary-color, 65)
-}
+@import "vars";
 
-.staff_only {
-  background-color: lighten($primary-color, 70);
-}
+// Comment bg colors
+.admin_only { background-color: lighten($primary-color, 65) }
+.staff_only { background-color: lighten($primary-color, 70); }
+.public_comments { background-color: lighten($body-font-color, 60) }
 
-.public_comments {
-  background-color: lighten($body-font-color, 60)
+
+.approval-process-container {
+  padding: 0;
+
+  #approval-statuses {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 1rem;
+
+    .status {
+      padding: 6px 12px 6px 24px;
+      position: relative;
+      height: 60px;
+      float: left;
+      background: white;
+      margin-right: 5px;
+      max-width: calc(100% / 4 - 5px);
+      color: $body-dark;
+
+      div { @extend %center-text-XY; }
+
+      &.success { background-color: $success; color: darken($success, 60%); }
+      &.info   { background-color: $info;    color: darken($info,    60%); }
+      &:not(:last-child).success:after { border-left-color: $success; }
+      &:not(:last-child).info:after   { border-left-color: $info; }
+
+      &:after {
+        content: " ";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 30px solid transparent;
+        border-bottom: 30px solid transparent;
+        border-left: 12px solid transparent;
+        position: absolute;
+        top: 50%;
+        margin-top: -30px;
+        left: 100%;
+        z-index: 3;
+      }
+
+      &:before {
+        content: " ";
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 30px solid transparent;
+        border-bottom: 30px solid transparent;
+        border-left: 12px solid $panel-bg;
+        position: absolute;
+        top: 50%;
+        margin-top: -30px;
+        margin-left: 5px;
+        left: 100%;
+        z-index: 3;
+      }
+
+      &:first-child { padding: 6px 6px 6px 10px; }
+      &:last-child  { padding: 6px 18px 6px 24px; }
+      &.status-default {
+        &:not(:last-child):after { border-left: 10px solid #fff; }
+        &:not(:last-child):before { border-left: 10px solid #ccc; }
+      }
+    }
+
+    > * > div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    // > *:nth-child(n+2) { display: none; }
+
+    /* phones */
+    @media (max-width: 767px) {
+      > *:nth-last-child(-n+2) { display: block; }
+      > * div { max-width: 60px; }
+    }
+
+    /* tablets */
+    @media (min-width: 768px) and (max-width:991px) {
+      > *:nth-last-child(-n+4) { display: block; }
+      > * div { max-width: 100px; }
+    }
+
+    /* desktops */
+    @media (min-width: 992px) {
+      > *:nth-last-child(-n+6) { display: block; }
+      > * div { max-width: 170px; }
+    }
+  }
 }

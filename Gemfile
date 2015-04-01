@@ -54,7 +54,7 @@ gem 'cancancan', '~> 1.10'
 gem 'gaffe'
 
 # Nested filter forms
-gem 'nested_form'
+gem 'cocoon'
 
 # The following gems were taken straight from Prof H's gemfiles
 

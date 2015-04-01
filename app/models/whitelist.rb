@@ -4,17 +4,23 @@ class Whitelist < ActiveRecord::Base
   has_many :whitelist_filters
   has_many :filters, through: :whitelist_filters
   
-  validate :user_key_id_valid
+  validates_presence_of :user_key
+  
+  validate :has_filters
   
   # Scopes
   scope :chronological, -> { order(:created_at) }
   scope :restrict_to, ->(param) { where(resource: param) }
   
-  def display_name
-    return "Whitelist for " + self.created_at.to_s
+  private
+  def has_filters
+    if self.filters.empty?
+      errors.add(:whitelist_id, "does not have any filters checked")
+      return false
+    end
+    return true
   end
   
-  private
   def user_key_id_valid
     unless UserKey.all.to_a.map{|o| o.id}.include?(self.user_key_id)
       errors.add(:user_key_id, "is not a invalid user key")

@@ -4,7 +4,7 @@ class UserKey < ActiveRecord::Base
   # Relationships
   belongs_to :user
   has_many :user_key_organizations
-  has_many :whitelists, inverse_of: :user_key
+  has_many :whitelists
   has_many :user_key_columns
   has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
@@ -14,6 +14,7 @@ class UserKey < ActiveRecord::Base
   has_many :comment_users, class_name: User, through: :comments
   
   accepts_nested_attributes_for :comments, limit: 1
+  # Reject a nested whitelist that has no filters attached
   accepts_nested_attributes_for :whitelists, allow_destroy: true
   
   # Validations

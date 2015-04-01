@@ -18,7 +18,7 @@ class Filter < ActiveRecord::Base
   
   # Methods  
   def name
-    filter_name + ' : ' + filter_value
+    "\"#{filter_name}\" = \"#{filter_value}\""
   end
   
   def filter_name_is_valid

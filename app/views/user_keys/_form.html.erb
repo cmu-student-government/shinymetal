@@ -1,4 +1,4 @@
-<%= nested_form_for(@user_key) do |f| %>
+<%= form_for(@user_key) do |f| %>
   
   <!-- Begin requester form -->
   
@@ -41,7 +41,7 @@
       
       <p><i>Set filters and organizations that this key may have access to here.</i></p>
      
-      <%= render partial: 'user_keys/form_partials/columns_checkboxes', locals: {f: f} %>
+      <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>
       <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>    
     
       <!--Expiration date-->

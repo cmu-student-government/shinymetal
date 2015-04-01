@@ -6,11 +6,12 @@ class Whitelist < ActiveRecord::Base
   
   validates_presence_of :user_key
   
-  validate :has_valid_filters
+  validate :has_filters
   
   # Scopes
   scope :chronological, -> { order(:created_at) }
-  scope :restrict_to, ->(param) { where(resource: param) }
+  # FIXME inefficient scope ignores the fact that each whitelist's filters all have the same resource
+  scope :restrict_to, ->(param) { joins(:filters).where("filters.resource = ?", param).distinct }
   
   def resource
     # All filters should have the same resource
@@ -18,19 +19,11 @@ class Whitelist < ActiveRecord::Base
   end
   
   private
-  def has_valid_filters
-    # FIXME, do not allow a whitelist to have no filters.
-    # This code works out in nested form, but not in tests.
-    #if self.filters.empty?
-    #  errors.add(:whitelist_id, "does not have any filters checked")
-    #  return false
-    #end
-    # The filters must have the same resource as the whitelist
-    for filter in self.filters
-      if filter.resource != self.resource
-        errors.add(:whitelist_id, "has invalid filters")
-        return false
-      end
+  def has_filters
+    # Do not allow a whitelist to have no filters.
+    if self.filters.empty?
+      errors.add(:whitelist_id, "does not have any filters checked")
+      return false
     end
     return true
   end

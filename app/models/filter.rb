@@ -9,7 +9,7 @@ class Filter < ActiveRecord::Base
   validate :filter_name_is_valid
   
   # Scopes
-  scope :alphabetical, -> { order(:filter_name).order(:filter_value) }
+  scope :alphabetical, -> { order(:resource).order(:filter_name).order(:filter_value) }
   scope :restrict_to, ->(param) { where(resource: param) }
   
   def only_these(param)

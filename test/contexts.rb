@@ -172,7 +172,13 @@ module Contexts
   
   # Whitelist_filters
   def create_whitelists
-    @bender_key_submitted_whitelist = FactoryGirl.create(:whitelist, user_key: @bender_key_submitted)
+    # A whitelist is only valid if it has filters, so create both at the same time here
+    # This is handled well by nested forms, but not by FactoryGirl
+    new_whitelist = Whitelist.new(user_key: @bender_key_submitted)
+    new_whitelist.save(validate: false)
+    @bender_key_submitted_org_page = FactoryGirl.create(:whitelist_filter, whitelist: new_whitelist, filter: @organizations_page_filter)
+    @bender_key_submitted_whitelist = new_whitelist
+    @bender_key_submitted_whitelist.save!
   end
   
   def destroy_whitelists
@@ -181,7 +187,8 @@ module Contexts
     
   # Whitelist_filters
   def create_whitelist_filters
-    @bender_key_submitted_org_page = FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: @organizations_page_filter)
+    # This should already have been created in create_whitelists
+    @bender_key_submitted_org_page ||= FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: @organizations_page_filter)
   end
   
   def destroy_whitelist_filters

@@ -5,38 +5,36 @@
   
   <h3><strong><%= resourceName.capitalize %></strong></h3>
   
-  <!-- Whitelists -->
+  <!-- Whitelists for this resource -->
   <% whitelists = @user_key.whitelists.restrict_to(resourceName).chronological %>
-
-  <br/>
   
   <div class="row">
-    <div class="column">
-    <h4>Rows</h4>
+    <div class="small-7 columns">
+    <h4>Automatic API Requests</h4>
       
     <% if !whitelists.empty? %>
-      <ul class="no_bullets">
-        <% first_word_and = "" %>
-        <% first_word_or = "" %>
+      <ol>
         <% for whitelist in whitelists %>
-            <em><%= first_word_or %></em>
-            <ul>
+          <% first_word_and = "Require: " %>
+          <li>
+            <ul class="no_bullets">
               <% for filter in whitelist.filters %>                
-                <li><%= first_word_and %><span class="success"><%= filter.name %></li></span>
+                <li><%= first_word_and %><span class="success"><%= filter.name %></span></li>
                  <% first_word_and = "and " %>
-                 <% first_word_or = "or " %>
               <% end %>
             </ul>
+            <br/>
+          </li>
         <% end %>
-      </ul>
+      </ol>
     <% else %>
       <p>None</p>
     <% end %>
     </div>
     
       <!-- Columns -->
-      <div class="column">
-      <h4>Columns</h4>
+      <div class="small-5 columns">
+      <h4>Columns Permitted</h4>
       <% columns = @user_key.columns.restrict_to(resourceName).alphabetical %>
       <% if !columns.empty? %>
         <ul>

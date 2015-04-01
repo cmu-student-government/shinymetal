@@ -1,15 +1,18 @@
 <ol>
-	<!-- Only does 1-7 since 8 can be blank -->
-<% for textField in UserKey::TEXT_FIELD_LIST[0,7] %>
-<li>
-	<% if @user_key[textField].blank?%>
-		<h3><small>To be completed</small></h3> 
-		<!-- hacky way to get the styling we want, foundation makes small headings grey out -->
-	<%else%>
-		<%= @user_key[textField]  %>
-	<%end%>
-</li>
+  
+  <!-- Only does 1-7 since 8 can be blank -->
+  <% for textField in UserKey::TEXT_FIELD_LIST[0,7] %>
+  <li>
+    <% if @user_key[textField].blank? %>
+            <h3><small>To be completed</small></h3> 
+            <!-- hacky way to get the styling we want, foundation makes small headings grey out -->
+    <% else %>
+            <%= @user_key[textField]  %>
+    <% end %>
+  </li>
+  <br/>
+  
+  <% end %>
+  <li><%= @user_key.proposal_text_eight.blank? ? 'N/A' : @user_key.proposal_text_eight %></li>
 
-<%end%>
-<li><%= @user_key.proposal_text_eight.blank? ? 'N/A' : @user_key.proposal_text_eight %></li>
 </ol>

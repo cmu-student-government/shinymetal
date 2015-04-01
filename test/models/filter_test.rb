@@ -15,15 +15,15 @@ class FilterTest < ActiveSupport::TestCase
     end
 
     should "have a method to return the filters name" do
-      assert_equal "status : active", @organizations_page_filter.name
+      assert_equal "\"status\" = \"active\"", @organizations_page_filter.name
     end
 	
     should "have a scope to sort filters alphabetically" do
-      assert_equal ["category : sports", "status : active", "status : inactive", "type : active"], Filter.alphabetical.to_a.map {|f| f.name}
+      assert_equal ["\"category\" = \"sports\"", "\"status\" = \"active\"", "\"status\" = \"inactive\"", "\"type\" = \"active\""], Filter.alphabetical.to_a.map {|f| f.name}
     end
     
     should "have a scope to restrict filter resources" do
-      assert_equal [["positions", "type : active"]],
+      assert_equal [["positions", "\"type\" = \"active\""]],
                    Filter.alphabetical.restrict_to("positions").to_a.map {|f| [f.resource, f.name]}
     end
     should "have a method to test for invalid resource names" do

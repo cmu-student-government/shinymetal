@@ -1,0 +1,52 @@
+
+<% for resourceName in Resource::RESOURCE_LIST %>
+  
+  <hr/>
+  
+  <h3><strong><%= resourceName.capitalize %></strong></h3>
+  
+  <!-- Whitelists for this resource -->
+  <% whitelists = @user_key.whitelists.restrict_to(resourceName).chronological %>
+  
+  <div class="row">
+    <div class="small-7 columns">
+    <h4>Automatic API Requests</h4>
+      
+    <% if !whitelists.empty? %>
+      <ol>
+        <% for whitelist in whitelists %>
+          <% first_word_and = "Require: " %>
+          <li>
+            <ul class="no_bullets">
+              <% for filter in whitelist.filters %>                
+                <li><%= first_word_and %><span class="success"><%= filter.name %></span></li>
+                 <% first_word_and = "and " %>
+              <% end %>
+            </ul>
+            <br/>
+          </li>
+        <% end %>
+      </ol>
+    <% else %>
+      <p>None</p>
+    <% end %>
+    </div>
+    
+      <!-- Columns -->
+      <div class="small-5 columns">
+      <h4>Columns Permitted</h4>
+      <% columns = @user_key.columns.restrict_to(resourceName).alphabetical %>
+      <% if !columns.empty? %>
+        <ul>
+          <% for col in columns %>
+            <li><span class="success"><%= col.name %></span></li>
+          <% end %>
+        </ul>
+      <% else %>
+      <p>None</p>
+      <% end %>
+    
+      </div>
+  </div>
+  
+<% end %>

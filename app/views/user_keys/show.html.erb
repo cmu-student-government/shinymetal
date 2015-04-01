@@ -69,28 +69,29 @@
 <% if @current_user.role? :is_staff %>
   <div class="staff_only panel">
   <h3>Staff only</h3>
-  <hr/>
     
-    <%= render partial: 'user_keys/show_partials/list_of_objects', locals: { object_name: "Column", object_symbol: :columns} %>
-    
-    <%= render partial: 'user_keys/show_partials/list_of_objects', locals: { object_name: "Filter", object_symbol: :filters} %>
-  
+    <%= render partial: 'user_keys/show_partials/list_of_resources' %>
     <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
     
-    <!-- Show the key's approvers if the key is at the approval stage or later. -->
-    <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
-      <%= render partial: 'user_keys/show_partials/list_of_approvers' %> 
-    <% end %>
-    
   </div>
+  
+  
+  <% if @user_key.at_stage? :awaiting_confirmation %>
+  <div class="staff_only panel row">
+  <!-- Show the key's approvers if the key is at the approval stage. -->
+      <div class="column">
+        <%= render partial: 'user_keys/show_partials/list_of_approvers' %>
+      </div>
+      <div class="column">
+        <% if @current_user.role? :is_approver %>
+          <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
+        <% end %>
+      </div>
+  </div>
+  <% end %>  
 <% end %>
-
 <!-- End of general staff-only information. -->
 
-<!-- Approvers submit their approval here -->
-<% if @user_key.at_stage? :awaiting_confirmation and @current_user.role? :is_approver %>
-  <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
-<% end  %>
 
 <!-- Confirm, reset, delete, and apply filters here. -->
 <% if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission) %>

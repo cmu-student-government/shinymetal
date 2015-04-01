@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :sessions, only: [:create, :new, :destroy]
   
-  resources :filters
+  resources :filters, except: [:edit, :update]
 
   resources :user_keys
   

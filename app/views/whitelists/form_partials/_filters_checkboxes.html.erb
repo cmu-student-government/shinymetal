@@ -1,0 +1,16 @@
+<h3>Filters</h3>
+
+<p>
+  <% if Filter.all.empty? %>
+  No filters can be selected because there are none in the system.
+  <% else %>
+    <% for resourceName in Resource::RESOURCE_LIST %>
+      <h5><%= resourceName.capitalize + " Filters" %></h5>
+      <% for filter in Filter.restrict_to(resourceName).alphabetical %>
+          <%= check_box_tag "whitelist[filter_ids][]", filter.id, @whitelist.filters.include?(filter) %>
+          <%= filter.name %>
+          <br />
+      <% end %>
+    <% end %>  
+  <% end %>
+</p>

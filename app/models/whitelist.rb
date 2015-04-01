@@ -12,6 +12,11 @@ class Whitelist < ActiveRecord::Base
   scope :chronological, -> { order(:created_at) }
   scope :restrict_to, ->(param) { where(resource: param) }
   
+  def resource
+    # All filters should have the same resource
+    return self.filters.first.resource
+  end
+  
   private
   def has_valid_filters
     # FIXME, do not allow a whitelist to have no filters.

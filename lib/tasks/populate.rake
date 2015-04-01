@@ -161,11 +161,10 @@ namespace :db do
           Whitelist.populate 1..3 do |whitelist|
              whitelist.user_key_id = user_key.id
              # Make it one of the resources
-             whitelist.resource = resource_list.pop
              whitelist.created_at = Time.now
              whitelist.updated_at = Time.now
              # get a list of filters to avoid repeat filters being assigned to a single whitelist
-             filter_list = Filter.restrict_to(whitelist.resource).to_a.shuffle
+             filter_list = Filter.restrict_to(resource_list.pop).to_a.shuffle
              WhitelistFilter.populate 1..2 do |whitelist_filter|
                whitelist_filter.whitelist_id = whitelist.id 
                whitelist_filter.filter_id = filter_list.pop

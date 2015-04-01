@@ -12,13 +12,19 @@ class Filter < ActiveRecord::Base
   scope :alphabetical, -> { order(:resource).order(:filter_name).order(:filter_value) }
   scope :restrict_to, ->(param) { where(resource: param) }
   
-  def only_these(param)
-    
-  end
+  before_destroy :is_destroyable?
   
   # Methods  
   def name
     "\"#{filter_name}\" = \"#{filter_value}\""
+  end
+  
+  def is_destroyable?
+    self.whitelists.empty?
+  end
+  
+  def user_keys
+    self.whitelists.map{|whitelist| whitelist.user_key}.uniq
   end
   
   def filter_name_is_valid

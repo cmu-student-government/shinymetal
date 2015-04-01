@@ -40,11 +40,18 @@ class WhitelistTest < ActiveSupport::TestCase
       deny bad.valid?
     end
     
+    # No duplications of filters for each whitelist
+    should "not allow duplicated filters in whitelist" do
+      current_filter = @bender_key_submitted_whitelist.filters.first
+      bad = FactoryGirl.build(:whitelist_filter, filter: current_filter, whitelist: @bender_key_submitted_whitelist)
+      deny bad.valid?
+    end
+    
     # Validations for filter-less whitelists
     should "not allow two filters with different resources" do
       # Bender Key's whitelist should only have organization filters
       valid_orgs_filter = FactoryGirl.create(:filter, resource: "organizations", filter_name: Resource::PARAM_NAME_HASH[:organizations][0])
-      valid_whitelist_filter = FactoryGirl.build(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: valid_orgs_filter)
+      valid_whitelist_filter = FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: valid_orgs_filter)
       assert valid_whitelist_filter.valid?
       valid_attendees_filter = FactoryGirl.create(:filter, resource: "attendees", filter_name: Resource::PARAM_NAME_HASH[:attendees][0])
       bad = FactoryGirl.build(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: valid_attendees_filter)

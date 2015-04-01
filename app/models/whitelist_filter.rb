@@ -6,7 +6,9 @@ class WhitelistFilter < ActiveRecord::Base
   validates_presence_of :filter
   
   validate :whitelist_has_one_resource_only
+  validates_uniqueness_of :whitelist_id, scope: :filter_id 
   
+  private
   def whitelist_has_one_resource_only
     # Check that all of a whitelist's filters have the same resource
     return true unless Whitelist.all.to_a.map{|o| o.id}.include?(whitelist_id)

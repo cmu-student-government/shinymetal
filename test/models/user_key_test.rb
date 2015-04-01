@@ -4,8 +4,7 @@ class UserKeyTest < ActiveSupport::TestCase
   # Relationships
   should belong_to(:user)
   should have_many(:user_key_organizations)
-  should have_many(:user_key_filters)
-  should have_many(:filters).through(:user_key_filters)
+  should have_many(:whitelists)
   should have_many(:organizations).through(:user_key_organizations)
   should have_many(:comments)
   should have_many(:approvals)

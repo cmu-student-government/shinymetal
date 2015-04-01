@@ -53,6 +53,9 @@ gem 'cancancan', '~> 1.10'
 # Error handler
 gem 'gaffe'
 
+# Nested filter forms
+gem 'cocoon'
+
 # The following gems were taken straight from Prof H's gemfiles
 
 group :development do

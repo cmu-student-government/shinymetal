@@ -1,0 +1,16 @@
+<!-- pass in action_path as add_whitelist or edit_whitelist-->
+
+<%= form_for [@user_key, @whitelist] do |f| %>
+  <fieldset>
+
+  <%= render 'shared/error_messages', object: @whitelist %>
+
+  <%= render partial: 'whitelists/form_partials/filters_checkboxes' %>
+
+  <div class="collapsed_row">
+    <%= f.submit class: "big-button success" %> | 
+    <%= link_to 'Cancel', user_key_path(@user_key.id), class: "big-button secondary" %>
+  </div>
+  
+  </fieldset>
+<% end %>

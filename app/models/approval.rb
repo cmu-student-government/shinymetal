@@ -15,30 +15,14 @@ class Approval < ActiveRecord::Base
   validates_uniqueness_of :user_id, scope: :user_key_id
   validate :belongs_to_valid_approver, on: :create
   
-  validate :user_key_id_valid
-  validate :user_id_valid
+  validates_presence_of :user_key
+  validates_presence_of :approval_user
   
   private
   # On create, should belong to an approver of some kind
   def belongs_to_valid_approver
     unless self.user_id.nil? or User.approvers_only.to_a.map{|o| o.id}.include?(self.user_id)
       errors.add(:approval_user, "is not a valid approver")
-      return false
-    end
-    return true
-  end
-  
-  def user_id_valid
-    unless User.all.to_a.map{|o| o.id}.include?(self.user_id)
-      errors.add(:user_id, "is invalid")
-      return false
-    end
-    return true
-  end
-  
-  def user_key_id_valid
-    unless UserKey.all.to_a.map{|o| o.id}.include?(self.user_key_id)
-      errors.add(:user_key_id, "is invalid")
       return false
     end
     return true

@@ -10,7 +10,6 @@
 
 <%= render partial: 'shared/list_of_user_keys' %>
 
-<%= link_to 'Edit filter', edit_filter_path(@filter), class: "big-button" %> |
 <%= link_to 'Back to filters list', filters_path, class: "big-button secondary" %>
 <br/>
 <%= link_to 'Delete filter', @filter, method: :delete, data: { confirm: 'Are you sure that you want to delete this filter?' }, class: "small-button" %></td>

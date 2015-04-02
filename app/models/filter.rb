@@ -27,6 +27,7 @@ class Filter < ActiveRecord::Base
   def is_destroyable?
     self.whitelists.empty?
   end
+  
   private
   
   def filter_name_is_valid

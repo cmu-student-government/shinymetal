@@ -1,4 +1,4 @@
-class Resource < ActiveRecord::Base
+class Resource
   RESOURCE_LIST = ['organizations','events','attendees','memberships','positions','users']
   PARAM_NAME_HASH = { organizations: ["organizationId",
                                       "excludeHiddenOrganizations",
@@ -35,7 +35,6 @@ class Resource < ActiveRecord::Base
                        # These parameters are available to all endpoints
                        # Currently they are unused, just here for documentation purposes
                        all: ["page","pageSize"] }
-  PARAM_LIST = PARAM_NAME_HASH::values.flatten.uniq
   
   # Theoretically these could also be temporary, and taken from calls to collegiatelinkapi?
   # FIXME we need to figure out which ones are important. 
@@ -86,7 +85,4 @@ class Resource < ActiveRecord::Base
                                "customFields"
                                ] }
                               # FIXME again, there are others for users
-  # This isn't used because a columns controller hasn't been created yet
-  #COLUMN_LIST = COLUMN_NAME_HASH::values.flatten.uniq
-  
 end

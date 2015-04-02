@@ -1,6 +1,6 @@
 class FiltersController < ApplicationController
   before_action :check_login
-  before_action :set_filter, only: [:show, :edit, :update, :destroy]
+  before_action :set_filter, only: [:show, :destroy]
 
   # CanCan checks
   authorize_resource
@@ -20,10 +20,6 @@ class FiltersController < ApplicationController
     @filter = Filter.new
   end
 
-  # GET /filters/1/edit
-  def edit
-  end
-
   # POST /filters
   def create
     @filter = Filter.new(filter_params)
@@ -31,15 +27,6 @@ class FiltersController < ApplicationController
       redirect_to @filter, notice: 'Filter was successfully created.'
     else
       render :new 
-    end
-  end
-
-  # PATCH/PUT /filters/1
-  def update
-    if @filter.update(filter_params)
-      redirect_to @filter, notice: 'Filter was successfully updated.'
-    else
-      render :edit
     end
   end
 

@@ -4,6 +4,7 @@ $disabled: #555;
 $success: darken(#dff0d8, 5%);
 $info: #fcf8e3;
 $alert: darken(#f2dede, 5%);
+$link: #008cba;
 
 $secondary-dark: #464646;
 $secondary-light: #F4F4F4;
@@ -23,4 +24,11 @@ $placeholder-blue: #D4DEE2;
   -webkit-transform: translateY(-50%) translateX(-50%);
   -ms-transform: translateY(-50%) translateX(-50%);
   transform: translateY(-50%) translateX(-50%);
+}
+
+@mixin word-wrap() {
+  word-break:     break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens:    auto;
+  hyphens:         auto;
 }

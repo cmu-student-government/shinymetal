@@ -21,16 +21,18 @@
 
   <body>
 
-    <%= render 'layouts/navigation' %>
+    <div id="wrapper">
+      <%= render 'layouts/navigation' %>
 
-    <div class="row">
-      <main role="main" class="panel s12">
-         <%= render 'layouts/messages' %>
-         <%= yield %>
-      </main>
+      <div class="row">
+        <main role="main" class="panel s12">
+           <%= render 'layouts/messages' %>
+           <%= yield %>
+        </main>
+      </div>
+
+      <%= render 'layouts/footer' %>
     </div>
-
-   <%= render 'layouts/footer' %>
 
   </body>
 </html>

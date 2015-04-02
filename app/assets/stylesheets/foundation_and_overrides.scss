@@ -4,40 +4,51 @@
 @import url(https://fonts.googleapis.com/css?family=Asap:400,700,400italic);
 $body-font-family: 'Asap', verdana, arial, helvetica, sans-serif;
 
-// Create mixins using Foundation classes
-  @mixin one-columns    ($size) { @extend .#{$size}-1;  @extend .columns; }
-  @mixin two-columns    ($size) { @extend .#{$size}-2;  @extend .columns; }
-  @mixin three-columns  ($size) { @extend .#{$size}-3;  @extend .columns; }
-  @mixin four-columns   ($size) { @extend .#{$size}-4;  @extend .columns; }
-  @mixin five-columns   ($size) { @extend .#{$size}-5;  @extend .columns; }
-  @mixin six-columns    ($size) { @extend .#{$size}-6;  @extend .columns; }
-  @mixin seven-columns  ($size) { @extend .#{$size}-7;  @extend .columns; }
-  @mixin eight-columns  ($size) { @extend .#{$size}-8;  @extend .columns; }
-  @mixin nine-columns   ($size) { @extend .#{$size}-9;  @extend .columns; }
-  @mixin ten-columns    ($size) { @extend .#{$size}-10; @extend .columns; }
-  @mixin eleven-columns ($size) { @extend .#{$size}-11; @extend .columns; }
-  @mixin twelve-columns ($size) { @extend .#{$size}-12; @extend .columns; }
-
 // Create custom column classes so we're framework neutral
-  .s1  { @include one-columns    ("small"); }
-  .s2  { @include two-columns    ("small"); }
-  .s3  { @include three-columns  ("small"); }
-  .s4  { @include four-columns   ("small"); }
-  .s5  { @include five-columns   ("small"); }
-  .s6  { @include six-columns    ("small"); }
-  .s7  { @include seven-columns  ("small"); }
-  .s8  { @include eight-columns  ("small"); }
-  .s9  { @include nine-columns   ("small"); }
-  .s10 { @include ten-columns    ("small"); }
-  .s11 { @include eleven-columns ("small"); }
-  .s12 { @include twelve-columns ("small"); }
+  @mixin columns    ($size, $num) { @extend .#{$size}-#{$num};  @extend .columns; }
+  .s1  { @include columns("small",  "1");  }
+  .s2  { @include columns("small",  "2");  }
+  .s3  { @include columns("small",  "3");  }
+  .s4  { @include columns("small",  "4");  }
+  .s5  { @include columns("small",  "5");  }
+  .s6  { @include columns("small",  "6");  }
+  .s7  { @include columns("small",  "7");  }
+  .s8  { @include columns("small",  "8");  }
+  .s9  { @include columns("small",  "9");  }
+  .s10 { @include columns("small",  "10"); }
+  .s11 { @include columns("small",  "11"); }
+  .s12 { @include columns("small",  "12"); }
+  .m1  { @include columns("medium", "1");  }
+  .m2  { @include columns("medium", "2");  }
+  .m3  { @include columns("medium", "3");  }
+  .m4  { @include columns("medium", "4");  }
+  .m5  { @include columns("medium", "5");  }
+  .m6  { @include columns("medium", "6");  }
+  .m7  { @include columns("medium", "7");  }
+  .m8  { @include columns("medium", "8");  }
+  .m9  { @include columns("medium", "9");  }
+  .m10 { @include columns("medium", "10"); }
+  .m11 { @include columns("medium", "11"); }
+  .m12 { @include columns("medium", "12"); }
+  .l1  { @include columns("large",  "1");  }
+  .l2  { @include columns("large",  "2");  }
+  .l3  { @include columns("large",  "3");  }
+  .l4  { @include columns("large",  "4");  }
+  .l5  { @include columns("large",  "5");  }
+  .l6  { @include columns("large",  "6");  }
+  .l7  { @include columns("large",  "7");  }
+  .l8  { @include columns("large",  "8");  }
+  .l9  { @include columns("large",  "9");  }
+  .l10 { @include columns("large",  "10"); }
+  .l11 { @include columns("large",  "11"); }
+  .l12 { @include columns("large",  "12"); }
 
 // Topbar overrides
   $topbar-bg-color: $primary;
   $topbar-bg: $topbar-bg-color;
 
   $topbar-link-bg-hover: darken($primary, 5%);
-  $topbar-dropdown-link-bg-hover: darken($primary, 5%);
+  $topbar-dropdown-link-bg-hover: $topbar-link-bg-hover;
   $topbar-dropdown-link-bg: $primary;
   $topbar-dropdown-bg: transparent;
 
@@ -52,6 +63,7 @@ $body-font-family: 'Asap', verdana, arial, helvetica, sans-serif;
   $body-bg: $white;
   $body-font-color: $body;
   $heading-font-color: $body-dark;
+  $anchor-font-color: $link;
 
 // Misc overrides
   $row-width: rem-calc(1280);

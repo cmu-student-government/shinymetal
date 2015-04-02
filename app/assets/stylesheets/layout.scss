@@ -1,71 +1,77 @@
 @import "vars";
 
-// Default styling
-  fieldset, hr { border: 1px solid; }
-
-  main {
-    @include twelve-columns("small");
-    background-color: white;
-  }
-
-  section {
-    @extend .row;
-    margin-top: 20px;
-  }
-
-  footer {
-    background-color: #aaa;
-    font-size: 10pt;
-    color: #eee;
-  }
-
-  ol li { margin-bottom: 20px; }
-
 // Navbar
   nav.top-bar {
-    #search-form {
-      @media screen and (max-width: rem-calc(805)) { display: none; }
+    div.top-bar-section {
+      ul li.active > a { background-color: $topbar-link-bg-hover; }
 
-      input.postfix.search-button {
-        padding: 0;
-        line-height: 0px;
-        font-size: 0.7rem;
-        color: $body-dark;
-        background: $white;
-        border: none;
-        border-radius: 0;
-      }
+      #search-form {
+        @media screen and (max-width: rem-calc(805)) { display: none; }
 
-      input.postfix.search-button:hover {
-        color: $body-dark;
-        background: $white;
-      }
+        .search-label {
+          padding-right: 0;
+          padding-left: 0;
+        }
 
-      .search-label {
-        padding-right: 0;
-        padding-left: 0;
-      }
-
-      .search-param {
-        padding-left: 0;
-
-        #search {
+        .search-button {
+          padding: 0;
+          font-size: 0.7rem;
+          color: $body-dark;
+          background: $white;
           border: none;
-          box-shadow: none;
+          border-radius: 0;
+          height: 1.75rem;
+          top: 0.6875rem;
+          line-height: 1.75rem;
+          cursor: default;
+        }
+
+
+        .search-param {
+          padding-left: 0;
+
+          #search {
+            border: none;
+            box-shadow: none;
+          }
         }
       }
+
+      .name h1 { font-size: 1.1875rem; }
     }
-
-    .name h1 { font-size: 1.1875rem; }
-
   }
 
-// Layout styling for forms
+// Body
+#wrapper {
+  position: relative;
+  min-height: 100%;
+  min-width: rem-calc(1200px);
+
+   main { margin-bottom: 10rem; }
+}
+
+// Success/alert classes
+  .success {
+    color: $success;
+  }
+
+  .alert {
+    color: $alert;
+  }
+
+// Misc classes
+  .no_bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   .form { @include grid-column(6); }
 
   .collapsed_row {
     @extend .collapse;
-    @extend .row; clear: both;
+    @extend .row;
+    clear: both;
   }
 
   .big-button {
@@ -81,18 +87,26 @@
     margin: 0;
   }
 
-// Success/alert classes
-  .success {
-    color: $success-color;
+// Footer
+  #back-to-top {
+    position: fixed;
+    bottom: 20px;
+    left: 5rem;
+    display: none;
+    cursor: pointer;
+    z-index: 999;
   }
 
-  .alert {
-    color: $alert-color;
-  }
+  footer {
+    background: transparent;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    line-height: 1.5em;
+    text-align: center;
+    color: $body-dark;
+    // font-size: 1em;
 
-// Misc classes
-  .no_bullets {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    // #copy { font-size: 0.7em; }
   }

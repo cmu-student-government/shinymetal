@@ -7,6 +7,7 @@ class Filter < ActiveRecord::Base
   validates :resource, inclusion: { in: Resource::RESOURCE_LIST, message: "is not a valid resource" }
   # Custom validation for filter names as determined by resource
   validate :filter_name_is_valid
+  validates_uniqueness_of :filter_value, scope: [:resource, :filter_name]
   
   # Scopes
   scope :alphabetical, -> { order(:resource).order(:filter_name).order(:filter_value) }
@@ -19,13 +20,14 @@ class Filter < ActiveRecord::Base
     "\"#{filter_name}\" = \"#{filter_value}\""
   end
   
-  def is_destroyable?
-    self.whitelists.empty?
-  end
-  
   def user_keys
     self.whitelists.map{|whitelist| whitelist.user_key}.uniq
   end
+  
+  def is_destroyable?
+    self.whitelists.empty?
+  end
+  private
   
   def filter_name_is_valid
     filter_param_list = Resource::RESOURCE_LIST

@@ -42,7 +42,7 @@
       <p><i>Set filters and organizations that this key may have access to here.</i></p>
      
       <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>
-      <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>    
+      <%= render partial: 'user_keys/form_partials/organizations_checkboxes', locals: {f: f} %>    
     
       <!--Expiration date-->
       <p><i>Set the expiration date for the key here.</i></p>

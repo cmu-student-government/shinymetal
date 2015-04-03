@@ -39,6 +39,15 @@ class FiltersController < ApplicationController
       render :show
     end
   end
+  
+  # PATCH /filters/repopulate_columns
+  def repopulate_columns
+    if Column.repopulate
+      redirect_to root_path, notice: "The columns in the system were successfully updated."
+    else
+      redirect_to root_path, alert: "The request to CollegiateLink failed. Please try again later."
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -18,6 +18,10 @@ Rails.application.routes.draw do
   # Path to repopulate the organizations look-up table
   patch 'organizations/repopulate_organizations' => 'organizations#repopulate_organizations', as: :repopulate_organizations
   
+  # Path to add columns from CollegiateLink
+  # FIXME It's in the filter controller, should be in a documentation-basd controller
+  patch 'filters/repopulate_columns' => 'filters#repopulate_columns', as: :repopulate_columns
+  
   # Path to see a user's own keys
   get 'own_user_keys' => 'user_keys#own_user_keys', as: :own_user_keys
   

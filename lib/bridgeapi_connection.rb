@@ -38,5 +38,5 @@ def hit_api_endpoint(endpoint)
   res = https.request(req)
 
   # Output result
-  return res.body
+  return JSON.parse(res.body)
 end

@@ -47,9 +47,9 @@ ActiveRecord::Schema.define(version: 20150330171619) do
   create_table "organizations", force: :cascade do |t|
     t.string   "name"
     t.integer  "external_id"
-    t.boolean  "removed",     default: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "user_key_columns", force: :cascade do |t|

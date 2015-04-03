@@ -1,4 +1,5 @@
 <tr>
   <td><%= filter.resource %></td>
   <td><%= link_to filter.name, filter %></td>
+  <td><%= render partial: 'shared/boolean_label', locals: { boolean_label: !filter.user_keys.empty?, true_message: "Used", false_message: "Unused"} %></td>
 </tr>

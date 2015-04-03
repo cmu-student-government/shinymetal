@@ -1,4 +1,5 @@
 <tr>
   <td><%= link_to organization.name, organization %></td>
   <td><%= render partial: 'shared/boolean_label', locals: { boolean_label: !organization.user_keys.empty?, true_message: "Used", false_message: "Unused"} %></td>
+  <td><%= render partial: 'shared/boolean_label', locals: { boolean_label: organization.active?, true_message: "Active", false_message: "Inactive"} %></td>
 </tr>

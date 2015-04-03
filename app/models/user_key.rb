@@ -3,13 +3,17 @@ class UserKey < ActiveRecord::Base
   
   # Relationships
   belongs_to :user
-  has_many :user_key_organizations
-  has_many :whitelists
-  has_many :user_key_columns
+  
+  # A User Key is the only thing that can be deleted (while still associated).
+  # Is components would be deleted automatically as well.
+  has_many :user_key_organizations, dependent: :destroy
+  has_many :whitelists, dependent: :destroy
+  has_many :user_key_columns, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :approvals, dependent: :destroy
+  
   has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
-  has_many :comments
-  has_many :approvals
   has_many :approval_users, class_name: User, through: :approvals
   has_many :comment_users, class_name: User, through: :comments
   
@@ -78,6 +82,12 @@ class UserKey < ActiveRecord::Base
     return self.time_expired < Date.today
   end
   
+  # Used on user_key show page to show "request form status" label
+  def request_form_done?
+    TEXT_FIELD_LIST.each {|attr| return false if self.send(attr).blank? and attr != :proposal_text_eight}
+    return (!self.name.blank? and self.agree)
+  end
+  
   # The form is ready to be submitted by the requester, or approved, or confirmed?
   def can_be_set_to? sym
     case sym # Do false cases first
@@ -87,8 +97,7 @@ class UserKey < ActiveRecord::Base
     when :awaiting_filters
       return false unless at_stage? :awaiting_submission
       # Each proposal_text_thing (except number 8) is not blank, name is not blank, terms agreed to
-      TEXT_FIELD_LIST.each {|attr|  return false if self.send(attr).blank? and attr != :proposal_text_eight}
-      return false if (self.name.blank? or !self.agree)
+      return false unless request_form_done?
     when :awaiting_confirmation
       return false unless at_stage? :awaiting_filters
       return false if self.time_expired.nil?

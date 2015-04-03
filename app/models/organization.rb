@@ -11,6 +11,11 @@ class Organization < ActiveRecord::Base
   scope :inactive, -> { where(active: false) }
   
   # Methods
+  # Get the organizations which don't exist anymore, but are still linked to ongoing keys
+  def self.inactive_but_with_nonexpired_keys
+    Organization.inactive.alphabetical.to_a.reject{|o| o.user_keys.not_expired.empty?}
+  end
+  
   # Repopulate the organizations look-up table
   # FIXME 1. needs error handling for bad jSON response, 2. only looks at 1 page of orgs on the site
   def self.repopulate

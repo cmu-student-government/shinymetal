@@ -3,10 +3,11 @@
 // Navbar
   nav.top-bar {
     div.top-bar-section {
-      ul li.active > a { background-color: $topbar-link-bg-hover; }
+      ul#nav-links li.active > a,
+      ul#drop-links li.active > a  { background-color: $topbar-link-bg-hover; }
 
       #search-form {
-        @media screen and (max-width: rem-calc(805)) { display: none; }
+        @media screen and (max-width: rem-calc(845)) { display: none; }
 
         .search-label {
           padding-right: 0;
@@ -45,7 +46,7 @@
 #wrapper {
   position: relative;
   min-height: 100%;
-  min-width: rem-calc(1200px);
+  // min-width: rem-calc(1000px);
 
    main { margin-bottom: 10rem; }
 }

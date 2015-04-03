@@ -4,7 +4,7 @@
   <%= render partial: 'user_keys/index_partials/index_table', locals: { keys: @user_keys, list_all: false } %>
 </div>
 
-<!-- Kaminari paginate -->
+<%# Kaminari paginate %>
 <div id="paginator">
   <%= paginate @user_keys, remote: true %></div>
 </div>

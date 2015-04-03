@@ -1,32 +1,32 @@
 <%= form_for(@user_key) do |f| %>
 
-  <!-- Begin requester form -->
+  <%#  Begin requester form  %>
 
   <%= render 'shared/error_messages', object: @user_key %>
 
-  <!-- On create, @user_key.id is nil -->
+  <%#  On create, @user_key.id is nil  %>
   <% if @user_key.id.nil? or @current_user.owns? @user_key %>
 
     <fieldset>
-    <!-- Application text boxes. Note that the form object is passed in as :f-->
+    <%#  Application text boxes. Note that the form object is passed in as :f %>
     <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
 
-    <!-- The key should belong to the current user when first created. This is handled in controller. -->
+    <%#  The key should belong to the current user when first created. This is handled in controller.  %>
 
     <%= render partial: 'user_keys/form_partials/terms', locals: {:f=>f} %>
      </fieldset>
 
   <% end %>
 
-  <!-- End requester -->
+  <%#  End requester  %>
 
-  <!-- Begin admin form -->
+  <%#  Begin admin form  %>
 
-  <!-- @current_user can only see both above and below if they are both admin and key owner. -->
-  <!-- Admin rights should be unavailable if the key is not submitted or created yet. -->
+  <%#  @current_user can only see both above and below if they are both admin and key owner.  %>
+  <%#  Admin rights should be unavailable if the key is not submitted or created yet.  %>
   <% if @current_user.role? :admin and !(@user_key.id.nil? or @user_key.at_stage? :awaiting_submission) %>
 
-    <!-- Only admins can assign filters, and they can do so at any time -->
+    <%#  Only admins can assign filters, and they can do so at any time  %>
     <fieldset class="admin_only">
       <h2>Admin only</h2>
 
@@ -38,7 +38,7 @@
       <%= render partial: 'user_keys/form_partials/objects_checkboxes', locals: { object_class: Column, object_symbol: :columns, object_name: "column"} %>
       <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>
 
-      <!--Expiration date-->
+      <%# xpiration date %>
       <p><i>Set the expiration date for the key here.</i></p>
       <div class="collapsed_row">
         <div class="s3">
@@ -52,10 +52,10 @@
 
     </fieldset>
 
-    <!-- Active or not active -->
+    <%#  Active or not active  %>
     <fieldset>
 
-      <!-- Only admins can inactive a key -->
+      <%#  Only admins can inactive a key  %>
       <p><i>Marking a key application as inactive
       suspends the application process. Marking a confirmed key as inactive
       suspends all API use of the key.</i></p>
@@ -73,11 +73,11 @@
 
   <% end %>
 
-  <!-- End admin form -->
+  <%#  End admin form  %>
 
   <br/>
 
-  <!-- "cancel_url" is passed as a local variable from new and edit-->
+  <%#  "cancel_url" is passed as a local variable from new and edit %>
   <div class="actions">
     <%= f.submit class: "big-button success" %> |
     <%= link_to 'Cancel', cancel_url, class: "big-button secondary" %>

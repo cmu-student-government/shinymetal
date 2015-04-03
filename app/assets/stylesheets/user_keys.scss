@@ -35,7 +35,11 @@
       &:not(:last-child).success:after { border-left-color: $success; }
       &:not(:last-child).info:after   { border-left-color: $info; }
 
-      &:after {
+      // Workaround for the last div being too short to fill container
+      &:last-child.success { box-shadow: 5px 0 $success; }
+      &:last-child.info { box-shadow: 5px 0 $info; }
+
+      &:not(:last-child):after {
         content: " ";
         display: block;
         width: 0;
@@ -50,7 +54,7 @@
         z-index: 3;
       }
 
-      &:before {
+      &:not(:last-child):before {
         content: " ";
         display: block;
         width: 0;

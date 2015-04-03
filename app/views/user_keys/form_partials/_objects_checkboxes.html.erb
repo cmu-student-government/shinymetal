@@ -1,4 +1,4 @@
-<!--Pass in object_class and object_name = "filters" or "column", object_non_plural = "filter"-->
+<%# Pass in object_class and object_name = "filters" or "column", object_non_plural = "filter" %>
 
 <h3><%= object_name.capitalize.pluralize %></h3>
 
@@ -13,8 +13,8 @@
           <%= check_box_tag "user_key[#{object_name}_ids][]", object.id, @user_key.send(object_symbol).include?(object) %>
             <%= object.name %>
           <br />
-          
+
       <% end %>
-    <% end %>  
+    <% end %>
   <% end %>
 </p>

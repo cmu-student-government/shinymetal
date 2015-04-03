@@ -1,22 +1,42 @@
 <div class="panel text-center approval-process-container">
-  <!-- <p><strong>Approval Status:</strong></p> -->
+  <%#  <p><strong>Approval Status:</strong></p>  %>
   <div id="approval-statuses" class="s12">
 
-    <div class="status s3 success">
+    <div class="status s3 success" data-tooltip aria-haspopup="true" title="Begun on <%= @user_key.created_at.to_formatted_s(:pretty) %>">
       <div class="text-center">Begun by requester</div>
     </div>
 
-    <div class="status s3 <%= @user_key.at_stage?(:awaiting_filters, true) ? 'success' : 'info' %>">
-      <div class="text-center">Submitted</div>
-    </div>
+    <% if @user_key.at_stage?(:awaiting_filters, true) %>
+      <div class="status s3 success" data-tooltip aria-haspopup="true" title="Submitted on <%= @user_key.time_submitted.to_formatted_s(:pretty) %>">
+        <div class="text-center">Submitted</div>
+      </div>
+    <% else %>
+      <div class="status s3 info">
+        <div class="text-center">Submitted</div>
+      </div>
+    <% end %>
 
-    <div class="status s3 <%= @user_key.at_stage?(:awaiting_confirmation, true) ? 'success' : 'info' %>">
+
+    <% if @user_key.at_stage?(:awaiting_confirmation, true) %>
+    <div class="status s3 success" data-tooltip aria-haspopup="true" title="Filters assigned on <%= @user_key.time_filtered.to_formatted_s(:pretty) %>">
       <div class="text-center">Assigned Filters</div>
     </div>
+    <% else %>
+      <div class="status s3 info">
+        <div class="text-center">Assigned Filters</div>
+      </div>
+    <% end %>
+    <% else %>
 
-    <div class="status s3 <%= @user_key.at_stage?(:confirmed) ? 'success' : 'info' %>">
-      <div class="text-center">Confirmed</div>
-    </div>
+    <% if @user_key.at_stage?(:confirmed, true) %>
+      <div class="status s3 success" data-tooltip aria-haspopup="true" title="Confirmed on <%= @user_key.time_confirmed.to_formatted_s(:pretty) %>">
+        <div class="text-center">Confirmed</div>
+      </div>
+    <% else %>
+      <div class="status s3 info">
+        <div class="text-center">Confirmed</div>
+      </div>
+    <% end %>
 
   </div>
 </div>

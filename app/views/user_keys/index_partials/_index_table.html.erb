@@ -1,13 +1,13 @@
-<!-- Keys and list_all passed in from partial call. -->
-<!-- List_all = true if this is an index action, false for listing a user's keys. -->
-<!-- This partial is used by both own_user_keys and index pages. -->
+<%#
+  Keys and list_all passed in from partial call.
+  List_all = true if this is an index action, false for listing a user's keys.
+  This partial is used by both own_user_keys and index pages.
+%>
 
 <% if keys.empty? and list_all %>
-  
-<p>No keys found.</p>
-
+  <p>There are currently no keys in the system.</p>
 <% elsif keys.empty? %>
-  
+
 <p>You do not have any existing or pending keys.</p>
 
 <% else %>
@@ -16,19 +16,19 @@
   <thead>
     <tr>
       <th>Key Name</th>
-      <!-- Only show andrew_id if there are potentially multiple users listed.-->
+       <%# Only show andrew_id if there are potentially multiple users listed. %>
       <% if list_all %>
         <th>User</th>
       <% end %>
       <th>Submitted</th>
-      <!-- Only staff should see extra details. -->
+      <%# Only staff should see extra details. %>
       <% if @current_user.role? :is_staff %>
       <th>Ready for approval</th>
       <% end %>
       <th>Confirmed</th>
       <th>Expires</th>
       <th>Active?</th>
-      <!-- Only admin can edit if submitted. Only owner can edit if not submitted. -->
+      <%#  Only admin can edit if submitted. Only owner can edit if not submitted.  %>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -36,12 +36,12 @@
   <tbody>
     <% for user_key in keys %>
       <tr>
-	<td><%= link_to user_key.display_name, user_key %></td>      
+	<td><%= link_to user_key.display_name, user_key %></td>
 	<% if list_all %>
 	  <td><%= link_to user_key.user.andrew_id, user_key.user %></td>
 	<% end %>
-	
-	<!-- The time labels and stamps get their own partial -->
+
+	<%#  The time labels and stamps get their own partial  %>
 	<%= render partial: 'user_keys/index_partials/row_times', locals: { user_key: user_key } %>
 
         </td>

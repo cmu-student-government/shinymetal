@@ -1,0 +1,15 @@
+<h3>Organization Details</h3>
+
+<p>
+  <strong>Name:</strong>
+  <%= @organization.name %>
+</p>
+
+<p>
+  <strong>CollegiateLink id:</strong>
+  <%= @organization.external_id %>
+</p>
+
+<%= render partial: 'shared/list_of_user_keys' %>
+
+<%= link_to 'Back to organizations list', organizations_path, class: "big-button secondary" %>

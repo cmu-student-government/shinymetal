@@ -15,9 +15,9 @@ class Organization < ActiveRecord::Base
   # FIXME 1. needs error handling for bad jSON response, 2. only looks at 1 page of orgs on the site
   def self.repopulate
     # First, fetch an array of all organizations still believed to be in CollegiateLink.
-    our_active_orgs_hash = get_our_active_organizations_hash
+    our_active_orgs_hash = Organization.get_our_active_organizations_hash
     # Second, fetch orgs from API
-    their_result_list = get_their_result_list
+    their_result_list = Organization.get_their_result_list
     
     # Third, create any organizations for new items.
     for item in their_result_list
@@ -29,7 +29,7 @@ class Organization < ActiveRecord::Base
     end
     
     # Fourth, inactivate any of our objects that remain in our hash.
-    for object in our_objects_without_matches.values
+    for object in our_active_orgs_hash.values
       object.update_attribute(:active, false)
       object.update_attribute(:name, object.name.strip + " (removed from CollegiateLink)")
     end
@@ -38,14 +38,14 @@ class Organization < ActiveRecord::Base
   end
   
   private
-  def get_our_active_organizations_hash
+  def self.get_our_active_organizations_hash
     our_active_orgs_hash = {}
     Organization.active.to_a.each {|o| our_active_orgs_hash[[o.external_id, o.name]] = o }
     # our_active_orgs_hash = { [1234,"name"] => object, [2134,"other_name"] => object,... }
-    return active_orgs_hash
+    return our_active_orgs_hash
   end
   
-  def get_their_result_list
+  def self.get_their_result_list
     body = hit_api_endpoint("organizations")
     result_list = []
     for item in body["items"]

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325232951) do
+ActiveRecord::Schema.define(version: 20150330171619) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer  "user_id"
@@ -58,13 +58,6 @@ ActiveRecord::Schema.define(version: 20150325232951) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "user_key_filters", force: :cascade do |t|
-    t.integer  "user_key_id"
-    t.integer  "filter_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
   create_table "user_key_organizations", force: :cascade do |t|
     t.integer  "user_key_id"
     t.integer  "organization_id"
@@ -100,6 +93,19 @@ ActiveRecord::Schema.define(version: 20150325232951) do
     t.boolean  "active",     default: true
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
+  end
+
+  create_table "whitelist_filters", force: :cascade do |t|
+    t.integer  "whitelist_id"
+    t.integer  "filter_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "whitelists", force: :cascade do |t|
+    t.integer  "user_key_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
 end

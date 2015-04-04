@@ -42,6 +42,8 @@ group :development do
   # rake diagram:all
   # You need to install other system dependencies. See https://github.com/preston/railroady
   gem 'railroady'
+  gem 'web-console', '~> 2.0'
+
 end
 
 # Pagination gem that is still being maintained

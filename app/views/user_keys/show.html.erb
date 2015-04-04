@@ -86,18 +86,21 @@
 <!-- Staffmembers see private information -->
 <% if @current_user.role? :is_staff %>
   <div class="staff_only panel">
-    
+    <!-- Show the key's approvers if the key is at the approval stage or later. -->
+    <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
+      <%= render partial: 'user_keys/show_partials/list_of_approvers' %> 
+    <% end %>
+  </div>
+
+  <div class="staff_only panel">
+
     <%= render partial: 'user_keys/show_partials/list_of_objects', locals: { object_name: "Column", object_symbol: :columns} %>
     
     <%= render partial: 'user_keys/show_partials/list_of_objects', locals: { object_name: "Filter", object_symbol: :filters} %>
   
     <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
     
-    <!-- Show the key's approvers if the key is at the approval stage or later. -->
-    <% if @user_key.at_stage? :awaiting_confirmation or @user_key.at_stage? :confirmed %>
-      <%= render partial: 'user_keys/show_partials/list_of_approvers' %> 
-    <% end %>
-    
+
   </div>
 <% end %>
 

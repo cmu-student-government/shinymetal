@@ -41,8 +41,7 @@
       
       <p><i>Set filters and organizations that this key may have access to here.</i></p>
      
-      <%= render partial: 'user_keys/form_partials/objects_checkboxes', locals: { object_class: Filter, object_symbol: :filters, object_name: "filter"} %>
-      <%= render partial: 'user_keys/form_partials/objects_checkboxes', locals: { object_class: Column, object_symbol: :columns, object_name: "column"} %>
+      <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>
       <%= render partial: 'user_keys/form_partials/organizations_checkboxes' %>    
     
       <!--Expiration date-->

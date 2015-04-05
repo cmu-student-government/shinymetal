@@ -13,13 +13,8 @@
         method: :patch, class: "big-button success", disabled: !(@user_key.can_be_set_to? :confirmed) %> |
 
   <% else %>
-    <p>This key has not yet been approved by everyone and cannot be released to the requester.</p>
+    <p>This key cannot be released to the requester yet.</p>
   <% end %>
     
-    
-
-<% else %> <!-- Must be at_stage? :confirmed -->
-
-<p> This key was approved by everyone and has been confirmed.</p>
 
 <% end %>

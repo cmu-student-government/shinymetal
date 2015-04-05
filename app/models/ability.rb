@@ -38,6 +38,10 @@ class Ability
       # Admin can do anything they want to with filters.
       can :manage, Filter
       
+      # Whitelist
+      # Admin can do anything they want to with whitelists.
+      can :manage, Whitelist
+      
       # UserKey
       # Comments cant be changed at awaiting_sub stage
       can :update, UserKey do |key|

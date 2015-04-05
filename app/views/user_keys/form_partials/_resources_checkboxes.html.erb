@@ -1,0 +1,43 @@
+<% for resource in Resource::RESOURCE_LIST %>
+  <hr/>
+  
+  <div class="row">
+    <h2><%= resource.capitalize %></h2>
+    
+    <div class="small-7 columns">
+    <h4>Rows</h4>
+    
+      <% @user_key.whitelists.restrict_to(resource).to_a.each do |whitelist| %>
+        <%= f.fields_for :whitelists, whitelist do |p| %>
+          <%= render partial: 'user_keys/form_partials/whitelist_fields',
+                    locals: { f: p, resource: resource } %>
+        <% end %>
+      <% end %>
+  
+      <div id="<%= resource %>"> <!-- Nested form uses this #tag to add new nested form-->
+        <br/>
+        <%= link_to_add_association "Add #{resource} clause", f, :whitelists,
+                                   partial: 'user_keys/form_partials/whitelist_fields',
+                                   html_options: { data: {'association-insertion-node': 'this' }},
+                                   render_options: {:locals => {:resource => resource }}, class: "small-button" %>
+        <br/><br/>
+      </div>
+    
+    </div>
+
+    <div class="small-4 small-offset-1 columns">
+    <h4>Columns</h4>
+      <% if Column.restrict_to(resource).empty? %>
+      None exist in the system.
+      <% else %>
+          <% for column in Column.restrict_to(resource).alphabetical %>
+              <%= check_box_tag "user_key[column_ids][]", column.id, @user_key.columns.include?(column) %>
+              <%= column.name %>
+              <br />
+          <% end %>
+      <% end %>
+    </div>
+    
+  </div> <!-- End row div -->
+    
+<% end %>

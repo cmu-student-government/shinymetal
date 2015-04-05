@@ -169,13 +169,29 @@ module Contexts
   def destroy_user_key_organizations
     @bender_key_submitted_cmutv.destroy
   end
-    
-  # User_key_filters
-  def create_user_key_filters
-    @bender_key_submitted_org_page = FactoryGirl.create(:user_key_filter, user_key: @bender_key_submitted, filter: @organizations_page_filter)
+  
+  # Whitelist_filters
+  def create_whitelists
+    # A whitelist is only valid if it has filters, so create both at the same time here
+    # This is handled well by nested forms, but not by FactoryGirl
+    new_whitelist = Whitelist.new(user_key: @bender_key_submitted)
+    new_whitelist.save(validate: false)
+    @bender_key_submitted_org_page = FactoryGirl.create(:whitelist_filter, whitelist: new_whitelist, filter: @organizations_page_filter)
+    @bender_key_submitted_whitelist = new_whitelist
+    @bender_key_submitted_whitelist.save!
   end
   
-  def destroy_user_key_filters
+  def destroy_whitelists
+    @bender_key_submitted_whitelist.destroy
+  end
+    
+  # Whitelist_filters
+  def create_whitelist_filters
+    # This should already have been created in create_whitelists
+    @bender_key_submitted_org_page ||= FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: @organizations_page_filter)
+  end
+  
+  def destroy_whitelist_filters
     @bender_key_submitted_org_page.destroy
   end
 
@@ -188,16 +204,18 @@ module Contexts
     create_columns
     create_organizations
     create_approvals
-    create_user_key_filters
+    create_whitelists
+    create_whitelist_filters
     create_user_key_columns
     create_user_key_organizations
   end
   
   # Destroy everything at once
   def destroy_everything
-    destroy_user_key_filters
+    destroy_whitelist_filters
     destroy_user_key_columns
     destroy_user_key_organizations
+    destroy_whitelists
     destroy_approvals
     destroy_user_keys
     destroy_users

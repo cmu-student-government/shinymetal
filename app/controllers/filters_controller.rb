@@ -12,7 +12,7 @@ class FiltersController < ApplicationController
 
   # GET /filters/1
   def show
-    @user_keys = @filter.user_keys.chronological
+    @user_keys = @filter.user_keys
   end
 
   # GET /filters/new
@@ -45,8 +45,12 @@ class FiltersController < ApplicationController
 
   # DELETE /filters/1
   def destroy
-    @filter.destroy
-    redirect_to filters_url, notice: 'Filter was successfully destroyed.'
+    if @filter.destroy
+      redirect_to filters_url, notice: 'Filter was successfully destroyed.'
+    else
+      @user_keys = @filter.user_keys
+      render :show
+    end
   end
 
   private

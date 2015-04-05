@@ -2,6 +2,7 @@
 
   <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key),
               method: :patch, class: "big-button success",
+              data: {disable_with: "Please Wait..." },
               disabled: !(@user_key.can_be_set_to? :awaiting_confirmation) %> |
 
 <% elsif @user_key.at_stage? :awaiting_confirmation %>
@@ -15,6 +16,5 @@
   <% else %>
     <p>This key cannot be released to the requester yet.</p>
   <% end %>
-    
 
 <% end %>

@@ -5,7 +5,7 @@
     <tr>
       <th>Resource</th>
       <th>Filter</th>
-      <th colspan="3"></th>
+      <th>Used?</th>
     </tr>
   </thead>
 
@@ -19,6 +19,14 @@
   <%= paginate @filters, remote: true %>
 </div>
 
-<br>
+<% if @current_user.role? :admin %>
+  
+  <br/>
+  <%= link_to 'New Filter', new_filter_path, class: "big-button" %>
+  <br/>
+  
+  <%= link_to 'Sync Columns', repopulate_columns_path,
+      method: :patch, class: "small-button center",
+      data: { disable_with: "Please Wait...", confirm: "Are you sure? This will send 8 requests to CollegiateLink API for their colummns." } %>
 
-<%= link_to 'New Filter', new_filter_path, class: "big-button" %>
+<% end %>

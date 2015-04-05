@@ -16,6 +16,7 @@ module Api
 
         # modified the script to hit only the specified endpoint
         # parse the JSON string from the collegiate link API into a hash
+
         body = JSON.parse(hit_api_endpoint("users"))
 
         # safe and non-nil because of verify_access_with_key 

@@ -26,7 +26,6 @@ class WhitelistTest < ActiveSupport::TestCase
       assert_equal "organizations", @bender_key_submitted_whitelist.resource
     end
     
-    
     # Validations for foreign key ids
     should "not allow invalid user id" do
       bad = FactoryGirl.build(:whitelist, user_key_id: "something invalid")

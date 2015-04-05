@@ -14,21 +14,9 @@ namespace :db do
     require 'populator'
     # Docs at: http://faker.rubyforge.org/rdoc/
     require 'faker'
-    
-    # Step 0: Create every possible column
-    Resource::COLUMN_NAME_HASH.each do |resource_sym, resource_column_list|
-      resource = resource_sym.to_s
-      for item in resource_column_list
-        column = Column.new
-        column.resource = resource
-        column.column_name = item
-        column.save!
-      end
-    end
-    
+
     # Step 1: clear any old data in the db
-    [Approval, Comment, Filter, Organization, WhitelistFilter, Whitelist, UserKeyOrganization, User, UserKey].each(&:delete_all)
-    
+    [Approval, Comment, Filter, Organization, WhitelistFilter, Whitelist, UserKeyOrganization, User, UserKey, Column, UserKeyColumn].each(&:delete_all)
     
     # Step 2: Add Filters, Orgs, and Approvers
     # Define resources, filter_names, filter_values
@@ -97,6 +85,7 @@ namespace :db do
       UserKey.populate 0..3 do |user_key|
         user_key.user_id = user.id
         user_key.name = Faker::Company.name
+        user_key.agree = true
         # I tried to DRY this, but Populator gem wouldn't let me
         user_key.proposal_text_one = Faker::Lorem.paragraph
         user_key.proposal_text_two = Faker::Lorem.paragraph
@@ -182,14 +171,8 @@ namespace :db do
             user_key_organization.created_at = Time.now
             user_key_organization.updated_at = Time.now
           end
-          # get a list of columns to avoid repeat columns being assigned
-          column_list = Column.all.to_a.shuffle
-          UserKeyColumn.populate 3..6 do |user_key_column|
-            user_key_column.user_key_id = user_key.id
-            user_key_column.column_id = column_list.pop.id
-            user_key_column.created_at = Time.now
-            user_key_column.updated_at = Time.now
-          end
+          # Don't populate user_key_columns;
+          # doing so would requiring Column.populate, which hits the Bridge 8 times.
         end
         
         list_of_approvers = User.approvers_only.to_a

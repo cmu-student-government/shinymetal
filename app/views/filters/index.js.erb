@@ -1,2 +1,2 @@
   $('#filters').html('<%= escape_javascript render partial: 'filters/index_partials/filter', collection: @filters %>');
-  $('#paginator').html('<%= escape_javascript paginate(@users, remote: true).to_s %>');
+  $('#paginator').html('<%= escape_javascript paginate(@filters, remote: true).to_s %>');

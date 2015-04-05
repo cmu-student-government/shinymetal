@@ -1,6 +1,6 @@
 <% if object.errors.any? %>
   <fieldset id="error_explanation">
-    <h3><%= pluralize(object.errors.count, "error") %>:</h3>
+    <h4><%= pluralize(object.errors.count, "error") %>:</h4>
 
     <ul>
     <% object.errors.full_messages.each do |message| %>

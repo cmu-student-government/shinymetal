@@ -38,6 +38,9 @@ class Ability
       # Admin can do anything they want to with filters.
       can :manage, Filter
       
+      # Orgs
+      can :manage, Organization
+      
       # Whitelist
       # Admin can do anything they want to with whitelists.
       can :manage, Whitelist
@@ -76,6 +79,10 @@ class Ability
       # Filters
       # Can read (show, index) filters
       can :read, Filter
+      
+      # Orgs
+      # Can read (show, index) orgs
+      can :read, Organization
       
       # User Keys
       # Can read (show, index) any submitted UserKeys

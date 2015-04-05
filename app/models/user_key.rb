@@ -3,13 +3,17 @@ class UserKey < ActiveRecord::Base
   
   # Relationships
   belongs_to :user
-  has_many :user_key_organizations
-  has_many :whitelists
-  has_many :user_key_columns
+  
+  # A User Key is the only thing that can be deleted (while still associated).
+  # Is components would be deleted automatically as well.
+  has_many :user_key_organizations, dependent: :destroy
+  has_many :whitelists, dependent: :destroy
+  has_many :user_key_columns, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :approvals, dependent: :destroy
+  
   has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
-  has_many :comments
-  has_many :approvals
   has_many :approval_users, class_name: User, through: :approvals
   has_many :comment_users, class_name: User, through: :comments
   
@@ -27,9 +31,8 @@ class UserKey < ActiveRecord::Base
   # Quick list for the 8 proposal_text symbols
   TEXT_FIELD_LIST = ["one","two","three","four","five","six","seven","eight"].map{|num| "proposal_text_#{num}".to_sym }
   
+  validates_presence_of :user
   validates_inclusion_of :status, in: STATUS_LIST
-  
-  validate :user_id_valid
   
   # validate that steps that have been passed remain passing
   for status in STATUS_LIST
@@ -54,7 +57,6 @@ class UserKey < ActiveRecord::Base
   scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
   scope :find_by_id, ->(param_id) { where("id == ?", param_id) }
   
-
   #scopes that will be used for email jobs 
   #FIXME figure out why month scope isn't working  
   scope :expires_in_a_month, -> { where("time_expired LIKE ?","%#{30.days.from_now.to_date}%") }
@@ -80,16 +82,27 @@ class UserKey < ActiveRecord::Base
     return self.time_expired < Date.today
   end
   
+  # Used on user_key show page to show "request form status" label
+  def request_form_done?
+    TEXT_FIELD_LIST.each {|attr| return false if self.send(attr).blank? and attr != :proposal_text_eight}
+    return (!self.name.blank? and self.agree)
+  end
+  
   # The form is ready to be submitted by the requester, or approved, or confirmed?
   def can_be_set_to? sym
     case sym # Do false cases first
+    when :awaiting_submission # For reset keys
+      return false unless (at_stage? :awaiting_filters or at_stage? :awaiting_confirmation)
+      return false unless (has_public_comments? and self.active)
     when :awaiting_filters
+      return false unless at_stage? :awaiting_submission
       # Each proposal_text_thing (except number 8) is not blank, name is not blank, terms agreed to
-      TEXT_FIELD_LIST.each {|attr|  return false if self.send(attr).blank? and attr != :proposal_text_eight}
-      return false if (self.name.blank? or !self.agree)
+      return false unless request_form_done?
     when :awaiting_confirmation
+      return false unless at_stage? :awaiting_filters
       return false if self.time_expired.nil?
-    when :confirmed 
+    when :confirmed
+      return false unless at_stage? :awaiting_confirmation
       # Simply counting all approvers and comparing approvals already earned
       # would have a bug when someone approves it but is soon demoted from approver.
       # So, only find the number of approvers who are currently still active "approvers"
@@ -140,16 +153,18 @@ class UserKey < ActiveRecord::Base
   end
   
   def set_status_as(sym)
+    today = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
     case sym
     when :awaiting_filters
-      return set_key_as_submitted
+      return set_key_as_(sym, :time_submitted, today, "needs an expiration date")
     when :awaiting_confirmation
-      return set_key_as_filtered
+      return set_key_as_(sym, :time_filtered, today, "cannot be submitted. Please check that you
+               have completed all fields of the form and agreed to API usage terms")
     when :confirmed
-      return set_key_as_confirmed
+      return set_key_as_(sym, :time_confirmed, today, "has not been approved by everyone yet")
     # Key can be reset to the very beginning of its lifecycle here
     when :awaiting_submission
-      return set_key_as_awaiting_submission
+      return set_key_as_(sym, :time_filtered, nil, "cannot be reset until the key is both active and has an Administrator note")
     end
   end
 
@@ -185,83 +200,26 @@ class UserKey < ActiveRecord::Base
     return !self.comments.public_only.empty?
   end
   
-  # When submitted, a key should have its requested date marked
-  def set_time_to_now(param_time_attribute)
-    self[param_time_attribute] = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
-  end
-  
-  # For a key being reset
-  def reset_times
-    self.time_submitted = nil
-    self.time_filtered = nil
-  end
-  
   # For a key being reset
   def reset_approvals
     # Delete all existing approvals
     self.approvals.destroy_all
   end
-
-  # When a key is submitted by requester to admin
-  def set_key_as_submitted
-    if at_stage? :awaiting_submission and self.can_be_set_to? :awaiting_filters
-      self.status = "awaiting_filters"
-      set_time_to_now(:time_submitted)
-      save_changes
-      return true
-    end
-    errors.add(:user_key, "cannot be submitted. Please check that you
-               have completed all fields of the form and agreed to API usage terms")
-    return false
-  end
   
-  # When an admin submits the filter form so it can be approved by everyone.
-  # Require an expiration date and at least one filter at this stage
-  def set_key_as_filtered
-    if at_stage? :awaiting_filters and self.can_be_set_to? :awaiting_confirmation
-      self.status = "awaiting_confirmation"
-      set_time_to_now(:time_filtered)
-      save_changes
-      return true
-    end
-    errors.add(:user_key, "needs an expiration date")
-    return false
-  end
-  
-  # When a key has been approved by everyone and is confirmed by admin
-  def set_key_as_confirmed
-    if at_stage? :awaiting_confirmation and self.can_be_set_to? :confirmed
-      self.status = "confirmed"
-      set_time_to_now(:time_confirmed)
-      save_changes
-      return true
-    end
-    errors.add(:user_key, "has not been approved by everyone yet")
-    return false
-  end
-  
-  # This is for Reset, when a key has rejected and sent back to the requester
   # Can only be sent back after submission but before "confirmed" stage
   # Note: a key can only be reset if it has comments made by admin for the requester's benefit.
-  def set_key_as_awaiting_submission
-    if (at_stage? :awaiting_filters or at_stage? :awaiting_confirmation) and has_public_comments?
-      self.status = "awaiting_submission"
-      reset_times
-      reset_approvals # Keep any filters/comments that were applied, so dont reset those
+  def set_key_as_(next_stage, timestamp, timestamp_value, error)
+    if self.can_be_set_to?(next_stage)
+      self.status = next_stage.to_s
+      if next_stage == :awaiting_submission # Reset the key
+        reset_approvals # Keep any filters/comments that were applied, so dont reset those
+      end # Advance the key's progress
+      self[timestamp] = timestamp_value
       save_changes
       return true
     end
-    errors.add(:user_key, "cannot be reset without providing an Administrator note")
+    errors.add(:user_key, error)
     return false
-  end
-
-  # Simple foreign key validation
-  def user_id_valid
-    unless User.all.to_a.map{|o| o.id}.include?(self.user_id)
-      errors.add(:user_id, "is invalid")
-      return false
-    end
-    return true
   end
   
   # Callbacks

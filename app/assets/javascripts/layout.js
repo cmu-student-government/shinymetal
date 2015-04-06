@@ -1,6 +1,7 @@
 $(function($) {
   var alertContainer = $("#alert-container"),
-      searchInput = $("input#term");
+      searchInput = $("input#term"),
+      searchTypeSelector = $("select#search-type-select");
 
   // Back to top button js
     $(window).scroll(function() {
@@ -20,20 +21,21 @@ $(function($) {
 
   // User search
     // For when changing search type (e.g. user, user_key)
-    // $("#search-type-select").change(function() { $("#term").val('') });
-    var users_search_path = searchInput.data("search-path"),
+    $("#search-type-select").change(function() { $("#term").val('') });
+
+    var users_search_path = searchInput.data("users-search-path"),
+        keys_search_path = searchInput.data("keys-search-path");
         users_path = searchInput.data("users-path");
+        keys_path = searchInput.data("keys-path");
 
     searchInput.autocomplete({
       delay: 500,
       autoFocus: true,
-      serviceUrl: users_search_path,
+      autoSelectFirst: true,
       paramName: "term",
-      onSelect: function(item) { window.location.href = users_path + "/" + item.data; },
+      serviceUrl: function() { return (searchTypeSelector.val() === "users") ? users_search_path : keys_search_path },
+      onSelect: function(item) { window.location.href = (searchTypeSelector.val() === "users") ? users_path : keys_path + "/" + item.data; },
       focus: function(e, ui) { ui.item.siblings().removeClass(".autocomplete-selected"); ui.item.addClass(".autocomplete-selected"); }
     });
-
-    // TODO not working..
-    // $.widget("ui.autocomplete", $.ui.autocomplete, { _resizeMenu: function() { debugger; return this.menu.element.outerWidth(+searchInput.width + 2); } });
 
 });

@@ -37,8 +37,8 @@ class UsersController < ApplicationController
 
   def search
     search_param = params[:term]
-    matching_users = User.search(search_param).alphabetical.collect { |u| { value: u.andrew_id, data: u.id } }
-    render json: {suggestions: matching_users }
+    matching_users = User.search(search_param).collect { |u| { value: "#{u.name} (#{u.andrew_id})", data: u.id } }
+    render json: { suggestions: matching_users }
   end
 
   private

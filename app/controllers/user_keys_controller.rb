@@ -1,7 +1,6 @@
 class UserKeysController < ApplicationController
   before_action :check_login
-  before_action :set_user_key, except: [:index, :own_user_keys, :new,
-                                        :create]
+  before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search]
 
   # CanCan checks
   authorize_resource
@@ -153,6 +152,12 @@ class UserKeysController < ApplicationController
       get_comments
       render :show
     end
+  end
+
+  def search
+    search_param = params[:term]
+    matching_keys = UserKey.submitted.search(search_param).collect { |u| { value: "#{u.name}", data: u.id } }
+    render json: { suggestions: matching_keys }
   end
 
   private

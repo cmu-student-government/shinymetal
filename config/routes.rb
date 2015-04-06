@@ -3,11 +3,12 @@ Rails.application.routes.draw do
 
   resources :filters
 
+  get 'user_keys/search' => 'user_keys#search', as: :user_keys_search # this needs to go before resource :user_keys to override the path
   resources :user_keys
 
   # Users are not deleted, only inactivated.
   # They are not created directly; they are meant to be created automatically via shibboleth login.
-  get 'users/search' => 'users#search', as: :users_search
+  get 'users/search' => 'users#search', as: :users_search # this needs to go before resource :users to override the path
   resources :users, except: [:destroy, :create, :new]
 
   # Authentication routes

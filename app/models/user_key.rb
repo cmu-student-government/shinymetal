@@ -70,6 +70,12 @@ class UserKey < ActiveRecord::Base
     return self.time_expired < DateTime.now
   end
 
+  def self.search(term, max=5)
+    term = "%#{term.to_s.downcase}%"
+    name = 'LOWER(name)'
+    where("#{name} LIKE ?", term).limit(max)
+  end
+
   # The form is ready to be submitted by the requester, or approved, or confirmed?
   def can_be_set_to? sym
     case sym # Do false cases first

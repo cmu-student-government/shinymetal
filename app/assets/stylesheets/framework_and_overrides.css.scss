@@ -110,6 +110,11 @@ $success-color: #5da423;
   margin: 0;
   padding: 0;
 }
+.checkbox_panel {
+  @extend .panel;
+  background-color: white;
+  border-radius: 8px;
+}
 
 #error_explanation {
   background-color: lighten($primary-color, 55);
@@ -144,4 +149,8 @@ footer {
   background-color: #aaa;
   font-size: 10pt;
   color: #eee;
+}
+label {
+  font-size: 1em;
+  margin-bottom: 0.5em;
 }

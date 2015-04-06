@@ -43,6 +43,25 @@
     }
   }
 
+  .autocomplete-suggestions {
+    color: $body;
+    background: $white;
+    font-size: 0.75em;
+    width: 124px !important;
+
+    .autocomplete-suggestion {
+      cursor: pointer;
+      height: 20px;
+      line-height: 10px;
+      padding: 5px;
+      text-overflow: ellipsis;
+
+      &:hover,
+      &:focus,
+      .autocomplete-selected { background: darken($white, 10%); }
+    }
+  }
+
 // Body
   #wrapper {
     position: relative;
@@ -92,8 +111,8 @@
 // Footer
   #back-to-top {
     position: fixed;
-    bottom: 20px;
-    left: 5rem;
+    bottom: 3rem;
+    left: 2rem;
     display: none;
     cursor: pointer;
     z-index: 999;

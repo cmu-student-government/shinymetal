@@ -8,8 +8,8 @@ class UsersController < ApplicationController
   # GET /users
   # search(filtering_params) used for search bar
   def index
-    @requesters = matching_users.requesters_only.page(params[:page])
-    @staff = matching_users.staff_only.page(params[:page])
+    @requesters = User.requesters_only.page(params[:page])
+    @staff = User.staff_only.page(params[:page])
   end
 
   # GET /users/1

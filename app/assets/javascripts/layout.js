@@ -4,11 +4,7 @@ $(function($) {
 
   // Back to top button js
     $(window).scroll(function() {
-      if ($(this).scrollTop() > 200)
-        $("#back-to-top").fadeIn(500);
-      else
-        $("#back-to-top").fadeOut(500);
-      scrollAlert();
+      $("#back-to-top").fadeTo("fast", $(this).scrollTop() > 200 ? 1 : -1);
     });
 
     $(document).on("click", "#back-to-top", function (e) {
@@ -28,27 +24,16 @@ $(function($) {
     var users_search_path = searchInput.data("search-path"),
         users_path = searchInput.data("users-path");
 
-    // var searchSource = function(req, res) {
-    //   $.ajax({
-    //     url: path,
-    //     dataType: "json",
-    //     data: { term: req.term },
-    //     success: function(data) {
-    //       res($.map(data, function(item) {
-    //         return { label: item.name, id: item.id }
-    //       }));
-    //     }
-    //   });
-    // }
-
-    var searchSelect =
-
-    $("input#term").devbridgeAutocomplete({
+    searchInput.autocomplete({
       delay: 500,
       autoFocus: true,
       serviceUrl: users_search_path,
       paramName: "term",
-      onSelect: function(e, ui) { window.location.href = users_path + "/" + ui.item.id; }
+      onSelect: function(item) { window.location.href = users_path + "/" + item.data; },
+      focus: function(e, ui) { ui.item.siblings().removeClass(".autocomplete-selected"); ui.item.addClass(".autocomplete-selected"); }
     });
+
+    // TODO not working..
+    // $.widget("ui.autocomplete", $.ui.autocomplete, { _resizeMenu: function() { debugger; return this.menu.element.outerWidth(+searchInput.width + 2); } });
 
 });

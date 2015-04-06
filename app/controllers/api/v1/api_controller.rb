@@ -14,10 +14,16 @@ module Api
         # appropriate query to hit the collegiate link api
         require "./lib/bridgeapi_connection.rb"
 
+        # get which endpoint from the URL, probably not the most elegant
+        # split on the slashes
+        post_url_list = (request.original_url).split("/")
+        # get the last element, guaranteed to be non-empty because a request
+        # must have URL
+        endpoint = post_url_list[(post_url_list.length) - 1]
+
         # modified the script to hit only the specified endpoint
         # parse the JSON string from the collegiate link API into a hash
-
-        body = JSON.parse(hit_api_endpoint("users"))
+        body = JSON.parse(hit_api_endpoint(endpoint))
 
         # safe and non-nil because of verify_access_with_key 
         andrew_id = request.headers["HTTP_ANDREW_ID"]
@@ -31,12 +37,14 @@ module Api
 
         # find the appropriate filter_columns for a given user key
         user_key_array = UserKey.find_by_id(find_user_key_id_by_andrew_id(andrew_id)).to_a
-        filter_columns = (!user_key_array.nil? && user_key_array.length > 0) ? user_key_array[0].columns.map{|c| c.column_name } : []
+        filter_columns = (!user_key_array.nil? && user_key_array.length > 0) ? user_key_array[0].columns.map{|c| [c.resource, c.column_name] } : []
+        resource_idx, column_name_idx = 0, 1
+        final_columns = filter_columns.select{|fc| fc[resource_idx] == endpoint}.map{|fc| fc[column_name_idx]}
 
-        if filter_columns.length == 0
+        if final_columns.length == 0
            render json: {"message" => "error, no columns whitelisted"}
         else
-          result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| filter_columns.include?(k) } } }
+          result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| final_columns.include?(k) } } }
           final_hash  = request_info_hash.merge(result_hash)
           render json: JSON(final_hash), status: 200
         end

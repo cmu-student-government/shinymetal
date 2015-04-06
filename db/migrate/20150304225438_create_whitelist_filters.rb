@@ -6,5 +6,7 @@ class CreateWhitelistFilters < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    
+    add_index :whitelist_filters, [ :whitelist_id , :filter_id ]
   end
 end

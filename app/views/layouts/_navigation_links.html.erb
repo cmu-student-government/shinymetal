@@ -2,7 +2,7 @@
     <li class="divider"></li>
     
     <!-- Begin admin login check-->
-    <% if logged_in? and @current_user.role? :is_staff %>
+    <% if @current_user and @current_user.role? :is_staff %>
     <li><%= link_to "Users", users_path %></li>
     
     <li><%= link_to "User Keys", user_keys_path %></li>
@@ -24,14 +24,14 @@
       </div>
     </li>
     <% end %>
-    <% if logged_in? %> <!--End admin login check, begin basic user login check-->
+    <% if @current_user %> <!--End admin login check, begin basic user login check-->
       <li><%= link_to "Your Keys", own_user_keys_path %></li>
     <% end %>
   </ul>
 
 <ul class="right">
-  <% if logged_in? %>
-    <li><%= link_to "Welcome, #{current_user.andrew_id}", @current_user %></li>
+  <% if @current_user %>
+    <li><%= link_to "Welcome, #{@current_user.andrew_id}", @current_user %></li>
     
     <li class="divider"></li>
     

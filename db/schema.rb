@@ -20,12 +20,16 @@ ActiveRecord::Schema.define(version: 20150330171619) do
     t.datetime "updated_at",  null: false
   end
 
+  add_index "approvals", ["user_key_id"], name: "index_approvals_on_user_key_id"
+
   create_table "columns", force: :cascade do |t|
     t.string   "resource"
     t.string   "column_name"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "columns", ["resource", "column_name"], name: "index_columns_on_resource_and_column_name"
 
   create_table "comments", force: :cascade do |t|
     t.text     "message"
@@ -36,6 +40,8 @@ ActiveRecord::Schema.define(version: 20150330171619) do
     t.datetime "updated_at",                  null: false
   end
 
+  add_index "comments", ["user_key_id"], name: "index_comments_on_user_key_id"
+
   create_table "filters", force: :cascade do |t|
     t.string   "resource"
     t.string   "filter_name"
@@ -43,6 +49,8 @@ ActiveRecord::Schema.define(version: 20150330171619) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
+
+  add_index "filters", ["resource", "filter_name", "filter_value"], name: "resource_name_value_index"
 
   create_table "organizations", force: :cascade do |t|
     t.string   "name"
@@ -52,6 +60,8 @@ ActiveRecord::Schema.define(version: 20150330171619) do
     t.datetime "updated_at",                 null: false
   end
 
+  add_index "organizations", ["name"], name: "index_organizations_on_name"
+
   create_table "user_key_columns", force: :cascade do |t|
     t.integer  "user_key_id"
     t.integer  "column_id"
@@ -59,12 +69,16 @@ ActiveRecord::Schema.define(version: 20150330171619) do
     t.datetime "updated_at",  null: false
   end
 
+  add_index "user_key_columns", ["user_key_id", "column_id"], name: "index_user_key_columns_on_user_key_id_and_column_id"
+
   create_table "user_key_organizations", force: :cascade do |t|
     t.integer  "user_key_id"
     t.integer  "organization_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
+
+  add_index "user_key_organizations", ["user_key_id", "organization_id"], name: "user_org_association_index"
 
   create_table "user_keys", force: :cascade do |t|
     t.integer  "user_id"
@@ -88,6 +102,9 @@ ActiveRecord::Schema.define(version: 20150330171619) do
     t.datetime "updated_at",                                          null: false
   end
 
+  add_index "user_keys", ["time_submitted", "time_filtered", "time_confirmed", "time_expired"], name: "user_key_ordering_index"
+  add_index "user_keys", ["user_id"], name: "user_key_fetching_index"
+
   create_table "users", force: :cascade do |t|
     t.string   "andrew_id"
     t.string   "role",       default: "requester"
@@ -96,6 +113,8 @@ ActiveRecord::Schema.define(version: 20150330171619) do
     t.datetime "updated_at",                       null: false
   end
 
+  add_index "users", ["andrew_id"], name: "index_users_on_andrew_id"
+
   create_table "whitelist_filters", force: :cascade do |t|
     t.integer  "whitelist_id"
     t.integer  "filter_id"
@@ -103,10 +122,14 @@ ActiveRecord::Schema.define(version: 20150330171619) do
     t.datetime "updated_at",   null: false
   end
 
+  add_index "whitelist_filters", ["whitelist_id", "filter_id"], name: "index_whitelist_filters_on_whitelist_id_and_filter_id"
+
   create_table "whitelists", force: :cascade do |t|
     t.integer  "user_key_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "whitelists", ["user_key_id"], name: "index_whitelists_on_user_key_id"
 
 end

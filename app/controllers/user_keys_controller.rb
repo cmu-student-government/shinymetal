@@ -141,7 +141,7 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/approve_key/
   def approve_key
-    if @user_key.set_approved_by(current_user)
+    if @user_key.set_approved_by(@current_user)
       redirect_to @user_key, notice: 'You have successfully approved this key.'
     else
       get_comments
@@ -151,7 +151,7 @@ class UserKeysController < ApplicationController
   
   # PATCH/PUT /user_keys/1/undo_approve_key/
   def undo_approve_key
-    if @user_key.undo_set_approved_by(current_user)
+    if @user_key.undo_set_approved_by(@current_user)
       redirect_to @user_key, notice: 'You have successfully revoked your approval for this key.'
     else
       get_comments

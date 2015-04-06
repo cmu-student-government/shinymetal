@@ -21,5 +21,10 @@ class CreateUserKeys < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    
+    add_index :user_keys, [:time_submitted,
+                           :time_filtered, :time_confirmed, :time_expired],
+                           name: "user_key_ordering_index"
+    add_index :user_keys, :user_id, name: "user_key_fetching_index"
   end
 end

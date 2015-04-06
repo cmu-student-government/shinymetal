@@ -60,6 +60,9 @@ gem 'rails', '4.2.0'
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
   gem 'turbolinks'
 
+  # Gives us access to students names/info from CMU's LDAP service
+  gem 'cmu_person'
+
 group :development do
   gem 'rails_layout'
 

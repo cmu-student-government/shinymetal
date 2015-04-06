@@ -13,7 +13,6 @@ class User < ActiveRecord::Base
   scope :approvers_only, -> { where("role = 'admin' or role = 'staff_approver'") }
   scope :staff_only, ->  { where("role <> 'requester'") }
   scope :requesters_only, ->  { where("role == 'requester'") }
-  scope :search, ->(param) { where("andrew_id LIKE ?", "%#{param.to_s.downcase}%") }
 
   # Methods
   def owns?(user_key)
@@ -31,5 +30,18 @@ class User < ActiveRecord::Base
       when :admin
         return self.role == "admin"
     end
+  end
+
+  def name(proper=true)
+    proper ? "#{first_name} #{last_name}" : "#{last_name}, #{first_name}"
+  end
+
+  def self.search(term)
+    search_condition = "%#{term}%"
+    term = term.to_s.downcase
+    andrew = 'LOWER(andrew_id)'
+    first = 'LOWER(first_name)'
+    last = 'LOWER(last_name)'
+    find(:all, conditions: ["#{andrew} LIKE ? OR #{first} LIKE ? OR #{last} LIKE ?", term, term, term])
   end
 end

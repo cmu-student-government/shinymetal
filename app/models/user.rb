@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   scope :approvers_only, -> { where("role = 'admin' or role = 'staff_approver'") }
   scope :staff_only, ->  { where("role <> 'requester'") }
   scope :requesters_only, ->  { where("role == 'requester'") }
+  scope :admin, ->  { where("role == 'admin'") }
 
   # Methods
   def owns?(user_key)

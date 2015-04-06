@@ -3,7 +3,8 @@
 # double handshake
 module Api
   module V1
-    class UsersController < ApplicationController
+    class ApiController < ApplicationController
+      skip_before_filter :verify_authenticity_token
       # apparently it's bad to pass in tokens in the URL directly,
       # it can be unsafe. will fix in future
       before_filter :verify_access_with_api_key
@@ -15,21 +16,40 @@ module Api
 
         # modified the script to hit only the specified endpoint
         # parse the JSON string from the collegiate link API into a hash
-        body = JSON.parse(hit_api_endpoint("users"))
-        # once we have entries in user_key_columns, we can say
-        # filter_columns = UserKey.find_by_id(find_user_key_id_by_andrew_id(params[:andrew_id])).columns
-        # these are temporary columns our API will white list
-        filter_columns = ["username", "firstName", "lastName", "campusEmail", "status"]
-        result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| filter_columns.include?(k) } } }
 
-        render json: JSON(result_hash), status: 200
+        body = JSON.parse(hit_api_endpoint("users"))
+
+        # safe and non-nil because of verify_access_with_key 
+        andrew_id = request.headers["HTTP_ANDREW_ID"]
+        api_key   = request.headers["HTTP_API_KEY"]
+
+        # additional information from collegiatelink API forwarded to requester
+        # so the user can then build an iterator to collect all of the information
+        # from all pages
+        request_info_labels = ["pageNumber", "pageSize", "totalItems", "totalPages"]
+        request_info_hash   = Hash[*(request_info_labels.map{|l| [l, body[l]]}).flatten]
+
+        # find the appropriate filter_columns for a given user key
+        user_key_array = UserKey.find_by_id(find_user_key_id_by_andrew_id(andrew_id)).to_a
+        filter_columns = (!user_key_array.nil? && user_key_array.length > 0) ? user_key_array[0].columns.map{|c| c.column_name } : []
+
+        if filter_columns.length == 0
+           render json: {"message" => "error, no columns whitelisted"}
+        else
+          result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| filter_columns.include?(k) } } }
+          final_hash  = request_info_hash.merge(result_hash)
+          render json: JSON(final_hash), status: 200
+        end
 
       end
 
       def find_user_key_id_by_andrew_id(andrew_id)
-        @cur_user = User.search(andrew_id)[0]
+        @cur_user         = User.search(andrew_id)[0]
         @user_keys_to_ids = @cur_user.user_keys.active.not_expired.confirmed.map{|uk| {uk.gen_api_key => uk.id} }
-        api_key = params[:api_key]
+        # guaranteed to be non-nil because only called in index controller
+        # after verify_access_with_api_key
+        puts @user_keys_to_ids
+        api_key = request.headers["HTTP_API_KEY"]
         # map to a list of ids where if the id matches, then return that id else 0
         result = @user_keys_to_ids.map{|d| !d[api_key].nil? ? d[api_key] : 0}
         # the id will then be added to all zeroes and can be returned
@@ -54,9 +74,11 @@ module Api
 
       # if there's a key and it exists in our system, it's verified
       def verify_access_with_api_key
-        if !(params[:api_key].present? && params[:andrew_id].present?)
+        api_key   = request.headers["HTTP_API_KEY"]
+        andrew_id = request.headers["HTTP_ANDREW_ID"]
+        if (api_key.nil? || andrew_id.nil?)
           render json: {error: "Error, bad request"}, status: 400
-        elsif !(key_matches?(params[:api_key], params[:andrew_id]))
+        elsif !(key_matches?(api_key, andrew_id))
           render json: {error: "Error, unauthorized"}, status: 401
         end
       end

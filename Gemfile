@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.8'
 
 # Database gems
   # Mysql is being used on our production server
@@ -63,8 +63,12 @@ gem 'rails', '4.2.0'
   # Gives us access to students names/info from CMU's LDAP service
   gem 'cmu_person'
 
+  # Nested filter forms
+  gem 'cocoon'
+
 group :development do
   gem 'rails_layout'
+  gem 'web-console', '~> 2.0'
 
   # You need to install other system dependencies. See https://github.com/preston/railroady
   gem 'railroady' # use w/ rake diagram:all

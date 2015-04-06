@@ -6,7 +6,7 @@ class Comment < ActiveRecord::Base
   # Validations
   validates_presence_of :message, message: "cannot be blank."
 
-  validate :user_key_id_valid
+  validates_presence_of :user_key
   # This second one has a helper method, has_valid_staff_user
   validate :user_id_valid
   
@@ -43,14 +43,6 @@ class Comment < ActiveRecord::Base
   def user_id_valid
     unless (User.all.to_a.map{|o| o.id}.include?(self.user_id) and has_valid_staff_user)
       errors.add(:user_id, "is invalid")
-      return false
-    end
-    return true
-  end
-  
-  def user_key_id_valid
-    unless UserKey.all.to_a.map{|o| o.id}.include?(self.user_key_id)
-      errors.add(:user_key_id, "is invalid")
       return false
     end
     return true

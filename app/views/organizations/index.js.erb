@@ -1,0 +1,2 @@
+  $('#organizations').html('<%= escape_javascript render partial: 'organizations/index_partials/organization', collection: @organizations %>');
+  $('#paginator').html('<%= escape_javascript paginate(@organizations, remote: true).to_s %>');

@@ -1,6 +1,6 @@
 <html>
   <body>
-    <p><%= @current_user.andrew_id %>, you have received a message from Shiny Metal API:</p>
+    <p><%= @recipient.nil? ? "Hello" : @recipient.andrew_id %>, you have received a message from Shiny Metal API:</p>
 
     <hr/>
 

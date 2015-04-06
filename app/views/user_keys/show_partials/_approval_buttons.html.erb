@@ -2,22 +2,19 @@
 
   <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key),
               method: :patch, class: "big-button success",
+              data: {disable_with: "Please Wait..." },
               disabled: !(@user_key.can_be_set_to? :awaiting_confirmation) %> |
 
 <% elsif @user_key.at_stage? :awaiting_confirmation %>
 
-  <% if @user_key.can_be_set_to? :confirmed? %>
-
+  <% if @user_key.can_be_set_to? :confirmed %>
+    
     <p>This key has been approved by everyone and is ready to be released to the requester.</p>
-  <% else %>
-    <p>This key has not yet been approved by everyone and cannot be released to the requester.</p>
-  <% end %>
-
     <%= link_to 'Confirm and release key to user', set_as_confirmed_path(@user_key), data: { confirm: 'Are you sure? If you click OK, a confirmation email will be sent to the key requester and this key request will be complete.' },
         method: :patch, class: "big-button success", disabled: !(@user_key.can_be_set_to? :confirmed) %> |
 
-<% else %> <%#  Must be at_stage? :confirmed  %>
-
-<p> This key was approved by everyone and has been confirmed.</p>
+  <% else %>
+    <p>This key cannot be released to the requester yet.</p>
+  <% end %>
 
 <% end %>

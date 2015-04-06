@@ -4,6 +4,9 @@ class HomeController < ApplicationController
       if @current_user.role? :is_staff
 	@pending_filter_keys = UserKey.awaiting_filters.chronological
 	@pending_approval = UserKey.awaiting_confirmation.chronological
+	# According to CollegiateLink business logic, @bad_organizations should always be empty.
+	# It is included here on the off chance that an organization is deleted from CollegiateLink.
+	@bad_organizations = Organization.inactive_but_with_nonexpired_keys
       else # :requester
 	current_user_keys = @current_user.user_keys.chronological
 	@confirmed_keys = current_user_keys.confirmed

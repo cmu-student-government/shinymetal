@@ -7,7 +7,7 @@ class UserTest < ActiveSupport::TestCase
   #Validations
   # This is not user input so it does't need to be validated
   #should validate_presence_of(:andrew_id)
-
+  
   should allow_value("admin").for(:role)
   should allow_value("requester").for(:role)
   should allow_value("staff_approver").for(:role)
@@ -36,6 +36,10 @@ class UserTest < ActiveSupport::TestCase
 
     should "have a scope to return a list of approvers" do
       assert_equal ["pjfry", "tleela"], User.approvers_only.by_andrew.map {|u| u.andrew_id}
+    end
+    
+    should "have a scope to return admin" do 
+      assert_equal ["fry"], User.admin.map{|u| u.andrew_id}
     end
 
     should "have a method to get a user's name" do
@@ -76,7 +80,7 @@ class UserTest < ActiveSupport::TestCase
       assert_includes User.search('Fry').map{ |u| u.andrew_id }, "pjfry"
       assert_includes User.search('Doctor Zoi').map{ |u| u.andrew_id }, "drzoid"
     end
-
+    
   end
 
 end

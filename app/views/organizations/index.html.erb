@@ -1,0 +1,32 @@
+<h1>Listing Organizations</h1>
+
+<%= render partial: "shared/bad_organizations_warning" %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Used?</th>
+      <th>Active?</th>
+    </tr>
+  </thead>
+
+  <tbody id="organizations">
+    <%= render partial: 'organizations/index_partials/organization', collection: @organizations %>
+  </tbody>
+</table>
+
+<!-- Kaminari paginate -->
+<div id="paginator">
+  <%= paginate @organizations, remote: true %>
+</div>
+
+<% if @current_user.role? :admin %>
+  <br>
+  
+  <%= link_to 'Sync Organizations Look-up Table',
+               repopulate_organizations_path, 
+               method: :patch, class: "big-button center",
+               data: { disable_with: "Please Wait...",
+               confirm: "Are you sure? This will send 1 request to CollegiateLink API for their organizations." } %>
+<% end %>

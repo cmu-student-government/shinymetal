@@ -1,11 +1,18 @@
 <ol>
-<li><%= @user_key.proposal_text_one %></li>
-<li><%= @user_key.proposal_text_two %></li>
-<li><%= @user_key.proposal_text_three %></li>
-<li><%= @user_key.proposal_text_four %></li>
-<li><%= @user_key.proposal_text_five %></li>
-<li><%= @user_key.proposal_text_six %></li>
-<li><%= @user_key.proposal_text_seven %></li>
-<%# Number 8 is optional %>
-<li><%= @user_key.proposal_text_eight.blank? ? 'N/A' : @user_key.proposal_text_eight %></li>
+  
+  <!-- Only does 1-7 since 8 can be blank -->
+  <% for textField in UserKey::TEXT_FIELD_LIST[0,7] %>
+  <li>
+    <% if @user_key[textField].blank? %>
+            <h3><small>To be completed</small></h3> 
+            <!-- hacky way to get the styling we want, foundation makes small headings grey out -->
+    <% else %>
+            <%= @user_key[textField]  %>
+    <% end %>
+  </li>
+  <br/>
+  
+  <% end %>
+  <li><%= @user_key.proposal_text_eight.blank? ? 'N/A' : @user_key.proposal_text_eight %></li>
+
 </ol>

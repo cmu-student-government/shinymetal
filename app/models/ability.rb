@@ -38,6 +38,13 @@ class Ability
       # Admin can do anything they want to with filters.
       can :manage, Filter
 
+      # Orgs
+      can :manage, Organization
+
+      # Whitelist
+      # Admin can do anything they want to with whitelists.
+      can :manage, Whitelist
+
       # UserKey
       # Comments cant be changed at awaiting_sub stage
       can :update, UserKey do |key|
@@ -55,11 +62,12 @@ class Ability
       can :set_as_reset, UserKey do |key|
         key.at_stage? :awaiting_filters or key.at_stage? :awaiting_confirmation
       end
-      # Admins can destroy keys
-      can :destroy, UserKey
 
       # Admins can search on UserKey
       can :search, UserKey
+
+      # Admins can destroy keys
+      can :destroy, UserKey
 
     end
     # End Admin rights
@@ -76,6 +84,10 @@ class Ability
       # Can read (show, index) filters
       can :read, Filter
 
+      # Orgs
+      # Can read (show, index) orgs
+      can :read, Organization
+
       # User Keys
       # Can read (show, index) any submitted UserKeys
       can :read, UserKey do |key|
@@ -89,6 +101,9 @@ class Ability
       can :delete_comment, UserKey do |key|
         !(key.at_stage? :awaiting_submission)
       end
+
+      # Admins can search on UserKey
+      can :search, UserKey
 
     end
     # End is_staff rights

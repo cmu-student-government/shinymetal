@@ -1,0 +1,18 @@
+
+<!-- Warn the staff if there are inactive orgs with keys that arent expired -->
+<% unless @bad_organizations.empty? %>
+  <fieldset id="error_explanation">
+    <p><strong class="alert">Warning:</strong> There are organizations which no longer
+    exist in CollegiateLink but which still belong to non-expired keys:</p>
+    
+    <ul>
+      <% @bad_organizations.each do |org| %>
+      <li><%= link_to org.name, org %>
+         &nbsp;(<%= pluralize(org.user_keys.not_expired.size, "Non-expired Key") %>)
+      </li>
+      <% end %>
+    </ul>
+  
+</fieldset>
+  <br/>
+<% end %>

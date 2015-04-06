@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   resources :sessions, only: [:create, :new, :destroy]
+  
+  resources :filters, except: [:edit, :update]
 
-  resources :filters
+  resources :organizations, only: [:show, :index]
 
   get 'user_keys/search' => 'user_keys#search', as: :user_keys_search # this needs to go before resource :user_keys to override the path
   resources :user_keys
@@ -14,7 +16,14 @@ Rails.application.routes.draw do
   # Authentication routes
   get 'logout' => 'sessions#destroy', as: :logout
   get 'login' => 'sessions#new', as: :login
-
+  
+  # Path to repopulate the organizations look-up table
+  patch 'organizations/repopulate_organizations' => 'organizations#repopulate_organizations', as: :repopulate_organizations
+  
+  # Path to add columns from CollegiateLink
+  # FIXME It's in the filter controller, should be in a documentation-basd controller
+  patch 'filters/repopulate_columns' => 'filters#repopulate_columns', as: :repopulate_columns
+  
   # Path to see a user's own keys
   get 'own_user_keys' => 'user_keys#own_user_keys', as: :own_user_keys
 
@@ -39,7 +48,7 @@ Rails.application.routes.draw do
   # routes for the api and respective versions
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
-      resources :users
+      post 'users' => 'api#index', controller: "api"
     end
 
     # in the future, we can simply do

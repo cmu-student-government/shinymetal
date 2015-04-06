@@ -41,7 +41,7 @@ FactoryGirl.define do
 
   factory :column do
     resource "organizations"
-    column_name "Description"
+    column_name "description"
   end
 
   factory :organization do
@@ -55,9 +55,14 @@ FactoryGirl.define do
     association :user_key
   end
 
-  # factory blueprint for user key filter
-  factory :user_key_filter do
+  # factory blueprint for whitelist filter
+  factory :whitelist_filter do
     association :filter
+    association :whitelist
+  end
+  
+  # factory blueprint for whitelist
+  factory :whitelist do
     association :user_key
   end
 

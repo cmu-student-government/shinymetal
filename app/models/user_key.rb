@@ -156,15 +156,16 @@ class UserKey < ActiveRecord::Base
     today = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
     case sym
     when :awaiting_filters
-      return set_key_as_(sym, :time_submitted, today, "needs an expiration date")
+      return set_key_as_(sym, :time_submitted, today, "The key needs an expiration date.")
     when :awaiting_confirmation
-      return set_key_as_(sym, :time_filtered, today, "cannot be submitted. Please check that you
+      return set_key_as_(sym, :time_filtered, today, "The key cannot be submitted. Please check that you
                have completed all fields of the form and agreed to API usage terms")
     when :confirmed
-      return set_key_as_(sym, :time_confirmed, today, "has not been approved by everyone yet")
+      return set_key_as_(sym, :time_confirmed, today, "The key cannot be released until it has been approved by all approvers.")
     # Key can be reset to the very beginning of its lifecycle here
     when :awaiting_submission
-      return set_key_as_(sym, :time_filtered, nil, "cannot be reset until the key is both active and has an Administrator note")
+      return set_key_as_(sym, :time_filtered, nil, "The key cannot be reset unless the key is both active, has not been confirmed yet,
+                         and has an Administrator note explaining the issue to the requester.")
     end
   end
 
@@ -218,7 +219,7 @@ class UserKey < ActiveRecord::Base
       save_changes
       return true
     end
-    errors.add(:user_key, error)
+    errors.add(:base, error)
     return false
   end
   

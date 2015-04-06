@@ -1,9 +1,9 @@
 <% if object.errors.any? %>
   <fieldset id="error_explanation">
-    <h4><%= pluralize(object.errors.count, "error") %>:</h4>
+    <p><strong class="alert"><%= pluralize(object.errors.count, "error") %></strong> occurred:</hp>
 
     <ul>
-    <% object.errors.full_messages.each do |message| %>
+    <% object.errors.each do |key, message| %>
       <li><%= message %></li>
     <% end %>
     </ul>

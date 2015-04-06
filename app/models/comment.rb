@@ -7,8 +7,9 @@ class Comment < ActiveRecord::Base
   validates_presence_of :message, message: "cannot be blank."
 
   validates_presence_of :user_key
-  # This second one has a helper method, has_valid_staff_user
-  validate :user_id_valid
+  validates_presence_of :comment_user
+  
+  validate :has_valid_staff_user, on: :create
   
   # Scope
   scope :chronological, -> { order(:created_at) }
@@ -21,8 +22,9 @@ class Comment < ActiveRecord::Base
   
   private
   def has_valid_staff_user
-    # User can always be admin
-    user = User.find(self.user_id)
+    user = User.find_by id: self.user_id
+    return true unless user
+    # Commenter can always be admin
     if user.role? :admin
       return true
     elsif user.role? :is_staff
@@ -30,21 +32,12 @@ class Comment < ActiveRecord::Base
       if !(public)
         return true
       else
-        errors.add(:user_id, "is not an admin and cannot make public comments")
+        errors.add(:base, "You are not an admin and cannot post public comments.")
         return false
       end
     end
     # User must be requester, so not valid
-    errors.add(:user_id, "is not a staffmember and cannot make comments")
+    errors.add(:base, "You are not a staffmember and cannot post any comments.")
     return false
-  end
-  
-  # Foreign key validations
-  def user_id_valid
-    unless (User.all.to_a.map{|o| o.id}.include?(self.user_id) and has_valid_staff_user)
-      errors.add(:user_id, "is invalid")
-      return false
-    end
-    return true
   end
 end

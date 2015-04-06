@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require turbolinks
 //= require cocoon
@@ -26,3 +27,20 @@ $(function() {
 $(document).on("click", '#key', function() {
     $(this).select();
  })
+
+// On load, hide the organization checkboxes
+$(document).ready(function() {
+    $('#organization_toggle_panel').hide();
+ })
+
+$(document).ready(function(){
+    $('#organization_toggle').click(function(){
+        $('#organization_toggle_panel').toggle();
+    });
+});
+
+$(document).ready(function(){
+    $('#second_organization_toggle').click(function(){
+        $('#organization_toggle_panel').toggle();
+    });
+});

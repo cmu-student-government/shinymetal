@@ -18,7 +18,7 @@ module Api
         # split on the slashes
         post_url_list = (request.original_url).split("/")
         # get the last element, guaranteed to be non-empty because a request
-        # must have  URL
+        # must have URL
         endpoint = post_url_list[(post_url_list.length) - 1]
 
         # modified the script to hit only the specified endpoint

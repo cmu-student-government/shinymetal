@@ -238,8 +238,7 @@ class UserKeyTest < ActiveSupport::TestCase
       # No approvals remaining; comments remain
       assert_equal 0, @bender_key_awaiting_conf_approved.approvals.size
       assert_equal 2, @bender_key_awaiting_conf_approved.comments.size
-      # Time_submitted, time_filtered reset
-      assert @bender_key_awaiting_conf_approved.time_submitted.nil?
+      # Time_filtered is reset
       assert @bender_key_awaiting_conf_approved.time_filtered.nil?
     end
     

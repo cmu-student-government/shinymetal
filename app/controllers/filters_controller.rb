@@ -1,6 +1,6 @@
 class FiltersController < ApplicationController
   before_action :check_login
-  before_action :set_filter, only: [:show, :edit, :update, :destroy]
+  before_action :set_filter, only: [:show, :destroy]
 
   # CanCan checks
   authorize_resource
@@ -20,10 +20,6 @@ class FiltersController < ApplicationController
     @filter = Filter.new
   end
 
-  # GET /filters/1/edit
-  def edit
-  end
-
   # POST /filters
   def create
     @filter = Filter.new(filter_params)
@@ -34,15 +30,6 @@ class FiltersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /filters/1
-  def update
-    if @filter.update(filter_params)
-      redirect_to @filter, notice: 'Filter was successfully updated.'
-    else
-      render :edit
-    end
-  end
-
   # DELETE /filters/1
   def destroy
     if @filter.destroy
@@ -50,6 +37,15 @@ class FiltersController < ApplicationController
     else
       @user_keys = @filter.user_keys
       render :show
+    end
+  end
+  
+  # PATCH /filters/repopulate_columns
+  def repopulate_columns
+    if Column.repopulate
+      redirect_to root_path, notice: "The columns in the system were successfully updated."
+    else
+      redirect_to root_path, alert: "The request to CollegiateLink failed. Please try again later."
     end
   end
 

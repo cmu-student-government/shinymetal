@@ -1,3 +1,5 @@
+require "./lib/bridgeapi_connection.rb"
+
 class Column < ActiveRecord::Base
   #Relationships
   has_many :user_key_columns
@@ -5,8 +7,8 @@ class Column < ActiveRecord::Base
   
   # Validations
   validates :resource, inclusion: { in: Resource::RESOURCE_LIST, message: "is not a valid resource" }
+  validates_uniqueness_of :resource, scope: :column_name
   # Custom validation for column names as determined by resource
-  validate :column_name_is_valid
   
   # Scopes
   scope :alphabetical, -> { order(:column_name) }
@@ -17,13 +19,24 @@ class Column < ActiveRecord::Base
     column_name
   end
   
-  def column_name_is_valid
-    column_param_list = Resource::RESOURCE_LIST
-    return true unless column_param_list.include?(self.resource)
-    param_list = Resource::COLUMN_NAME_HASH[(self.resource.to_sym)]
-    if !(param_list.include?(self.column_name))
-      errors.add(:column_name, "is not a valid column name for that resource")
-      return false
+  # Load columns directly from CollegiateLink
+  # FIXME needs error handling in case there is no response
+  def self.repopulate
+    # Note that this will hit all resources, and add Columns for any column
+    # that has a non-blank instance in CollegiateLink.
+    for resource in Resource::RESOURCE_LIST
+      # Get the JSON response
+      response = hit_api_endpoint(resource)
+      # Select out the blank columns for each item, map each item to its keys only,
+      # flatten the outer list, and keep the unique result.
+      result_list = response["items"].map{|result| result.select{ |k, v| !v.blank? }.keys }.flatten.uniq
+      # Create a Column for each if it doesn't exist already
+      for result_name in result_list
+        params = { resource: resource, column_name: result_name }
+        if Column.where(params).empty?
+          Column.create(params)
+        end
+      end
     end
     return true
   end

@@ -7,7 +7,7 @@
   <% else %>
     <ul>
       <% for org in @user_key.organizations %>
-        <li><span class="success"><%= org.name %></span></li>
+        <li><%= link_to org.name, org, class: (org.active ? "success" : "alert")%></li>
       <% end %>
     </ul>
   <% end %>

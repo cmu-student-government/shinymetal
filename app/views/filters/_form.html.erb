@@ -8,7 +8,9 @@
       <%= f.label :resource, class: "prefix" %>
     </div>
     <div class="nine-column">
+       <div>
       <%= f.select :resource, Resource::RESOURCE_LIST %>
+       </div>
     </div>
   </div>
   <div class="collapsed_row">
@@ -16,12 +18,12 @@
       <%= f.label :filter_name, class: "prefix" %>
     </div>
     <div class="nine-column">
-      <%= f.select :filter_name, Resource::PARAM_LIST %>
+      <%= f.select :filter_name, Resource::PARAM_NAME_HASH.sort %>
     </div>
-  </div>
+ </div>
   <div class="collapsed_row">
     <div class="three-column">
-      <%= f.label :filter_value, class: "prefix" %>
+      <%= f.label :filter_value, class: "prefix", allow_blank: true %>
     </div>
     <div class="nine-column">
       <%= f.text_field :filter_value %>

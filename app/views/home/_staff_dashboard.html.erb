@@ -3,6 +3,8 @@
 <h3>Hi, <%="#{@current_user.andrew_id}"%>!  </h3>
 <br />
 
+<%= render partial: 'shared/bad_organizations_warning' %>
+
 <h3>Keys Awaiting Approval or Confirmation</h3>
 <% if @pending_approval.size > 0 %>
   <table>

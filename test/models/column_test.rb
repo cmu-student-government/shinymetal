@@ -27,10 +27,5 @@ class ColumnTest < ActiveSupport::TestCase
       assert_equal [["organizations", "description"]],
                    Column.alphabetical.restrict_to("organizations").to_a.map {|f| [f.resource, f.name]}
     end
-
-    should "have a method to test for invalid column names" do
-      bad_column = FactoryGirl.build(:column, column_name: "bad")
-      deny bad_column.valid?
-    end
   end
 end

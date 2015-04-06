@@ -171,8 +171,10 @@ namespace :db do
             user_key_organization.created_at = Time.now
             user_key_organization.updated_at = Time.now
           end
-<<<<<<< HEAD
           # get a list of columns to avoid repeat columns being assigned
+          # Don't populate user_key_columns;
+          # doing so would requiring Column.populate, which hits the Bridge 8 times.
+          # this is necessary for testing purposes
           column_list = Column.all.to_a.shuffle
           UserKeyColumn.populate 3..10 do |user_key_column|
             user_key_column.user_key_id = user_key.id
@@ -180,10 +182,6 @@ namespace :db do
             user_key_column.created_at = Time.now
             user_key_column.updated_at = Time.now
           end
-=======
-          # Don't populate user_key_columns;
-          # doing so would requiring Column.populate, which hits the Bridge 8 times.
->>>>>>> aaaefb410f1f6ac8f5ddb90e4e9e440122ffc069
         end
         
         list_of_approvers = User.approvers_only.to_a

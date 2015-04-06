@@ -64,22 +64,11 @@
 
       </ul>
     </li>
-    <% end %>
-    <% if logged_in? %> <!--End admin login check, begin basic user login check-->
-      <li><%= link_to "Your Keys", own_user_keys_path %></li>
-    <% end %>
-  </ul>
 
-<ul class="right">
-  <% if logged_in? %>
-    <li><%= link_to "Welcome, #{current_user.andrew_id}", @current_user %></li>
-    
-    <li class="divider"></li>
-    
-    <li><%= link_to "Logout", logout_path %></li>
   <% else %>
 
     <li><%= link_to "Login", login_path %></li>
+
   <% end %>
 
 </ul>

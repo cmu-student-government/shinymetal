@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'rails', '4.2.8'
+gem 'rails', '4.2.1'
 
 # Database gems
   # Mysql is being used on our production server
@@ -25,6 +25,7 @@ gem 'rails', '4.2.8'
   # Use jquery as the JavaScript library
   gem 'jquery-rails'
   gem 'jquery-ui-rails'
+  gem 'jquery-turbolinks'
 
   # Foundation gems
   gem 'foundation-rails'

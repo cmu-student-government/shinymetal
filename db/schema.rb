@@ -47,20 +47,14 @@ ActiveRecord::Schema.define(version: 20150406145750) do
   create_table "organizations", force: :cascade do |t|
     t.string   "name"
     t.integer  "external_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "user_key_columns", force: :cascade do |t|
     t.integer  "user_key_id"
     t.integer  "column_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  create_table "user_key_filters", force: :cascade do |t|
-    t.integer  "user_key_id"
-    t.integer  "filter_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -78,7 +72,7 @@ ActiveRecord::Schema.define(version: 20150406145750) do
     t.datetime "time_submitted"
     t.datetime "time_filtered"
     t.datetime "time_confirmed"
-    t.datetime "time_expired"
+    t.date     "time_expired"
     t.boolean  "active",              default: true
     t.string   "name"
     t.text     "proposal_text_one"
@@ -102,6 +96,19 @@ ActiveRecord::Schema.define(version: 20150406145750) do
     t.datetime "updated_at",                       null: false
     t.string   "first_name"
     t.string   "last_name"
+  end
+
+  create_table "whitelist_filters", force: :cascade do |t|
+    t.integer  "whitelist_id"
+    t.integer  "filter_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "whitelists", force: :cascade do |t|
+    t.integer  "user_key_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
 end

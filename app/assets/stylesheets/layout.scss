@@ -7,6 +7,7 @@
       ul#drop-links li.active > a  { background-color: $topbar-link-bg-hover; }
 
       #search-form {
+        margin-right: -1rem;
         @media screen and (max-width: rem-calc(860)) { display: none; }
 
         .search-label {

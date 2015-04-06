@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   # Users are not deleted, only inactivated.
   # They are not created directly; they are meant to be created automatically via shibboleth login.
+  get 'users/search' => 'users#search', as: :users_search
   resources :users, except: [:destroy, :create, :new]
 
   # Authentication routes
@@ -47,7 +48,6 @@ Rails.application.routes.draw do
     # etc. for each endpoint
   end
 
-  get 'users/search' => 'users#search', as: :users_search
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

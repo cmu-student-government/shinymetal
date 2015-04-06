@@ -31,21 +31,24 @@
 <%# Right Nav Section %>
 <ul id="drop-links" class="right">
 
-  <li class="has-form" id="search-form">
-    <div class="collapsed_row">
-
-      <%= form_tag '', method: :get, id: "searchbox" do %>
-        <div class="search-label s4">
-          <div class="search-button postfix">Find User:</div>
-        </div>
-        <div class="search-param s8">
-          <%= search_field_tag :term, params[:term] %>
-        </div>
-      <% end %>
-    </div>
-  </li>
-
   <% if logged_in? %>
+
+    <% if @current_user.role? :is_staff %>
+        <li class="has-form" id="search-form">
+          <div class="collapsed_row">
+
+            <div id="searchbox">
+              <div class="search-label s4">
+                <div class="search-button postfix">Find User:</div>
+              </div>
+              <div class="search-param s8">
+                <%= text_field_tag :term, params[:term], { "data-search-path" => users_search_path, "data-users-path" => users_path } %>
+              </div>
+            </div>
+
+          </div>
+        </li>
+      <% end %>
 
     <li class="has-dropdown">
       <a href="#">Welcome, <%= @current_user.andrew_id %>!</a>

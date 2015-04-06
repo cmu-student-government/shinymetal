@@ -3,7 +3,7 @@
 
 <ul id="nav-links" class="left">
 
-   <%# Begin admin login check %>
+  <%# Begin admin login check %>
   <% if logged_in? %>
     <% if @current_user.role? :is_staff %>
 
@@ -23,20 +23,6 @@
         <%= link_to "My Keys", own_user_keys_path %>
       </li>
 
-      <li class="has-form" id="search-form">
-        <div class="collapsed_row">
-
-          <%= form_tag users_path, method: 'GET' do %>
-            <div class="search-label s4">
-              <div class="search-button postfix">Find User:</div>
-            </div>
-            <div class="search-param s8">
-              <%= text_field_tag :search, params[:search] %>
-            </div>
-          <% end %>
-        </div>
-      </li>
-
     <% end %>
   <% end %>
 </ul>
@@ -44,6 +30,20 @@
 
 <%# Right Nav Section %>
 <ul id="drop-links" class="right">
+
+  <li class="has-form" id="search-form">
+    <div class="collapsed_row">
+
+      <%= form_tag '', method: :get, id: "searchbox" do %>
+        <div class="search-label s4">
+          <div class="search-button postfix">Find User:</div>
+        </div>
+        <div class="search-param s8">
+          <%= search_field_tag :term, params[:term] %>
+        </div>
+      <% end %>
+    </div>
+  </li>
 
   <% if logged_in? %>
 

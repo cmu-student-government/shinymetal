@@ -24,6 +24,7 @@ gem 'rails', '4.2.0'
 
   # Use jquery as the JavaScript library
   gem 'jquery-rails'
+  gem 'jquery-ui-rails'
 
   # Foundation gems
   gem 'foundation-rails'
@@ -59,12 +60,6 @@ gem 'rails', '4.2.0'
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
   gem 'turbolinks'
 
-
-group :production do
-  # Use mysql in production
-  gem 'mysql2'
-end
-
 group :development do
   gem 'rails_layout'
 
@@ -98,6 +93,4 @@ group :test do
   # This one is NOT from Prof H, replaces turn gem, turn gem is deprecated
   gem 'minitest-reporters'
   # gem 'tconsole'  # issues with matchers and minitest, so skip for now
-
-  gem 'sqlite3'
 end

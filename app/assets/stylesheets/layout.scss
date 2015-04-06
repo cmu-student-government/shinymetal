@@ -7,7 +7,7 @@
       ul#drop-links li.active > a  { background-color: $topbar-link-bg-hover; }
 
       #search-form {
-        @media screen and (max-width: rem-calc(845)) { display: none; }
+        @media screen and (max-width: rem-calc(860)) { display: none; }
 
         .search-label {
           padding-right: 0;
@@ -31,7 +31,7 @@
         .search-param {
           padding-left: 0;
 
-          #search {
+          #term {
             border: none;
             box-shadow: none;
           }
@@ -43,22 +43,22 @@
   }
 
 // Body
-#wrapper {
-  position: relative;
-  min-height: 100%;
-  // min-width: rem-calc(1000px);
+  #wrapper {
+    position: relative;
+    min-height: 100%;
+    // min-width: rem-calc(1000px);
 
-   main { margin-bottom: 10rem; }
-}
-
-// Success/alert classes
-  .success {
-    color: $success;
+     main { margin-bottom: 10rem; }
   }
 
-  .alert {
-    color: $alert;
-  }
+  // Success/alert classes
+    .success {
+      color: $success;
+    }
+
+    .alert {
+      color: $alert;
+    }
 
 // Misc classes
   .no_bullets {

@@ -1,25 +1,25 @@
 Rails.application.routes.draw do
   resources :sessions, only: [:create, :new, :destroy]
-  
+
   resources :filters
 
   resources :user_keys
-  
+
   # Users are not deleted, only inactivated.
   # They are not created directly; they are meant to be created automatically via shibboleth login.
   resources :users, except: [:destroy, :create, :new]
-  
+
   # Authentication routes
   get 'logout' => 'sessions#destroy', as: :logout
   get 'login' => 'sessions#new', as: :login
-  
+
   # Path to see a user's own keys
   get 'own_user_keys' => 'user_keys#own_user_keys', as: :own_user_keys
-  
+
   # User key comment adding
   patch 'user_keys/:id/add_comment' => 'user_keys#add_comment', as: :add_comment
   patch 'user_keys/:id/delete_comment/:comment_id' => 'user_keys#delete_comment', as: :delete_comment
-  
+
   # Use these routes to set a key as submitted, filtered, etc
   patch 'user_keys/:id/set_as_submitted' => 'user_keys#set_as_submitted', as: :set_as_submitted
   patch 'user_keys/:id/set_as_filtered' => 'user_keys#set_as_filtered', as: :set_as_filtered
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users
     end
-  
+
     # in the future, we can simply do
     # namespace :v2 do
     #   resources :user
@@ -47,6 +47,7 @@ Rails.application.routes.draw do
     # etc. for each endpoint
   end
 
+  get 'users/search' => 'users#search', as: :users_search
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

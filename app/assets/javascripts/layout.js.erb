@@ -1,0 +1,61 @@
+<% environment.context_class.instance_eval { include Rails.application.routes.url_helpers } %>
+
+$(function($) {
+  var alertContainer = $("#alert-container");
+
+  // Back to top button js
+    $(window).scroll(function() {
+      if ($(this).scrollTop() > 200)
+        $("#back-to-top").fadeIn(500);
+      else
+        $("#back-to-top").fadeOut(500);
+      scrollAlert();
+    });
+
+    var scrollAlert = function() {
+      var alertBox = alertContainer.find(".alert-box").first();
+      if (!alertBox) return;
+      var alertBoxTop = alertBox.offset().top;
+      alertBox.toggleClass("sticky", $(window).scrollTop() > alertBoxTop);
+    }
+
+    $(document).on("click", "#back-to-top", function (e) {
+      $("html, body").animate( { scrollTop: 0 }, 100);
+      return false;
+    });
+
+  // Navbar search click
+    $(document).on("click", "#search-form .search-button", function (e) {
+      $("#search-form input").focus();
+      return false;
+    });
+
+  // User search
+    // For when changing search type (e.g. user, user_key)
+    // $("#search-type-select").change(function() { $("#term").val('') });
+
+    var searchSource = function(req, res) {
+      debugger;
+      var path = "<%= users_search_path %>";
+      $.ajax({
+        url: path,
+        dataType: "json",
+        data: { term: req.term },
+        success: function(data) {
+          res($.map(data, function(item) {
+            return { label: item.name, id: item.id }
+          }));
+        }
+      });
+    }
+
+    $("input#term").autocomplete({
+      source: searchSource,
+      select: function(e, ui) {
+        var path = "<%= users_path %>";
+        window.location.href = path + "/" + ui.item.id;
+      },
+      minLength: 2, delay: 500, autoFocus: true
+    });
+
+});

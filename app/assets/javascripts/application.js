@@ -16,7 +16,7 @@
 //= require turbolinks
 //= require cocoon
 //= require foundation
-//= require jquery.ui.autocomplete
+//= require jQuery.autocomplete
 //= require_tree .
 
 $(document).on('page:load', function() { $(document).foundation(); }); // http://stackoverflow.com/a/27385622/2557082

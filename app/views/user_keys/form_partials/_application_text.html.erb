@@ -1,12 +1,12 @@
 <p>
-	<div class="nine-column">
+	<div class="s9">
 
-Name: 
+Name:
       <%= f.text_field :name %> <small> Your application name. This is used for administrative purposes. For example, "cmuTV website key"
  </small>
 </div>
 </p>
-<br/><br/><br/><br/><br/><br/> <!-- There's probably a better way to do that... -->
+<br/><br/><br/><br/><br/><br/> <%#  There's probably a better way to do that...  %>
 
 <p>1. Who are the other individual(s)/organization(s) bringing forward the proposal?
 How can they be reached?
@@ -15,7 +15,7 @@ Also include your leadership transition plan, if the
 project/initiative will extend past the current academic year.</p>
 <%= render partial: 'user_keys/form_partials/text_partials/text_item',
            locals: {text_item: :proposal_text_one, :f=>f} %>
-           
+
 <br/>
 
 <p>2. Include any sponsoring department/advisors for the project, as well as
@@ -29,31 +29,31 @@ their contact information.</p>
 and the primary demographic(s) it will serve.</p>
 <%= render partial: 'user_keys/form_partials/text_partials/text_item',
            locals: {text_item: :proposal_text_three, :f=>f} %>
-           
+
 <br/>
 
 <p>4. How will the project/ initiative enhance the goals
-and purposes of The Bridge?</p>           
+and purposes of The Bridge?</p>
 <%= render partial: 'user_keys/form_partials/text_partials/text_item',
            locals: {text_item: :proposal_text_four, :f=>f} %>
-           
+
 <br/>
-           
+
 <p>5. Enumerate the specific type(s) of data requested,
 number of times the API would be utilized,
 and over what time period the project would
-require access to data from The Bridge.</p> 
+require access to data from The Bridge.</p>
 <%= render partial: 'user_keys/form_partials/text_partials/text_item',
            locals: {text_item: :proposal_text_five, :f=>f} %>
-           
+
 <br/>
-           
+
 <p>6. How will the project /initiative ensure security of all data
 sourced from The Bridge? Please include details regarding where/how
 the data will be stored and code will be hosted.</p>
 <%= render partial: 'user_keys/form_partials/text_partials/text_item',
            locals: {text_item: :proposal_text_six, :f=>f} %>
-           
+
 <br/>
 
 <p>7. How will the group or individual responsible for the
@@ -66,7 +66,7 @@ completion.
 </p>
 <%= render partial: 'user_keys/form_partials/text_partials/text_item',
            locals: {text_item: :proposal_text_seven, :f=>f} %>
-           
+
 <br/>
 
 <p>8. Please include any additional documentation that will further clarify

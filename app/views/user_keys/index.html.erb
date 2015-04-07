@@ -1,14 +1,22 @@
 <h1>Submitted User Keys</h1>
 
-<div id="all_user_keys">
-  <%= render partial: 'user_keys/index_partials/index_table', locals: { keys: @user_keys, list_all: true } %>
+<div class="row">
+  <div class="s12">
+    <div id="all_user_keys">
+      <%= render partial: 'user_keys/index_partials/index_table', locals: { keys: @user_keys, list_all: true } %>
+    </div>
+  </div>
 </div>
 
-<!-- Kaminari paginate -->
-<div id="paginator">
-  <%= paginate @user_keys, remote: true %></div>
+<div class="row">
+  <%#  Kaminari paginate  %>
+  <div id="s6">
+    <div id="paginator">
+      <%= paginate @user_keys, remote: true %>
+    </div>
+  </div>
+
+  <div id="s6 left">
+    <%= link_to 'New User key', new_user_key_path, class: "big-button" %>
+  </div>
 </div>
-
-<br>
-
-<%= link_to 'New User key', new_user_key_path, class: "big-button" %>

@@ -1,13 +1,13 @@
 module Contexts
   # Users
   def create_users
-    @hermes = FactoryGirl.create(:user, andrew_id: 'hermes')
+    @hermes = FactoryGirl.create(:user, andrew_id: 'hconrad', first_name: 'Hermes', last_name: 'Conrad')
     @bender = FactoryGirl.create(:user)
-    @fry = FactoryGirl.create(:user, andrew_id: 'fry', role: 'admin')
-    @leela = FactoryGirl.create(:user, andrew_id: 'leela', role: 'staff_approver')
-    @zoidberg = FactoryGirl.create(:user, andrew_id: 'zoidberg', role: 'staff_not_approver')
+    @fry = FactoryGirl.create(:user, andrew_id: 'pjfry', role: 'admin', first_name: 'Phillip', last_name: 'Fry')
+    @leela = FactoryGirl.create(:user, andrew_id: 'tleela', role: 'staff_approver', first_name: 'Turanga', last_name: 'Leela')
+    @zoidberg = FactoryGirl.create(:user, andrew_id: 'drzoid', role: 'staff_not_approver', first_name: 'Doctor', last_name: 'Zoidberg')
   end
-  
+
   def destroy_users
     @hermes.destroy
     @bender.destroy

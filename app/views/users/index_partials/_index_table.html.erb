@@ -1,5 +1,5 @@
-<!-- Pass in users @requesters or @staff from index page -->
-<!-- 'user_type' is 'requesters' or 'staff' -->
+<%# Pass in users @requesters or @staff from index page %>
+<%# 'user_type' is 'requesters' or 'staff' %>
 
 <h2><%= user_type.capitalize %></h2>
 
@@ -8,14 +8,14 @@
 <p>No <%= user_type %> found.</p>
 
 <% else %>
-  
+
   <table>
     <thead>
       <tr>
 	<th>Andrew</th>
 	<th>Role</th>
 	<th>Active?</th>
-	<!-- Staff can see this list but only admin can edit users-->
+	<%# Staff can see this list but only admin can edit users %>
 	<% if @current_user.role? :admin %>
 	  <th colspan="3"></th>
 	<% end %>
@@ -29,7 +29,7 @@
 	<td>
         <%= render partial: 'shared/boolean_label', locals: { boolean_label: user.active, true_message: "Yes", false_message: "No" } %>
         </td>
-	<!-- Staff can see this list but only admin can edit users-->
+	<%# Staff can see this list but only admin can edit users %>
 	<% if @current_user.role? :admin %>
 	  <td><%= link_to 'Edit', edit_user_path(user), class: "small-button" %></td>
         <% end %>
@@ -37,5 +37,5 @@
     <% end %>
     </tbody>
   </table>
-  
+
 <% end %>

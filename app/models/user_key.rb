@@ -1,9 +1,9 @@
 class UserKey < ActiveRecord::Base
   before_save :check_name
-  
+
   # Relationships
   belongs_to :user
-  
+
   # A User Key is the only thing that can be deleted (while still associated).
   # Is components would be deleted automatically as well.
   has_many :user_key_organizations, dependent: :destroy
@@ -11,16 +11,18 @@ class UserKey < ActiveRecord::Base
   has_many :user_key_columns, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :approvals, dependent: :destroy
-  
+
   has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
+  has_many :comments
+  has_many :approvals
   has_many :approval_users, class_name: User, through: :approvals
   has_many :comment_users, class_name: User, through: :comments
-  
+
   accepts_nested_attributes_for :comments, limit: 1
   # Reject a nested whitelist that has no filters attached
   accepts_nested_attributes_for :whitelists, allow_destroy: true
-  
+
   # Validations
   # Statuses for keys are currently:
   #     awaiting_submission, if started by requester but not submitted to admin
@@ -30,10 +32,12 @@ class UserKey < ActiveRecord::Base
   STATUS_LIST = ["awaiting_submission", "awaiting_filters", "awaiting_confirmation", "confirmed"]
   # Quick list for the 8 proposal_text symbols
   TEXT_FIELD_LIST = ["one","two","three","four","five","six","seven","eight"].map{|num| "proposal_text_#{num}".to_sym }
-  
+
   validates_presence_of :user
   validates_inclusion_of :status, in: STATUS_LIST
-  
+
+  validate :user_id_valid
+
   # validate that steps that have been passed remain passing
   for status in STATUS_LIST
     unless status == "awaiting_submission"
@@ -41,12 +45,12 @@ class UserKey < ActiveRecord::Base
                if: Proc.new { |key| key.at_stage?(status.to_sym, true) }
     end
   end
-  
+
   # Scopes
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc).order(time_expired: :desc) }
   scope :active, -> { where(active: true) }
-  
+
   #scopes dealing with status for dashboards
   scope :awaiting_filters, -> { where("status == ?", 'awaiting_filters')}
   scope :awaiting_confirmation, -> { where("status == ?", 'awaiting_confirmation')}
@@ -56,38 +60,44 @@ class UserKey < ActiveRecord::Base
   scope :expired, -> { where("time_expired < ?", DateTime.now)}
   scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
   scope :find_by_id, ->(param_id) { where("id == ?", param_id) }
-  
-  #scopes that will be used for email jobs 
-  #FIXME figure out why month scope isn't working  
+
+  #scopes that will be used for email jobs
+  #FIXME figure out why month scope isn't working
   scope :expires_in_a_month, -> { where("time_expired LIKE ?","%#{30.days.from_now.to_date}%") }
-  
+
   scope :expires_today, -> { where("time_expired LIKE ?","%#{Date.today}%") }
 
   # Methods
   def approved_by?(user)
     return self.approval_users.approvers_only.to_a.include?(user)
   end
-  
+
   def set_approved_by(user)
     return Approval.create(user_key_id: self.id, user_id: user.id)
   end
-  
+
   def undo_set_approved_by(user)
     old_approval = self.approvals.by(user).first
     old_approval.destroy
   end
-  
+
   def expired?
     return false if self.time_expired.nil?
     return self.time_expired < Date.today
   end
-  
+
   # Used on user_key show page to show "request form status" label
   def request_form_done?
     TEXT_FIELD_LIST.each {|attr| return false if self.send(attr).blank? and attr != :proposal_text_eight}
     return (!self.name.blank? and self.agree)
   end
-  
+
+  def self.search(term, max=5)
+    term = "%#{term.to_s.downcase}%"
+    name = 'LOWER(name)'
+    where("#{name} LIKE ?", term).limit(max)
+  end
+
   # The form is ready to be submitted by the requester, or approved, or confirmed?
   def can_be_set_to? sym
     case sym # Do false cases first
@@ -110,7 +120,7 @@ class UserKey < ActiveRecord::Base
     end
     return true
   end
-  
+
   # A key with 'allow_past' which is past the submission stage
   # will be considered to be "at" the submission stage
   # This is used in user_key show page
@@ -121,7 +131,7 @@ class UserKey < ActiveRecord::Base
         return true
       else
         return self.status == "awaiting_submission"
-      end   
+      end
     when :awaiting_filters
       if allow_past
         # The only stage we cannot be at is awaiting_submission
@@ -142,7 +152,7 @@ class UserKey < ActiveRecord::Base
     end
   end
 
-  # Used for index and show pages; overwrites displayed name if name is blank 
+  # Used for index and show pages; overwrites displayed name if name is blank
   # Note that this method is overwriting the :name attribute getter.
   def display_name
     if name.blank? # No name given yet, make up a temporary one
@@ -151,7 +161,7 @@ class UserKey < ActiveRecord::Base
       return name
     end
   end
-  
+
   def set_status_as(sym)
     today = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
     case sym
@@ -174,11 +184,11 @@ class UserKey < ActiveRecord::Base
       date_string = self.time_submitted.to_s.split("")
       # the andrew_id of the user who requested the user_key
       andrew_id = self.user.andrew_id.split("")
-      # add some spice (salt) to the key as well 
+      # add some spice (salt) to the key as well
       salt = SETTINGS[:default]["api_key_salt"].split("")
       # intertwine the string of the andrewid and the date together to build
       # the hash. This is so we can compare the passed in token to a hash
-      # we can recompute to ensure security and not have the key stored in 
+      # we can recompute to ensure security and not have the key stored in
       # the database. (ex: intertwining "hello" and "woo" => "hweololo")
       # eventually add in the salt
       hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
@@ -194,18 +204,68 @@ class UserKey < ActiveRecord::Base
   def save_changes
     self.save!
   end
-  
+
   # Requirement for resetting a key
   def has_public_comments?
     return !self.comments.public_only.empty?
   end
-  
+
+  # When submitted, a key should have its requested date marked
+  def set_time_to_now(param_time_attribute)
+    self[param_time_attribute] = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
+  end
+
+  # For a key being reset
+  def reset_times
+    self.time_submitted = nil
+    self.time_filtered = nil
+  end
+
   # For a key being reset
   def reset_approvals
     # Delete all existing approvals
     self.approvals.destroy_all
   end
-  
+
+  # When a key is submitted by requester to admin
+  def set_key_as_submitted
+    if at_stage? :awaiting_submission and self.can_be_set_to? :awaiting_filters
+      self.status = "awaiting_filters"
+      set_time_to_now(:time_submitted)
+      save_changes
+      return true
+    end
+    errors.add(:user_key, "cannot be submitted. Please check that you
+               have completed all fields of the form and agreed to API usage terms")
+    return false
+  end
+
+  # When an admin submits the filter form so it can be approved by everyone.
+  # Require an expiration date and at least one filter at this stage
+  def set_key_as_filtered
+    if at_stage? :awaiting_filters and self.can_be_set_to? :awaiting_confirmation
+      self.status = "awaiting_confirmation"
+      set_time_to_now(:time_filtered)
+      save_changes
+      return true
+    end
+    errors.add(:user_key, "needs an expiration date")
+    return false
+  end
+
+  # When a key has been approved by everyone and is confirmed by admin
+  def set_key_as_confirmed
+    if at_stage? :awaiting_confirmation and self.can_be_set_to? :confirmed
+      self.status = "confirmed"
+      set_time_to_now(:time_confirmed)
+      save_changes
+      return true
+    end
+    errors.add(:user_key, "has not been approved by everyone yet")
+    return false
+  end
+
+  # This is for Reset, when a key has rejected and sent back to the requester
   # Can only be sent back after submission but before "confirmed" stage
   # Note: a key can only be reset if it has comments made by admin for the requester's benefit.
   def set_key_as_(next_stage, timestamp, timestamp_value, error)
@@ -221,7 +281,7 @@ class UserKey < ActiveRecord::Base
     errors.add(:user_key, error)
     return false
   end
-  
+
   # Callbacks
   # don't allow "Unnamed Application" to be the name; set to nil
   def check_name

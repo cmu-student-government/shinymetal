@@ -1,0 +1,38 @@
+$primary: #990000;
+$secondary: #D4D4D4;
+$success: darken(#dff0d8, 5%);
+$info: #fcf8e3;
+$alert: darken(#f2dede, 5%);
+$link: #008cba;
+$placeholder: rgba(0,0,0,0.4);
+$white: #fff;
+$black: #000;
+$body: #686565;
+$body-dark: #222;
+
+$disabled: #555;
+$secondary-dark: #464646;
+$secondary-light: #F4F4F4;
+
+%center-text-XY {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateY(-50%) translateX(-50%);
+  -ms-transform: translateY(-50%) translateX(-50%);
+  transform: translateY(-50%) translateX(-50%);
+}
+
+@mixin word-wrap() {
+  word-break:     break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens:    auto;
+  hyphens:         auto;
+}
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder           {@content}
+  &::-moz-placeholder          {@content}
+  &:-ms-input-placeholder      {@content}
+}

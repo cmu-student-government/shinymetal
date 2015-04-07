@@ -1,5 +1,5 @@
-<!-- Allow an approve to toggle approval only during awaiting_confirmation stage-->
-<div class="staff_only panel"
+<%# Allow an approve to toggle approval only during awaiting_confirmation stage %>
+<div class="staff_only panel">
   <% if @user_key.approved_by?(@current_user) %>
     
     <p><strong>You have approved this key.</strong></p>

@@ -10,10 +10,10 @@ class UserKeyTest < ActiveSupport::TestCase
   should have_many(:approvals)
   should have_many(:approval_users).through(:approvals)
   should have_many(:comment_users).through(:comments)
-  
+
   # Validations
   should accept_nested_attributes_for(:comments).limit(1)
-  
+
   # Status
   should allow_value("awaiting_submission").for(:status)
   should allow_value("awaiting_filters").for(:status)
@@ -21,26 +21,26 @@ class UserKeyTest < ActiveSupport::TestCase
   should allow_value("confirmed").for(:status)
   should_not allow_value("anything_else").for(:status)
   should_not allow_value(nil).for(:status)
-  
+
   context "Creating a user key context" do
     setup do
       create_everything
     end
-    
+
     teardown do
       destroy_everything
     end
-    
+
     # FIXME: Test the scopes with keys belonging to different users
     should "have a scope to sort by andrew_id" do
       assert_equal 9, UserKey.by_user.size
       assert_equal ["bender", "hermes"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
     end
-    
+
     should "have assert scope to return only submitted keys" do
       assert_equal 4, UserKey.submitted.size
     end
-    
+
     should "have a display_name method" do
       assert_equal "Bender Key", @bender_key.display_name
       @bender_key.name = nil
@@ -48,7 +48,11 @@ class UserKeyTest < ActiveSupport::TestCase
       @bender_key.reload
       assert_equal "Unnamed Application", @bender_key.display_name
     end
-    
+
+    should "have a method to search for a given key, even with incomplete input" do
+      assert_includes UserKey.search('herm').map{ |u| u.name }, "Hermes Key"
+    end
+
     should "have at_stage? method" do
       # Test some positive cases
       assert @bender_key.at_stage? :awaiting_submission
@@ -65,41 +69,40 @@ class UserKeyTest < ActiveSupport::TestCase
       assert @bender_key_awaiting_conf.at_stage?(:awaiting_filters, true)
       deny @bender_key_submitted.at_stage?(:awaiting_confirmation, true)
     end
-    
+
     should "have a can_be_set_to? :confirmed method" do
       assert @bender_key_awaiting_conf_approved.can_be_set_to? :confirmed
       deny @bender_key_awaiting_conf.can_be_set_to? :confirmed
     end
-    
+
     should "have an approved_by?(user) method" do
       assert @bender_key_awaiting_conf_approved.approved_by?(@leela)
       deny @bender_key_awaiting_conf_approved.approved_by?(@bender)
     end
-    
+
     should "have method to undo set approved by a user" do
       @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
       deny @bender_key_awaiting_conf_approved.approved_by?(@leela)
     end
-    
+
     should "have method to set approved by" do
       @bender_key_awaiting_conf.set_approved_by(@leela)
       assert @bender_key_awaiting_conf.approved_by?(@leela)
     end
-    
+
     # Test chronological filter, to be used on index pages
     should "have a scope to sort by time" do
-      assert_equal ["Bender Submitted", "Bender Awaiting Conf", 
-        "Bender Awaiting Conf Approved", "Bender Expires Today", 
-        "Bender Expires in a Month", "Bender Expired", 
-        "Bender Confirmed", "Bender Key"],
+      assert_equal ["Bender Submitted", "Bender Awaiting Conf",
+                    "Bender Awaiting Conf Approved", "Bender Expired",
+                    "Bender Confirmed", "Bender Key"],
                    @bender.user_keys.chronological.all.map{|o| o.name }
     end
 
-    should "have a scope that returns keys awaiting filters" do 
+    should "have a scope that returns keys awaiting filters" do
       assert_equal 1, UserKey.awaiting_filters.size
     end
 
-    should "have a scope that returns keys awaiting confirmation" do 
+    should "have a scope that returns keys awaiting confirmation" do
       assert_equal 2, UserKey.awaiting_confirmation.size
     end
 
@@ -108,7 +111,7 @@ class UserKeyTest < ActiveSupport::TestCase
     end
 
     should "have a scope that returns keys awaiting submission" do
-      assert_equal 5, UserKey.awaiting_submission.size
+      assert_equal 3, UserKey.awaiting_submission.size
     end
 
     should "have a scope that returns expired keys" do
@@ -132,7 +135,7 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
                    @bender_key.time_submitted.to_formatted_s(:pretty)
     end
-    
+
     should "have status changed when request is submitted" do
       assert_equal "awaiting_submission",
                    @bender_key.status
@@ -142,7 +145,7 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal "awaiting_filters",
                    @bender_key.status
     end
-    
+
     should "have time_filtered set to now when request is set as filtered by admin" do
       assert @bender_key_submitted.time_filtered.nil?
       # Set time_expired to allow the key to be marked as filtered
@@ -154,7 +157,7 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
                    @bender_key_submitted.time_filtered.to_formatted_s(:pretty)
     end
-    
+
     should "have status changed when request is filtered" do
       assert_equal "awaiting_filters",
                    @bender_key_submitted.status

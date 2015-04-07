@@ -1,20 +1,20 @@
-<!-- Begin staff-only comment area-->
+<%# Begin staff-only comment area %>
 <% if @current_user.role? :is_staff %>
   <div class="staff_only">
 
     <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @private_comments, comment_type: "Staff Discussion (Private)" } %>
-  
-    <!-- Staff submitting their own keys can't comment until the key is submitted.-->
+
+     <%#  Staff submitting their own keys can't comment until the key is submitted.  %>
     <% if !(@user_key.at_stage? :awaiting_submission) %>
-    
+
       <%= render partial: 'user_keys/show_partials/add_comment' %>
-      
+
     <% else %>
-    
-    <p><i>Comments cannot be made until the key request has been submitted.</i></p>  
-    
+
+    <p><i>Comments cannot be made until the key request has been submitted.</i></p>
+
     <% end %>
-   
-  </div> 
-<!-- End staff-only comment area-->
+
+  </div>
+<%# End staff-only comment area %>
 <% end %>

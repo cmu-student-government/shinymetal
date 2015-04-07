@@ -40,7 +40,8 @@ class QuestionsController < ApplicationController
 
   # DELETE /questions/1
   def destroy
-    @question.destroy
+    # Don't actually destroy the question; we need to preserve it for existing keys.
+    @question.inactivate
     redirect_to questions_url, notice: 'Question was successfully deleted.'
   end
 

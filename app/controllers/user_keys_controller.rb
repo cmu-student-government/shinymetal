@@ -26,6 +26,12 @@ class UserKeysController < ApplicationController
   # GET /user_keys/new
   def new
     @user_key = UserKey.new
+    @questions = Question.active.chronological.to_a.reverse
+    @questions.size.times do |i|
+      new_answer = @user_key.answers.build
+      new_answer.user_key = @user_key
+      new_answer.question = @questions[i-1]
+    end
   end
 
   # GET /user_keys/1/edit
@@ -176,7 +182,7 @@ class UserKeysController < ApplicationController
 
     def owner_user_key_params
       # For requester, upon creating or updating application text
-      params.require(:user_key).permit(:agree, :name, *UserKey::TEXT_FIELD_LIST)
+      params.require(:user_key).permit(:agree, :name, answers_attributes: [:id, :message, :question_id])
     end
     
     def comment_user_key_params # For anyone who can comment

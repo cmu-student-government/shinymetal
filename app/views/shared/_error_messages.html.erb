@@ -4,7 +4,7 @@
 
     <ul>
     <% object.errors.each do |key, message| %>
-      <li><%= message %></li>
+      <li><%= key unless key==:base %> <%= message %></li>
     <% end %>
     </ul>
   </fieldset>

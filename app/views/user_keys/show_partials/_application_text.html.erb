@@ -1,18 +1,17 @@
 <ol>
   
-  <!-- Only does 1-7 since 8 can be blank -->
-  <% for textField in UserKey::TEXT_FIELD_LIST[0,7] %>
+  <% for answer in @user_key.answers %>
   <li>
-    <% if @user_key[textField].blank? %>
-            <h3><small>To be completed</small></h3> 
-            <!-- hacky way to get the styling we want, foundation makes small headings grey out -->
+    <label><em><%= answer.question.message %></em></label>
+    
+    <% if answer.message.blank? and answer.question.required %>
+          <h3><small>To be completed</small></h3> 
+          <!-- hacky way to get the styling we want, foundation makes small headings grey out -->
     <% else %>
-            <%= @user_key[textField]  %>
+        <p><span><%= answer.message %></span></p>
     <% end %>
-  </li>
-  <br/>
-  
+    
   <% end %>
-  <li><%= @user_key.proposal_text_eight.blank? ? 'N/A' : @user_key.proposal_text_eight %></li>
-
+  </li>
+  
 </ol>

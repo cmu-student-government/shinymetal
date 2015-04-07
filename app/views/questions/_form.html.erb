@@ -1,0 +1,28 @@
+<%= form_for(@question) do |f| %>
+  <fieldset>
+
+  <%= render 'shared/error_messages', object: @question %>
+
+  <div class="collapsed_row">
+    <div class="three-column">
+      <%= f.label :message, class: "prefix" %>
+    </div>
+    <div class="nine-column">
+      <%= f.text_area :message %>
+    </div>
+  </div>
+  <div class="collapsed_row">
+    <%= f.check_box :required %>
+    <%= f.label :required %>
+  </div>
+  
+  <br/>
+  
+  <div class="actions">
+    <%= f.submit class: "big-button success" %> |
+    <%= link_to 'Cancel', questions_url, class: "big-button secondary" %>
+  </div>
+  
+  </fieldset>
+  
+<% end %>

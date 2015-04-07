@@ -22,7 +22,7 @@ class Whitelist < ActiveRecord::Base
   def has_filters
     # Do not allow a whitelist to have no filters.
     if self.filters.empty?
-      errors.add(:whitelist_id, "does not have any filters checked")
+      errors.add(:base, "A new clause has been created but does not have any filters.")
       return false
     end
     return true

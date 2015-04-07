@@ -1,0 +1,153 @@
+@import "vars";
+
+input {
+  @include placeholder {
+    font-size: 0.7rem;
+    color: $placeholder;
+  }
+}
+
+// Navbar
+  nav#topbar {
+    margin-bottom: 2rem;
+
+    div.top-bar-section {
+      ul#nav-links li.active > a,
+      ul#drop-links li.active > a  { background-color: $topbar-link-bg-hover; }
+
+      #search-form {
+        @media screen and (max-width: rem-calc(860)) { display: none; }
+
+        .search-label {
+          padding-right: 0;
+          padding-left: 0;
+        }
+
+        .search-type-select {
+          padding: 0;
+          font-size: 0.7rem;
+          color: $placeholder;
+          outline: none !important;
+          border: none;
+          border-left: solid 1px rgba(0,0,0,0.1);
+          border-radius: 0;
+          height: 1.75rem;
+          top: 0.6875rem;
+          line-height: 1.75rem;
+          cursor: default;
+          &:hover { outline: none; border-left: solid 1px rgba(0,0,0,0.3); }
+
+          option {
+            height: 20px;
+            color: $placeholder;
+            line-height: 10px;
+          }
+        }
+
+
+        .search-param {
+          padding-right: 0;
+
+          #term {
+            border: none;
+            box-shadow: none;
+            font-size: 0.7rem;
+            color: $body-dark;
+          }
+        }
+      }
+
+      .name h1 { font-size: 1.1875rem; }
+    }
+  }
+
+  .autocomplete-suggestions {
+    color: $body;
+    background: $white;
+    font-size: 0.7em;
+    width: 158px !important;
+
+    .autocomplete-suggestion {
+      cursor: pointer;
+      height: 20px;
+      line-height: 10px;
+      padding: 5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      &:hover,
+      &:focus,
+      .autocomplete-selected { background: darken($white, 10%); }
+    }
+  }
+
+// Body
+  #wrapper {
+    position: relative;
+    min-height: 100%;
+    // min-width: rem-calc(1000px);
+
+     main { margin-bottom: 10rem; }
+  }
+
+  // Success/alert classes
+    .success {
+      color: $success;
+    }
+
+    .alert {
+      color: $alert;
+    }
+
+// Misc classes
+  .no_bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .form { @include grid-column(6); }
+
+  .collapsed_row {
+    @extend .collapse;
+    @extend .row;
+    clear: both;
+  }
+
+  .big-button {
+    @extend .button;
+    @extend .radius;
+    @extend .small;
+  }
+
+  .small-button {
+    @extend .button;
+    @extend .radius;
+    @extend .tiny;
+    margin: 0;
+  }
+
+// Footer
+  #back-to-top {
+    position: fixed;
+    bottom: 3rem;
+    left: 2rem;
+    display: none;
+    cursor: pointer;
+    z-index: 999;
+  }
+
+  footer {
+    background: transparent;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    line-height: 1.5em;
+    text-align: center;
+    color: $body-dark;
+    // font-size: 1em;
+
+    // #copy { font-size: 0.7em; }
+  }

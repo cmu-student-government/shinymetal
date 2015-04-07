@@ -14,7 +14,7 @@
   </tbody>
 </table>
 
-<!-- Kaminari paginate -->
+<%# Kaminari paginate %>
 <div id="paginator">
   <%= paginate @filters, remote: true %>
 </div>
@@ -23,10 +23,6 @@
   
   <br/>
   <%= link_to 'New Filter', new_filter_path, class: "big-button" %>
-  <br/>
   
-  <%= link_to 'Sync Columns', repopulate_columns_path,
-      method: :patch, class: "small-button center",
-      data: { disable_with: "Please Wait...", confirm: "Are you sure? This will send 8 requests to CollegiateLink API for their colummns." } %>
-
 <% end %>
+

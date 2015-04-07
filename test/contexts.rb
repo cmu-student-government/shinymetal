@@ -1,13 +1,13 @@
 module Contexts
   # Users
   def create_users
-    @hermes = FactoryGirl.create(:user, andrew_id: 'hermes')
+    @hermes = FactoryGirl.create(:user, andrew_id: 'hconrad', first_name: 'Hermes', last_name: 'Conrad')
     @bender = FactoryGirl.create(:user)
-    @fry = FactoryGirl.create(:user, andrew_id: 'fry', role: 'admin')
-    @leela = FactoryGirl.create(:user, andrew_id: 'leela', role: 'staff_approver')
-    @zoidberg = FactoryGirl.create(:user, andrew_id: 'zoidberg', role: 'staff_not_approver')
+    @fry = FactoryGirl.create(:user, andrew_id: 'pjfry', role: 'admin', first_name: 'Phillip', last_name: 'Fry')
+    @leela = FactoryGirl.create(:user, andrew_id: 'tleela', role: 'staff_approver', first_name: 'Turanga', last_name: 'Leela')
+    @zoidberg = FactoryGirl.create(:user, andrew_id: 'drzoid', role: 'staff_not_approver', first_name: 'Doctor', last_name: 'Zoidberg')
   end
-  
+
   def destroy_users
     @hermes.destroy
     @bender.destroy
@@ -135,12 +135,14 @@ module Contexts
     @cmutv = FactoryGirl.create(:organization)
     @wrct = FactoryGirl.create(:organization, name: "WRCT", external_id: 2)
     @abfilms = FactoryGirl.create(:organization, name: "AB Films", external_id: 3)
+    @inactive_org = FactoryGirl.create(:organization, name: "Inactive Org", active: false)
   end
 
   def destroy_organizations
     @cmutv.destroy
     @wrct.destroy
     @abfilms.destroy
+    @inactive_org.destroy
   end
   
   # Approvals
@@ -168,6 +170,30 @@ module Contexts
   
   def destroy_user_key_organizations
     @bender_key_submitted_cmutv.destroy
+  end
+  
+  # Questions
+  def create_questions
+    @question_required = FactoryGirl.create(:question)
+    @question_not_required = FactoryGirl.create(:question, message: "Wassup?", required: false)
+    @question_inactive = FactoryGirl.create(:question, message: "Got any money?", active: false)
+  end
+  
+  def destroy_questions
+    @question_required.destroy
+    @question_not_required.destroy
+    @question_inactive.destroy
+  end
+  
+  # Answers
+  def create_answers
+    @answer_required = FactoryGirl.create(:answer, question: @question_required, user_key: @bender_key)
+    @answer_not_required = FactoryGirl.create(:answer, message: "No, I'm a college student.", question: @question_not_required, user_key: @bender_key)
+  end
+  
+  def destroy_answers
+    @answer_required.destroy
+    @answer_not_required.destroy
   end
   
   # Whitelist_filters

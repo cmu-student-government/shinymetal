@@ -1,17 +1,17 @@
 <h1>All Users</h1>
-  
-<!-- Begin @requesters-->
+
+<%# Begin @requesters %>
 <div id="requesters">
   <%= render partial: 'users/index_partials/index_table', locals: {user_type: "requesters", users: @requesters } %>
 </div>
-    
-<!-- Kaminari paginate -->
+
+<%# Kaminari paginate %>
 <div id="paginator">
   <%= paginate @requesters, remote: true %>
 </div>
 
 <br/>
 
-<!-- Begin @staff-->
-<!-- anyone looking at @staff is staff, so @staff is never empty -->
+<%# Begin @staff %>
+<%# anyone looking at @staff is staff, so @staff is never empty %>
 <%= render partial: 'users/index_partials/index_table', locals: {user_type: "staff", users: @staff } %>

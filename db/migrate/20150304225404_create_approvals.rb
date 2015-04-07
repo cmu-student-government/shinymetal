@@ -6,5 +6,7 @@ class CreateApprovals < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    
+    add_index :approvals, :user_key_id
   end
 end

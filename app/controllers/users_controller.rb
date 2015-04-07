@@ -1,23 +1,15 @@
 class UsersController < ApplicationController
   before_action :check_login
   before_action :set_user, only: [:show, :edit, :update]
-  
+
   # CanCan checks
   authorize_resource
 
   # GET /users
   # search(filtering_params) used for search bar
   def index
-    search_param = params[:search]
-    # First, did we find a single matching user?
-    matching_users = User.search(search_param).alphabetical
-    if matching_users.size==1
-      @user = matching_users.to_a.first
-      redirect_to @user
-    else # No single matching user, so list them instead
-      @requesters = matching_users.requesters_only.page(params[:page])
-      @staff = matching_users.staff_only.page(params[:page])
-    end
+    @requesters = User.requesters_only.page(params[:page])
+    @staff = User.staff_only.page(params[:page])
   end
 
   # GET /users/1
@@ -43,12 +35,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def search
+    search_param = params[:term]
+    matching_users = User.search(search_param).collect { |u| { value: "#{u.name} (#{u.andrew_id})", data: u.id } }
+    render json: { suggestions: matching_users }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
     end
-    
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:role, :active)

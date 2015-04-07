@@ -7,7 +7,6 @@
     <tr>
       <th>Name</th>
       <th>Used?</th>
-      <th>Active?</th>
     </tr>
   </thead>
 
@@ -20,13 +19,3 @@
 <div id="paginator">
   <%= paginate @organizations, remote: true %>
 </div>
-
-<% if @current_user.role? :admin %>
-  <br>
-  
-  <%= link_to 'Sync Organizations Look-up Table',
-               repopulate_organizations_path, 
-               method: :patch, class: "big-button center",
-               data: { disable_with: "Please Wait...",
-               confirm: "Are you sure? This will send 1 request to CollegiateLink API for their organizations." } %>
-<% end %>

@@ -6,5 +6,7 @@ class CreateUserKeyColumns < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    
+    add_index :user_key_columns, [ :user_key_id, :column_id ]
   end
 end

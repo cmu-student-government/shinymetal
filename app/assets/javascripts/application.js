@@ -13,33 +13,31 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
-//= require jquery.ui.autocomplete
 //= require turbolinks
 //= require cocoon
 //= require foundation
+//= require jquery.ui.autocomplete
 //= require_tree .
 
 $(document).on('page:load', function() { $(document).foundation(); }); // http://stackoverflow.com/a/27385622/2557082
-$(function() { $(document).foundation(); });
 
 // adds
 $(document).on("click", '#key', function() {
     $(this).select();
  })
 
-// On load, hide the organization checkboxes
-$(document).ready(function() {
-    $('#organization_toggle_panel').hide();
- })
+// On page load
+$(function() {
+  $(document).foundation();
 
-$(document).ready(function(){
-    $('#organization_toggle').click(function(){
-        $('#organization_toggle_panel').toggle();
-    });
-});
+  // hide the organization checkboxes
+  $('#organization_toggle_panel').hide();
 
-$(document).ready(function(){
-    $('#second_organization_toggle').click(function(){
-        $('#organization_toggle_panel').toggle();
-    });
+  $('#organization_toggle').click(function(){
+      $('#organization_toggle_panel').toggle();
+  });
+
+  $('#second_organization_toggle').click(function(){
+      $('#organization_toggle_panel').toggle();
+  });
 });

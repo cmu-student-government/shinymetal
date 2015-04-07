@@ -6,7 +6,7 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations
   def index
-    @organizations = Organization.alphabetical.page(params[:page])
+    @organizations = Organization.active.alphabetical.page(params[:page])
     # For the warning message (that is also shown on the home page)
     @bad_organizations = Organization.inactive_but_with_nonexpired_keys
   end

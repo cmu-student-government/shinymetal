@@ -27,18 +27,18 @@ class ApprovalTest < ActiveSupport::TestCase
     should "be made by an approver on create" do
       # Bender is not an approver
       @bad_approval = FactoryGirl.build(:approval, user_key: @bender_key_submitted, approval_user: @bender)
-      #deny @bad_approval.valid?
+      deny @bad_approval.valid?
     end
     
-        # Validations for foreign key ids
+    # Validations for foreign key ids
     should "not allow invalid user_id" do
-      bad_comment = FactoryGirl.build(:approval, user_key: @bender_key_awaiting_conf, approval_user: @leela, user_id: "something_invalid")
-      deny bad_comment.valid?
+      bad_approval = FactoryGirl.build(:approval, user_key: @bender_key_awaiting_conf, approval_user: @leela, user_id: "something_invalid")
+      deny bad_approval.valid?
     end
     
     should "not allow invalid user_key_id" do
-      bad_comment = FactoryGirl.build(:approval, user_key_id: "something_invalid", approval_user: @leela)
-      deny bad_comment.valid?
+      bad_approval = FactoryGirl.build(:approval, user_key_id: "something_invalid", approval_user: @leela)
+      deny bad_approval.valid?
     end
   end
 end

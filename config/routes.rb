@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   resources :user_keys
   
+  resources :questions, except: [:show]
+  
   # Users are not deleted, only inactivated.
   # They are not created directly; they are meant to be created automatically via shibboleth login.
   resources :users, except: [:destroy, :create, :new]
@@ -19,7 +21,6 @@ Rails.application.routes.draw do
   patch 'repopulate_organizations' => 'questions#repopulate_organizations', as: :repopulate_organizations
   
   # Path to add columns from CollegiateLink
-  # FIXME It's in the filter controller, should be in a documentation-basd controller
   patch 'repopulate_columns' => 'questions#repopulate_columns', as: :repopulate_columns
   
   # Path to see a user's own keys

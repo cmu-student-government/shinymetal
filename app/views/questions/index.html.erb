@@ -1,0 +1,25 @@
+<h1>Settings</h1>
+
+<ol>
+  <% @questions.each do |question| %>
+    <li>
+      <%= question.message %>
+    </li> 
+  <% end %>
+</ol>
+  
+<br/>
+  
+<%= link_to 'Sync Columns', repopulate_columns_path,
+      method: :patch, class: "small-button center",
+      data: { disable_with: "Please Wait...",
+      confirm: "Are you sure? This will send 8 requests to CollegiateLink API for their colummns." } %>
+
+<br/>
+
+<%= link_to 'Sync Organizations Look-up Table',
+               repopulate_organizations_path, 
+               method: :patch, class: "big-button center",
+               data: { disable_with: "Please Wait...",
+               confirm: "Are you sure? This will send 1 request to CollegiateLink API for their organizations." } %>
+<% end %>

@@ -60,7 +60,22 @@ FactoryGirl.define do
     association :column
     association :user_key
   end
+    
+  # factory blueprint for question
+  factory :question do
+    required true
+    active true
+    message "How do you feel?"
+  end
   
+  # answer factory
+  factory :answer do
+    association :user_key
+    association :question
+    message "Great!"
+  end
+  
+  # approval factory
   factory :approval do
     association :approval_user #user, renamed to approval_user for clarity
     association :user_key

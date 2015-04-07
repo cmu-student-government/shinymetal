@@ -170,6 +170,19 @@ module Contexts
     @bender_key_submitted_cmutv.destroy
   end
   
+  # Questions
+  def create_questions
+    @question_required = FactoryGirl.create(:question)
+    @quesiton_not_required = FactoryGirl.create(:question, message: "Wassup?", required: false)
+    @question_inactive = FactoryGirl.create(:question, message: "Got any money?", active: false)
+  end
+  
+  def destroy_questions
+    @question_required.destroy
+    @quesiton_not_required.destroy
+    @question_inactive.destroy
+  end
+  
   # Whitelist_filters
   def create_whitelists
     # A whitelist is only valid if it has filters, so create both at the same time here

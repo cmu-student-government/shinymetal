@@ -28,7 +28,7 @@ gem 'rails', '4.2.1'
   gem 'jquery-turbolinks'
 
   # Foundation gems
-  gem 'foundation-rails'
+  gem 'foundation-rails', '= 5.5.1.0'
 
 
 # API gems

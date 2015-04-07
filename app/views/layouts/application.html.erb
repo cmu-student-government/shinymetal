@@ -9,7 +9,6 @@
     <meta name="description" content="<%= content_for?(:keywords) ? yield(:keywords) : 'cmu,bridgeapi,thebridge,api,stugov' %>">
 
     <%= stylesheet_link_tag     'application',      'data-turbolinks-track' => true, media: 'all' %>
-    <%= javascript_include_tag  'application',      'data-turbolinks-track' => true %>
     <%= javascript_include_tag  'vendor/modernizr', 'data-turbolinks-track' => true %>
 
     <%= favicon_link_tag "favicon.ico" %>
@@ -34,5 +33,6 @@
       <%= render 'layouts/footer' %>
     </div>
 
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   </body>
 </html>

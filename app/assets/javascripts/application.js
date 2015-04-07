@@ -14,8 +14,8 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require turbolinks
-//= require cocoon
 //= require foundation
+//= require cocoon
 //= require jQuery.autocomplete
 //= require_tree .
 

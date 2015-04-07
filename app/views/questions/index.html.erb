@@ -1,25 +1,38 @@
 <h1>Settings</h1>
 
+<br/>
+
+<h2>Application Questions</h2>
+
 <ol>
-  <% @questions.each do |question| %>
+  <% @active_questions.each do |question| %>
     <li>
+      <% if question.required %>
+        <strong>(Required)&nbsp;</strong>
+      <% end %>
       <%= question.message %>
+      <br/>
+      <%= link_to 'Edit', edit_question_path(question), class: "big-button" %> | 
+      <%= link_to 'Delete', question_path(question), method: :delete, class: "big-button" %>
     </li> 
   <% end %>
 </ol>
   
-<br/>
-  
-<%= link_to 'Sync Columns', repopulate_columns_path,
-      method: :patch, class: "small-button center",
-      data: { disable_with: "Please Wait...",
-      confirm: "Are you sure? This will send 8 requests to CollegiateLink API for their colummns." } %>
+<br>
 
-<br/>
+<%= link_to 'New question', new_question_path, class: "big-button" %>
+
+</br>
 
 <%= link_to 'Sync Organizations Look-up Table',
                repopulate_organizations_path, 
                method: :patch, class: "big-button center",
                data: { disable_with: "Please Wait...",
                confirm: "Are you sure? This will send 1 request to CollegiateLink API for their organizations." } %>
-<% end %>
+
+<br/>
+  
+<%= link_to 'Sync Columns', repopulate_columns_path,
+      method: :patch, class: "small-button center",
+      data: { disable_with: "Please Wait...",
+      confirm: "Are you sure? This will send 8 requests to CollegiateLink API for their colummns." } %>

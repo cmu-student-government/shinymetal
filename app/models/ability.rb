@@ -38,6 +38,9 @@ class Ability
       # Admin can do anything they want to with filters.
       can :manage, Filter
       
+      # Questions
+      can :manage, Question
+      
       # Orgs
       can :manage, Organization
       
@@ -79,6 +82,9 @@ class Ability
       # Filters
       # Can read (show, index) filters
       can :read, Filter
+      
+      # Questions
+      can :read, Question
       
       # Orgs
       # Can read (show, index) orgs

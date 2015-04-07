@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150330171619) do
+ActiveRecord::Schema.define(version: 20150407034652) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer  "user_id"
@@ -61,6 +61,14 @@ ActiveRecord::Schema.define(version: 20150330171619) do
   end
 
   add_index "organizations", ["name"], name: "index_organizations_on_name"
+
+  create_table "questions", force: :cascade do |t|
+    t.text     "message"
+    t.boolean  "required"
+    t.boolean  "active",     default: true
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
 
   create_table "user_key_columns", force: :cascade do |t|
     t.integer  "user_key_id"

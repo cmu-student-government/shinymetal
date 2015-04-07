@@ -7,7 +7,7 @@ class QuestionsController < ApplicationController
 
   # GET /questions
   def index
-    @questions = Question.all
+    @active_questions = Question.active.chronological.to_a
   end
   
   # GET /questions/1/edit

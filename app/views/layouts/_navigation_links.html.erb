@@ -23,6 +23,9 @@
         <% end %>
       </div>
     </li>
+    
+    <li><%= link_to "Settings", questions_path %></li>
+    
     <% end %>
     <% if @current_user %> <!--End admin login check, begin basic user login check-->
       <li><%= link_to "Your Keys", own_user_keys_path %></li>

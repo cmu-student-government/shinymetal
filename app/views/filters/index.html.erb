@@ -14,7 +14,7 @@
   </tbody>
 </table>
 
-<!-- Kaminari paginate -->
+<%# Kaminari paginate %>
 <div id="paginator">
   <%= paginate @filters, remote: true %>
 </div>
@@ -25,3 +25,4 @@
   <%= link_to 'New Filter', new_filter_path, class: "big-button" %>
   
 <% end %>
+

@@ -32,29 +32,8 @@
   <%= render partial: 'user_keys/show_partials/approval_status' %>
 <% end %> 
 
-<!-- Everyone can see most of the following information.-->
-    
-<!-- Timestamps -->
-<table>
-  <tr>
-    <th>Request Form Status</th>
-    <th>Submission</th>
-    <% if @current_user.role? :is_staff %>
-      <th>Ready for approval</th>
-    <% end %> 
-    <th>Confirmation</th>
-    <th>Expires</th>
-    <% if @current_user.role? :is_staff %>
-      <th>Active</th>
-    <% end %>
-  </tr>
-  <tr>
-    <td class="text-center">
-      <%= render partial: 'shared/boolean_label', locals: { boolean_label: @user_key.request_form_done?, true_message: "Completed", false_message: "Incomplete" } %>
-    </td>
-    <%= render partial: 'user_keys/index_partials/row_times', locals: { user_key: @user_key } %>
-  </tr>
-</table>
+<%# Everyone can see most of the following information. %>
+    <%#  TODO show expires, active  %>
 
 <table>
   <tr>
@@ -74,20 +53,17 @@
   <%= render partial: 'user_keys/show_partials/application_text' %>
 </p>
 
-</div> 
-<!-- End of status panel -->
+<%# Show notes from Admin %>
+<div class="public_comments">
+  <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
+</div>
+<%# End of public information. %>
 
-
-<!-- End of public information. -->
-
-<div class="content" id="permissionsPanel">
-
-
-<!-- Staffmembers see private information -->
+<%# Staffmembers see private information %>
 <% if @current_user.role? :is_staff %>
   <div class="staff_only panel">
-
   <h3>Staff only</h3>
+  <br>
     
     <%= render partial: 'user_keys/show_partials/list_of_resources' %>
     <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
@@ -109,6 +85,7 @@
   </div>
   <% end %>  
 <% end %>
+
 <!-- End of general staff-only information. -->
 
 

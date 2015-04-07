@@ -1,8 +1,7 @@
 class UserKeysController < ApplicationController
   before_action :check_login
-  before_action :set_user_key, except: [:index, :own_user_keys, :new,
-                                        :create]
-  
+  before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search]
+
   # CanCan checks
   authorize_resource
 
@@ -11,7 +10,7 @@ class UserKeysController < ApplicationController
     # Staffmember only wants to see key applications that have been submitted.
     @user_keys = UserKey.submitted.chronological.by_user.page(params[:page])
   end
-  
+
   # GET /own_user_keys
   def own_user_keys
     # Any logged-in user can see all of their own keys.
@@ -65,13 +64,14 @@ class UserKeysController < ApplicationController
       render :edit
     end
   end
-  
+
   # PATCH/PUT /user_keys/1/add_comment
   def add_comment
     # Set user_id of new comment to current user's id.
     # This takes the single nested comment_attribute;
     # always set the commenter's id to the current user's id.
     params[:user_key][:comments_attributes]["0"][:user_id] = @current_user.id
+    # FIXME Adding a user_key_comment note from administrator should send email to requester?
     if @user_key.update(comment_user_key_params)
       redirect_to @user_key, notice: 'Comment was successfully added.'
     else
@@ -79,7 +79,7 @@ class UserKeysController < ApplicationController
       render :show
     end
   end
-  
+
   # DELETE /user_keys/1/delete_comment/1
   def delete_comment
     # Delete single comment;
@@ -97,7 +97,7 @@ class UserKeysController < ApplicationController
     @user_key.destroy
     redirect_to user_keys_url, notice: 'User key was successfully destroyed.'
   end
-  
+
   # PATCH/PUT /user_keys/1/set_as_submitted
   def set_as_submitted
     if @user_key.set_status_as :awaiting_filters
@@ -110,7 +110,7 @@ class UserKeysController < ApplicationController
       render :show
     end
   end
-  
+
   # PATCH/PUT /user_keys/1/set_as_filtered
   def set_as_filtered
     if @user_key.set_status_as :awaiting_confirmation
@@ -121,7 +121,7 @@ class UserKeysController < ApplicationController
       render :show
     end
   end
-  
+
   # PATCH/PUT /user_keys/1/set_as_approved
   def set_as_confirmed
     if @user_key.set_status_as :confirmed
@@ -132,7 +132,7 @@ class UserKeysController < ApplicationController
       render :show
     end
   end
-  
+
   # PATCH/PUT /user_keys/1/set_as_reset
   def set_as_reset
     if @user_key.set_status_as :awaiting_submission
@@ -144,7 +144,7 @@ class UserKeysController < ApplicationController
       render :show
     end
   end
-  
+
   # PATCH/PUT /user_keys/1/approve_key/
   def approve_key
     if @user_key.set_approved_by(@current_user)
@@ -154,7 +154,7 @@ class UserKeysController < ApplicationController
       render :show
     end
   end
-  
+
   # PATCH/PUT /user_keys/1/undo_approve_key/
   def undo_approve_key
     if @user_key.undo_set_approved_by(@current_user)
@@ -163,6 +163,12 @@ class UserKeysController < ApplicationController
       get_comments
       render :show
     end
+  end
+
+  def search
+    search_param = params[:term]
+    matching_keys = UserKey.submitted.search(search_param).collect { |u| { value: "#{u.name}", data: u.id } }
+    render json: { suggestions: matching_keys }
   end
 
   private
@@ -175,7 +181,7 @@ class UserKeysController < ApplicationController
       @private_comments = @user_key.comments.private_only.chronological
       @comment = @user_key.comments.build
     end
-      
+
     def set_user_key
       @user_key = UserKey.find(params[:id])
     end
@@ -184,11 +190,11 @@ class UserKeysController < ApplicationController
       # For requester, upon creating or updating application text
       params.require(:user_key).permit(:agree, :name, answers_attributes: [:id, :message, :question_id])
     end
-    
+
     def comment_user_key_params # For anyone who can comment
       params.require(:user_key).permit(:comments_attributes => [:id, :message, :public, :user_id])
     end
-    
+
     def admin_update_user_key_params # For admin, upon updating filters or anything else
       params.require(:user_key).permit(:time_expired, :active, :reason, :column_ids => [],
                                        :organization_ids => [], :whitelists_attributes => [:id, :resource, :_destroy, :filter_ids => []])

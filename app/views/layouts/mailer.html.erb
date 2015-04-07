@@ -3,15 +3,15 @@
     <p><%= @recipient.nil? ? "Hello" : @recipient.andrew_id %>, you have received a message from Shiny Metal API:</p>
 
     <hr/>
-    
+
     <%= yield %>
-    
+
     <hr/>
-    
+
     <p><em>Do not reply to this email. If you are experiencing issues, please contact the system administrator.</em></p>
-    
-    <!-- This email is triggered in the UserKey conroller. -->
-    <!-- The development-only letter_opener gem to open the email in a new tab.-->
-  
+
+    <%#  This email is triggered in the UserKey conroller.  %>
+    <%#  The development-only letter_opener gem to open the email in a new tab. %>
+
   </body>
 </html>

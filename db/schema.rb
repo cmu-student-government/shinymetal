@@ -119,6 +119,8 @@ ActiveRecord::Schema.define(version: 20150407042819) do
     t.boolean  "active",     default: true
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["andrew_id"], name: "index_users_on_andrew_id"

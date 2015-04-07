@@ -1,3 +1,4 @@
+
 // Overwrite default colors and font
 
 $body-font-family: "Avenir Roman", "Helvetica", Helvetica, Arial, sans-serif;
@@ -110,11 +111,7 @@ $success-color: #5da423;
   margin: 0;
   padding: 0;
 }
-.checkbox_panel {
-  @extend .panel;
-  background-color: white;
-  border-radius: 8px;
-}
+
 
 #error_explanation {
   background-color: lighten($primary-color, 55);

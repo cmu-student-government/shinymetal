@@ -1,2 +1,2 @@
-  $('#requesters').html('<%= escape_javascript render partial: 'users/index_partials/requesters' %>');
+  $('#requesters').html('<%= escape_javascript render partial: 'users/index_partials/index_table',locals: {user_type: "requesters", users: @requesters } %>');
   $('#paginator').html('<%= escape_javascript paginate(@requesters, remote: true).to_s %>');

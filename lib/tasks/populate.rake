@@ -20,29 +20,35 @@ namespace :db do
      WhitelistFilter, Whitelist, UserKeyOrganization, User,
      UserKey, Column, UserKeyColumn].each(&:delete_all)
     
-    # Step 2: Add Filters, Orgs, Questions, and Approvers
+    # Step 2: Add Filters, Cols, Orgs, Questions, and Approvers
     # Define resources, filter_names, filter_values
     filter_lists = [["organizations","type","closed"],
-                 ["organizations","type","somewhat closed"],
+                 ["organizations","type","false"],
                  ["events","currentEventsOnly","true"],
-                 ["events","currentEventsOnly","somewhat true"],
+                 ["events","currentEventsOnly","false"],
                  ["attendees","status","active"],
-                 ["attendees","status","somewhat active"],
+                 ["attendees","status","inactive"],
                  ["memberships","currentMembershipsOnly","true"],
-                 ["memberships","currentMembershipsOnly","somewhat true"],
+                 ["memberships","currentMembershipsOnly","false"],
                  ["positions","type","public"],
-                 ["positions","type","somewhat public"],
+                 ["positions","type","private"],
                  ["users","status","active"],
-                 ["users","status","somewhat active"]]
+                 ["users","status","inactive"]]
+    # Build filters and columns at the same time
     filter_lists.each do |fl|
       # create a filter
       filter = Filter.new
+      column = Column.new
       filter.resource = fl[0]
+      column.resource = fl[0]
       filter.filter_name = fl[1]
+      column.column_name = fl[1]
       filter.filter_value = fl[2]
       # save with bang (!) so exception is thrown on failure
       filter.save!
+      column.save! if column.valid? #don't create repeat columns
     end
+    
     org_lists = [["Tennis","100"],
                  ["Crew","200"],
                  ["Water Polo","300"]]
@@ -181,6 +187,15 @@ namespace :db do
             # set the timestamps
             user_key_organization.created_at = Time.now
             user_key_organization.updated_at = Time.now
+          end
+          # get a list of columns to avoid repeat columns
+          col_list = Column.all.to_a.shuffle
+          UserKeyColumn.populate 2..4 do |user_key_col|
+            user_key_col.user_key_id = user_key.id 
+            user_key_col.column_id = col_list.pop.id
+            # set the timestamps
+            user_key_col.created_at = Time.now
+            user_key_col.updated_at = Time.now
           end
         end
         

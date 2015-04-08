@@ -135,12 +135,14 @@ module Contexts
     @cmutv = FactoryGirl.create(:organization)
     @wrct = FactoryGirl.create(:organization, name: "WRCT", external_id: 2)
     @abfilms = FactoryGirl.create(:organization, name: "AB Films", external_id: 3)
+    @inactive_org = FactoryGirl.create(:organization, name: "Inactive Org", active: false)
   end
 
   def destroy_organizations
     @cmutv.destroy
     @wrct.destroy
     @abfilms.destroy
+    @inactive_org.destroy
   end
   
   # Approvals
@@ -168,6 +170,30 @@ module Contexts
   
   def destroy_user_key_organizations
     @bender_key_submitted_cmutv.destroy
+  end
+  
+  # Questions
+  def create_questions
+    @question_required = FactoryGirl.create(:question)
+    @question_not_required = FactoryGirl.create(:question, message: "Wassup?", required: false)
+    @question_inactive = FactoryGirl.create(:question, message: "Got any money?", active: false)
+  end
+  
+  def destroy_questions
+    @question_required.destroy
+    @question_not_required.destroy
+    @question_inactive.destroy
+  end
+  
+  # Answers
+  def create_answers
+    @answer_required = FactoryGirl.create(:answer, question: @question_required, user_key: @bender_key)
+    @answer_not_required = FactoryGirl.create(:answer, message: "No, I'm a college student.", question: @question_not_required, user_key: @bender_key)
+  end
+  
+  def destroy_answers
+    @answer_required.destroy
+    @answer_not_required.destroy
   end
   
   # Whitelist_filters

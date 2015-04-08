@@ -6,5 +6,7 @@ class CreateUserKeyOrganizations < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    
+    add_index :user_key_organizations, [ :user_key_id, :organization_id ], name: "user_org_association_index"
   end
 end

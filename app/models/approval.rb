@@ -7,19 +7,21 @@ class Approval < ActiveRecord::Base
   validates_presence_of :user_key
   validates_presence_of :approval_user
   
+  validate :belongs_to_valid_approver, on: :create
+  
   # Scopes
   scope :by, ->(user) { where(user_id: user.id) }
   
   # Methods
   # Every new approval is always unique
   validates_uniqueness_of :user_id, scope: :user_key_id
-  validate :belongs_to_valid_approver, on: :create
 
   private
   # On create, should belong to an approver of some kind
   def belongs_to_valid_approver
-    unless self.user_id.nil? or User.approvers_only.to_a.map{|o| o.id}.include?(self.user_id)
-      errors.add(:approval_user, "is not a valid approver")
+    user = User.find_by id: self.user_id
+    unless user.nil? or user.role? :is_approver
+      errors.add(:base, "You are not a valid approver in the system.")
       return false
     end
     return true

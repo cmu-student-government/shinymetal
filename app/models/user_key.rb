@@ -11,7 +11,10 @@ class UserKey < ActiveRecord::Base
   has_many :user_key_columns, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :approvals, dependent: :destroy
-
+  # has_many :answers requires inverse_of, to be created at the same time as its user_key.
+  has_many :answers, dependent: :destroy, inverse_of: :user_key
+  
+  has_many :questions, through: :answers
   has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
   has_many :comments
@@ -20,7 +23,7 @@ class UserKey < ActiveRecord::Base
   has_many :comment_users, class_name: User, through: :comments
 
   accepts_nested_attributes_for :comments, limit: 1
-  # Reject a nested whitelist that has no filters attached
+  accepts_nested_attributes_for :answers
   accepts_nested_attributes_for :whitelists, allow_destroy: true
 
   # Validations
@@ -30,13 +33,9 @@ class UserKey < ActiveRecord::Base
   #     awaiting_confirmation, if not approved by everybody
   # or  confirmed
   STATUS_LIST = ["awaiting_submission", "awaiting_filters", "awaiting_confirmation", "confirmed"]
-  # Quick list for the 8 proposal_text symbols
-  TEXT_FIELD_LIST = ["one","two","three","four","five","six","seven","eight"].map{|num| "proposal_text_#{num}".to_sym }
 
   validates_presence_of :user
   validates_inclusion_of :status, in: STATUS_LIST
-
-  validate :user_id_valid
 
   # validate that steps that have been passed remain passing
   for status in STATUS_LIST
@@ -88,7 +87,7 @@ class UserKey < ActiveRecord::Base
 
   # Used on user_key show page to show "request form status" label
   def request_form_done?
-    TEXT_FIELD_LIST.each {|attr| return false if self.send(attr).blank? and attr != :proposal_text_eight}
+    self.answers.each {|answer| return false if answer.message.blank? and answer.question.required }
     return (!self.name.blank? and self.agree)
   end
 
@@ -106,7 +105,6 @@ class UserKey < ActiveRecord::Base
       return false unless (has_public_comments? and self.active)
     when :awaiting_filters
       return false unless at_stage? :awaiting_submission
-      # Each proposal_text_thing (except number 8) is not blank, name is not blank, terms agreed to
       return false unless request_form_done?
     when :awaiting_confirmation
       return false unless at_stage? :awaiting_filters
@@ -166,15 +164,16 @@ class UserKey < ActiveRecord::Base
     today = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
     case sym
     when :awaiting_filters
-      return set_key_as_(sym, :time_submitted, today, "needs an expiration date")
+      return set_key_as_(sym, :time_submitted, today, "The key cannot be submitted. Please check that you
+               have completed all requires fields and agreed to API usage terms.")
     when :awaiting_confirmation
-      return set_key_as_(sym, :time_filtered, today, "cannot be submitted. Please check that you
-               have completed all fields of the form and agreed to API usage terms")
+      return set_key_as_(sym, :time_filtered, today, "The key needs an expiration date.")
     when :confirmed
-      return set_key_as_(sym, :time_confirmed, today, "has not been approved by everyone yet")
+      return set_key_as_(sym, :time_confirmed, today, "The key cannot be released until it has been approved by all approvers.")
     # Key can be reset to the very beginning of its lifecycle here
     when :awaiting_submission
-      return set_key_as_(sym, :time_filtered, nil, "cannot be reset until the key is both active and has an Administrator note")
+      return set_key_as_(sym, :time_filtered, nil, "The key cannot be reset unless the key is both active, has not been confirmed yet,
+                         and has an Administrator note explaining the issue to the requester.")
     end
   end
 
@@ -278,7 +277,7 @@ class UserKey < ActiveRecord::Base
       save_changes
       return true
     end
-    errors.add(:user_key, error)
+    errors.add(:base, error)
     return false
   end
 

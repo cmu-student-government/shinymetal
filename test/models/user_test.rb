@@ -39,7 +39,7 @@ class UserTest < ActiveSupport::TestCase
     end
     
     should "have a scope to return admin" do 
-      assert_equal ["fry"], User.admin.map{|u| u.andrew_id}
+      assert_equal ["pjfry"], User.admin.map{|u| u.andrew_id}
     end
 
     should "have a method to get a user's name" do

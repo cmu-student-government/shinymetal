@@ -35,7 +35,7 @@ class Filter < ActiveRecord::Base
     return true unless filter_param_list.include?(self.resource)
     param_list = Resource::PARAM_NAME_HASH[(self.resource.to_sym)]
     if !(param_list.include?(self.filter_name))
-      errors.add(:filter_name, "is not a valid filter name for that resource")
+      errors.add(:base, "The filter name is not a valid option for the resource selected.")
       return false
     end
     return true

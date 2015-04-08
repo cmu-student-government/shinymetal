@@ -16,31 +16,39 @@ namespace :db do
     require 'faker'
 
     # Step 1: clear any old data in the db
-    [Approval, Comment, Filter, Organization, WhitelistFilter, Whitelist, UserKeyOrganization, User, UserKey, Column, UserKeyColumn].each(&:delete_all)
-
-    # Step 2: Add Filters, Orgs, and Approvers
+    [Approval, Question, Answer, Comment, Filter, Organization,
+     WhitelistFilter, Whitelist, UserKeyOrganization, User,
+     UserKey, Column, UserKeyColumn].each(&:delete_all)
+    
+    # Step 2: Add Filters, Cols, Orgs, Questions, and Approvers
     # Define resources, filter_names, filter_values
     filter_lists = [["organizations","type","closed"],
-                 ["organizations","type","somewhat closed"],
+                 ["organizations","type","false"],
                  ["events","currentEventsOnly","true"],
-                 ["events","currentEventsOnly","somewhat true"],
+                 ["events","currentEventsOnly","false"],
                  ["attendees","status","active"],
-                 ["attendees","status","somewhat active"],
+                 ["attendees","status","inactive"],
                  ["memberships","currentMembershipsOnly","true"],
-                 ["memberships","currentMembershipsOnly","somewhat true"],
+                 ["memberships","currentMembershipsOnly","false"],
                  ["positions","type","public"],
-                 ["positions","type","somewhat public"],
+                 ["positions","type","private"],
                  ["users","status","active"],
-                 ["users","status","somewhat active"]]
+                 ["users","status","inactive"]]
+    # Build filters and columns at the same time
     filter_lists.each do |fl|
       # create a filter
       filter = Filter.new
+      column = Column.new
       filter.resource = fl[0]
+      column.resource = fl[0]
       filter.filter_name = fl[1]
+      column.column_name = fl[1]
       filter.filter_value = fl[2]
       # save with bang (!) so exception is thrown on failure
       filter.save!
+      column.save! if column.valid? #don't create repeat columns
     end
+    
     org_lists = [["Tennis","100"],
                  ["Crew","200"],
                  ["Water Polo","300"]]
@@ -51,6 +59,14 @@ namespace :db do
       org.external_id = ol[1]
       # save with bang (!) so exception is thrown on failure
       org.save!
+    end
+    # now add questions
+    1..5.times do
+      # create a new question
+      question = Question.new
+      question.message = Faker::Lorem.paragraph
+      question.required = true
+      question.save!
     end
     # now add approver users
     1..5.times do
@@ -92,15 +108,16 @@ namespace :db do
         user_key.user_id = user.id
         user_key.name = Faker::Company.name
         user_key.agree = true
-        # I tried to DRY this, but Populator gem wouldn't let me
-        user_key.proposal_text_one = Faker::Lorem.paragraph
-        user_key.proposal_text_two = Faker::Lorem.paragraph
-        user_key.proposal_text_three = Faker::Lorem.paragraph
-        user_key.proposal_text_four = Faker::Lorem.paragraph
-        user_key.proposal_text_five = Faker::Lorem.paragraph
-        user_key.proposal_text_six = Faker::Lorem.paragraph
-        user_key.proposal_text_seven = Faker::Lorem.paragraph
-        user_key.proposal_text_eight = [Faker::Lorem.paragraph, nil]
+        
+        # Create an answer for each question that was created earlier
+        question_list = Question.all.to_a.clone
+        Answer.populate question_list.size do |answer|
+           answer.user_key_id = user_key.id
+           answer.question_id = question_list.pop.id
+           answer.message = Faker::Lorem.paragraph
+           answer.created_at = Time.now
+           answer.updated_at = Time.now
+        end
 
         # make sure all begin as awaiting submission
         user_key.status = "awaiting_submission"
@@ -177,16 +194,14 @@ namespace :db do
             user_key_organization.created_at = Time.now
             user_key_organization.updated_at = Time.now
           end
-          # get a list of columns to avoid repeat columns being assigned
-          # Don't populate user_key_columns;
-          # doing so would requiring Column.populate, which hits the Bridge 8 times.
-          # this is necessary for testing purposes
-          column_list = Column.all.to_a.shuffle
-          UserKeyColumn.populate 3..10 do |user_key_column|
-            user_key_column.user_key_id = user_key.id
-            user_key_column.column_id = column_list.pop.id
-            user_key_column.created_at = Time.now
-            user_key_column.updated_at = Time.now
+          # get a list of columns to avoid repeat columns
+          col_list = Column.all.to_a.shuffle
+          UserKeyColumn.populate 2..4 do |user_key_col|
+            user_key_col.user_key_id = user_key.id 
+            user_key_col.column_id = col_list.pop.id
+            # set the timestamps
+            user_key_col.created_at = Time.now
+            user_key_col.updated_at = Time.now
           end
         end
 

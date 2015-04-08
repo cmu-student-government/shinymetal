@@ -34,7 +34,7 @@ class UserKeyTest < ActiveSupport::TestCase
     # FIXME: Test the scopes with keys belonging to different users
     should "have a scope to sort by andrew_id" do
       assert_equal 9, UserKey.by_user.size
-      assert_equal ["bender", "hermes"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
+      assert_equal ["brodriguez", "hconrad"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
     end
 
     should "have assert scope to return only submitted keys" do
@@ -93,8 +93,9 @@ class UserKeyTest < ActiveSupport::TestCase
     # Test chronological filter, to be used on index pages
     should "have a scope to sort by time" do
       assert_equal ["Bender Submitted", "Bender Awaiting Conf",
-                    "Bender Awaiting Conf Approved", "Bender Expired",
-                    "Bender Confirmed", "Bender Key"],
+                    "Bender Awaiting Conf Approved", "Bender Expires Today",
+                    "Bender Expires in a Month",
+                    "Bender Expired", "Bender Confirmed", "Bender Key"],
                    @bender.user_keys.chronological.all.map{|o| o.name }
     end
 
@@ -111,7 +112,7 @@ class UserKeyTest < ActiveSupport::TestCase
     end
 
     should "have a scope that returns keys awaiting submission" do
-      assert_equal 3, UserKey.awaiting_submission.size
+      assert_equal 5, UserKey.awaiting_submission.size
     end
 
     should "have a scope that returns expired keys" do

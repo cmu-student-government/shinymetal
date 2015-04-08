@@ -17,4 +17,10 @@
 @import "foundation-icons/foundation-icons";
 @import "vars";
 @import "layout";
-@import "user_keys"
+@import "user_keys";
+
+.checkbox_panel {
+  @extend .panel;
+  background-color: white;
+  border-radius: 8px;
+}

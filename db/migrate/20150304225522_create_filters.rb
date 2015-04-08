@@ -7,5 +7,7 @@ class CreateFilters < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    
+    add_index :filters, [:resource, :filter_name, :filter_value ], name: "resource_name_value_index"
   end
 end

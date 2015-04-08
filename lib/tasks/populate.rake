@@ -21,19 +21,10 @@ namespace :db do
      UserKey, Column, UserKeyColumn].each(&:delete_all)
     
     # Step 2: Add Filters, Cols, Orgs, Questions, and Approvers
-    # Define resources, filter_names, filter_values
-    filter_lists = [["organizations","type","closed"],
-                 ["organizations","type","false"],
-                 ["events","currentEventsOnly","true"],
-                 ["events","currentEventsOnly","false"],
-                 ["attendees","status","active"],
-                 ["attendees","status","inactive"],
-                 ["memberships","currentMembershipsOnly","true"],
-                 ["memberships","currentMembershipsOnly","false"],
-                 ["positions","type","public"],
-                 ["positions","type","private"],
-                 ["users","status","active"],
-                 ["users","status","inactive"]]
+    # Define resources, filter_names, and filter_values.
+    # This list is used to create 1 filter (with random value) for each possible parameter.
+    filter_lists = Resource::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k,i,Faker::Lorem.word]} }.flatten(1)
+    
     # Build filters and columns at the same time
     filter_lists.each do |fl|
       # create a filter
@@ -170,14 +161,14 @@ namespace :db do
           end
           # Create 1 to 3 whitelists for each key, each a different resource
           resource_list = Resource::RESOURCE_LIST.shuffle
-          Whitelist.populate 1..3 do |whitelist|
+          Whitelist.populate 2..4 do |whitelist|
              whitelist.user_key_id = user_key.id
              # Make it one of the resources
              whitelist.created_at = Time.now
              whitelist.updated_at = Time.now
              # get a list of filters to avoid repeat filters being assigned to a single whitelist
              filter_list = Filter.restrict_to(resource_list.pop).to_a.shuffle
-             WhitelistFilter.populate 1..2 do |whitelist_filter|
+             WhitelistFilter.populate 2..4 do |whitelist_filter|
                whitelist_filter.whitelist_id = whitelist.id
                whitelist_filter.filter_id = filter_list.pop
                # set the timestamps

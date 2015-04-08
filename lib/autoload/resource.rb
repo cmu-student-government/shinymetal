@@ -31,8 +31,8 @@ module Resource
                        positions: ["positionId", "organizationId",
                                    "template","type","activeStatusOnly"],
                        users: ["userId","username","cardId","sisId","affiliation",
-                               "enrollmentStatus","primarySchoolOfEnrollment","status"],
+                               "enrollmentStatus","primarySchoolOfEnrollment","status"] }
                        # These parameters are available to all endpoints
                        # Currently they are unused, just here for documentation purposes
-                       all: ["page","pageSize"] }
+                       # all: ["page","pageSize"]
 end

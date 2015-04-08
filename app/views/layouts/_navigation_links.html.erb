@@ -18,12 +18,8 @@
       <li class="<%= 'active' if cName == 'filters' %>">
         <%= link_to "Filters", filters_path %>
       </li>
-
-      <li class="<%= 'active' if aName == 'own_user_keys' %>">
-        <%= link_to "My Keys", own_user_keys_path %>
-      </li>
       
-      <li class="<%= 'active' if aName == 'own_user_keys' %>">
+      <li class="<%= 'active' if cName == 'questions' %>">
         <%= link_to "Settings", questions_path %>
       </li>
 
@@ -61,9 +57,11 @@
       <% end %>
 
     <li class="has-dropdown">
-      <a href="#">Welcome, <%= @current_user.andrew_id %>!</a>
+      <a href="#">Welcome, <%= @current_user.first_name %>!</a>
       <ul class="dropdown">
 
+        <li><%= link_to "My Keys", own_user_keys_path %></li>
+              
         <li><%= link_to "Logout", logout_path %></li>
 
       </ul>

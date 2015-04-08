@@ -1,5 +1,11 @@
 module Resource
+  # RESOURCE_LIST is used by both the Column and Filter models.
+  # Also used in views: creating valid filters in the filter form, for list of resources in user key pages.
+  # RESOURCE_LIST holds all endpoints that are available from CollegiateLink and used by CMU.
   RESOURCE_LIST = ['organizations','events','attendees','memberships','positions','users']
+  
+  # PARAM_NAME_HASH is to ensure that only valid filters can be created.
+  # A *valid* filter is one that would be recognized by Collegiatelink API.
   PARAM_NAME_HASH = { organizations: ["organizationId",
                                       "excludeHiddenOrganizations",
                                       "status", "category","type","name"],
@@ -32,7 +38,6 @@ module Resource
                                    "template","type","activeStatusOnly"],
                        users: ["userId","username","cardId","sisId","affiliation",
                                "enrollmentStatus","primarySchoolOfEnrollment","status"] }
-                       # These parameters are available to all endpoints
-                       # Currently they are unused, just here for documentation purposes
-                       # all: ["page","pageSize"]
+                       # "page" and "pageSize" are also available params for all endpoints.
+                       # However, it should not be possible to create a filter for them.
 end

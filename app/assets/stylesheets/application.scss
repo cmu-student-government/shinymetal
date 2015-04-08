@@ -24,3 +24,64 @@
   background-color: white;
   border-radius: 8px;
 }
+
+// Apply check, x, and right-arrow styles for status on user_key show page
+.success {
+  color: $success-color;
+}
+.alert {
+  color: $alert-color;
+}
+.admin_only {
+  background-color: lighten($primary-color, 65)
+}
+.staff_only {
+  background-color: lighten($primary-color, 70);
+}
+.public_comments {
+  background-color: lighten($body-font-color, 60)
+}
+.no_bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+#error_explanation {
+  background-color: lighten($primary-color, 55);
+  border-radius: 8px;
+}
+
+.tabs dd.active a, .tabs .tab-title.active a {
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}
+
+.tabs-content > .content {
+  padding: 2em;
+}
+
+// Apply styles to HTML elements
+// to make views framework-neutral.
+// (This part came default with foundation.)
+fieldset, hr {
+  border: 1px solid;
+}
+
+section {
+  @extend .row;
+  margin-top: 20px;
+}
+
+footer {
+  background-color: #aaa;
+  font-size: 10pt;
+  color: #eee;
+}
+
+label {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+}

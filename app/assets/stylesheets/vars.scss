@@ -18,21 +18,10 @@ $secondary-light: #F4F4F4;
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateY(-50%) translateX(-50%);
-  -ms-transform: translateY(-50%) translateX(-50%);
-  transform: translateY(-50%) translateX(-50%);
+  @include transform(translateY(-50%) translateX(-50%)); // Bourbon vendor prefixes
 }
 
 @mixin word-wrap() {
-  word-break:     break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens:    auto;
-  hyphens:         auto;
-}
-
-@mixin placeholder {
-  &::-webkit-input-placeholder {@content}
-  &:-moz-placeholder           {@content}
-  &::-moz-placeholder          {@content}
-  &:-ms-input-placeholder      {@content}
+  word-break: break-word;
+  @include hyphens(auto); // Bourbon vendor prefixes
 }

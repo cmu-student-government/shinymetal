@@ -4,6 +4,7 @@ require 'net/http'
 
 # call this function with the specific endpoint to hit
 # we can change this in the future to take in more options later
+# :nocov:
 def hit_api_endpoint(endpoint)
   # Authentication info, don't share this!
   pass = SETTINGS[:stugov_api_user]
@@ -40,3 +41,4 @@ def hit_api_endpoint(endpoint)
   # Output result
   return JSON.parse(res.body)
 end
+# :nocov:

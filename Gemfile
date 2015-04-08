@@ -19,7 +19,7 @@ gem 'rails', '4.2.1'
   # Use CoffeeScript for .coffee assets and views
   gem 'coffee-rails', '~> 4.1.0'
 
-  # Use Bourbon for SCSS
+  # Use Bourbon for SCSS vendor prefix mixins
   gem 'bourbon'
 
   # Use jquery as the JavaScript library

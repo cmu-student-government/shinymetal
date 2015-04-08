@@ -88,7 +88,7 @@ class UserKey < ActiveRecord::Base
   # Used on user_key show page to show "request form status" label
   def request_form_done?
     self.answers.each {|answer| return false if answer.message.blank? and answer.question.required }
-    return (!self.name.blank? and self.agree)
+    return !self.name.blank?
   end
 
   def self.search(term, max=5)

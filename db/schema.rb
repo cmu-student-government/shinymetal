@@ -105,7 +105,6 @@ ActiveRecord::Schema.define(version: 20150407042819) do
     t.date     "time_expired"
     t.boolean  "active",         default: true
     t.string   "name"
-    t.boolean  "agree",          default: false
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
   end

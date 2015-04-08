@@ -1,26 +1,18 @@
 <%= form_for(@user_key) do |f| %>
 
-  <%#  Begin requester form  %>
-
   <%= render 'shared/error_messages', object: @user_key %>
-
-  <%#  On create, @user_key.id is nil  %>
+  
+  <%#  Begin requester form  %>
+  <%#  On create, @user_key.id is nil and not yet owned by its creator.  %>
   <% if @user_key.id.nil? or @current_user.owns? @user_key %>
-
     <fieldset>
     <%#  Application text boxes. Note that the form object is passed in as :f %>
     <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
-
-    <%#  The key should belong to the current user when first created. This is handled in controller.  %>
-
-    <%= render partial: 'user_keys/form_partials/terms', locals: {:f=>f} %>
-     </fieldset>
-
+    </fieldset>
   <% end %>
+  <%#  End requester input %>
 
-  <%#  End requester  %>
-
-  <%#  Begin admin form  %>
+  <%#  Begin admin input  %>
 
   <%#  @current_user can only see both above and below if they are both admin and key owner.  %>
   <%#  Admin rights should be unavailable if the key is not submitted or created yet.  %>

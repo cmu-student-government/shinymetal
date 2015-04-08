@@ -98,7 +98,6 @@ namespace :db do
       UserKey.populate 0..3 do |user_key|
         user_key.user_id = user.id
         user_key.name = Faker::Company.name
-        user_key.agree = true
         
         # Create an answer for each question that was created earlier
         question_list = Question.all.to_a.clone

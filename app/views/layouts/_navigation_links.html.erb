@@ -4,7 +4,7 @@
 <ul id="nav-links" class="left">
 
   <%# Begin admin login check %>
-  <% if logged_in? %>
+  <% if @current_user %>
     <% if @current_user.role? :is_staff %>
 
       <li class="<%= 'active' if cName == 'users' %>">
@@ -31,8 +31,7 @@
 <%# Right Nav Section %>
 <ul id="drop-links" class="right">
 
-  <% if logged_in? %>
-
+  <% if @current_user %>
     <% if @current_user.role? :is_staff %>
         <li class="has-form" id="search-form">
           <div class="collapsed_row">
@@ -54,7 +53,7 @@
 
           </div>
         </li>
-      <% end %>
+    <% end %>
 
     <li class="has-dropdown">
       <a href="#">Welcome, <%= @current_user.first_name %>!</a>

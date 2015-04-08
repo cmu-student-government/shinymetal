@@ -1,4 +1,4 @@
-class Resource
+module Resource
   RESOURCE_LIST = ['organizations','events','attendees','memberships','positions','users']
   PARAM_NAME_HASH = { organizations: ["organizationId",
                                       "excludeHiddenOrganizations",

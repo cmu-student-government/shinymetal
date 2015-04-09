@@ -1,11 +1,10 @@
 <header class="contain-to-grid">
   <nav id="topbar" class="top-bar" data-topbar role="navigation">
-
     <ul class="title-area">
       <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
       <li class="name">
         <h1>
-          <%= link_to root_url, { id: "root-link" } do %>
+          <%= link_to (@current_user ? home_url : root_url), { id: "root-link" } do %>
             <div class="visible-for-xlarge-up"><%= image_tag "cmu_logo.png", size: "280x40", id: "cmu_logo" %>&nbsp;&nbsp;The Bridge API</div>
             <div class="hidden-for-xlarge-up">The Bridge API</div>
           <% end %>

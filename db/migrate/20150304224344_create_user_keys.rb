@@ -9,7 +9,6 @@ class CreateUserKeys < ActiveRecord::Migration
       t.date :time_expired
       t.boolean :active, default: true
       t.string :name
-      t.boolean :agree, default: false
 
       t.timestamps null: false
     end

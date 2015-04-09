@@ -12,7 +12,6 @@ FactoryGirl.define do
    # factory blueprint for user keys
   factory :user_key do
     association :user
-    agree true
     name "Bender Key"
     status "awaiting_submission"
   end

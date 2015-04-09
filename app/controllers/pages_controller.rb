@@ -1,12 +1,11 @@
 class PagesController < ApplicationController
   before_action :set_page
 
-  # CanCan checks
+  # CanCan checks; only admin can edit these pages.
   authorize_resource
 
   # GET /contact
   def show
-    
   end
 
   # GET /contact/edit

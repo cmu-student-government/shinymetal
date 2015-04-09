@@ -24,7 +24,6 @@ class UserTest < ActiveSupport::TestCase
     teardown do
       destroy_everything
     end
-
     #Scopes
     should "have a scope to sort users alphabetically by last, first" do
       assert_equal ["hconrad", "pjfry", "tleela", "brodriguez", "drzoid"], User.alphabetical.map {|u| u.andrew_id}
@@ -40,6 +39,11 @@ class UserTest < ActiveSupport::TestCase
     
     should "have a scope to return admin" do 
       assert_equal ["pjfry"], User.admin.map{|u| u.andrew_id}
+    end
+
+    # Methods
+    should "have a method to get a user's email" do
+      assert_equal "pjfry@andrew.cmu.edu", @fry.email
     end
 
     should "have a method to get a user's name" do

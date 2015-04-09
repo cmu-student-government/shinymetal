@@ -54,7 +54,6 @@ $body-font-family: 'Asap', verdana, arial, helvetica, sans-serif;
 
   $topbar-height: rem-calc(50);
 
-// Color overrides
   $primary-color: $primary;
   $secondary-color: $secondary;
   $alert-color: $alert;
@@ -67,6 +66,7 @@ $body-font-family: 'Asap', verdana, arial, helvetica, sans-serif;
 
 // Misc overrides
   $row-width: rem-calc(1280);
-
+  $topbar-breakpoint: rem-calc(660px);
+  $topbar-media-query: "screen only and (min-width:600px)";
 
 @import "foundation";

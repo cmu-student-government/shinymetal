@@ -8,11 +8,14 @@ input {
 }
 
 // Navbar
-  nav#topbar {
+  nav#top-bar {
     margin-bottom: 2rem;
 
-    div.top-bar-section {
+    .title-area #root-link {
+      #large-logo { @media screen and (max-width: rem-calc(1150)) { display: none; } }
+    }
 
+    div.top-bar-section {
       li#settings a {
         line-height: 1.6rem;
         i { color: #fff; font-size: 1.4rem; line-height: 3rem; }

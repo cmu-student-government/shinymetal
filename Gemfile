@@ -66,6 +66,9 @@ gem 'rails', '4.2.1'
 
   # Nested filter forms
   gem 'cocoon'
+  
+  # Markdown rendering
+  gem 'redcarpet'
 
 group :development do
   gem 'rails_layout'

@@ -17,6 +17,10 @@ class User < ActiveRecord::Base
   scope :admin, ->  { where("role == 'admin'") }
 
   # Methods
+  def email
+    "#{andrew_id}@andrew.cmu.edu"
+  end
+  
   def owns?(user_key)
     user_key.user.id == self.id
   end

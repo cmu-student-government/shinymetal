@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     user = User.find_by_andrew_id(params[:login])
     if user
       session[:user_id] = user.id
-      redirect_to root_path, notice: "Logged in successfully."
+      redirect_to home_path, notice: "Logged in successfully."
     else
       flash.now[:alert] = "Invalid login."
       render action: 'new'

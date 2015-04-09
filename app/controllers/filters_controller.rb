@@ -33,7 +33,7 @@ class FiltersController < ApplicationController
   # DELETE /filters/1
   def destroy
     if @filter.destroy
-      redirect_to filters_url, notice: 'Filter was successfully destroyed.'
+      redirect_to filters_url, notice: 'Filter was successfully deleted.'
     else
       @user_keys = @filter.user_keys
       render :show

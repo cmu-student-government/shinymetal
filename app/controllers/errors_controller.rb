@@ -12,6 +12,11 @@ class ErrorsController < ApplicationController
     current_user
     # @rescue_response is the name of the error for a typical error.
     # Here, an `@exception` variable contains the original raised error
-    render status: @status_code
+    respond_to do |format|
+      format.html { render status: @status_code }
+      format.json {
+        render json: {error: "Internal server error; please try again later."}, status: 500
+        }
+    end
   end
 end

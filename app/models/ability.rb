@@ -8,6 +8,9 @@ class Ability
     # User is passed in from application controller, this is if the user is a guest
     user ||= User.new
 
+    # Everyone can read the not-so-static pages.
+    can :read, Page
+
     # Authorize user keys, users, filters, and
     # the comments in User Keys.
 
@@ -37,6 +40,9 @@ class Ability
       # Filter
       # Admin can do anything they want to with filters.
       can :manage, Filter
+      
+      # Pages
+      can :manage, Page
       
       # Questions
       can :manage, Question
@@ -117,7 +123,10 @@ class Ability
     # Requester and Key Owner rights
     # These rights are universally available to anyone who is logged in
     if logged_in
-
+      
+      # Can see the 'home' page (distinct from the guest 'welcome' page)
+      can :read, :home
+      
       # Users
       # Can see their own profile
       can :show, User do |accessed_user|

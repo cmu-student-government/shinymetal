@@ -192,7 +192,7 @@ class UserKeysController < ApplicationController
 
     def owner_user_key_params
       # For requester, upon creating or updating application text
-      params.require(:user_key).permit(:agree, :name, answers_attributes: [:id, :message, :question_id])
+      params.require(:user_key).permit(:name, answers_attributes: [:id, :message, :question_id])
     end
 
     def comment_user_key_params # For anyone who can comment

@@ -38,6 +38,9 @@ class Ability
       # Admin can do anything they want to with filters.
       can :manage, Filter
       
+      # Pages
+      can :manage, Page
+      
       # Questions
       can :manage, Question
       
@@ -148,6 +151,9 @@ class Ability
 
     #End basic logged_in rights
     end
+  
+  # Everyone can read the not-so-static pages.
+  can :read, Page
 
   ##End def initialize
   end

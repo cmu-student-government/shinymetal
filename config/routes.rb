@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :sessions, only: [:create, :new, :destroy]
-  
+
   resources :filters, except: [:edit, :update]
 
   resources :organizations, only: [:show, :index]
@@ -62,14 +62,9 @@ Rails.application.routes.draw do
     # end
     # etc. for each endpoint
   end
-
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
+  
+  #Catch-all for About, Contact, etc pages
+  get ':page_url/edit' => 'pages#edit', as: :edit_page
+  get ':page_url' => 'pages#show', as: :page
+  patch ':page_url' => 'pages#update'
 end

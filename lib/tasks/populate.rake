@@ -24,6 +24,11 @@ namespace :db do
     # Define resources, filter_names, and filter_values.
     # This list is used to create 1 filter (with random value) for each possible parameter.
     filter_lists = Resource::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k,i,Faker::Lorem.word]} }.flatten(1)
+    # Add more useful values to Organizations endpoint for API testing purposes:
+    filter_lists.append(["organizations","excludeHiddenOrganizations", "true"])
+    filter_lists.append(["organizations","status", "active"])
+    filter_lists.append(["organizations","category", "Greek Life"])
+    filter_lists.append(["organizations","type", "Fraternity & Sorority Life"])
     
     # Build filters and columns at the same time
     filter_lists.each do |fl|
@@ -40,9 +45,8 @@ namespace :db do
       column.save! if column.valid? #don't create repeat columns
     end
     
-    org_lists = [["Tennis","100"],
-                 ["Crew","200"],
-                 ["Water Polo","300"]]
+    org_lists = [["Activities Board","64224"],
+                 ["AB Underground","64692"]]
     org_lists.each do |ol|
       # create an org
       org = Organization.new
@@ -177,7 +181,7 @@ namespace :db do
           end
           # get a list of orgs to avoid repeat orgs being assigned
           org_list = Organization.all.to_a.shuffle
-          UserKeyOrganization.populate 1..3 do |user_key_organization|
+          UserKeyOrganization.populate 1..2 do |user_key_organization|
             user_key_organization.user_key_id = user_key.id
             user_key_organization.organization_id = org_list.pop.id
             # set the timestamps

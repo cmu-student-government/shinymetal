@@ -18,9 +18,9 @@
       <li class="<%= 'active' if cName == 'filters' %>">
         <%= link_to "Filters", filters_path %>
       </li>
-      
-      <li class="<%= 'active' if cName == 'questions' %>">
-        <%= link_to "Settings", questions_path %>
+
+      <li class="<%= 'active' if cName == 'organizations' %>">
+        <%= link_to "Orgs", organizations_path %>
       </li>
 
     <% end %>
@@ -34,38 +34,51 @@
   <% if logged_in? %>
 
     <% if @current_user.role? :is_staff %>
-        <li class="has-form" id="search-form">
-          <div class="collapsed_row">
+      <li class="has-form" id="search-form">
+        <div class="collapsed_row">
 
-            <div id="searchbox">
-              <div class="search-param s8">
-                <%= text_field_tag :term, params[:term], {
-                  "data-users-search-path" => users_search_path,
-                  "data-keys-search-path" => user_keys_search_path,
-                  "data-users-path" => users_path,
-                  "data-keys-path" => user_keys_path,
-                  placeholder: 'Search for...'
-                } %>
-              </div>
-              <div class="search-label s4">
-                <%= select_tag "search-type-select", options_for_select(["users","keys"]), class: "search-type-select postfix", id: "search-type-select" %>
-              </div>
+          <div id="searchbox">
+            <div class="search-param s8">
+              <%= text_field_tag :term, params[:term], {
+                "data-users-search-path" => users_search_path,
+                "data-keys-search-path" => user_keys_search_path,
+                "data-users-path" => users_path,
+                "data-keys-path" => user_keys_path,
+                placeholder: 'Search for...'
+              } %>
             </div>
-
+            <div class="search-label s4">
+              <%= select_tag "search-type-select", options_for_select(["users","keys"]), class: "search-type-select postfix", id: "search-type-select" %>
+            </div>
           </div>
-        </li>
-      <% end %>
 
-    <li class="has-dropdown">
-      <a href="#">Welcome, <%= @current_user.first_name %>!</a>
-      <ul class="dropdown">
+        </div>
+      </li>
+    <% end %>
 
-        <li><%= link_to "My Keys", own_user_keys_path %></li>
-              
-        <li><%= link_to "Logout", logout_path %></li>
+      <li id="settings" class="<%= 'active' if cName == 'questions' %>">
+        <%= link_to questions_path do %>
+          <i class="show-for-medium-up fi-widget"></i>
+          <div class="show-for-small-only">Settings</div>
+        <% end %>
+      </li>
 
-      </ul>
-    </li>
+    <%# For medium up %>
+      <li class="has-dropdown show-for-medium-up">
+        <a href="#">Welcome, <%= @current_user.first_name %>!</a>
+        <ul class="dropdown">
+
+          <li><%= link_to "My Keys", own_user_keys_path %></li>
+
+          <li><%= link_to "Logout", logout_path %></li>
+
+        </ul>
+      </li>
+    <%# For small %>
+      <li class="show-for-small-only"><%= link_to "My Keys", own_user_keys_path %></li>
+      <li class="show-for-small-only"><%= link_to "Logout", logout_path %></li>
+
+
 
   <% else %>
 

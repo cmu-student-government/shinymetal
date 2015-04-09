@@ -12,6 +12,12 @@ input {
     margin-bottom: 2rem;
 
     div.top-bar-section {
+
+      li#settings a {
+        line-height: 1.6rem;
+        i { color: #fff; font-size: 1.4rem; line-height: 3rem; }
+      }
+
       ul#nav-links li.active > a,
       ul#drop-links li.active > a  { background-color: $topbar-link-bg-hover; }
 

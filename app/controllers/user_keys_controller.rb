@@ -95,7 +95,11 @@ class UserKeysController < ApplicationController
   # DELETE /user_keys/1
   def destroy
     @user_key.destroy
-    redirect_to user_keys_url, notice: 'User key was successfully destroyed.'
+    if @current_user.role? :is_staff
+      redirect_to user_keys_url, notice: 'User key was successfully deleted.'
+    else
+      redirect_to own_user_keys_url, notice: 'Application was successfully deleted.'
+    end
   end
 
   # PATCH/PUT /user_keys/1/set_as_submitted

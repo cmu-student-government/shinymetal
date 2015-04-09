@@ -19,13 +19,13 @@ gem 'rails', '4.2.1'
   # Use CoffeeScript for .coffee assets and views
   gem 'coffee-rails', '~> 4.1.0'
 
-  # Use Bourbon for SCSS
+  # Use Bourbon for SCSS vendor prefix mixins
   gem 'bourbon'
 
   # Use jquery as the JavaScript library
   gem 'jquery-rails'
   # gem 'jquery-ui-rails', '~> 4.2.1'
-  gem 'jquery-turbolinks'
+  # gem 'jquery-turbolinks'
 
   # Foundation gems
   gem 'foundation-rails', '= 5.5.1.0'
@@ -59,7 +59,7 @@ gem 'rails', '4.2.1'
   gem 'gaffe'
 
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-  gem 'turbolinks'
+  # gem 'turbolinks'
 
   # Gives us access to students names/info from CMU's LDAP service
   gem 'cmu_person'

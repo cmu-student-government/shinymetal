@@ -8,10 +8,11 @@
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : 'The Bridge API' %>">
     <meta name="description" content="<%= content_for?(:keywords) ? yield(:keywords) : 'cmu,bridgeapi,thebridge,api,stugov' %>">
 
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_include_tag 'vendor/modernizr' %>
-    <%= javascript_include_tag 'application' %>
-
+    <%= stylesheet_link_tag     'application',      'data-turbolinks-track' => true, media: 'all' %>
+    <%= javascript_include_tag  'vendor/modernizr', 'data-turbolinks-track' => true %>
+    
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    
     <%= favicon_link_tag "favicon.ico" %>
     <%= favicon_link_tag "favicon.ico", rel: "apple-touch-icon" %>
 

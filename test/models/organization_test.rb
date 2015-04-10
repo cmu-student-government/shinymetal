@@ -28,6 +28,22 @@ class OrganizationTest < ActiveSupport::TestCase
     should "have inactive scope" do
       assert_equal ['Inactive Org'], Organization.alphabetical.inactive.map { |o| o.name }
     end
+    
+    should "have repopulate class method to pull org name data from collegiatelink" do
+      Organization.repopulate
+      assert_equal 8, Organization.all.size
+      names_of_results = ["First Test Item", "Second Test Item", "Third Test Item", "Fourth Test Item"].sort
+      assert_equal names_of_results, Organization.active.alphabetical.to_a.map{|o| o.name}
+      # Our orgs were not in the response, so they are now marked inactive:
+      deny @cmutv.reload.active
+      deny @abfilms.reload.active
+      # Running the method a second time shouldn't change anything, since there is no new data to pull.
+      Organization.repopulate
+      assert_equal 8, Organization.all.size
+      assert_equal names_of_results, Organization.active.alphabetical.to_a.map{|o| o.name}
+      # Destroy the four new test items
+      names_of_results.map{|n| Organization.where(name: n).take.destroy }
+    end
 
     should "have class inactive_but_with_nonexpired_keys method to test for removed organizations" do
       assert_equal 0, Organization.inactive_but_with_nonexpired_keys.size

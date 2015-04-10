@@ -1,9 +1,11 @@
 
 <div class="row">
-  <div class="nine-column">
-    <%= f.label :name %>
+  <div class="s5">
+    <strong>(Required)</strong> Application Name
     <%= f.text_field :name %>
-    <small> Your application name.</small>
+    <small>
+    This is the name that will be used to refer to your application and API key.
+    </small>
   </div>
 </div>
 
@@ -11,19 +13,18 @@
 
 <ol>
   
-<%= f.fields_for :answers do |answer_form| %>
+  <%= f.fields_for :answers do |answer_form| %>
   
-     <li><strong><%= "(Required)" if answer_form.object.question.required %></strong>
-      <%= answer_form.object.question.message %>
-     </li>
-     <br/>
-     
-     <div class="row">
-      <%= answer_form.hidden_field :question_id %>
-      <%= answer_form.text_area :message %>
-      </div>
-               
-      <br/>
-    <% end %>
+      <%# answer_form.options[:child_index] is the index of the object in params attributes. %>
+      <%# If the answer has already been created, use that answer's question. %>
+      <%# Otherwise, this index is used as the index to the @questions list to maintain the right ordering of the answers.%>
+      <% question = answer_form.object.question || @questions[answer_form.options[:child_index]] %>
+      <li>
+        <strong>
+        <%= markdown((question.required ? "**Required** " : "") + question.message) %>
+        <%= answer_form.text_area :message, rows: "8" %>
+      </li>
+      
+  <% end %>
     
-  </ol>
+</ol>

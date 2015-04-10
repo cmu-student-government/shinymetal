@@ -23,7 +23,7 @@ class Column < ActiveRecord::Base
     # Note that this will hit all resources and get the columns from the first item.
     for resource in Resources::RESOURCE_LIST
       # Get the JSON response
-    endpoint_response = EndpointResponse(resource)
+    endpoint_response = EndpointResponse.new(resource)
       # Create a Column for each if it doesn't exist already
       for result_name in endpoint_response.columns
         params = { resource: resource, column_name: result_name }

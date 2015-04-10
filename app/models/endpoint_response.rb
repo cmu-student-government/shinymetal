@@ -1,4 +1,8 @@
-require "./lib/bridgeapi_connection.rb"
+if Rails.env.test?
+  require "./lib/bridgeapi_connection_test_version.rb"
+else
+  require "./lib/bridgeapi_connection.rb"
+end
 
 # Objectify responses from bridgeapi_connection
 class EndpointResponse

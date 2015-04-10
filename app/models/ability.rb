@@ -150,6 +150,10 @@ class Ability
       can :own_user_keys, UserKey do |key|
         user.owns?(key)
       end
+      # Can discard a new application
+      can :destroy, UserKey do |key|
+        user.owns?(key) and key.at_stage? :awaiting_submission
+      end
       # Can create a new key for themselves
       can :create, UserKey
 

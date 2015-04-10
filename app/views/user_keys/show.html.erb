@@ -31,8 +31,7 @@
   <%= render partial: 'user_keys/show_partials/approval_status' %>
 <% end %> 
 
-<%# Everyone can see most of the following information. %>
-    <%#  FIXME show expires, active  %>
+<%#  FIXME show expires, active  %>
 
 <table>
   <tr>
@@ -51,12 +50,6 @@
   <strong>Application text:</strong>
   <%= render partial: 'user_keys/show_partials/application_text' %>
 </p>
-
-<%# Show notes from Admin %>
-<div class="public_comments">
-  <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
-</div>
-<%# End of public information. %>
 
 </div>
 

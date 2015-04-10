@@ -19,6 +19,4 @@
 								      time_attr: :time_expired, temp_false_message: "Expired", temp_true_message: "Not Expired"} %>
 </td>
 <%# Show active too %>
-<% if @current_user.role? :is_staff %>
-  <td><%= render partial: 'shared/boolean_label', locals: { boolean_label: user_key.active, true_message: "Yes", false_message: "No" } %>
-<% end %>
+<td><%= render partial: 'shared/boolean_label', locals: { boolean_label: user_key.active, true_message: "Yes", false_message: "No" } %>

@@ -1,7 +1,9 @@
 if Rails.env.test?
   require "./lib/bridgeapi_connection_test_version.rb"
 else
+  # :nocov:
   require "./lib/bridgeapi_connection.rb"
+  # :nocov:
 end
 
 # Objectify responses from bridgeapi_connection
@@ -13,10 +15,11 @@ class EndpointResponse
       hash_response = hit_api_endpoint(resource, options)
       @page_number = hash_response["pageNumber"]
       @page_size = hash_response["pageSize"]
-      @total_items = hash_response["pageSize"]
+      @total_items = hash_response["totalItems"]
       @total_pages = hash_response["totalPages"]
       @items = hash_response["items"]
-      @failed = false
+      # Set failed to true, just in case we got no response from collegiatelink
+      @failed = hash_response.blank?
     else # not a valid resource
       @failed = true
     end
@@ -24,13 +27,13 @@ class EndpointResponse
   
   def columns
     # This function assumes that each item has the same columns.
-    @items.first.keys
+    return @items.first.keys
   end
   
   def restrict_to_columns(columns_whitelist)
     for item in @items
-      for col in item
-	item.delete(col) unless columns_whitelist.include?(col)
+      for column in item.keys
+	      item.delete(column) unless columns_whitelist.include?(column)
       end
     end
   end

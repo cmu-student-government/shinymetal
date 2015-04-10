@@ -6,6 +6,9 @@ require 'net/http'
 # we can change this in the future to take in more options later
 # :nocov:
 def hit_api_endpoint(endpoint, options={})
+  # Set the optional page number to the first page if not otherwise specified
+  options[:page_number] ||= 1
+  
   # Authentication info, don't share this!
   pass = SETTINGS[:stugov_api_user]
   priv = SETTINGS[:stugov_api_pass]
@@ -21,7 +24,7 @@ def hit_api_endpoint(endpoint, options={})
   resource = endpoint
 
   # Any optional parameters that are listed for this endpoint in the API docs
-  optional_params = "&page=1"
+  optional_params = "&page=#{options[:page_number]}"
 
   # Now we construct the full url
   url = URI.parse("#{base_url}?resource=#{resource}#{optional_params}")

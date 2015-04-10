@@ -5,14 +5,17 @@ class EndpointResponse
   attr_reader :page_number, :page_size, :total_items, :total_pages, :items, :failed
   
   def initialize(resource, options={})
-    hash_response = hit_api_endpoint(resource, options)
-    # If there was an error, the rest will be nil anyway.
-    @page_number = hash_response["pageNumber"]
-    @page_size = hash_response["pageSize"]
-    @total_items = hash_response["pageSize"]
-    @total_pages = hash_response["totalPages"]
-    @items = hash_response["items"]
-    @failed = hash_response.blank?
+    if Resources::RESOURCE_LIST.include?(resource)
+      hash_response = hit_api_endpoint(resource, options)
+      @page_number = hash_response["pageNumber"]
+      @page_size = hash_response["pageSize"]
+      @total_items = hash_response["pageSize"]
+      @total_pages = hash_response["totalPages"]
+      @items = hash_response["items"]
+      @failed = false
+    else # not a valid resource
+      @failed = true
+    end
   end
   
   def columns

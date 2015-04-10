@@ -5,7 +5,7 @@ require 'net/http'
 # call this function with the specific endpoint to hit
 # we can change this in the future to take in more options later
 # :nocov:
-def hit_api_endpoint(endpoint)
+def hit_api_endpoint(endpoint, options={})
   # Authentication info, don't share this!
   pass = SETTINGS[:stugov_api_user]
   priv = SETTINGS[:stugov_api_pass]
@@ -38,7 +38,10 @@ def hit_api_endpoint(endpoint)
   # Send the request, put response into res
   res = https.request(req)
 
-  # Output result
+  # Return an empty string if res.body is blank
+  return "" if res.body.blank?
+
+  # Output successful result
   return JSON.parse(res.body)
 end
 # :nocov:

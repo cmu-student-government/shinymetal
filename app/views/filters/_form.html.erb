@@ -8,7 +8,7 @@
       <%= f.label :resource, class: "prefix" %>
     </div>
     <div class="s9">
-      <%= f.select :resource, Resource::RESOURCE_LIST %>
+      <%= f.select :resource, Resources::RESOURCE_LIST %>
     </div>
   </div>
   <div class="collapsed_row">
@@ -16,7 +16,7 @@
       <%= f.label :filter_name, class: "prefix" %>
     </div>
     <div class="s9">
-      <%= f.select :filter_name, Resource::PARAM_NAME_HASH %>
+      <%= f.select :filter_name, Resources::PARAM_NAME_HASH %>
     </div>
   </div>
   <div class="collapsed_row">

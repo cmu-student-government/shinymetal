@@ -1,3 +1,11 @@
+<%# The terms Page's content is rendered as part of a tooltip. %>
+<p>By submitting, you agree to the
+<span class="has-tip tip-top" data-tooltip aria-haspopup="true"
+      title="<%= markdown(Page.find_or_create("terms").message) %>">
+  <%= link_to "terms and conditions", page_path("terms") %></span>
+for using the Bridge API.
+</p>
+
 <%# Key owner can submit the key or edit the application before submitting. %>
   <%= link_to 'Submit request', set_as_submitted_path(@user_key), method: :patch,
               data: {disable_with: "Please Wait..." },

@@ -74,7 +74,6 @@ gem 'rails', '4.1.1'
   gem 'capistrano', '~> 3.2.1'
   gem 'capistrano-rails', '~> 1.1.0' # Use Capistrano for deployment
   gem 'capistrano-bundler'
-  gem 'nokogiri', '>= 1.6.0.beta'
 
 group :development do
   gem 'rails_layout'

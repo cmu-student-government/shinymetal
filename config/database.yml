@@ -23,9 +23,9 @@ test:
   <<: *default
 
 production:
-  adapter: mysql2
   <<: *default
+  adapter: mysql2
 
 staging:
-  adapter: mysql2
   <<: *default
+  adapter: mysql2

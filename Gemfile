@@ -66,9 +66,14 @@ gem 'rails', '4.2.1'
 
   # Nested filter forms
   gem 'cocoon'
-  
+
   # Markdown rendering
   gem 'redcarpet'
+
+  # Capistrano for deployment
+  gem 'capistrano', '~> 3.2.1'
+  gem 'capistrano-rails', '~> 1.1.0' # Use Capistrano for deployment
+  gem 'capistrano-bundler'
 
 group :development do
   gem 'rails_layout'

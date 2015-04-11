@@ -1,14 +1,9 @@
-<h1>Welcome to the ShinyMetal API</h1>
-<p> This API provides access to organization and event information at CMU from the Bridge.
-
-<% if logged_in? %>
-  <% if @current_user.role? :is_staff %>
-   <%= render :partial => "staff_dashboard" %>
-
-  <% else %>
-   <%= render :partial => "requester_dashboard" %>
-  <% end %>
+<% if @current_user.role? :is_staff %>
+ 
+ <%= render :partial => "staff_dashboard" %>
 
 <% else %>
-  Login to begin.
+ 
+ <%= render :partial => "requester_dashboard" %>
+
 <% end %>

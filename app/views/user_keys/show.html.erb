@@ -26,13 +26,12 @@
 
 <div class="content active" id="statusPanel">
 
-<!-- Only Staff should see this status bar.-->
+<%# Only Staff should see this status bar.%>
 <% if @current_user.role? :is_staff %>
   <%= render partial: 'user_keys/show_partials/approval_status' %>
 <% end %> 
 
-<%# Everyone can see most of the following information. %>
-    <%#  TODO show expires, active  %>
+<%#  FIXME show expires, active  %>
 
 <table>
   <tr>
@@ -52,20 +51,12 @@
   <%= render partial: 'user_keys/show_partials/application_text' %>
 </p>
 
-<%# Show notes from Admin %>
-<div class="public_comments">
-  <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
 </div>
-<%# End of public information. %>
-
-</div>
-
-<%# Staffmembers see private information %>
 
 <div class="content" id="permissionsPanel">
-  
-<% if @current_user.role? :is_staff %>
-<div class="content">
+
+<%# Permissions are only visible to the owner when the key is confirmed. %>
+<% if @current_user.role? :is_staff or (@current_user.owns?(@user_key) and @user_key.at_stage? :confirmed) %>
   <div class="staff_only panel">
   <h3>Staff only</h3>
   <br>
@@ -73,22 +64,24 @@
     <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
   </div>
   
-  
     <% if @user_key.at_stage? :awaiting_confirmation %>
-    <div class="staff_only panel row">
-    <!-- Show the key's approvers if the key is at the approval stage. -->
-        <div class="column">
-          <%= render partial: 'user_keys/show_partials/list_of_approvers' %>
-        </div>
-        <div class="column">
-          <% if @current_user.role? :is_approver %>
-            <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
-          <% end %>
-        </div>
-    </div>
+      <div class="staff_only panel row">
+      <%# Show the key's approvers if the key is at the approval stage. %>
+          <div class="column">
+            <%= render partial: 'user_keys/show_partials/list_of_approvers' %>
+          </div>
+          <div class="column">
+            <% if @current_user.role? :is_approver %>
+              <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
+            <% end %>
+          </div>
+      </div>
     <% end %>
 
-</div>
+<% else %>
+    
+  <p>No API access rights exist yet. Once this key request is approved, access rights will be granted by an administrator.</p>
+    
 <% end %>
 
 </div> <%# End of permissions tab. %>
@@ -100,18 +93,16 @@
 </div>
 
 <div class="content" id="commentsPanel">
-<!--Show notes from Admin -->
-<div class="public_comments">
-  <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
-</div> 
+  <div class="public_comments">
+    <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
+  </div> 
 <%= render partial: 'user_keys/show_partials/list_of_comments' %>
 </div>
-<!-- End of comments panel -->
 
-<!-- Confirm, reset, delete, and apply filters here. -->
+<%# Confirm, reset, delete, and apply filters here. %>
 <% if @current_user.role? :admin and !(@user_key.at_stage? :awaiting_submission) %>
   <%= render partial: 'user_keys/show_partials/admin_only' %>
-<!-- Otherwise, key owner can submit the key or edit request.-->
+<%# Otherwise, key owner can submit the key or edit request.%>
 <% elsif @current_user.owns?(@user_key) and @user_key.at_stage? :awaiting_submission %>
   <%= render partial: 'user_keys/show_partials/submit_buttons' %>
 <% end %>

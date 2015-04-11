@@ -21,19 +21,15 @@ namespace :db do
      UserKey, Column, UserKeyColumn].each(&:delete_all)
     
     # Step 2: Add Filters, Cols, Orgs, Questions, and Approvers
-    # Define resources, filter_names, filter_values
-    filter_lists = [["organizations","type","closed"],
-                 ["organizations","type","false"],
-                 ["events","currentEventsOnly","true"],
-                 ["events","currentEventsOnly","false"],
-                 ["attendees","status","active"],
-                 ["attendees","status","inactive"],
-                 ["memberships","currentMembershipsOnly","true"],
-                 ["memberships","currentMembershipsOnly","false"],
-                 ["positions","type","public"],
-                 ["positions","type","private"],
-                 ["users","status","active"],
-                 ["users","status","inactive"]]
+    # Define resources, filter_names, and filter_values.
+    # This list is used to create 1 filter (with random value) for each possible parameter.
+    filter_lists = Resource::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k,i,Faker::Lorem.word]} }.flatten(1)
+    # Add more useful values to Organizations endpoint for API testing purposes:
+    filter_lists.append(["organizations","excludeHiddenOrganizations", "true"])
+    filter_lists.append(["organizations","status", "active"])
+    filter_lists.append(["organizations","category", "Greek Life"])
+    filter_lists.append(["organizations","type", "Fraternity & Sorority Life"])
+    
     # Build filters and columns at the same time
     filter_lists.each do |fl|
       # create a filter
@@ -49,9 +45,8 @@ namespace :db do
       column.save! if column.valid? #don't create repeat columns
     end
     
-    org_lists = [["Tennis","100"],
-                 ["Crew","200"],
-                 ["Water Polo","300"]]
+    org_lists = [["Activities Board","64224"],
+                 ["AB Underground","64692"]]
     org_lists.each do |ol|
       # create an org
       org = Organization.new
@@ -107,7 +102,6 @@ namespace :db do
       UserKey.populate 0..3 do |user_key|
         user_key.user_id = user.id
         user_key.name = Faker::Company.name
-        user_key.agree = true
         
         # Create an answer for each question that was created earlier
         question_list = Question.all.to_a.clone
@@ -170,14 +164,14 @@ namespace :db do
           end
           # Create 1 to 3 whitelists for each key, each a different resource
           resource_list = Resource::RESOURCE_LIST.shuffle
-          Whitelist.populate 1..3 do |whitelist|
+          Whitelist.populate 2..4 do |whitelist|
              whitelist.user_key_id = user_key.id
              # Make it one of the resources
              whitelist.created_at = Time.now
              whitelist.updated_at = Time.now
              # get a list of filters to avoid repeat filters being assigned to a single whitelist
              filter_list = Filter.restrict_to(resource_list.pop).to_a.shuffle
-             WhitelistFilter.populate 1..2 do |whitelist_filter|
+             WhitelistFilter.populate 2..4 do |whitelist_filter|
                whitelist_filter.whitelist_id = whitelist.id
                whitelist_filter.filter_id = filter_list.pop
                # set the timestamps
@@ -187,7 +181,7 @@ namespace :db do
           end
           # get a list of orgs to avoid repeat orgs being assigned
           org_list = Organization.all.to_a.shuffle
-          UserKeyOrganization.populate 1..3 do |user_key_organization|
+          UserKeyOrganization.populate 1..2 do |user_key_organization|
             user_key_organization.user_key_id = user_key.id
             user_key_organization.organization_id = org_list.pop.id
             # set the timestamps

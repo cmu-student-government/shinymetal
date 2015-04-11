@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'rails', '4.2.1'
+gem 'rails', '4.1.1'
 
 # Database gems
   # Mysql is being used on our production server
@@ -74,6 +74,7 @@ gem 'rails', '4.2.1'
   gem 'capistrano', '~> 3.2.1'
   gem 'capistrano-rails', '~> 1.1.0' # Use Capistrano for deployment
   gem 'capistrano-bundler'
+  gem 'nokogiri', '>= 1.6.0.beta'
 
 group :development do
   gem 'rails_layout'

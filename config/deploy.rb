@@ -1,7 +1,7 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
 
-set :application, 'shinymetal'
+set :application, 'bridgeapi'
 set :repo_url, 'git@github.com:jkcorrea/shinymetal.git'
 set :scm, :git
 set :use_sudo, false

@@ -2,7 +2,7 @@
 lock '3.2.1'
 
 set :application, 'shinymetal'
-set :repo_url, 'git@github.com:cmu-student-government/shinymetal.git'
+set :repo_url, 'git@github.com:jkcorrea/shinymetal.git'
 set :scm, :git
 set :use_sudo, false
 set :stages, %w(production staging)

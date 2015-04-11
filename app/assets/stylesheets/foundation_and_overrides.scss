@@ -52,7 +52,6 @@ $body-font-family: 'Asap', verdana, arial, helvetica, sans-serif;
   $topbar-dropdown-link-bg: $primary;
   $topbar-dropdown-bg: transparent;
 
-  $topbar-height: rem-calc(50);
 
   $primary-color: $primary;
   $secondary-color: $secondary;
@@ -66,7 +65,8 @@ $body-font-family: 'Asap', verdana, arial, helvetica, sans-serif;
 
 // Misc overrides
   $row-width: rem-calc(1280);
+  $topbar-height: rem-calc(50);
   $topbar-breakpoint: rem-calc(660px);
-  $topbar-media-query: "screen only and (min-width:600px)";
+  $topbar-media-query: "only screen and (min-width:#{$topbar-breakpoint})";
 
 @import "foundation";

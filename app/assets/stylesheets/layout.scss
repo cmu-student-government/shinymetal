@@ -12,7 +12,8 @@ input {
     margin-bottom: 2rem;
 
     .title-area #root-link {
-      #large-logo { @media screen and (max-width: rem-calc(1150)) { display: none; } }
+      #large-logo {
+        @media only screen and (max-width: rem-calc(1150)) { display: none; } }
     }
 
     div.top-bar-section {

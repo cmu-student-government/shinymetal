@@ -15,8 +15,8 @@ class SessionsController < ApplicationController
         user.save!
       end
 
-      session[:idea_seed] = Time.now.to_i
-      session[:andrew_id] = andrew_id
+      # session[:idea_seed] = Time.now.to_i
+      session[:user_id] = user.id
       flash[:notice] = "Welcome, #{user.name}! You are now logged in."
       redirect_to session[:return_to] || root_path
     end

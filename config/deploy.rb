@@ -8,7 +8,7 @@ set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
 
-set :password, ask("StuGov server password", nil)
+set :password, ask("StuGov server password", "", echo: false)
 set :ssh_options, {
  forward_agent: true,
  auth_methods: %w(password),

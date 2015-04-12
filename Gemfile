@@ -72,8 +72,8 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'redcarpet'
 
   # Capistrano for deployment
-  gem 'capistrano', '~> 3.2.1'
-  gem 'capistrano-rails', '~> 1.1.0' # Use Capistrano for deployment
+  gem 'capistrano', '~> 3.4'
+  gem 'capistrano-rails', '~> 1.1.2' # Use Capistrano for deployment
   gem 'capistrano-bundler'
 
 group :development do

@@ -60,8 +60,11 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   # Error handler
   gem 'gaffe'
 
+  # Load .env files into ENV
+  gem 'dotenv-rails', '~> 2.0.1' :github => "bkeepers/dotenv", :require => 'dotenv/rails-now'
+
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-  # gem 'turbolinks'
+  gem 'turbolinks'
 
   # Gives us access to students names/info from CMU's LDAP service
   gem 'cmu_person'

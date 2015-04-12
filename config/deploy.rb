@@ -15,6 +15,8 @@ set :ssh_options, {
  # password: fetch(:password)
 }
 
+# Load .env files into ENV
+set :linked_files, fetch(:linked_files, []).push('.env')
 
 namespace :deploy do
 

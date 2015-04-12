@@ -61,7 +61,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'gaffe'
 
   # Load .env files into ENV
-  gem 'dotenv-rails', '~> 2.0.1' :github => "bkeepers/dotenv", :require => 'dotenv/rails-now'
+  gem 'dotenv-rails', github: "bkeepers/dotenv", tag: 'v2.0.1', require: 'dotenv/rails-now'
 
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
   gem 'turbolinks'

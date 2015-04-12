@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 gem 'rails', '4.1.1'
+gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 
 # Database gems
   # Mysql is being used on our production server

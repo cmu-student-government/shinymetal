@@ -13,11 +13,10 @@ class UserKeyMailer < ApplicationMailer
   end
 
   #email for admin when an application has been submitted
-  def admin_submit_msg(admin, user, user_key)
-    @recipient = admin
+  def admin_submit_msg(user, user_key)
     @user = user
     @user_key = user_key
-    mail(:to => @recipient.email,
+    mail(:to => Proc.new { User.admin.map(&:email) },
          :subject => "Shiny Metal API Notice: Key Request Submitted")
   end
 

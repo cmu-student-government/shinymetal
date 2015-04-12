@@ -25,12 +25,8 @@ class UserKeysController < ApplicationController
   # GET /user_keys/new
   def new
     @user_key = UserKey.new
-    @questions = Question.active.chronological.to_a.reverse
-    @questions.size.times do |i|
-      new_answer = @user_key.answers.build
-      new_answer.user_key = @user_key
-      new_answer.question = @questions[i-1]
-    end
+    get_questions
+    build_answers
   end
 
   # GET /user_keys/1/edit
@@ -39,8 +35,14 @@ class UserKeysController < ApplicationController
 
   # POST /user_keys
   def create
+    # Questions needed to sanitize ids, or for question data in render :new if there is an error.
+    get_questions
+    # Destroy any question_id that was passed in (none should have been passed in),
+    # then match correct questions to answers based on index.
+    sanitize_question_ids
+    # Build new key
+    @user_key = UserKey.new(create_user_key_params)
     # Set user_key's user to be the current user
-    @user_key = UserKey.new(owner_user_key_params)
     @user_key.user_id = @current_user.id
     if @user_key.save
       redirect_to @user_key, notice: 'User key was successfully created.'
@@ -185,14 +187,35 @@ class UserKeysController < ApplicationController
       @private_comments = @user_key.comments.private_only.chronological
       @comment = @user_key.comments.build
     end
+    
+    def sanitize_question_ids
+      # question_id is something only we should be able to change.
+      # It is included in params so that we can set question_id as part of updating nested attributes.
+      params[:user_key][:answers_attributes].each{|k,v| v[:question_id] = nil}
+      @questions.each_with_index{|q,i| params[:user_key][:answers_attributes][i.to_s][:question_id] = q.id}
+      # Any extra answers that the user hacked in will error out due to missing a question_id.
+    end
+    
+    def get_questions
+      @questions = Question.active.chronological.to_a
+    end
+
+    def build_answers
+      @questions.size.times do
+        @user_key.answers.build
+      end
+    end
 
     def set_user_key
       @user_key = UserKey.find(params[:id])
     end
-
-    def owner_user_key_params
-      # For requester, upon creating or updating application text
+    
+    def create_user_key_params # For requester, upon creating application text
       params.require(:user_key).permit(:name, answers_attributes: [:id, :message, :question_id])
+    end
+
+    def owner_user_key_params # For requester, upon updating application text
+      params.require(:user_key).permit(:name, answers_attributes: [:id, :message])
     end
 
     def comment_user_key_params # For anyone who can comment

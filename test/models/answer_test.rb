@@ -23,7 +23,7 @@ class AnswerTest < ActiveSupport::TestCase
     end
     
     should "have a default scope" do
-      assert_equal ["No, I'm a college student.", "Great!"], Answer.all.map{|a| a.message}
+      assert_equal ["Great!","No, I'm a college student."], Answer.all.map{|a| a.message}
     end
   end
 end

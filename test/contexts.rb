@@ -134,7 +134,7 @@ module Contexts
   def create_organizations
     @cmutv = FactoryGirl.create(:organization)
     @wrct = FactoryGirl.create(:organization, name: "WRCT", external_id: 2)
-    @abfilms = FactoryGirl.create(:organization, name: "AB Films", external_id: 3)
+    @abfilms = FactoryGirl.create(:organization, name: "AB Films", external_id: 10)
     @inactive_org = FactoryGirl.create(:organization, name: "Inactive Org", active: false)
   end
 

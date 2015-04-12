@@ -1,9 +1,9 @@
 <h3><%=@user_key.display_name %>&nbsp;
-  <small> for
+  <small> :
     <% if @current_user.role? :is_staff %>
-      <%= link_to @user_key.user.andrew_id, @user_key.user %>
+      <%= link_to @user_key.user.name, @user_key.user %>
     <% else %>
-      <%= @user_key.user.andrew_id %>
+      <%= @user_key.user.name %>
     <% end %>
   </small>
 </h3>

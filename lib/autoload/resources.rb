@@ -1,4 +1,4 @@
-module Resource
+module Resources  
   # RESOURCE_LIST is used by both the Column and Filter models.
   # Also used in views: creating valid filters in the filter form, for list of resources in user key pages.
   # RESOURCE_LIST holds all endpoints that are available from CollegiateLink and used by CMU.

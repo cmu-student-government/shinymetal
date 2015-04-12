@@ -165,7 +165,7 @@ class UserKey < ActiveRecord::Base
     case sym
     when :awaiting_filters
       return set_key_as_(sym, :time_submitted, today, "The key cannot be submitted. Please check that you
-               have completed all requires fields and agreed to API usage terms.")
+               have completed all requires fields.")
     when :awaiting_confirmation
       return set_key_as_(sym, :time_filtered, today, "The key needs an expiration date.")
     when :confirmed
@@ -208,60 +208,11 @@ class UserKey < ActiveRecord::Base
   def has_public_comments?
     return !self.comments.public_only.empty?
   end
-
-  # When submitted, a key should have its requested date marked
-  def set_time_to_now(param_time_attribute)
-    self[param_time_attribute] = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
-  end
-
-  # For a key being reset
-  def reset_times
-    self.time_submitted = nil
-    self.time_filtered = nil
-  end
-
+  
   # For a key being reset
   def reset_approvals
     # Delete all existing approvals
     self.approvals.destroy_all
-  end
-
-  # When a key is submitted by requester to admin
-  def set_key_as_submitted
-    if at_stage? :awaiting_submission and self.can_be_set_to? :awaiting_filters
-      self.status = "awaiting_filters"
-      set_time_to_now(:time_submitted)
-      save_changes
-      return true
-    end
-    errors.add(:user_key, "cannot be submitted. Please check that you
-               have completed all fields of the form and agreed to API usage terms")
-    return false
-  end
-
-  # When an admin submits the filter form so it can be approved by everyone.
-  # Require an expiration date and at least one filter at this stage
-  def set_key_as_filtered
-    if at_stage? :awaiting_filters and self.can_be_set_to? :awaiting_confirmation
-      self.status = "awaiting_confirmation"
-      set_time_to_now(:time_filtered)
-      save_changes
-      return true
-    end
-    errors.add(:user_key, "needs an expiration date")
-    return false
-  end
-
-  # When a key has been approved by everyone and is confirmed by admin
-  def set_key_as_confirmed
-    if at_stage? :awaiting_confirmation and self.can_be_set_to? :confirmed
-      self.status = "confirmed"
-      set_time_to_now(:time_confirmed)
-      save_changes
-      return true
-    end
-    errors.add(:user_key, "has not been approved by everyone yet")
-    return false
   end
 
   # This is for Reset, when a key has rejected and sent back to the requester

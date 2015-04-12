@@ -24,7 +24,7 @@
       <% for user in users %>
         <tr>
         	<td><%= link_to user.andrew_id, user %></td>
-        	<td><%= user.role %></td>
+        	<td><%= user.display_role %></td>
         	<td><%= render partial: 'shared/boolean_label', locals: { boolean_label: user.active, true_message: "Yes", false_message: "No" } %></td>
         	<%# Staff can see this list but only admin can edit users %>
         	<% if @current_user.role? :admin %>

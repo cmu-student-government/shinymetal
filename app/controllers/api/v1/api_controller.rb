@@ -26,7 +26,7 @@ module Api
         end
 
         # find the appropriate filter_columns for a given user key
-        final_columns = @user_key.columns.restrict_to(endpoint).to_a
+        final_columns = @user_key.columns.restrict_to(endpoint).to_a.map{|c| c.name}
 
         if final_columns.empty?
           render json: {"message" => "error, no columns permitted for this resource"}

@@ -16,8 +16,8 @@ Rails.application.routes.draw do
   resources :users, except: [:destroy, :create, :new]
 
   # Authentication routes
-  get 'logout' => 'sessions#destroy', as: :logout
-  # get 'login' => 'sessions#new', as: :login
+  get 'logout' => 'sessions#logout', as: :logout
+  get 'login' => 'sessions#login', as: :login
 
   # Path to repopulate the organizations look-up table
   patch 'repopulate_organizations' => 'questions#repopulate_organizations', as: :repopulate_organizations

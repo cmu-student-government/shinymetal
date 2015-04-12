@@ -14,16 +14,10 @@ module Api
         # appropriate query to hit the collegiate link api
         require "./lib/bridgeapi_connection.rb"
 
-        # get which endpoint from the URL, probably not the most elegant
-        # split on the slashes
-        post_url_list = (request.original_url).split("/")
-        # get the last element, guaranteed to be non-empty because a request
-        # must have URL
-        endpoint = post_url_list[(post_url_list.length) - 1]
-
-        # modified the script to hit only the specified endpoint
+        # modified the script to hit only the specified endpoint and
         # parse the JSON string from the collegiate link API into a hash
-        body = JSON.parse(hit_api_endpoint(endpoint))
+        endpoint = params[:endpoint]
+        body = hit_api_endpoint(endpoint)
 
         # safe and non-nil because of verify_access_with_key 
         andrew_id = request.headers["HTTP_ANDREW_ID"]
@@ -42,7 +36,7 @@ module Api
         final_columns = filter_columns.select{|fc| fc[resource_idx] == endpoint}.map{|fc| fc[column_name_idx]}
 
         if final_columns.length == 0
-           render json: {"message" => "error, no columns whitelisted"}
+           render json: request_info_hash.merge({"results" => "error, no columns whitelisted"})
         else
           result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| final_columns.include?(k) } } }
           final_hash  = request_info_hash.merge(result_hash)

@@ -46,11 +46,7 @@ Rails.application.routes.draw do
   # routes for the api and respective versions
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
-      post 'users'         => 'api#index', controller: 'api'
-      post 'events'        => 'api#index', controller: 'api'
-      post 'memberships'   => 'api#index', controller: 'api'
-      post 'organizations' => 'api#index', controller: 'api'
-      post 'positions'     => 'api#index', controller: 'api'
+      post ':endpoint' => 'api#index'
     end
   
     # in the future, we can simply do

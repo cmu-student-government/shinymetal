@@ -35,6 +35,8 @@ def hit_api_endpoint(endpoint)
   req.add_field("Authentication", digest)
 
   # Send the request, put response into res
+
+  # FIRXME handle errors
   res = https.request(req)
 
   # Output result

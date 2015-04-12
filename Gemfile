@@ -115,3 +115,8 @@ group :test do
   gem 'minitest-reporters'
   # gem 'tconsole'  # issues with matchers and minitest, so skip for now
 end
+
+
+group :production, :staging do
+  gem 'actionpack-page_caching'
+end

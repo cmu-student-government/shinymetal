@@ -7,10 +7,7 @@
 <ol>
   <% @active_questions.each do |question| %>
     <li>
-      <% if question.required %>
-        <strong>(Required)&nbsp;</strong>
-      <% end %>
-      <%= markdown(question.message) %>
+      <%= markdown((question.required ? "**Required** " : "") + question.message) %>
       <br/>
       <%= link_to 'Edit', edit_question_path(question), class: "big-button" %> | 
       <%= link_to 'Delete', question_path(question), method: :delete, class: "big-button" %>

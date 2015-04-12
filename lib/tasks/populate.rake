@@ -23,7 +23,7 @@ namespace :db do
     # Step 2: Add Filters, Cols, Orgs, Questions, and Approvers
     # Define resources, filter_names, and filter_values.
     # This list is used to create 1 filter (with random value) for each possible parameter.
-    filter_lists = Resource::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k,i,Faker::Lorem.word]} }.flatten(1)
+    filter_lists = Resources::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k,i,Faker::Lorem.word]} }.flatten(1)
     # Add more useful values to Organizations endpoint for API testing purposes:
     filter_lists.append(["organizations","excludeHiddenOrganizations", "true"])
     filter_lists.append(["organizations","status", "active"])
@@ -163,7 +163,7 @@ namespace :db do
             comment.updated_at = Time.now
           end
           # Create 1 to 3 whitelists for each key, each a different resource
-          resource_list = Resource::RESOURCE_LIST.shuffle
+          resource_list = Resources::RESOURCE_LIST.shuffle
           Whitelist.populate 2..4 do |whitelist|
              whitelist.user_key_id = user_key.id
              # Make it one of the resources

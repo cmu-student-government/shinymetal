@@ -4,8 +4,8 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   
   # Scopes
-  # Using a default_scope makes it easier to sort nested items on create.
-  default_scope { order(created_at: :desc) } 
+  # Using a default_scope makes it easier to sort nested items.
+  default_scope { joins(:question).order("questions.created_at") } 
   
   # Validations
   validates_presence_of :question

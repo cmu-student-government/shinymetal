@@ -7,12 +7,12 @@
     <strong>Andrew:</strong>
     <%= @user.andrew_id %>
   </p>
-  
+
   <div class="collapsed_row">
-    <div class="three-column">
+    <div class="s3">
       <%= f.label :role, class: "prefix" %>
     </div>
-    <div class="nine-column">
+    <div class="s9">
       <%= f.select :role, User::ROLE_LIST %>
     </div>
   </div>
@@ -20,14 +20,14 @@
     <%= f.check_box :active %>
     <%= f.label :active %>
   </div>
-  
+
   <br/>
-  
+
   <div class="actions">
     <%= f.submit class: "big-button success" %> |
     <%= link_to 'Cancel', @user, class: "big-button secondary" %>
   </div>
-  
+
   </fieldset>
-  
+
 <% end %>

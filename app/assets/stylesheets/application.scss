@@ -1,0 +1,87 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ */
+
+@import "bourbon";
+@import "foundation_and_overrides";
+@import "foundation-icons/foundation-icons";
+@import "vars";
+@import "layout";
+@import "user_keys";
+
+.checkbox_panel {
+  @extend .panel;
+  background-color: white;
+  border-radius: 8px;
+}
+
+// Apply check, x, and right-arrow styles for status on user_key show page
+.success {
+  color: $success-color;
+}
+.alert {
+  color: $alert-color;
+}
+.admin_only {
+  background-color: lighten($primary-color, 65)
+}
+.staff_only {
+  background-color: lighten($primary-color, 70);
+}
+.public_comments {
+  background-color: lighten($body-font-color, 60)
+}
+.no_bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+#error_explanation {
+  background-color: lighten($primary-color, 55);
+  border-radius: 8px;
+}
+
+.tabs dd.active a, .tabs .tab-title.active a {
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}
+
+.tabs-content > .content {
+  padding: 2em;
+}
+
+// Apply styles to HTML elements
+// to make views framework-neutral.
+// (This part came default with foundation.)
+fieldset, hr {
+  border: 1px solid;
+}
+
+section {
+  @extend .row;
+  margin-top: 20px;
+}
+
+footer {
+  background-color: #aaa;
+  font-size: 10pt;
+  color: #eee;
+}
+
+label {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+}

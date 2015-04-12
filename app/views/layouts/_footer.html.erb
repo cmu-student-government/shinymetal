@@ -1,3 +1,23 @@
-<br /><br />
-<p> Under development. </p>
-<br /><br />
+<div id="back-to-top">
+  Back to Top
+</div>
+
+<footer>
+  <%# If the user is logged in, provide a link to the home dashboard. %>
+  <% if @current_user %>
+    <%= link_to 'Home', home_path %>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <% end %>
+  
+  <%# Provide a link for each possible not-so-static page. %>
+  <% Page::PAGE_LIST.keys.each_with_index do |page_url, index| %>
+    <% unless index == 0 %>
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    <% end %>
+    <%= link_to page_url.capitalize, page_path(page_url) %>
+  <% end %>
+  
+  <br />
+  <div id="copy">
+    &copy; 2015 Carnegie Mellon University &mdash; Information Systems
+  </div>
+</footer>

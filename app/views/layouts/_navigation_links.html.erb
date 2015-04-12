@@ -1,43 +1,88 @@
-  <ul class="left"> 
-    <li class="divider"></li>
-    
-    <!-- Begin admin login check-->
-    <% if logged_in? and @current_user.role? :is_staff %>
-    <li><%= link_to "Users", users_path %></li>
-    
-    <li><%= link_to "User Keys", user_keys_path %></li>
-    
-    <li><%= link_to "Filters", filters_path %></li>
-    
-    <li><%= link_to "Orgs", organizations_path %></li>
-  
-    <li class="has-form">
-      <div class="collapsed_row">
-        <%= form_tag users_path, method: 'get' do %>
-          <div class="search-param">
-            <%= text_field_tag :search, params[:search] %>
-          </div>
-          <div class="search-label">
-            <%= submit_tag "Find User", :name => nil, class: "search-button info postfix" %>
-          </div>
-        <% end %>
-      </div>
-    </li>
-    <% end %>
-    <% if logged_in? %> <!--End admin login check, begin basic user login check-->
-      <li><%= link_to "Your Keys", own_user_keys_path %></li>
-    <% end %>
-  </ul>
+<% cName = controller.controller_name %>
+<% aName = controller.action_name %>
 
-<ul class="right">
-  <% if logged_in? %>
-    <li><%= link_to "Welcome, #{current_user.andrew_id}", @current_user %></li>
-    
-    <li class="divider"></li>
-    
-    <li><%= link_to "Logout", logout_path %></li>
-  <% else %>
-    <li><%= link_to "Login", login_path %></li>
+<ul id="nav-links" class="left">
+
+  <%# Begin admin login check %>
+  <% if @current_user %>
+    <% if @current_user.role? :is_staff %>
+
+      <li class="<%= 'active' if cName == 'users' %>">
+        <%= link_to "Users", users_path %>
+      </li>
+
+      <li class="<%= 'active' if cName == 'user_keys' && aName != 'own_user_keys' %>">
+        <%= link_to "User Keys", user_keys_path %>
+      </li>
+
+      <li class="<%= 'active' if cName == 'filters' %>">
+        <%= link_to "Filters", filters_path %>
+      </li>
+
+      <li class="<%= 'active' if cName == 'organizations' %>">
+        <%= link_to "Orgs", organizations_path %>
+      </li>
+
+    <% end %>
   <% end %>
-  </li>
+</ul>
+
+
+<%# Right Nav Section %>
+<ul id="drop-links" class="right">
+
+  <% if @current_user %>
+    <% if @current_user.role? :is_staff %>
+      <li class="has-form" id="search-form">
+        <div class="collapsed_row">
+
+          <div id="searchbox">
+            <div class="search-param s8">
+              <%= text_field_tag :term, params[:term], {
+                "data-users-search-path" => users_search_path,
+                "data-keys-search-path" => user_keys_search_path,
+                "data-users-path" => users_path,
+                "data-keys-path" => user_keys_path,
+                placeholder: 'Search for...'
+              } %>
+            </div>
+            <div class="search-label s4">
+              <%= select_tag "search-type-select", options_for_select(["users","keys"]), class: "search-type-select postfix", id: "search-type-select" %>
+            </div>
+          </div>
+
+        </div>
+      </li>
+    <% end %>
+
+      <li id="settings" class="<%= 'active' if cName == 'questions' %>">
+        <%= link_to questions_path do %>
+          <i class="show-for-medium-up fi-widget"></i>
+          <div class="show-for-small-only">Settings</div>
+        <% end %>
+      </li>
+
+    <%# For medium up %>
+      <li class="has-dropdown show-for-medium-up">
+        <a href="#">Welcome, <%= @current_user.first_name %></a>
+        <ul class="dropdown">
+
+          <li><%= link_to "My Keys", own_user_keys_path %></li>
+
+          <li><%= link_to "Logout", logout_path %></li>
+
+        </ul>
+      </li>
+    <%# For small %>
+      <li class="show-for-small-only"><%= link_to "My Keys", own_user_keys_path %></li>
+      <li class="show-for-small-only"><%= link_to "Logout", logout_path %></li>
+
+
+
+  <% else %>
+
+    <li><%= link_to "Login", login_path %></li>
+
+  <% end %>
+
 </ul>

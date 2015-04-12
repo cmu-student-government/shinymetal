@@ -9,16 +9,20 @@ class User < ActiveRecord::Base
   #validates :andrew_id, presence: true, uniqueness: true
   validates :role, inclusion: { in: ROLE_LIST, message: "is not a recognized role in system" }
 
-  scope :alphabetical, -> { order(:andrew_id) }
+  scope :alphabetical, -> { order(:last_name, :first_name) }
+  scope :by_andrew, -> { order(:andrew_id) }
   scope :approvers_only, -> { where("role = 'admin' or role = 'staff_approver'") }
   scope :staff_only, ->  { where("role <> 'requester'") }
   scope :requesters_only, ->  { where("role == 'requester'") }
   scope :admin, ->  { where("role == 'admin'") }
-  scope :search, ->(param) { where("andrew_id LIKE ?", "%#{param.to_s.downcase}%") }
 
   # Methods
+  def email
+    "#{andrew_id}@andrew.cmu.edu"
+  end
+  
   def owns?(user_key)
-    return user_key.user.id == self.id
+    user_key.user.id == self.id
   end
 
   def role?(sym)
@@ -34,4 +38,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  def name(proper=true)
+    proper ? "#{first_name} #{last_name}" : "#{last_name}, #{first_name}"
+  end
+
+  def self.search(term, max=5)
+    term = "%#{term.to_s.downcase}%"
+    andrew = 'LOWER(andrew_id)'
+    first = 'LOWER(first_name)'
+    last = 'LOWER(last_name)'
+    full = "LOWER(#{connection.concat('first_name', '\' \'', 'last_name')})"
+    where("#{andrew} LIKE ? OR #{first} LIKE ? OR #{last} LIKE ? OR #{full} LIKE ?", term, term, term, term).limit(max)
+  end
 end

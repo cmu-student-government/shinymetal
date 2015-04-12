@@ -17,7 +17,7 @@ class WhitelistFilter < ActiveRecord::Base
     existing_whitelist_filters = Whitelist.find(whitelist_id).filters
     return true if existing_whitelist_filters.empty?
     unless existing_whitelist_filters.first.resource == incoming_filter.resource
-      errors.add(:filter, "has the wrong resource for this whitelist")
+      errors.add(:base, "A clause was given filters for different API endpoints.")
       return false
     end
     return true

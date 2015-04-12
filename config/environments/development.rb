@@ -12,12 +12,6 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   # config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-  
-  # For Gaffe gem:
-  # Make Rails use `exceptions_app` in development
-  config.consider_all_requests_local = false
-  # To restore chatty errors, set the above variable to true:
-  # config.consider_all_requests_local = true
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
@@ -44,7 +38,13 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  
+
   # Development mailer opens mail in browser
   config.action_mailer.delivery_method = :letter_opener
+  
+  # For Gaffe error handler gem:
+  # Make Rails use `exceptions_app` in development
+  config.consider_all_requests_local = false
+  # To restore chatty errors, set the above variable to true:
+  # config.consider_all_requests_local = true
 end

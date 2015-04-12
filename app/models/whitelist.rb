@@ -14,15 +14,15 @@ class Whitelist < ActiveRecord::Base
   scope :restrict_to, ->(param) { joins(:filters).where("filters.resource = ?", param).distinct }
   
   def resource
-    # All filters should have the same resource
+    # All filters in a whitelist should have the same resource.
     return self.filters.first.resource
   end
   
   private
+  # Do not allow a whitelist to have no filters.
   def has_filters
-    # Do not allow a whitelist to have no filters.
     if self.filters.empty?
-      errors.add(:whitelist_id, "does not have any filters checked")
+      errors.add(:base, "A new clause has been created but does not have any filters.")
       return false
     end
     return true

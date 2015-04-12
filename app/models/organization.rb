@@ -1,5 +1,3 @@
-require "./lib/bridgeapi_connection.rb"
-
 class Organization < ActiveRecord::Base
   # Relationships
   has_many :user_key_organizations
@@ -17,7 +15,6 @@ class Organization < ActiveRecord::Base
   end
   
   # Repopulate the organizations look-up table
-  # FIXME 1. needs error handling for bad jSON response, 2. only looks at 1 page of orgs on the site
   def self.repopulate
     # First, fetch an array of all organizations still believed to be in CollegiateLink.
     our_active_orgs_hash = Organization.get_our_active_organizations_hash
@@ -39,7 +36,7 @@ class Organization < ActiveRecord::Base
       object.update_attribute(:name, object.name.strip + " (removed from CollegiateLink)")
     end
     
-    return true
+    return true #FIXME needs error handling
   end
   
   private
@@ -51,10 +48,16 @@ class Organization < ActiveRecord::Base
   end
   
   def self.get_their_result_list
-    body = hit_api_endpoint("organizations")
     result_list = []
-    for item in body["items"]
-      result_list.append([item["organizationId"],item["name"]])
+    page_number = 1
+    total_pages = nil
+    while total_pages.nil? or page_number <= total_pages
+      page_response = EndpointResponse.new("organizations", page_number: page_number)
+      total_pages = page_response.total_pages
+      for item in page_response.items
+        result_list.append([item["organizationId"],item["name"]])
+      end
+      page_number = page_number + 1
     end
     # result_list = [ [1234,"name"], [2134,"other_name"],...]
     return result_list

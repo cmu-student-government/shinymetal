@@ -33,19 +33,10 @@ class FiltersController < ApplicationController
   # DELETE /filters/1
   def destroy
     if @filter.destroy
-      redirect_to filters_url, notice: 'Filter was successfully destroyed.'
+      redirect_to filters_url, notice: 'Filter was successfully deleted.'
     else
       @user_keys = @filter.user_keys
       render :show
-    end
-  end
-  
-  # PATCH /filters/repopulate_columns
-  def repopulate_columns
-    if Column.repopulate
-      redirect_to root_path, notice: "The columns in the system were successfully updated."
-    else
-      redirect_to root_path, alert: "The request to CollegiateLink failed. Please try again later."
     end
   end
 

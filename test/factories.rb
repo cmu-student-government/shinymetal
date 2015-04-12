@@ -1,26 +1,18 @@
 FactoryGirl.define do
-  
+
   # factory blueprint for users
   factory :user do
-    andrew_id "bender"
+    andrew_id "brodriguez"
+    first_name "Bender"
+    last_name "Rodriguez"
     role "requester"
     active true
   end
-  
+
    # factory blueprint for user keys
   factory :user_key do
     association :user
-    agree true
     name "Bender Key"
-    proposal_text_one "Test"
-    proposal_text_two "Test"
-    proposal_text_three "Test"
-    proposal_text_four "Test"
-    proposal_text_five "Test"
-    proposal_text_six "Test"
-    proposal_text_seven "Test"
-    # Eight is optional
-    proposal_text_eight nil
     status "awaiting_submission"
   end
 
@@ -36,7 +28,7 @@ FactoryGirl.define do
     filter_name "status"
     filter_value "active"
   end
-  
+
   factory :column do
     resource "organizations"
     column_name "description"
@@ -46,7 +38,7 @@ FactoryGirl.define do
     name "cmuTV"
     external_id 1
   end
-  
+
   # factory blueprint for user key organizations
   factory :user_key_organization do
     association :organization
@@ -63,13 +55,28 @@ FactoryGirl.define do
   factory :whitelist do
     association :user_key
   end
-  
+
   # factory blueprint for user key column
   factory :user_key_column do
     association :column
     association :user_key
   end
   
+  # factory blueprint for question
+  factory :question do
+    required true
+    active true
+    message "How do you feel?"
+  end
+  
+  # answer factory
+  factory :answer do
+    association :user_key
+    association :question
+    message "Great!"
+  end
+  
+  # approval factory
   factory :approval do
     association :approval_user #user, renamed to approval_user for clarity
     association :user_key

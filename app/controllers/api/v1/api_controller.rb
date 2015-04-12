@@ -7,7 +7,7 @@ module Api
       skip_before_filter :verify_authenticity_token
       # apparently it's bad to pass in tokens in the URL directly,
       # it can be unsafe. will fix in future
-      #####before_filter :verify_access_with_api_key
+      before_filter :verify_access_with_api_key
 
       def index
         # FIXME need to modify to consider related filters and build 
@@ -16,7 +16,7 @@ module Api
         
         # Note to Ben, if you want to test "users" easily,
         # comment out the before_filter, and uncomment the next line (which gets a key with at least 1 column for users):
-        @user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
+        #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
         
         endpoint = params[:endpoint]
         response = EndpointResponse.new(endpoint)

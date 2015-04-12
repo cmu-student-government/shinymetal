@@ -15,8 +15,8 @@ class User < ActiveRecord::Base
   scope :by_andrew, -> { order(:andrew_id) }
   scope :approvers_only, -> { where("role = 'admin' or role = 'staff_approver'") }
   scope :staff_only, ->  { where("role <> 'requester'") }
-  scope :requesters_only, ->  { where("role == 'requester'") }
-  scope :admin, ->  { where("role == 'admin'") }
+  scope :requesters_only, ->  { where("role = 'requester'") }
+  scope :admin, ->  { where("role = 'admin'") }
 
   # Methods
   def email
@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   def set_name
     person = CMU::Person.find(andrew_id)
     first_name = person.first_name
-    last_name = person.last_name
+    last_name = person.last_name-
   end
 
   def self.search(term, max=5)

@@ -7,9 +7,9 @@ Rails.application.routes.draw do
 
   get 'user_keys/search' => 'user_keys#search', as: :user_keys_search # this needs to go before resource :user_keys to override the path
   resources :user_keys
-  
+
   resources :questions, except: [:show]
-  
+
   # Users are not deleted, only inactivated.
   # They are not created directly; they are meant to be created automatically via shibboleth login.
   get 'users/search' => 'users#search', as: :users_search # this needs to go before resource :users to override the path
@@ -17,14 +17,14 @@ Rails.application.routes.draw do
 
   # Authentication routes
   get 'logout' => 'sessions#destroy', as: :logout
-  get 'login' => 'sessions#new', as: :login
-  
+  # get 'login' => 'sessions#new', as: :login
+
   # Path to repopulate the organizations look-up table
   patch 'repopulate_organizations' => 'questions#repopulate_organizations', as: :repopulate_organizations
-  
+
   # Path to add columns from CollegiateLink
   patch 'repopulate_columns' => 'questions#repopulate_columns', as: :repopulate_columns
-  
+
   # Path to see a user's own keys
   get 'own_user_keys' => 'user_keys#own_user_keys', as: :own_user_keys
 
@@ -56,12 +56,12 @@ Rails.application.routes.draw do
     # end
     # etc. for each endpoint
   end
-  
+
   root :to => "pages#show", page_url: 'welcome'
-  
+
   # Home path
   get 'home' => 'home#index', as: :home
-  
+
   # Catch-all for About, Contact, etc pages
   get ':page_url/edit' => 'pages#edit', as: :edit_page
   get ':page_url' => 'pages#show', as: :page

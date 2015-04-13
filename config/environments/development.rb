@@ -9,8 +9,7 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
-  # Show full error reports and disable caching.
-  # config.consider_all_requests_local       = true
+  # Disable caching.
   # config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send.
@@ -44,7 +43,6 @@ Rails.application.configure do
 
   # For Gaffe error handler gem:
   # Make Rails use `exceptions_app` in development
-  config.consider_all_requests_local = false
+  config.consider_all_requests_local = true
   # To restore chatty errors, set the above variable to true:
-  # config.consider_all_requests_local = true
 end

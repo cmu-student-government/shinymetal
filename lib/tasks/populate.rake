@@ -23,7 +23,7 @@ namespace :db do
     # Step 2: Add Filters, Cols, Orgs, Questions, and Approvers
     # Define resources, filter_names, and filter_values.
     # This list is used to create 1 filter (with random value) for each possible parameter.
-    filter_lists = Resources::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k,i,Faker::Lorem.word]} }.flatten(1)
+    filter_lists = Resources::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k.to_s,i,Faker::Lorem.word]} }.flatten(1)
     # Add more useful values to Organizations endpoint for API testing purposes:
     filter_lists.append(["organizations","excludeHiddenOrganizations", "true"])
     filter_lists.append(["organizations","status", "active"])

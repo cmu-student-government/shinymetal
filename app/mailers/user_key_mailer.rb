@@ -26,7 +26,7 @@ class UserKeyMailer < ApplicationMailer
     @user = user
     @user_key = user_key
     #FIXME test in production, letter opener doesn't seem to play nicely with Proc.new, i think it works tho ?
-    email = Proc.new { User.approvers_only.map { |a| a.email }
+    email = Proc.new { User.approvers_only.map { |a| a.email } }
     mail(:to => email, 
          :subject => "Shiny Metal API Notice: Key Request Available For Approval")
   end

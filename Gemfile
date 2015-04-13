@@ -70,6 +70,9 @@ gem 'rails', '4.2.1'
   # Markdown rendering
   gem 'redcarpet'
 
+  # Schedules tasks (used for email)
+  gem 'whenever', :require => false
+
 group :development do
   gem 'rails_layout'
   gem 'web-console', '~> 2.0'

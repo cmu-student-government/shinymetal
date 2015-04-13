@@ -2,7 +2,7 @@
 lock '3.4.0'
 
 set :application, 'bridgeapi'
-set :repo_url, 'git@github.com:jkcorrea/shinymetal.git'
+set :repo_url, 'git@github.com:cmu-student-government/shinymetal.git'
 set :scm, :git
 set :use_sudo, false
 set :stages, %w(production staging)
@@ -24,6 +24,11 @@ namespace :deploy do
     on roles(:all) do
       execute :ln, "-nfs #{shared_path}/config/settings.yml #{release_path}/config/"
     end
+  end
+
+  desc "Update the crontab file"
+    task :update_crontab do
+    run "bundle exec whenever --update-crontab #{application}"
   end
 
   # task :search_reindex do

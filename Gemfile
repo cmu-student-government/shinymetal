@@ -64,6 +64,9 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   # Markdown rendering
   gem 'redcarpet'
 
+  # Schedules tasks (used for email)
+  gem 'whenever', :require => false
+
   # Sqlite3 for dev, test db
   gem 'sqlite3', group: [:development, :test]
 

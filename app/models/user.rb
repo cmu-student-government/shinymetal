@@ -46,8 +46,10 @@ class User < ActiveRecord::Base
 
   def set_name
     person = CMU::Person.find(andrew_id)
-    first_name = person.first_name
-    last_name = person.last_name
+    if !person.nil?   
+      first_name = person.first_name
+      last_name = person.last_name
+    end
   end
 
   def self.search(term, max=5)

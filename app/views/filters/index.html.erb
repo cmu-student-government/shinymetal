@@ -14,15 +14,19 @@
   </tbody>
 </table>
 
-<%# Kaminari paginate %>
-<div id="paginator">
-  <%= paginate @filters, remote: true %>
+<div class="row">
+  <div class="s6">
+    <% if @current_user.role? :admin %>
+      <%= link_to 'New Filter', new_filter_path, class: "big-button" %>
+    <% end %>
+  </div>
+  
+  <%#  Kaminari paginate  %>
+  <div class="s6">
+    <div id="paginator">
+      <%= paginate @filters, remote: true %>
+    </div>
+  </div>
 </div>
 
-<% if @current_user.role? :admin %>
-  
-  <br/>
-  <%= link_to 'New Filter', new_filter_path, class: "big-button" %>
-  
-<% end %>
 

@@ -19,6 +19,7 @@
     <% if @current_user.role? :admin %>
       <%= link_to 'New Filter', new_filter_path, class: "big-button" %>
     <% end %>
+   &nbsp;
   </div>
   
   <%#  Kaminari paginate  %>

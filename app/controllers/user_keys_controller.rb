@@ -109,7 +109,7 @@ class UserKeysController < ApplicationController
     if @user_key.set_status_as :awaiting_filters
       # Email confirmation and page confirmation
       UserKeyMailer.submitted_msg(@current_user).deliver
-      UserKeyMailer.admin_submit_msg(User.admin.first, @current_user, @user_key).deliver
+      UserKeyMailer.admin_submit_msg(@current_user, @user_key).deliver
       redirect_to @user_key, notice: 'User key request was successfully submitted.'
     else
       get_comments
@@ -187,7 +187,7 @@ class UserKeysController < ApplicationController
       @private_comments = @user_key.comments.private_only.chronological
       @comment = @user_key.comments.build
     end
-    
+
     def sanitize_question_ids
       # question_id is something only we should be able to change.
       # It is included in params so that we can set question_id as part of updating nested attributes.
@@ -195,7 +195,7 @@ class UserKeysController < ApplicationController
       @questions.each_with_index{|q,i| params[:user_key][:answers_attributes][i.to_s][:question_id] = q.id}
       # Any extra answers that the user hacked in will error out due to missing a question_id.
     end
-    
+
     def get_questions
       @questions = Question.active.chronological.to_a
     end
@@ -209,7 +209,7 @@ class UserKeysController < ApplicationController
     def set_user_key
       @user_key = UserKey.find(params[:id])
     end
-    
+
     def create_user_key_params # For requester, upon creating application text
       params.require(:user_key).permit(:name, answers_attributes: [:id, :message, :question_id])
     end

@@ -13,7 +13,7 @@ class UserKey < ActiveRecord::Base
   has_many :approvals, dependent: :destroy
   # has_many :answers requires inverse_of, to be created at the same time as its user_key.
   has_many :answers, dependent: :destroy, inverse_of: :user_key
-  
+
   has_many :questions, through: :answers
   has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
@@ -51,14 +51,13 @@ class UserKey < ActiveRecord::Base
   scope :active, -> { where(active: true) }
 
   #scopes dealing with status for dashboards
-  scope :awaiting_filters, -> { where("status == ?", 'awaiting_filters')}
-  scope :awaiting_confirmation, -> { where("status == ?", 'awaiting_confirmation')}
-  scope :confirmed, -> { where("status == ?", 'confirmed')}
-  scope :awaiting_submission, -> { where("status == ?", 'awaiting_submission')}
+  scope :awaiting_filters, -> { where("status = ?", 'awaiting_filters')}
+  scope :awaiting_confirmation, -> { where("status = ?", 'awaiting_confirmation')}
+  scope :confirmed, -> { where("status = ?", 'confirmed')}
+  scope :awaiting_submission, -> { where("status = ?", 'awaiting_submission')}
   scope :submitted, -> { where("status <> 'awaiting_submission'") }
   scope :expired, -> { where("time_expired < ?", DateTime.now)}
   scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
-  scope :find_by_id, ->(param_id) { where("id == ?", param_id) }
 
   #scopes that will be used for email jobs
   scope :expires_in_a_month, -> { where("time_expired LIKE ?","%#{30.days.from_now.to_date}%") }
@@ -207,7 +206,7 @@ class UserKey < ActiveRecord::Base
   def has_public_comments?
     return !self.comments.public_only.empty?
   end
-  
+
   # For a key being reset
   def reset_approvals
     # Delete all existing approvals

@@ -10,7 +10,10 @@
       <%= markdown((question.required ? "**Required** " : "") + question.message) %>
       <br/>
       <%= link_to 'Edit', edit_question_path(question), class: "big-button" %> | 
-      <%= link_to 'Delete', question_path(question), method: :delete, class: "big-button" %>
+      <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will remove this question from all future applications.
+      Existing applications will still have answers to thsi question."
+        <%= link_to 'Delete', question_path(question), method: :delete, class: "big-button" %>
+      </span>
     </li> 
   <% end %>
 </ol>
@@ -21,7 +24,7 @@
 
 </br>
 
-<span class="has-tip tip-top" "data-tooltip aria-haspopup="true" title="This action will pull data from CollegiateLink API
+<span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will pull data from CollegiateLink API
 to refresh the list of organizations in the system. This action is executed automatically by the system every week.">
 <%= link_to 'Sync Organizations Look-up Table',
                repopulate_organizations_path, 
@@ -31,7 +34,7 @@ to refresh the list of organizations in the system. This action is executed auto
 </span>
 <br/>
 
-<span class="has-tip tip-top" "data-tooltip aria-haspopup="true" title="This action will pull data from CollegiateLink API
+<span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will pull data from CollegiateLink API
 to refresh the list of columns known to be used by CollegiateLink. This action is executed automatically by the system every week.">
 <%= link_to 'Sync Columns', repopulate_columns_path,
       method: :patch, class: "small-button center",

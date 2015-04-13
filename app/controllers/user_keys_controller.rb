@@ -45,7 +45,7 @@ class UserKeysController < ApplicationController
     # Set user_key's user to be the current user
     @user_key.user_id = @current_user.id
     if @user_key.save
-      redirect_to @user_key, notice: 'User key was successfully created.'
+      redirect_to @user_key, notice: 'Application was successfully created.'
     else
       render :new
     end
@@ -61,7 +61,7 @@ class UserKeysController < ApplicationController
       whitelist = owner_user_key_params
     end
     if @user_key.update(whitelist)
-      redirect_to @user_key, notice: 'User key was successfully updated.'
+      redirect_to @user_key, notice: 'Application was successfully updated.'
     else
       render :edit
     end
@@ -98,7 +98,7 @@ class UserKeysController < ApplicationController
   def destroy
     @user_key.destroy
     if @current_user.role? :is_staff
-      redirect_to user_keys_url, notice: 'User key was successfully deleted.'
+      redirect_to user_keys_url, notice: 'Application was successfully deleted.'
     else
       redirect_to own_user_keys_url, notice: 'Application was successfully deleted.'
     end
@@ -112,7 +112,8 @@ class UserKeysController < ApplicationController
       User.admin.each do |admin|
         UserKeyMailer.admin_submit_msg(admin, @user_key).deliver
       end
-      redirect_to @user_key, notice: 'User key request was successfully submitted.'
+      redirect_to @user_key, notice: 'Application was successfully submitted. A confirmation email has been sent to you.
+                                      You will receive an email when the status of your application changes.'
     else
       get_comments
       render :show
@@ -123,7 +124,7 @@ class UserKeysController < ApplicationController
   def set_as_filtered
     if @user_key.set_status_as :awaiting_confirmation
       UserKeyMailer.share_with_approver_msg(@user_key.user, @user_key).deliver
-      redirect_to @user_key, notice: 'User key has had its filters assigned and is now visible to approvers.'
+      redirect_to @user_key, notice: 'Application has had its filters assigned and can now be approved by approvers in the system.'
     else
       get_comments
       render :show
@@ -134,7 +135,7 @@ class UserKeysController < ApplicationController
   def set_as_confirmed
     if @user_key.set_status_as :confirmed
       UserKeyMailer.key_approved_msg(@user_key.user, @user_key).deliver
-      redirect_to @user_key, notice: 'User key was successfully confirmed. All steps are complete.'
+      redirect_to @user_key, notice: 'Application was successfully confirmed and released to the requester. All steps are complete.'
     else
       get_comments
       render :show
@@ -145,7 +146,7 @@ class UserKeysController < ApplicationController
   def set_as_reset
     if @user_key.set_status_as :awaiting_submission
       UserKeyMailer.app_reset_msg(@user_key.user, @user_key).deliver
-      redirect_to user_keys_url, notice: 'User key application was successfully returned to the requester with comments,
+      redirect_to user_keys_url, notice: 'Application was successfully returned to the requester with comments,
                                           and is no longer visible to staff.'
     else
       get_comments

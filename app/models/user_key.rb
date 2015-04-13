@@ -84,6 +84,11 @@ class UserKey < ActiveRecord::Base
     return false if self.time_expired.nil?
     return self.time_expired < Date.today
   end
+  
+  def will_expire_soon?
+    return false if self.time_expired.nil? or self.expired?
+    return self.time_expired < 30.days.from_now
+  end
 
   # Used on user_key show page to show "request form status" label
   def request_form_done?

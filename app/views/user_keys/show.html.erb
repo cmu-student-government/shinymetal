@@ -12,6 +12,8 @@
 
 <%= render 'shared/error_messages', object: @user_key %>
 
+<%= render 'user_keys/show_partials/status_warning' %>
+
 <ul class="tabs" data-tab>
   <li class="tab-title active"><a href="#statusPanel">Status</a></li>
   <% if @current_user.role? :is_staff %>

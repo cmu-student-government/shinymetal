@@ -1,0 +1,24 @@
+<!-- Warn the user key owner when the key is inactive, in progress, expired, about to expire, or good to go -->
+
+<% message_class = "error" %>
+<!-- Errors -->
+<% if !@user_key.active %>
+  <% message = "This key has been suspended indefinitely by an administrator and is not available." %> 
+<% elsif @user_key.expired? %>
+  <% message = "This key has expired and is no longer in available." %>
+
+<!--Notices-->
+<% elsif @user_key.will_expire_soon? %>
+  <% message = "This key will expire soon. You will receive an automated email when the key expires." %>
+  <% message_class = "notice" %>
+<% elsif @user_key.at_stage? :awaiting_filters or @user_key.at_stage? :awaiting_confirmation %>
+  <% message = "This application is being processed.
+                You will receive an automated email when the status of your application changes." %>
+  <% message_class = "notice" %>
+<% end %>
+  
+<% unless message.nil?%>  
+  <fieldset class="<%= message_class %>_explanation">
+    <p><strong><%= message_class.capitalize %></strong>: <%= message %></p>
+  </fieldset>
+<% end %>

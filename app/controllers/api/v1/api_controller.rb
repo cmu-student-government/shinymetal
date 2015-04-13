@@ -12,30 +12,25 @@ module Api
       def index
         # FIXME need to modify to consider related filters and build 
         # appropriate query to hit the collegiate link api
-        # Note to Ben, if you want to test "users" easily,
-        # comment out the before_filter, and uncomment the next line (which gets a key with at least 1 column for users):
+        
+        # If you want to test "users" easily, comment out the before_filter, and uncomment the next line:
         #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
         
         endpoint = params[:endpoint]
         response = EndpointResponse.new(endpoint)
         if response.failed
           render json: {"message" => "error, the requested resource does not exist"}
-          return
-        end
-
-        # find the appropriate filter_columns for a given user key
-        final_columns = @user_key.columns.restrict_to(endpoint).to_a.map{|c| c.name}
-
-        if final_columns.empty?
-          render json: {"message" => "error, no columns permitted for this resource"}
         else
-          #result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| final_columns.include?(k) } } }
-          response.restrict_to_columns(final_columns)
-          #final_hash  = request_info_hash.merge(result_hash)
-          final_hash = response.to_hash
-          render json: JSON(final_hash), status: 200
+          # find the appropriate filter_columns for a given user key
+          final_columns = @user_key.columns.restrict_to(endpoint).to_a.map{|c| c.name}
+          if final_columns.empty?
+            render json: {"message" => "error, no columns permitted for this resource"}
+          else
+            response.restrict_to_columns(final_columns)
+            final_hash = response.to_hash
+            render json: JSON(final_hash), status: 200
+          end
         end
-
       end
 
       #def find_user_key_id_by_andrew_id(andrew_id)
@@ -83,7 +78,6 @@ module Api
           render json: {error: "Error, the account associated with this andrew ID has been suspended"}, status: 401
         end
       end
-
     end
   end
 end

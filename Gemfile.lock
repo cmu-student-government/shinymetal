@@ -7,6 +7,13 @@ GIT
     dotenv-rails (2.0.1)
       dotenv (= 2.0.1)
 
+GIT
+  remote: https://github.com/jkcorrea/cmu_person.git
+  revision: d615d5837575e226aaf3a056e4392015e67cc183
+  specs:
+    cmu_person (0.0.3)
+      net-ldap
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -64,8 +71,6 @@ GEM
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     chronic (0.10.2)
-    cmu_person (0.0.2)
-      net-ldap
     cocoon (1.2.6)
     coderay (1.1.0)
     coffee-rails (4.1.0)
@@ -243,7 +248,7 @@ DEPENDENCIES
   capistrano (~> 3.4)
   capistrano-bundler
   capistrano-rails (~> 1.1.2)
-  cmu_person
+  cmu_person!
   cocoon
   coffee-rails (~> 4.1.0)
   dotenv-rails!

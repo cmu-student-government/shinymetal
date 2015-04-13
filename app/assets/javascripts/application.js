@@ -11,11 +11,13 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require foundation
 //= require cocoon
 //= require jQuery.autocomplete
 //= require_tree .
+//= require turbolinks
 
 $(document).on('page:load', function() { $(document).foundation(); }); // http://stackoverflow.com/a/27385622/2557082
 

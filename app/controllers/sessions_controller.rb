@@ -1,22 +1,29 @@
 class SessionsController < ApplicationController
-  def new
-  end
+  def login
+    remote_user = Rails.env.development? ? "mdf" : request.env["REMOTE_USER"]
 
-  def create
-    # TEMPORARILY allow anyone to login as anybody without authentication
-    #user = User.authenticate(params[:login], params[:password])
-    user = User.find_by_andrew_id(params[:login])
-    if user
-      session[:user_id] = user.id
-      redirect_to home_path, notice: "Logged in successfully."
+    if remote_user.blank?
+      render_500
     else
-      flash.now[:alert] = "Invalid login."
-      render action: 'new'
+      andrew_id = remote_user.split("@")[0].downcase
+      user = User.find_by_andrew_id(andrew_id)
+
+      if !user
+        user = User.new
+        user.andrew_id = andrew_id
+        user.role = ["jkcorrea", "mdf", "aditisar", "bklam"].include?(andrew_id) ? "admin" : "requester"
+        user.save!
+      end
+
+      # session[:idea_seed] = Time.now.to_i
+      session[:user_id] = user.id
+      flash[:notice] = "Welcome, #{user.name}! You are now logged in."
+      redirect_to session[:return_to] || root_path
     end
   end
 
-  def destroy
+  def logout
     session[:user_id] = nil
-    redirect_to root_path, notice: "You have been logged out."
+    redirect_to "https://webiso.andrew.cmu.edu/logout.cgi"
   end
 end

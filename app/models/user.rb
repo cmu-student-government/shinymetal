@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  before_save :set_name
+
   # Relationships
   has_many :user_keys
 
@@ -27,7 +29,7 @@ class User < ActiveRecord::Base
   def email
     "#{andrew_id}@andrew.cmu.edu"
   end
-  
+
   def owns?(user_key)
     user_key.user.id == self.id
   end
@@ -47,6 +49,12 @@ class User < ActiveRecord::Base
 
   def name(proper=true)
     proper ? "#{first_name} #{last_name}" : "#{last_name}, #{first_name}"
+  end
+
+  def set_name
+    person = CMU::Person.find(andrew_id)
+    self.first_name = person.first_name
+    self.last_name = person.last_name
   end
 
   def self.search(term, max=5)

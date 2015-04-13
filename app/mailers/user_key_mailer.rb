@@ -13,11 +13,10 @@ class UserKeyMailer < ApplicationMailer
   end
 
   #email for admin when an application has been submitted
-  def admin_submit_msg(admin, user, user_key)
-    @recipient = admin
+  def admin_submit_msg(user, user_key)
     @user = user
     @user_key = user_key
-    mail(:to => @recipient.email,
+    mail(:to => Proc.new { User.admin.map(&:email) },
          :subject => "The Bridge API Notice: Key Request Submitted")
   end
 
@@ -26,7 +25,7 @@ class UserKeyMailer < ApplicationMailer
     @user = user
     @user_key = user_key
     #FIXME test in production, letter opener doesn't seem to play nicely with Proc.new, i think it works tho ?
-    email = Proc.new { User.approvers_only.map { |a| a.email }
+    email = Proc.new { User.approvers_only.map(&:email) }
     mail(:to => email, 
          :subject => "The Bridge API Notice: Key Request Available For Approval")
   end
@@ -61,6 +60,7 @@ class UserKeyMailer < ApplicationMailer
     @user_key = user_key
     mail(:to => @recipient.email, 
          :subject => "The Bridge API Notice: Your #{@user_key.name} Key Application Has Been Approved!")
+
   end
 
   #email for admin when all approvers have approved

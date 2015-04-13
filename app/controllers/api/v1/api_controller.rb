@@ -12,10 +12,9 @@ module Api
       def index
         # FIXME need to modify to consider related filters and build 
         # appropriate query to hit the collegiate link api
-        
+  
         # If you want to test "users" easily, comment out the before_filter, and uncomment the next line:
         #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
-        
         endpoint = params[:endpoint]
         response = EndpointResponse.new(endpoint)
         if response.failed
@@ -32,22 +31,6 @@ module Api
           end
         end
       end
-
-      #def find_user_key_id_by_andrew_id(andrew_id)
-      #  @cur_user         = User.search(andrew_id)[0]
-      #  @user_keys_to_ids = @cur_user.user_keys.active.not_expired.confirmed.map{|uk| {uk.gen_api_key => uk.id} }
-      #  # guaranteed to be non-nil because only called in index controller
-      #  # after verify_access_with_api_key
-      #  puts @user_keys_to_ids
-      #  api_key = request.headers["HTTP_API_KEY"]
-      #  # map to a list of ids where if the id matches, then return that id else 0
-      #  result = @user_keys_to_ids.map{|d| !d[api_key].nil? ? d[api_key] : 0}
-      #  # the id will then be added to all zeroes and can be returned
-      #  id = result.reduce(:+)
-      #  # in the case where no user_keys are found to match the user and api_key
-      #  final_id = id > 0 ? id : nil
-      #  return final_id
-      #end
       
       private
       #return whether the passed in api_key exists in our system

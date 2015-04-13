@@ -27,7 +27,7 @@ namespace :deploy do
   end
 
   desc "Update the crontab file"
-    task :update_crontab do
+  task :update_crontab do
     run "bundle exec whenever --update-crontab #{application}"
   end
 

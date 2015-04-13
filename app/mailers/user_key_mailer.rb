@@ -1,6 +1,6 @@
 class UserKeyMailer < ApplicationMailer
   # FIXME make sure to replace with the actual URL when deployed
-  default_url_options[:host] = 'stugov.andrew.cmu.edu/shinymetal'
+  default_url_options[:host] = 'https://stugov.andrew.cmu.edu/bridgeapi'
 
   # This will not send any real email in development mode.
   # Instead, email will be opened in browser.

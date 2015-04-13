@@ -4,23 +4,31 @@
 
 <h2>Application Questions</h2>
 
+<hr/>
+
 <ol>
   <% @active_questions.each do |question| %>
-    <li>
-      <%= markdown((question.required ? "**Required** " : "") + question.message) %>
-      <br/>
-      <%= link_to 'Edit', edit_question_path(question), class: "big-button" %> | 
-      <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will remove this question from all future applications.
-      Existing applications will still have answers to thsi question."
-        <%= link_to 'Delete', question_path(question), method: :delete, class: "big-button" %>
-      </span>
-    </li> 
+  <div class="row">
+    <div class="s11">
+      <li>
+        <%= markdown((question.required ? "**Required** " : "") + question.message) %>
+      </li>
+    </div>
+    <div class="s1">
+        <%= link_to '<i class="fi-page-edit"></i>'.html_safe, edit_question_path(question) %>
+        &nbsp; | &nbsp; 
+        <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will remove this question from future applications.
+        Existing applications will still have answers to this question.">
+          <%= link_to '<i class="fi-x"></i>'.html_safe, question_path(question), method: :delete, class: "red" %>
+        </span>
+      </div>
+  </div>
   <% end %>
 </ol>
   
 <br>
 
-<%= link_to 'New question', new_question_path, class: "big-button" %>
+<%= link_to 'Add question', new_question_path, class: "big-button" %>
 
 </br>
 

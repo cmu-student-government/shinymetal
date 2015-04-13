@@ -109,7 +109,9 @@ class UserKeysController < ApplicationController
     if @user_key.set_status_as :awaiting_filters
       # Email confirmation and page confirmation
       UserKeyMailer.submitted_msg(@current_user).deliver
-      UserKeyMailer.admin_submit_msg(@current_user, @user_key).deliver
+      User.admin.each do |admin|
+        UserKeyMailer.admin_submit_msg(admin, @user_key).deliver
+      end
       redirect_to @user_key, notice: 'User key request was successfully submitted.'
     else
       get_comments

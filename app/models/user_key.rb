@@ -60,10 +60,9 @@ class UserKey < ActiveRecord::Base
   scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
 
   #scopes that will be used for email jobs
-  #FIXME figure out why month scope isn't working
-  scope :expires_in_a_month, -> { where("time_expired LIKE ?","%#{30.days.from_now.to_date}%") }
+  scope :expires_in_a_month, -> { where("time_expired = ?", 30.days.from_now.to_date) }
 
-  scope :expires_today, -> { where("time_expired LIKE ?","%#{Date.today}%") }
+  scope :expires_today, -> { where("time_expired = ?", Date.today) }
 
   # Methods
   def approved_by?(user)

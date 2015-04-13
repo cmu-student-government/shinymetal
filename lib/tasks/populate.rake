@@ -23,7 +23,7 @@ namespace :db do
     # Step 2: Add Filters, Cols, Orgs, Questions, and Approvers
     # Define resources, filter_names, and filter_values.
     # This list is used to create 1 filter (with random value) for each possible parameter.
-    filter_lists = Resources::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k,i,Faker::Lorem.word]} }.flatten(1)
+    filter_lists = Resources::PARAM_NAME_HASH.sort.map{|k,v| v.map{|i| [k.to_s,i,Faker::Lorem.word]} }.flatten(1)
     # Add more useful values to Organizations endpoint for API testing purposes:
     filter_lists.append(["organizations","excludeHiddenOrganizations", "true"])
     filter_lists.append(["organizations","status", "active"])
@@ -124,7 +124,10 @@ namespace :db do
             user_key.time_filtered = 2.weeks.ago.to_date
 
             # time_expired is randomly 1..3 months from now, or 1..2 months ago
-            user_key.time_expired = (1..5).map{|d| d.months.from_now}.append((1..2).map{ |d| d.months.ago})
+            #user_key.time_expired = (1..5).map{|d| d.months.from_now}.append((1..2).map{ |d| d.months.ago})
+            
+            # time_expired set to today or a month from today to test email tasks
+            user_key.time_expired = [Date.today + 30, Date.today] 
 
             user_key.status = "awaiting_confirmation"
             if [true,false].sample # if the key was confirmed...

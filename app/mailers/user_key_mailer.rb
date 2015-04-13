@@ -9,7 +9,7 @@ class UserKeyMailer < ApplicationMailer
   def submitted_msg(user)
     @recipient = user
     mail(:to => @recipient.email,
-         :subject => "Shiny Metal API Notice: Key Request Submitted")
+         :subject => "The Bridge API Notice: Key Request Submitted")
   end
 
   #email for admin when an application has been submitted
@@ -18,7 +18,7 @@ class UserKeyMailer < ApplicationMailer
     @user = user
     @user_key = user_key
     mail(:to => @recipient.email,
-         :subject => "Shiny Metal API Notice: Key Request Submitted")
+         :subject => "The Bridge API Notice: Key Request Submitted")
   end
 
   #email for approvers when a key has been marked ready for approval
@@ -28,7 +28,7 @@ class UserKeyMailer < ApplicationMailer
     #FIXME test in production, letter opener doesn't seem to play nicely with Proc.new, i think it works tho ?
     email = Proc.new { User.approvers_only.map { |a| a.email }
     mail(:to => email, 
-         :subject => "Shiny Metal API Notice: Key Request Available For Approval")
+         :subject => "The Bridge API Notice: Key Request Available For Approval")
   end
 
   #email for requester when their key will expire in 30 days
@@ -36,7 +36,7 @@ class UserKeyMailer < ApplicationMailer
     @recipient = user
     @user_key = user_key
     mail(:to => @recipient.email,
-         :subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Will Expire Soon")
+         :subject => "The Bridge API Notice: Your #{@user_key.name} Key Will Expire Soon")
   end
 
   #email for requester when their key expires
@@ -44,7 +44,7 @@ class UserKeyMailer < ApplicationMailer
     @recipient = user
     @user_key = user_key
     mail(:to => @recipient.email,
-         :subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Has Expired")
+         :subject => "The Bridge API Notice: Your #{@user_key.name} Key Has Expired")
   end
 
   #email for requester when their application has been reopened
@@ -52,7 +52,7 @@ class UserKeyMailer < ApplicationMailer
     @recipient = user
     @user_key = user_key
     mail(:to => @recipient.email, 
-  	 :subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Application Has Been Reopened")
+  	 :subject => "The Bridge API Notice: Your #{@user_key.name} Key Application Has Been Reopened")
   end
 
   #email for requester when process is complete and they have a key
@@ -60,7 +60,7 @@ class UserKeyMailer < ApplicationMailer
     @recipient = user
     @user_key = user_key
     mail(:to => @recipient.email, 
-         :subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Application Has Been Approved!")
+         :subject => "The Bridge API Notice: Your #{@user_key.name} Key Application Has Been Approved!")
   end
 
   #email for admin when all approvers have approved
@@ -68,6 +68,6 @@ class UserKeyMailer < ApplicationMailer
     @recipient = admin
     @user_key = user_key
     mail(:to => @recipient.email, 
-         :subject => "Shiny Metal API Notice: #{@user_key.name} Key Has Been Approved by All Parties")
+         :subject => "The Bridge API Notice: #{@user_key.name} Key Has Been Approved by All Parties")
   end
 end

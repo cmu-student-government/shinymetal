@@ -31,21 +31,40 @@
       
       <hr/>
       
-      <p><i>Set filters and organizations that this key may have access to here.</i></p>
+      <p><i>Set or change filters, columns, and organizations that this key may automatically have access to for each endpoint.</i></p>
      
+      <p><i>Any columns and organizations that are selected are available to the user.</i></p>
+
+      <p><i>For filtering out data, the system uses "whitelists" to define access rights. A "whitelist" is a group of filters. 
+      User requests to an API resource will be accepted as long as they satisfy all filters for at least one whitelist for the resource.
+      Any user request to an API resource that does not satisfy any whitelists for the resource here will be rejected by the system.</i></p>
+      
       <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>
       <%= render partial: 'user_keys/form_partials/organizations_checkboxes', locals: {f: f} %>    
     
       <!--Expiration date-->
-      <p><i>Set the expiration date for the key here.</i></p>
+      <p><i>Set or change the expiration date for the key.</i></p>
       <div class="collapsed_row">
-        <div class="three-column">
+        <div class="s3">
           <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
         </div>
-        <div class="nine-column">
+        <div class="s3">
           <%= f.date_field :time_expired, order: [:month, :day, :year], 
                           start_year: Date.today.year, end_year: 2.years.from_now %>
         </div>
+      </div>
+              
+      <p><i>Marking a key as inactive
+      suspends the application process, or revokes access rights if the key is already confirmed.</i></p>
+    
+      <div class="collapsed_row">
+        <%= f.check_box :active %>
+        <%= f.label :active %>
+        <% if @user_key.active %>
+          &nbsp; <i>This key is currently active.</i>
+        <% else %>
+          &nbsp; <i>This key is inactive and has been suspended.</i>
+        <% end %>
       </div>
       
     </div>
@@ -54,29 +73,7 @@
         <%= render partial: 'user_keys/show_partials/application_text' %>
 
     </div>
-</div>
-    
-    <!-- Active or not active -->
-    <fieldset>
-      
-      <!-- Only admins can inactive a key -->
-      <p><i>Marking a key application as inactive
-      suspends the application process. Marking a confirmed key as inactive
-      suspends all API use of the key.</i></p>
-      
-      <div class="collapsed_row">
-        <%= f.check_box :active %>
-        <%= f.label :active %>
-        <% if @user_key.active %>
-          &nbsp; <i class="success">This key is active and has not been suspended.</i>
-        <% else %>
-          &nbsp; <i class="alert">This key is inactive and has been suspended.</i>
-        <% end %>
-      </div>
-    </fieldset>
-    
   <% end %>
-  
   <!-- End admin form -->
 
   <br/>

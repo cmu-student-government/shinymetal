@@ -16,11 +16,8 @@
 
 <ul class="tabs" data-tab>
   <li class="tab-title active"><a href="#statusPanel">Status</a></li>
-  <% if @current_user.role? :is_staff %>
   <li class="tab-title"><a href="#permissionsPanel">Permissions</a></li>
-  <% end %>
   <li class="tab-title"><a href="#documentationPanel">Documentation</a></li>
-  
   <li class="tab-title"><a href="#commentsPanel">Comments</a></li>
 </ul>
 
@@ -33,20 +30,22 @@
   <%= render partial: 'user_keys/show_partials/approval_status' %>
 <% end %> 
 
-<%#  FIXME show expires, active  %>
-
-<table>
-  <tr>
-    <th>
-      API Key Value
-    </th>
-  </tr>
-  <tr>
-    <td>
-      <%= @user_key.gen_api_key || "<em>Your key is not currently available.</em>"%>
-    </td>
-  </th>
-</table>
+<% if @user_key.at_stage? :confirmed or @current_user.role? :staff %>
+  <table>
+    <tr>
+      <th>API Key Value</th>
+      <th>Expiration Date</th>
+    </tr>
+    <tr>
+      <td>
+      <%= @user_key.gen_api_key %>
+      </td>
+      <td>
+      <%= @user_key.time_expired.nil? ? "N/A" : @user_key.time_expired.to_formatted_s(:long) %>
+      </td>
+    </tr>
+  </table>
+<% end %>
 
 <p>
   <strong>Application text:</strong>

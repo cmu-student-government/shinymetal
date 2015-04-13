@@ -78,10 +78,15 @@
 
   <br/>
   
+  <% msg = (@user_key.at_stage?(:awaiting_submission) ? "After saving, you will be able to submit the application or make further changes." : "Additional changes can always be made later.") %>
+  
   <!-- "cancel_url" is passed as a local variable from new and edit-->
   <div class="actions">
+    <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will save changes to this application. " + <%=msg%>>
     <%= f.submit current_page?(:action => 'new')? "Create application" : "Update application",
-        class: "big-button success", data: {disable_with: "Please Wait..." } %> | 
+        class: "big-button success", data: {disable_with: "Please Wait..." } %>
+        </span>
+        | 
     <%= link_to 'Cancel', cancel_url, class: "big-button secondary" %>
   </div>
   

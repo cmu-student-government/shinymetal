@@ -24,7 +24,10 @@
   <br/>
 
   <div class="actions">
-    <%= f.submit class: "big-button success" %> |
+    <span class="has-tip tip-top" data-tooltip aria-haspopup="true"
+      title="This action will save any changes made for this user's account.">
+    <%= f.submit class: "big-button success" %>
+    </span>|
     <%= link_to 'Cancel', @user, class: "big-button secondary" %>
   </div>
 

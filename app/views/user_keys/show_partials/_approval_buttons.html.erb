@@ -1,6 +1,7 @@
 <% if @user_key.at_stage? :awaiting_filters %>
 
-  <span class="has-tip tip-top" "data-tooltip aria-haspopup="true" title="This action will allow approvers in the system to begin approving this key.">
+  <span class="has-tip tip-top" "data-tooltip aria-haspopup="true" title="This action will allow approvers in the system to begin approving this key. This
+  button should be clicked when you are finished determining the access privileges for this key.">
   <%= link_to 'Share key with approvers', set_as_filtered_path(@user_key),
               method: :patch, class: "big-button success",
               data: {disable_with: "Please Wait..." },

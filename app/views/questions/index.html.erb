@@ -22,7 +22,7 @@
 </br>
 
 <span class="has-tip tip-top" "data-tooltip aria-haspopup="true" title="This action will pull data from CollegiateLink API
-to refresh the list of organizations in the system.">
+to refresh the list of organizations in the system. This action is executed automatically by the system every week.">
 <%= link_to 'Sync Organizations Look-up Table',
                repopulate_organizations_path, 
                method: :patch, class: "big-button center",
@@ -32,8 +32,8 @@ to refresh the list of organizations in the system.">
 <br/>
 
 <span class="has-tip tip-top" "data-tooltip aria-haspopup="true" title="This action will pull data from CollegiateLink API
-to refresh the list of columns known to be used by CollegiateLink.">
+to refresh the list of columns known to be used by CollegiateLink. This action is executed automatically by the system every week.">
 <%= link_to 'Sync Columns', repopulate_columns_path,
       method: :patch, class: "small-button center",
       data: { disable_with: "Please Wait...",
-      confirm: "Are you sure? This will send 8 requests to CollegiateLink API for their colummns." } %>
+      confirm: "Are you sure? This will send 6 requests to CollegiateLink API for their colummns." } %>

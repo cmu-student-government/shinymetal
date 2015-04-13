@@ -1,7 +1,6 @@
 <%# Allow an approve to toggle approval only during awaiting_confirmation stage %>
 <div class="staff_only panel">
   <% if @user_key.approved_by?(@current_user) %>
-    
     <p><strong>You have approved this key.</strong></p>
     <%= link_to 'Undo approve key', undo_approve_key_path(@user_key), method: :patch,
                  class: "big-button secondary", data: {disable_with: "Please Wait..." } %> 
@@ -9,8 +8,10 @@
   <% else %> <!--This user has not approved the key yet-->
     
     <p><strong>You have not approved this key yet.</strong></p> 
-    <%= link_to 'Approve key', approve_key_path(@user_key), method: :patch,
-                  class: "big-button", data: {disable_with: "Please Wait..." } %> 
-  
+    <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will mark your approval for this key application.
+    Once you've approved this key, you will still be able to revoke your approval.">
+      <%= link_to 'Approve key', approve_key_path(@user_key), method: :patch,
+                  class: "big-button", data: {disable_with: "Please Wait..." } %>
+    </span>
   <% end %>
 </div>

@@ -1,6 +1,4 @@
 class UserKeyMailer < ApplicationMailer
-  # FIXME make sure to replace with the actual URL when deployed
-  default_url_options[:host] = 'https://stugov.andrew.cmu.edu/bridgeapi'
 
   # This will not send any real email in development mode.
   # Instead, email will be opened in browser.
@@ -16,7 +14,7 @@ class UserKeyMailer < ApplicationMailer
   def admin_submit_msg(user, user_key)
     @user = user
     @user_key = user_key
-    mail(:to => Proc.new { User.admin.map(&:email) },
+    mail(:to => User.admin.map(&:email),
          :subject => "The Bridge API Notice: Key Request Submitted")
   end
 
@@ -24,9 +22,7 @@ class UserKeyMailer < ApplicationMailer
   def share_with_approver_msg(user, user_key)
     @user = user
     @user_key = user_key
-    #FIXME test in production, letter opener doesn't seem to play nicely with Proc.new, i think it works tho ?
-    email = Proc.new { User.approvers_only.map(&:email) }
-    mail(:to => email, 
+    mail(:to => User.approvers_only.map(&:email),
          :subject => "The Bridge API Notice: Key Request Available For Approval")
   end
 

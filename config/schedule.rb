@@ -20,6 +20,14 @@
 # Learn more: http://github.com/javan/whenever
 
 every 1.day, :at => '12:00 am' do
-	rake "expiry_warning"
-	rake "expired"
+	rake "email:expiry_warning"
+	rake "email:expired"
+end
+
+every 1.week do
+	rake "repopulate:orgs"
+end
+
+every 1.month do
+	rake "repopulate:columns"
 end

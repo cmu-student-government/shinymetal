@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def login
-    remote_user = Rails.env.development? ? "mdf" : request.env["REMOTE_USER"]
+    remote_user = Rails.env.development? ? "aditisar" : request.env["REMOTE_USER"]
 
     if remote_user.blank?
       render_500

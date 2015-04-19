@@ -37,7 +37,7 @@
         <div class="collapsed_row">
 
           <div id="searchbox">
-            <div class="search-param s8">
+            <div id="search-param" class="s8">
               <%= text_field_tag :term, params[:term], {
                 "data-users-search-path" => users_search_path,
                 "data-keys-search-path" => user_keys_search_path,
@@ -46,7 +46,7 @@
                 placeholder: 'Search for...'
               } %>
             </div>
-            <div class="search-label s4">
+            <div id="search-label" class="s4">
               <%= select_tag "search-type-select", options_for_select(["users","keys"]), class: "search-type-select postfix", id: "search-type-select" %>
             </div>
           </div>

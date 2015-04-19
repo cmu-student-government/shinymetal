@@ -31,15 +31,11 @@ namespace :deploy do
     run "bundle exec whenever --update-crontab #{application}"
   end
 
-  # task :search_reindex do
-  #   on roles(:all) do
-  #     execute :rake, 'searchkick:reindex:all'
-  #   end
-  # end
-
   task :symlink_php_endpoints do
-    execute :ln, "-nfs #{shared_path}/jira.php #{release_path}/public/jira.php"
-    execute :ln, "-nfs #{shared_path}/api.php #{release_path}/public/api.php"
+    on roles(:all) do
+      execute :ln, "-nfs #{shared_path}/jira.php #{release_path}/public/jira.php"
+      execute :ln, "-nfs #{shared_path}/api.php #{release_path}/public/api.php"
+      end
   end
 
   desc 'Restart application'
@@ -65,4 +61,3 @@ end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"
 before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
-# after "deploy",  "deploy:search_reindex"

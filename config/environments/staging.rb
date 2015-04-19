@@ -45,7 +45,7 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Point rails to the correct root URL instead of just '/'
-  config.relative_url_root = "/staging/stu-inits"
+  config.relative_url_root = "/staging/bridgeapi"
 
   # Asset host path
   config.action_controller.asset_host = "https://stugov.andrew.cmu.edu"

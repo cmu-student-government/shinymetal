@@ -37,6 +37,12 @@ namespace :deploy do
   #   end
   # end
 
+  before "deploy:restart", :symlink_php_endpoints
+  task :symlink_php_endpoints do
+    run "ln -nfs #{shared_path}/jira.php #{release_path}/public/jira.php"
+    run "ln -nfs #{shared_path}/api.php #{release_path}/public/api.php"
+  end
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do

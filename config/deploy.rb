@@ -38,8 +38,8 @@ namespace :deploy do
   # end
 
   task :symlink_php_endpoints do
-    run "ln -nfs #{shared_path}/jira.php #{release_path}/public/jira.php"
-    run "ln -nfs #{shared_path}/api.php #{release_path}/public/api.php"
+    execute :ln, "-nfs #{shared_path}/jira.php #{release_path}/public/jira.php"
+    execute :ln, "-nfs #{shared_path}/api.php #{release_path}/public/api.php"
   end
 
   desc 'Restart application'

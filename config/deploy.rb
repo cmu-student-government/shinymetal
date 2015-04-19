@@ -37,7 +37,6 @@ namespace :deploy do
   #   end
   # end
 
-  before "deploy:restart", :symlink_php_endpoints
   task :symlink_php_endpoints do
     run "ln -nfs #{shared_path}/jira.php #{release_path}/public/jira.php"
     run "ln -nfs #{shared_path}/api.php #{release_path}/public/api.php"
@@ -65,4 +64,5 @@ namespace :deploy do
 end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"
+before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
 # after "deploy",  "deploy:search_reindex"

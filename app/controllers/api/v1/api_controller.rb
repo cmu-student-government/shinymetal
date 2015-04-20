@@ -15,25 +15,39 @@ module Api
         # Note to Ben, if you want to test "users" easily,
         # comment out the before_filter, and uncomment the next line (which gets a key with at least 1 column for users):
         #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
+
+        # filter out excess params to get the relevant ones for API call
+        unwanted_keys = %w[format controller action endpoint]
+        options = params.reject{ |k,v| unwanted_keys.include?(k)}
+        default_params = %w[page pageSize]
+        options_minus_defaults = options.reject{ |k,v| default_params.include?(k) }
         
-        endpoint = params[:endpoint]
-        response = EndpointResponse.new(endpoint)
-        if response.failed
-          render json: {"message" => "error, the requested resource does not exist"}
-        end
+        # this conditional filters out the rows of the response. if the params
+        # POSTed are not a valid combination of filters to use, it will
+        # immediately reject the response
+        if request_params_allowed(options_minus_defaults)
+          endpoint = params[:endpoint]
+          response = EndpointResponse.new(endpoint, options)
+          if response.failed
+            puts response
+            render json: {"message" => "error, the requested resource does not exist"}
+          end        
 
-        # find the appropriate filter_columns for a given user key
-        final_columns = @user_key.columns.restrict_to(endpoint).to_a.map{|c| c.name}
+          # find the appropriate filter_columns for a given user key
+          final_columns = @user_key.columns.restrict_to(endpoint).to_a.map{|c| c.name}
 
-        if final_columns.empty?
-          response.set_error_message({"message" => "error, no columns permitted for this resource"})
-          render json: response.to_hash
+          if final_columns.empty?
+            response.set_error_message({"message" => "error, no columns permitted for this resource"})
+            render json: response.to_hash
+          else
+            #result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| final_columns.include?(k) } } }
+            response.restrict_to_columns(final_columns)
+            #final_hash  = request_info_hash.merge(result_hash)
+            final_hash = response.to_hash
+            render json: JSON(final_hash), status: 200
+          end
         else
-          #result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| final_columns.include?(k) } } }
-          # response.restrict_to_columns(final_columns)
-          #final_hash  = request_info_hash.merge(result_hash)
-          final_hash = response.to_hash
-          render json: JSON(final_hash), status: 200
+          render json: {"message" => "error, the combination of parameters used is not valid for this API key"}
         end
 
       end
@@ -86,6 +100,9 @@ module Api
         end
       end
 
+      def request_params_allowed(options)
+        return @user_key.whitelists.map{|w| w.filters.to_a.sort}.include?(options.keys.sort) || options.empty?
+      end
     end
   end
 end

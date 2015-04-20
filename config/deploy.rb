@@ -33,8 +33,8 @@ namespace :deploy do
 
   task :symlink_php_endpoints do
     on roles(:all) do
-      execute :ln, "-nfs #{shared_path}/jira.php #{release_path}/public/jira.php"
-      execute :ln, "-nfs #{shared_path}/api.php #{release_path}/public/api.php"
+      execute :ln, "-nfs #{shared_path}/public/jira.php #{release_path}/public/jira.php"
+      execute :ln, "-nfs #{shared_path}/public/api.php #{release_path}/public/api.php"
     end
   end
 

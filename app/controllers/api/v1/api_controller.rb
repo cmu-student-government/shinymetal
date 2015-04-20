@@ -10,37 +10,44 @@ module Api
       before_filter :verify_access_with_api_key
 
       def index
-        # FIXME need to modify to consider related filters and build 
-        # appropriate query to hit the collegiate link api
         require "./lib/bridgeapi_connection.rb"
+        
+        # Note to Ben, if you want to test "users" easily,
+        # comment out the before_filter, and uncomment the next line (which gets a key with at least 1 column for users):
+        #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
 
-        # modified the script to hit only the specified endpoint and
-        # parse the JSON string from the collegiate link API into a hash
-        endpoint = params[:endpoint]
-        body = hit_api_endpoint(endpoint)
+        # filter out excess params to get the relevant ones for API call
+        unwanted_keys = %w[format controller action endpoint]
+        options = params.reject{ |k,v| unwanted_keys.include?(k)}
+        default_params = %w[page pageSize]
+        options_minus_defaults = options.reject{ |k,v| default_params.include?(k) }
+        
+        # this conditional filters out the rows of the response. if the params
+        # POSTed are not a valid combination of filters to use, it will
+        # immediately reject the response
+        if request_params_allowed(options_minus_defaults)
+          endpoint = params[:endpoint]
+          response = EndpointResponse.new(endpoint, options)
+          if response.failed
+            puts response
+            render json: {"message" => "error, the requested resource does not exist"}
+          end        
 
-        # safe and non-nil because of verify_access_with_key 
-        andrew_id = request.headers["HTTP_ANDREW_ID"]
-        api_key   = request.headers["HTTP_API_KEY"]
+          # find the appropriate filter_columns for a given user key
+          final_columns = @user_key.columns.restrict_to(endpoint).to_a.map{|c| c.name}
 
-        # additional information from collegiatelink API forwarded to requester
-        # so the user can then build an iterator to collect all of the information
-        # from all pages
-        request_info_labels = ["pageNumber", "pageSize", "totalItems", "totalPages"]
-        request_info_hash   = Hash[*(request_info_labels.map{|l| [l, body[l]]}).flatten]
-
-        # find the appropriate filter_columns for a given user key
-        user_key_array = UserKey.find_by_id(find_user_key_id_by_andrew_id(andrew_id)).to_a
-        filter_columns = (!user_key_array.nil? && user_key_array.length > 0) ? user_key_array[0].columns.map{|c| [c.resource, c.column_name] } : []
-        resource_idx, column_name_idx = 0, 1
-        final_columns = filter_columns.select{|fc| fc[resource_idx] == endpoint}.map{|fc| fc[column_name_idx]}
-
-        if final_columns.length == 0
-           render json: request_info_hash.merge({"results" => "error, no columns whitelisted"})
+          if final_columns.empty?
+            response.set_error_message({"message" => "error, no columns permitted for this resource"})
+            render json: response.to_hash
+          else
+            #result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| final_columns.include?(k) } } }
+            response.restrict_to_columns(final_columns)
+            #final_hash  = request_info_hash.merge(result_hash)
+            final_hash = response.to_hash
+            render json: JSON(final_hash), status: 200
+          end
         else
-          result_hash = {"results" => body["items"].map{|result| result.select{ |k, v| final_columns.include?(k) } } }
-          final_hash  = request_info_hash.merge(result_hash)
-          render json: JSON(final_hash), status: 200
+          render json: {"message" => "error, the combination of parameters used is not valid for this API key"}
         end
 
       end
@@ -68,8 +75,16 @@ module Api
           # safe because we know the andrew_id is in the system, and must be
           # first because all andrew_ids are guaranteed to be unique
           @cur_user = User.search(andrew_id)[0] 
+          
           # need to check all active, non-expired keys associatd with the user
-          return @cur_user.user_keys.active.not_expired.map{|uk| uk.gen_api_key}.include?(api_key)
+          #return @cur_user.user_keys.active.not_expired.confirmed.map{|uk| uk.gen_api_key}.include?(api_key)
+          for key in @cur_user.user_keys.active.not_expired.confirmed
+            if key.gen_api_key == api_key
+              @user_key = key
+              return true
+            end
+          end
+          
         end
         return false
       end
@@ -85,6 +100,9 @@ module Api
         end
       end
 
+      def request_params_allowed(options)
+        return @user_key.whitelists.map{|w| w.filters.to_a.sort}.include?(options.keys.sort) || options.empty?
+      end
     end
   end
 end

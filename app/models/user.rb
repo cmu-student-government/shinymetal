@@ -5,20 +5,27 @@ class User < ActiveRecord::Base
   has_many :user_keys
 
   # Validations
-  ROLE_LIST = ["requester", "admin", "staff_approver", "staff_not_approver"]
+  ROLE_LIST = {"requester" => "Requester",
+               "admin" => "Administrator (Approver)",
+               "staff_approver" => "Staff (Approver)",
+               "staff_not_approver" => "Staff"}
 
   # No need to validate andrew_id; this is not user input
   #validates :andrew_id, presence: true, uniqueness: true
-  validates :role, inclusion: { in: ROLE_LIST, message: "is not a recognized role in system" }
+  validates :role, inclusion: { in: ROLE_LIST.keys, message: "is not a recognized role in system" }
 
   scope :alphabetical, -> { order(:last_name, :first_name) }
   scope :by_andrew, -> { order(:andrew_id) }
   scope :approvers_only, -> { where("role = 'admin' or role = 'staff_approver'") }
-  scope :staff_only, ->  { where("role <> 'requester'") }
-  scope :requesters_only, ->  { where("role = 'requester'") }
-  scope :admin, ->  { where("role = 'admin'") }
+  scope :staff_only, ->  { where.not(role: 'requester') }
+  scope :requesters_only, ->  { where(role: 'requester') }
+  scope :admin, ->  { where(role: 'admin') }
 
   # Methods
+  def display_role
+    ROLE_LIST[self.role]
+  end
+  
   def email
     "#{andrew_id}@andrew.cmu.edu"
   end
@@ -47,8 +54,8 @@ class User < ActiveRecord::Base
   def set_name
     person = CMU::Person.find(andrew_id)
     if !person.nil?   
-      first_name = person.first_name
-      last_name = person.last_name
+      self.first_name = person.first_name
+      self.last_name = person.last_name
     end
   end
 

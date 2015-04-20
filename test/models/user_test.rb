@@ -42,6 +42,11 @@ class UserTest < ActiveSupport::TestCase
     end
 
     # Methods
+    should "have a method to display the nice form of the user's role" do
+      assert_equal "Administrator (Approver)", @fry.display_role
+      assert_equal "Requester", @bender.display_role
+    end
+    
     should "have a method to get a user's email" do
       assert_equal "pjfry@andrew.cmu.edu", @fry.email
     end

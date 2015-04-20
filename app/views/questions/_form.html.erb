@@ -19,7 +19,10 @@
   <br/>
   
   <div class="actions">
-    <%= f.submit class: "big-button success" %> |
+      <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will save any changes to this question.
+      Editing an existing question will change how that question appears on existing applications. New questions will be ignored by existing applications.">
+        <%= f.submit class: "big-button success" %>
+      </span>|
     <%= link_to 'Cancel', questions_url, class: "big-button secondary" %>
   </div>
   

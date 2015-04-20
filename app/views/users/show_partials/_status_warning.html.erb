@@ -1,0 +1,6 @@
+<!-- Feedback to staff that a user has been suspended -->
+<% unless @user.active %>  
+  <fieldset class="error_explanation">
+    <p><strong>Alert: </strong>This user's account has been suspended. This user will not be permitted to sign into this website or to use any API keys.</p>
+  </fieldset>
+<% end %>

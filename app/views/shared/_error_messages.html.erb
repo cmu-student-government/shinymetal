@@ -1,11 +1,8 @@
 <% if object.errors.any? %>
-  <fieldset id="error_explanation">
-    <p><strong class="alert"><%= pluralize(object.errors.count, "error") %></strong> occurred:</hp>
-
-    <ul>
+  <fieldset class="error_explanation">
     <% object.errors.each do |key, message| %>
-      <li><%= key unless key==:base %> <%= message %></li>
+      <p><strong>Error: </strong></hp>
+      <%= key unless key==:base %> <%= message %></li>
     <% end %>
-    </ul>
   </fieldset>
 <% end %>

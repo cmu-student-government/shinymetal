@@ -28,7 +28,10 @@
     </div>
   </div>
   <div class="collapsed_row">
-    <%= f.submit class: "big-button success" %> |
+    <span class="has-tip tip-top" data-tooltip aria-haspopup="true"
+      title="This action will save any changes made to this filter.">
+    <%= f.submit class: "big-button success" %>
+    </span>|
     <%= link_to 'Cancel', cancel_url, class: "big-button secondary" %>
   </div>
 

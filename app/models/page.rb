@@ -7,7 +7,7 @@ class Page < ActiveRecord::Base
   # Static pages, with content to be determined by an admin.
   # Theoretically, functionality could be extended so that the admin can add pages,
   # but this would add unnecessary complexity to the app.
-  PAGE_LIST = {"welcome" => "Welcome to the Shiny Metal API",
+  PAGE_LIST = {"welcome" => "Welcome to the Bridge API",
                "contact" => "Contact Us",
                "about" => "About Us",
                "terms" => "Terms and Conditions"

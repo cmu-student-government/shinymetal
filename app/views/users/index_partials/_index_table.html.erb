@@ -8,27 +8,31 @@
   <p>No <%= user_type %> found.</p>
 <% else %>
 
-  <table style="width: 100%;">
+  <table>
     <thead>
       <tr>
       	<th>Andrew</th>
       	<th>Role</th>
+	<th>Applications</th>
+	<th>Currently has a key with API access?</th>
       	<th>Active?</th>
         <%# Staff can see this list but only admin can edit users %>
       	<% if @current_user.role? :admin %>
-          <th colspan="3"></th>
+          <th colspan="1"></th>
       	<% end %>
       </tr>
     </thead>
     <tbody>
       <% for user in users %>
         <tr>
-        	<td><%= link_to user.andrew_id, user %></td>
-        	<td><%= user.role %></td>
-        	<td><%= render partial: 'shared/boolean_label', locals: { boolean_label: user.active, true_message: "Yes", false_message: "No" } %></td>
-        	<%# Staff can see this list but only admin can edit users %>
-        	<% if @current_user.role? :admin %>
-            <td><%= link_to 'Edit', edit_user_path(user), class: "small-button" %></td>
+	  <td><%= link_to user.andrew_id, user %></td>
+	  <td><%= user.display_role %></td>
+	  <td><%= user.user_keys.all.size %></td>
+	  <td><%= render partial: 'shared/boolean_label', locals: {boolean_label: user.user_keys.confirmed.not_expired.active.all.empty?, true_message: "Yes", false_message: "No" }%></td>
+	  <td><%= render partial: 'shared/boolean_label', locals: {boolean_label: user.active, true_message: "Yes", false_message: "No" } %></td>
+	  <%# Staff can see this list but only admin can edit users %>
+          <% if @current_user.role? :admin %>
+            <td><%= link_to '<i class="fi-page-edit"></i>'.html_safe, edit_user_path(user) %></td>
           <% end %>
         </tr>
       <% end %>

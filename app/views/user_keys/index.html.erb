@@ -9,14 +9,14 @@
 </div>
 
 <div class="row">
+  <div class="s6">
+    <%= link_to 'New User key', new_user_key_path, class: "big-button" %>
+  </div>
+  
   <%#  Kaminari paginate  %>
-  <div id="s6">
+  <div class="s6">
     <div id="paginator">
       <%= paginate @user_keys, remote: true %>
     </div>
-  </div>
-
-  <div id="s6 left">
-    <%= link_to 'New User key', new_user_key_path, class: "big-button" %>
   </div>
 </div>

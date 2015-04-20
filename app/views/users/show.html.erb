@@ -1,11 +1,18 @@
+<%= render partial: 'users/show_partials/status_warning' %>
+
 <p>
-  <strong>Andrew:</strong>
+  <strong>Name:</strong>
+  <%= @user.name %>
+</p>
+
+<p>
+  <strong>Andrew Id:</strong>
   <%= @user.andrew_id %>
 </p>
 
 <p>
   <strong>Role:</strong>
-  <%= @user.role %>
+  <%= @user.display_role %>
 </p>
 
 <p>

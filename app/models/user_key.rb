@@ -1,6 +1,6 @@
 class UserKey < ActiveRecord::Base
   before_save :check_name
-
+  
   # Relationships
   belongs_to :user
 
@@ -12,18 +12,16 @@ class UserKey < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   has_many :approvals, dependent: :destroy
   # has_many :answers requires inverse_of, to be created at the same time as its user_key.
-  has_many :answers, dependent: :destroy, inverse_of: :user_key
+  has_many :answers, inverse_of: :user_key
 
   has_many :questions, through: :answers
   has_many :columns, through: :user_key_columns
   has_many :organizations, through: :user_key_organizations
-  has_many :comments
-  has_many :approvals
   has_many :approval_users, class_name: User, through: :approvals
   has_many :comment_users, class_name: User, through: :comments
 
   accepts_nested_attributes_for :comments, limit: 1
-  accepts_nested_attributes_for :answers
+  #accepts_nested_attributes_for :answers
   accepts_nested_attributes_for :whitelists, allow_destroy: true
 
   # Validations
@@ -81,6 +79,11 @@ class UserKey < ActiveRecord::Base
   def expired?
     return false if self.time_expired.nil?
     return self.time_expired < Date.today
+  end
+  
+  def will_expire_soon?
+    return false if self.time_expired.nil? or self.expired?
+    return self.time_expired < 30.days.from_now
   end
 
   # Used on user_key show page to show "request form status" label

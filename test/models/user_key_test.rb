@@ -136,6 +136,12 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
                    @bender_key.time_submitted.to_formatted_s(:pretty)
     end
+    
+    should "have a method to show if the key will expire within 30 days" do
+      deny @bender_key.will_expire_soon?
+      assert @expires_in_month_key.will_expire_soon?
+      deny @expired_key.will_expire_soon?
+    end
 
     should "have status changed when request is submitted" do
       assert_equal "awaiting_submission",

@@ -8,8 +8,9 @@ GIT
       dotenv (= 2.0.1)
 
 GIT
-  remote: https://github.com/jkcorrea/cmu_person.git
+  remote: git://github.com/jkcorrea/cmu_person.git
   revision: d615d5837575e226aaf3a056e4392015e67cc183
+  ref: d615d5837575e226aaf3a056e4392015e67cc183
   specs:
     cmu_person (0.0.3)
       net-ldap

@@ -9,9 +9,7 @@ module Api
       # it can be unsafe. will fix in future
       before_filter :verify_access_with_api_key
 
-      def index
-        require "./lib/bridgeapi_connection.rb"
-        
+      def index        
         # Note to Ben, if you want to test "users" easily,
         # comment out the before_filter, and uncomment the next line (which gets a key with at least 1 column for users):
         #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
@@ -82,8 +80,20 @@ module Api
       end
 
       def request_params_allowed(options)
-        return @user_key.whitelists.map{|w| w.filters.to_a.sort}.include?(options.keys.sort) || options.empty?
+        return @user_key.whitelists.map{|w| w.filters.to_a.sort}.include?(options.keys.sort)
       end
+
+      def params_values_allowed(options)
+        for filter_group in @user_key.whitelists.map{|w| w.filters.to_a.sort}
+          for filter in filter_group
+            if options[filter] != filter.filter_value
+              return false
+            end
+          end            
+        end
+        return true
+      end
+
     end
   end
 end

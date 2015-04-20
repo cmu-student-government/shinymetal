@@ -80,13 +80,10 @@ module Api
           render json: {error: "Error, the account associated with this andrew ID has been suspended"}, status: 401
         end
       end
-<<<<<<< HEAD
 
       def request_params_allowed(options)
         return @user_key.whitelists.map{|w| w.filters.to_a.sort}.include?(options.keys.sort) || options.empty?
       end
-=======
->>>>>>> ab31cc7efa5db22f66b8d022253e55bbf0573bfc
     end
   end
 end

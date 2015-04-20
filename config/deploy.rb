@@ -35,7 +35,7 @@ namespace :deploy do
     on roles(:all) do
       execute :ln, "-nfs #{shared_path}/jira.php #{release_path}/public/jira.php"
       execute :ln, "-nfs #{shared_path}/api.php #{release_path}/public/api.php"
-      end
+    end
   end
 
   desc 'Restart application'

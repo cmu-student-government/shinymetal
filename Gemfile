@@ -1,12 +1,13 @@
 source 'https://rubygems.org'
-gem 'rails', '4.2.1'
+gem 'rails', '4.1.1'
+gem 'rake', '10.0.4'
+gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 
-# Database gems
-  # Mysql is being used on our production server
-  gem 'mysql2', group: :production
 
-  # Use sqlite3 in development for easy use
-  gem 'sqlite3', group: [:development, :test]
+# Capistrano for deployment
+  gem 'capistrano', '~> 3.4'
+  gem 'capistrano-rails', '~> 1.1.2' # Use Capistrano for deployment
+  gem 'capistrano-bundler'
 
 
 # Asset gems
@@ -23,9 +24,8 @@ gem 'rails', '4.2.1'
   gem 'bourbon'
 
   # Use jquery as the JavaScript library
-  gem 'jquery-rails'
-  # gem 'jquery-ui-rails', '~> 4.2.1'
-  # gem 'jquery-turbolinks'
+  gem 'jquery-rails', '~> 3.1.2'
+  gem 'jquery-turbolinks'
 
   # Foundation gems
   gem 'foundation-rails', '= 5.5.1.0'
@@ -38,15 +38,6 @@ gem 'rails', '4.2.1'
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', '~> 0.4.0', group: :doc
 
-  # Use ActiveModel has_secure_password
-  # gem 'bcrypt', '~> 3.1.7'
-
-  # Use Unicorn as the app server
-  # gem 'unicorn'
-
-  # Use Capistrano for deployment
-  # gem 'capistrano-rails', group: :development
-
 
 # Utility gems
   # Pagination gem that is still being maintained
@@ -58,17 +49,26 @@ gem 'rails', '4.2.1'
   # Error handler
   gem 'gaffe'
 
+  # Load .env files into ENV
+  gem 'dotenv-rails', github: "bkeepers/dotenv", tag: 'v2.0.1', require: 'dotenv/rails-now'
+
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-  # gem 'turbolinks'
+  gem 'turbolinks'
 
   # Gives us access to students names/info from CMU's LDAP service
-  gem 'cmu_person'
-
+  gem 'cmu_person', git: 'https://github.com/jkcorrea/cmu_person.git'
+  
   # Nested filter forms
   gem 'cocoon'
-  
+
   # Markdown rendering
   gem 'redcarpet'
+
+  # Schedules tasks (used for email)
+  gem 'whenever', :require => false
+
+  # Sqlite3 for dev, test db
+  gem 'sqlite3', group: [:development, :test]
 
 group :development do
   gem 'rails_layout'
@@ -104,4 +104,13 @@ group :test do
   # This one is NOT from Prof H, replaces turn gem, turn gem is deprecated
   gem 'minitest-reporters'
   # gem 'tconsole'  # issues with matchers and minitest, so skip for now
+end
+
+
+group :production, :staging do
+  # Use mysql2 for deploy db
+  gem 'mysql2'
+
+  # Need this otherwise mod_rails throws a fit on deploy server
+  gem 'actionpack-page_caching'
 end

@@ -1,6 +1,4 @@
 class UserKeyMailer < ApplicationMailer
-  # FIXME make sure to replace with the actual URL when deployed
-  default_url_options[:host] = 'stugov.andrew.cmu.edu/shinymetal'
 
   # This will not send any real email in development mode.
   # Instead, email will be opened in browser.
@@ -13,11 +11,10 @@ class UserKeyMailer < ApplicationMailer
   end
 
   #email for admin when an application has been submitted
-  def admin_submit_msg(admin, user, user_key)
-    @recipient = admin
+  def admin_submit_msg(user, user_key)
     @user = user
     @user_key = user_key
-    mail(:to => @recipient.email,
+    mail(:to => User.admin.map(&:email),
          :subject => "Shiny Metal API Notice: Key Request Submitted")
   end
 
@@ -25,9 +22,7 @@ class UserKeyMailer < ApplicationMailer
   def share_with_approver_msg(user, user_key)
     @user = user
     @user_key = user_key
-    #FIXME test in production, letter opener doesn't seem to play nicely with Proc.new, i think it works tho ?
-    email = Proc.new { User.approvers_only.map { |a| a.email }
-    mail(:to => email, 
+    mail(:to => User.approvers_only.map(&:email),
          :subject => "Shiny Metal API Notice: Key Request Available For Approval")
   end
 
@@ -51,7 +46,7 @@ class UserKeyMailer < ApplicationMailer
   def app_reset_msg(user, user_key)
     @recipient = user
     @user_key = user_key
-    mail(:to => @recipient.email, 
+    mail(:to => @recipient.email,
   	 :subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Application Has Been Reopened")
   end
 
@@ -59,7 +54,7 @@ class UserKeyMailer < ApplicationMailer
   def key_approved_msg(user, user_key)
     @recipient = user
     @user_key = user_key
-    mail(:to => @recipient.email, 
+    mail(:to => @recipient.email,
          :subject => "Shiny Metal API Notice: Your #{@user_key.name} Key Application Has Been Approved!")
   end
 
@@ -67,7 +62,7 @@ class UserKeyMailer < ApplicationMailer
   def everyone_approved_key(admin, user_key)
     @recipient = admin
     @user_key = user_key
-    mail(:to => @recipient.email, 
+    mail(:to => @recipient.email,
          :subject => "Shiny Metal API Notice: #{@user_key.name} Key Has Been Approved by All Parties")
   end
 end

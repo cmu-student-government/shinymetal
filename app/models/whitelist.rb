@@ -1,7 +1,7 @@
 class Whitelist < ActiveRecord::Base
   # Relationships
   belongs_to :user_key, inverse_of: :whitelists
-  has_many :whitelist_filters
+  has_many :whitelist_filters, dependent: :destroy
   has_many :filters, through: :whitelist_filters
   
   validates_presence_of :user_key

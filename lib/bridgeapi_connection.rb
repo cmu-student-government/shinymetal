@@ -29,11 +29,9 @@ def hit_api_endpoint(endpoint, options={})
   options.each do |k, v|
     url_options = url_options + "&#{k}=#{v}"
   end
-  puts url_options
 
   # Now we construct the full url
   url = URI.parse("#{base_url}?resource=#{resource}#{url_options}")
-  puts url
 
   # Create our request object and set the Authentication header with our encrypted data
   https = Net::HTTP.new(url.host, url.port)

@@ -56,7 +56,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'turbolinks'
 
   # Gives us access to students names/info from CMU's LDAP service
-  gem 'cmu_person', git: 'https://github.com/jkcorrea/cmu_person.git'
+  gem 'cmu_person', github: "jkcorrea/cmu_person", ref: "d615d5837575e226aaf3a056e4392015e67cc183"
 
   # Nested filter forms
   gem 'cocoon'

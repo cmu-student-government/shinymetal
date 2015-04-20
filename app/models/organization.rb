@@ -20,6 +20,8 @@ class Organization < ActiveRecord::Base
     our_active_orgs_hash = Organization.get_our_active_organizations_hash
     # Second, fetch orgs from API
     their_result_list = Organization.get_their_result_list
+    # Second-and-a-half, return false if their result list was nil (because there was an error)
+    return false if their_result_list.nil?
     
     # Third, create any organizations for new items.
     for item in their_result_list
@@ -36,7 +38,7 @@ class Organization < ActiveRecord::Base
       object.update_attribute(:name, object.name.strip + " (removed from CollegiateLink)")
     end
     
-    return true #FIXME needs error handling
+    return true # We were successful
   end
   
   private
@@ -53,6 +55,9 @@ class Organization < ActiveRecord::Base
     total_pages = nil
     while total_pages.nil? or page_number <= total_pages
       page_response = EndpointResponse.new("organizations", page_number: page_number)
+      # If there was an error, return nil immediately
+      return nil if page_response.failed
+      # Otherwise, add the organizations on this page to our list of all their orgs
       total_pages = page_response.total_pages
       for item in page_response.items
         result_list.append([item["organizationId"],item["name"]])

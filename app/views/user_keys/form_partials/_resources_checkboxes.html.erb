@@ -5,7 +5,7 @@
     <h2><%= resource.capitalize %></h2>
 
     <div class="small-5 columns">
-    <h4>Rows</h4>
+    <h4>Whitelists</h4>
 
       <% @user_key.whitelists.restrict_to(resource).to_a.each do |whitelist| %>
         <%= f.fields_for :whitelists, whitelist do |p| %>
@@ -16,7 +16,7 @@
 
       <div id="<%= resource %>"> <!-- Nested form uses this #tag to add new nested form-->
         <br/>
-        <%= link_to_add_association "Add #{resource} clause", f, :whitelists,
+        <%= link_to_add_association "Add #{resource} whitelist", f, :whitelists,
                                    partial: 'user_keys/form_partials/whitelist_fields',
                                    html_options: { data: { 'association-insertion-node' => 'this' }},
                                    render_options: { locals: { resource: resource } }, class: "small-button" %>

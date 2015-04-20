@@ -22,9 +22,11 @@ class Column < ActiveRecord::Base
   def self.repopulate
     # Note that this will hit all resources and get the columns from the first item.
     for resource in Resources::RESOURCE_LIST
-      # Get the JSON response
-    endpoint_response = EndpointResponse.new(resource)
-      # Create a Column for each if it doesn't exist already
+      # First, get one response for this resource
+      endpoint_response = EndpointResponse.new(resource)
+      # Return false if it failed
+      return false if endpoint_response.failed
+      # Otherwise, create a Column for each if it doesn't exist already
       for result_name in endpoint_response.columns
         params = { resource: resource, column_name: result_name }
         Column.create(params) if Column.where(params).empty?

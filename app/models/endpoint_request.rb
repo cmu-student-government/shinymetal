@@ -10,15 +10,16 @@ class EndpointRequest
   # Initialize an EndpontRequest.
   #
   # @param user_key [UserKey] User key with the Gen API Key that matches the one passed in earlier.
-  # @param params [Hash] The request endpoint and options that the user passed in,
+  # @param params [HashWithIndifferentAccess] The request endpoint and options that the user passed in,
   #   not including the endpoint itself. For example, { "page" => "1", "status" => "active" }.
   # @return [EndpointRequest]
   def initialize(user_key, params)
     @user_key = user_key
-    # It doesn't matter if the resource passed in exists or not; that will already cause errors in the response.
+    # It doesn't matter here if the resource passed in exists or not; that will cause errors in the response.
+    # Downcase them here, because we will need to change filters case insensitively. 
     @resource = params[:endpoint]
     @options = params.reject{ |k,v| k == :endpoint}
-    @failed = "error, the combination of parameters used is not valid for this API key" unless self.valid?
+    @failed = "error, the request's combination of parameters is not allowed for this API key" unless self.valid?
   end
   
   # Determines if the given user key is allowed to request the paramaters passed in.
@@ -45,7 +46,9 @@ class EndpointRequest
   private
   def matches_options?(filter_group)
     for filter in filter_group
-      if @options[filter.filter_name.to_sym] != filter.filter_value
+      # Downcase the values, because CollegiateLink is case insensitive.
+      # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
+      if @options[filter.filter_name].nil? or @options[filter.filter_name].downcase != filter.filter_value.downcase
 	return false
       end
     end
@@ -53,6 +56,6 @@ class EndpointRequest
   end
   
   def has_valid_organization_id?
-    return @user_key.organizations.active.map{|o| o.external_id.to_s}.include?(@options[:organizationId].to_s)
+    return @user_key.organizations.active.map{|o| o.external_id.to_s}.include?(@options[:organizationid].to_s)
   end
 end

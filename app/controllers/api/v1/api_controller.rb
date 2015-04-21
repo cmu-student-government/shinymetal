@@ -12,15 +12,11 @@ module Api
       def index        
         # To test "users", comment out the before_filter, and uncomment the next line:
         #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
-        
-        # Make certain that the parameters are symbols.
-        # The values are expected all be strings.
-        params.symbolize_keys!
-        
+
         # this conditional filters out the rows of the response. if the params
         # POSTed are not a valid combination of filters to use, it will
         # immediately reject the response
-        request = EndpointRequest(@user_key, params)
+        request = EndpointRequest.new(@user_key, params)
         # request.failed is an error message if the filters aren't permitted for this key.
         unless request.failed
           response = EndpointResponse.new(@user_key, params)

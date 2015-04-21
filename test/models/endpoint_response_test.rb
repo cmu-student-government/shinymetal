@@ -6,9 +6,9 @@ class EndpointResponseTest < ActiveSupport::TestCase
       create_everything
       @user_key_response = EndpointResponse.new(@bender_key_submitted, endpoint: "organizations")
       @users_response = EndpointResponse.new(nil, endpoint: "users")
-      @organizations_response = EndpointResponse.new(nil, endpoint: "organizations", "page" => "2")
+      @organizations_response = EndpointResponse.new(nil, endpoint: "organizations", page: "2")
       @bad_resource = EndpointResponse.new(nil, endpoint: "invalid!")
-      @bad_page_number = EndpointResponse.new(nil, endpoint: "users", "page" => "3")
+      @bad_page_number = EndpointResponse.new(nil, endpoint: "users", page: "3")
     end
     
     teardown do

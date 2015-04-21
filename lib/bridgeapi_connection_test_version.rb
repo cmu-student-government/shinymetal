@@ -1,6 +1,6 @@
 # Dummy data used for unit testing
 def hit_api_endpoint(params)
-  page_number = params["page"] || "1"
+  page_number = params[:page] || "1"
   # Output successful result
   first_page =
          {"pageNumber" => 1,

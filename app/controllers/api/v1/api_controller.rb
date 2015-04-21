@@ -12,7 +12,11 @@ module Api
       def index        
         # To test "users", comment out the before_filter, and uncomment the next line:
         #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
-
+        
+        # Make certain that the parameters are symbols.
+        # The values are expected all be strings.
+        params.symbolize_keys!
+        
         # this conditional filters out the rows of the response. if the params
         # POSTed are not a valid combination of filters to use, it will
         # immediately reject the response

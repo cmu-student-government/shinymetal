@@ -7,7 +7,7 @@ require 'net/http'
 # :nocov:
 def hit_api_endpoint(params)
   # Set the optional page number to the first page if not otherwise specified
-  params["page"] ||= "1"
+  params[:page] ||= "1"
   
   # Authentication info, don't share this!
   pass = SETTINGS[:stugov_api_user]
@@ -28,7 +28,7 @@ def hit_api_endpoint(params)
   # can then be constructed into the URL
   url_options = ""
   options.each do |k, v|
-    url_options = url_options + "&#{k}=#{v}"
+    url_options = url_options + "&#{k.to_s}=#{v}"
   end
 
   # Now we construct the full url

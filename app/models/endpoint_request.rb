@@ -45,7 +45,7 @@ class EndpointRequest
   private
   def matches_options?(filter_group)
     for filter in filter_group
-      if @options[filter.filter_name] != filter.filter_value
+      if @options[filter.filter_name.to_sym] != filter.filter_value
 	return false
       end
     end
@@ -53,6 +53,6 @@ class EndpointRequest
   end
   
   def has_valid_organization_id?
-    return @user_key.organizations.active.map{|o| o.external_id.to_s}.include?(@options["organizationId"].to_s)
+    return @user_key.organizations.active.map{|o| o.external_id.to_s}.include?(@options[:organizationId].to_s)
   end
 end

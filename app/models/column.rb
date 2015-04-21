@@ -23,7 +23,7 @@ class Column < ActiveRecord::Base
     # Note that this will hit all resources and get the columns from the first item.
     for resource in Resources::RESOURCE_LIST
       # First, get one response for this resource
-      endpoint_response = EndpointResponse.new(resource)
+      endpoint_response = EndpointResponse.new(endpoint: resource)
       # Return false if it failed
       return false if endpoint_response.failed
       # Otherwise, create a Column for each if it doesn't exist already

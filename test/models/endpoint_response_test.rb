@@ -3,10 +3,10 @@ require 'test_helper'
 class EndpointResponseTest < ActiveSupport::TestCase
   context "Creating an endpoint response context" do
     setup do
-      @users_response = EndpointResponse.new("users")
-      @organizations_response = EndpointResponse.new("organizations", page_number: 2)
-      @bad_resource = EndpointResponse.new("invalid!")
-      @bad_page_number = EndpointResponse.new("users", page_number: 3)
+      @users_response = EndpointResponse.new(endpoint: "users")
+      @organizations_response = EndpointResponse.new(endpoint: "organizations", "page" => "2")
+      @bad_resource = EndpointResponse.new(endpoint: "invalid!")
+      @bad_page_number = EndpointResponse.new(endpoint: "users", "page" => "3")
     end
     
     should "have an expected fail response when the resource is invalid" do
@@ -33,7 +33,7 @@ class EndpointResponseTest < ActiveSupport::TestCase
     end
     
     should "become a hash like collegiatelink hash with to_hash method" do
-      assert_equal hit_api_endpoint("users"), @users_response.to_hash
+      assert_equal hit_api_endpoint({endpoint: "users"}), @users_response.to_hash
     end
     
     should "have a restrict_to_columns method that keeps only the given columns" do

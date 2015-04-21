@@ -5,9 +5,9 @@ require 'net/http'
 # call this function with the specific endpoint to hit
 # we can change this in the future to take in more options later
 # :nocov:
-def hit_api_endpoint(endpoint, options={})
+def hit_api_endpoint(params)
   # Set the optional page number to the first page if not otherwise specified
-  options[:page] ||= 1
+  params["page"] ||= "1"
   
   # Authentication info, don't share this!
   pass = SETTINGS[:stugov_api_user]
@@ -21,7 +21,8 @@ def hit_api_endpoint(endpoint, options={})
 
   # Specify which endpoint we'd like to request from. If you want a specific
   #   id from this endpoint, just do <endpoint>/<id>, for example: events/105
-  resource = endpoint
+  resource = params[:endpoint]
+  options = params.reject{ |k,v| k == :endpoint}
 
   # Any optional parameters that are listed for this endpoint in the API docs
   # can then be constructed into the URL

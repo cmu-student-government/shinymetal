@@ -1,9 +1,5 @@
 # Objectify requests to the API in the Api Controller
 class EndpointRequest
-  # These values will be immediately removed from the options hash.
-  # FIXME Why?
-  BLACKLIST = %w[format controller action endpoint]
-  
   # @return [String] The resource passed into the URL.
   attr_reader :resource
   # @return [Hash] The paramaters passed into the URL, with blacklist values removed.
@@ -12,15 +8,14 @@ class EndpointRequest
   # Initialize an EndpontRequest.
   #
   # @param user_key [UserKey] User key with the Gen API Key that matches the one passed in earlier.
-  # @param resource [String] Resource that is being requested by the user.
-  # @param options [Hash] The response options that the user passed in,
+  # @param params [Hash] The request endpoint and options that the user passed in,
   #   not including the endpoint itself. For example, { "page" => "1", "status" => "active" }.
   # @return [EndpointRequest]
-  def initialize(user_key, resource, options)
+  def initialize(user_key, params)
     @user_key = user_key
     # It doesn't matter if the resource passed in exists or not; that will already cause errors in the response.
-    @resource = resource
-    @options = options.reject{ |k,v| BLACKLIST.include?(k) }
+    @resource = params[:endpoint]
+    @options = params.reject{ |k,v| k == :endpoint}
   end
   
   # Determines if the given user key is allowed to request the paramaters passed in.

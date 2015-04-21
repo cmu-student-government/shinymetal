@@ -1,6 +1,6 @@
 # Dummy data used for unit testing
-def hit_api_endpoint(endpoint, options={})
-  page_number = options[:page_number] || 1
+def hit_api_endpoint(params)
+  page_number = params["page"] || "1"
   # Output successful result
   first_page =
          {"pageNumber" => 1,
@@ -18,9 +18,9 @@ def hit_api_endpoint(endpoint, options={})
           "items" => [{"name" => "Third Test Item", "organizationId" => 30},
                       {"name" => "Fourth Test Item", "organizationId" => 40}]
           }
-  if page_number == 1
+  if page_number == "1"
     return first_page
-  elsif page_number == 2
+  elsif page_number == "2"
     return second_page
   else #FIXME check what collegiatelink returns
     return ""

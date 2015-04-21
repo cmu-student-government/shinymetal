@@ -110,23 +110,23 @@ module Contexts
   
   #Columns
   def create_columns
-    @organizations_description_column = FactoryGirl.create(:column)
+    @organizations_id_column = FactoryGirl.create(:column)
     @events_eventname_column = FactoryGirl.create(:column, resource: 'events', column_name: 'eventName')
   end
 
   def destroy_columns
-    @organizations_description_column.destroy
+    @organizations_id_column.destroy
     @events_eventname_column.destroy 
   end
   
   #UserKeyColumns
   def create_user_key_columns
-    @organizations_description_column_bender = FactoryGirl.create(:user_key_column, user_key: @bender_key_submitted, column: @organizations_description_column)
+    @organizations_id_column_bender = FactoryGirl.create(:user_key_column, user_key: @bender_key_submitted, column: @organizations_id_column)
     @events_eventname_column_bender = FactoryGirl.create(:user_key_column, user_key: @bender_key_submitted, column: @events_eventname_column)
   end
 
   def destroy_user_key_columns
-    @organizations_description_column_bender.destroy
+    @organizations_id_column_bender.destroy
     @events_eventname_column_bender.destroy 
   end
 

@@ -23,15 +23,13 @@ module Api
             render json: {"message" => "error, the requested resource does not exist"}
           end        
 
-          # find the appropriate filter_columns for a given user key
           final_columns = @user_key.columns.restrict_to(request.endpoint).to_a.map{|c| c.name}
 
           if final_columns.empty?
             render json: ({"message" => "error, no columns permitted for this resource"})
           else
             response.restrict_to_columns(final_columns)
-            final_hash = response.to_hash
-            render json: JSON(final_hash), status: 200
+            render json: JSON(response.to_hash), status: 200
           end
         else
           render json: {"message" => "error, the combination of parameters used is not valid for this API key"}

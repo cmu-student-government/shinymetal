@@ -31,7 +31,7 @@ FactoryGirl.define do
 
   factory :column do
     resource "organizations"
-    column_name "description"
+    column_name "organizationId"
   end
 
   factory :organization do

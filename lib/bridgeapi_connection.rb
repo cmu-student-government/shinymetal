@@ -7,7 +7,7 @@ require 'net/http'
 # :nocov:
 def hit_api_endpoint(endpoint, options={})
   # Set the optional page number to the first page if not otherwise specified
-  options[:page_number] ||= 1
+  options[:page] ||= 1
   
   # Authentication info, don't share this!
   pass = SETTINGS[:stugov_api_user]
@@ -24,10 +24,14 @@ def hit_api_endpoint(endpoint, options={})
   resource = endpoint
 
   # Any optional parameters that are listed for this endpoint in the API docs
-  optional_params = "&page=#{options[:page_number]}"
+  # can then be constructed into the URL
+  url_options = ""
+  options.each do |k, v|
+    url_options = url_options + "&#{k}=#{v}"
+  end
 
   # Now we construct the full url
-  url = URI.parse("#{base_url}?resource=#{resource}#{optional_params}")
+  url = URI.parse("#{base_url}?resource=#{resource}#{url_options}")
 
   # Create our request object and set the Authentication header with our encrypted data
   https = Net::HTTP.new(url.host, url.port)
@@ -39,6 +43,8 @@ def hit_api_endpoint(endpoint, options={})
   req.add_field("Authentication", digest)
 
   # Send the request, put response into res
+
+  # FIRXME handle errors
   res = https.request(req)
 
   # Return an empty string if res.body is blank

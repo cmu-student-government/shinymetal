@@ -54,7 +54,7 @@ class Organization < ActiveRecord::Base
     page_number = 1
     total_pages = nil
     while total_pages.nil? or page_number <= total_pages
-      page_response = EndpointResponse.new("organizations", page_number: page_number)
+      page_response = EndpointResponse.new("organizations", page: page_number)
       # If there was an error, return nil immediately
       return nil if page_response.failed
       # Otherwise, add the organizations on this page to our list of all their orgs

@@ -17,22 +17,18 @@ module Api
         # POSTed are not a valid combination of filters to use, it will
         # immediately reject the response
         request = EndpointRequest(@user_key, params)
-        if request.valid?
-          response = EndpointResponse.new(params)
-          if response.failed
-            render json: {"message" => "error, the requested resource does not exist"}
-          end        
-
-          final_columns = @user_key.columns.restrict_to(request.endpoint).to_a.map{|c| c.name}
-
-          if final_columns.empty?
-            render json: ({"message" => "error, no columns permitted for this resource"})
-          else
-            response.restrict_to_columns(final_columns)
+        # request.failed is an error message if the filters aren't permitted for this key.
+        unless request.failed
+          response = EndpointResponse.new(@user_key, params)
+          unless response.failed
             render json: JSON(response.to_hash), status: 200
+          else
+            # response.failed is an error message if something went wrong.
+            # response will fail if there are no columns for this resource, or if resource was invalid.
+            render json: {"message" => response.failed }
           end
         else
-          render json: {"message" => "error, the combination of parameters used is not valid for this API key"}
+          render json: {"message" => request.failed }
         end
       end
       

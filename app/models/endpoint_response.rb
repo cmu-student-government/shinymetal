@@ -1,3 +1,4 @@
+# For the sake of testing, use a static test JSON response.
 if Rails.env.test?
   require "./lib/bridgeapi_connection_test_version.rb"
 else
@@ -25,11 +26,15 @@ class EndpointResponse
       @total_pages = hash_response["totalPages"]
       @items = hash_response["items"]
       # Set failed to true in case we got no response from collegiatelink
-      @failed = hash_response.blank?
+      @failed = "error, there was no response from CollegiateLink" if hash_response.blank?
       # Restrict the columns in the response according to the passed-in user_key
-      restrict_columns unless (@failed or @user_key.nil?)
+      unless (@user_key.nil? or @failed)
+        restrict_columns
+        # Set failed if there are no columns left
+        @failed = "error, no columns permitted for this resource" if self.columns.empty?
+      end
     else # not a valid resource
-      @failed = true
+      @failed = "error, the requested resource does not exist"
     end
   end
   

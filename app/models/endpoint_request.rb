@@ -4,6 +4,8 @@ class EndpointRequest
   attr_reader :resource
   # @return [Hash] The paramaters passed into the URL, with blacklist values removed.
   attr_reader :options
+  # @return [String, nil] The error message for any endpoint request that was not allowed.
+  attr_reader :failed
   
   # Initialize an EndpontRequest.
   #
@@ -16,6 +18,7 @@ class EndpointRequest
     # It doesn't matter if the resource passed in exists or not; that will already cause errors in the response.
     @resource = params[:endpoint]
     @options = params.reject{ |k,v| k == :endpoint}
+    @failed = "error, the combination of parameters used is not valid for this API key" unless self.valid?
   end
   
   # Determines if the given user key is allowed to request the paramaters passed in.
@@ -25,7 +28,7 @@ class EndpointRequest
   def valid?
     filter_group_list = @user_key.whitelists.restrict_to(@resource).to_a.map{|w| w.filters.to_a}
     # If the key has no whitelists at all, the key has unrestricted filter access.
-    # (If the key has no columns, the key has no access at all, but we check for that in the controller.)
+    # (If the key has no columns, the key has no access at all, but we check for that in EndpointResponse.)
     return true if filter_group_list.empty?
     # Map the filters for each individual whitelist into a list to be checked.
     for filter_group in filter_group_list

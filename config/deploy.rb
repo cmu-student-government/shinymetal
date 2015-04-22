@@ -2,17 +2,17 @@
 lock '3.4.0'
 
 set :application, 'bridgeapi'
-set :repo_url, 'git@github.com:cmu-student-government/shinymetal.git'
+set :repo_url, 'git@github.com:aditisar/shinymetal.git'
 set :scm, :git
 set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
 
-set :password, ask("StuGov server password", "", echo: false)
+# set :password, ask("StuGov server password", "", echo: false)
 set :ssh_options, {
  forward_agent: true,
- auth_methods: %w(password),
- password: fetch(:password)
+ # auth_methods: %w(password),
+ # password: fetch(:password)
 }
 
 # Load .env files into ENV

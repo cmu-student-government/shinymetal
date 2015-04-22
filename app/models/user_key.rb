@@ -21,7 +21,7 @@ class UserKey < ActiveRecord::Base
   has_many :comment_users, class_name: User, through: :comments
 
   accepts_nested_attributes_for :comments, limit: 1
-  #accepts_nested_attributes_for :answers
+  accepts_nested_attributes_for :answers
   accepts_nested_attributes_for :whitelists, allow_destroy: true
 
   # Validations

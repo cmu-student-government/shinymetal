@@ -18,7 +18,6 @@ class Column < ActiveRecord::Base
   end
   
   # Load columns directly from CollegiateLink
-  # FIXME needs error handling in case there is no response
   def self.repopulate
     # Note that this will hit all resources and get the columns from the first item.
     for resource in Resources::RESOURCE_LIST

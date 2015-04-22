@@ -8,7 +8,8 @@ end
 
 # Objectify responses from bridgeapi_connection
 class EndpointResponse
-  attr_reader :page_number, :page_size, :total_items, :total_pages, :items, :failed
+  attr_reader :page_number, :page_size, :total_items, :total_pages, :failed
+  attr_accessor :items
   
   def initialize(resource, options={})
     if Resources::RESOURCE_LIST.include?(resource)
@@ -23,6 +24,10 @@ class EndpointResponse
     else # not a valid resource
       @failed = true
     end
+  end
+
+  def set_error_message(message)
+    @items = message
   end
   
   def columns

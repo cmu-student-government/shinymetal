@@ -57,6 +57,10 @@
   background-color: $info-color;
   border-radius: 8px;
 }
+.success_explanation {
+  background-color: $success;
+  border-radius: 8px;
+}
 .tabs dd.active a, .tabs .tab-title.active a {
     border-top: 1px solid #000;
     border-left: 1px solid #000;

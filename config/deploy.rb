@@ -63,4 +63,5 @@ end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"
 before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
-after "deploy:assets:precompile", "whenever:update_crontab"
+#after "deploy:assets:precompile", "whenever:update_crontab"
+#Don't want to overwrite working crontab

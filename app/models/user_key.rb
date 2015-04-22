@@ -35,9 +35,12 @@ class UserKey < ActiveRecord::Base
   validates_presence_of :user
   validates_inclusion_of :status, in: STATUS_LIST
 
-  # validate that steps that have been passed remain passing
+  # Validate that the requirements of the submission step and the filtering step
+  #  are always met afterwards.
+  #  We do not validate that keys are always approvable afterwards,
+  #  because more approvers may be added to the system later.
   for status in STATUS_LIST
-    unless status == "awaiting_submission"
+    if status == "awaiting_filters" or status == "awaiting_confirmation"
       validate Proc.new { |key| key.can_be_set_to?(status.to_sym) },
                if: Proc.new { |key| key.at_stage?(status.to_sym, true) }
     end

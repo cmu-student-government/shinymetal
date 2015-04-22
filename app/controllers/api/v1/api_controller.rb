@@ -9,26 +9,26 @@ module Api
       # it can be unsafe. will fix in future
       before_filter :verify_access_with_api_key
 
-      def index
-        # FIXME need to modify to consider related filters and build 
-        # appropriate query to hit the collegiate link api
-  
-        # If you want to test "users" easily, comment out the before_filter, and uncomment the next line:
+      def index        
+        # To test "users", comment out the before_filter, and uncomment the next line:
         #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
-        endpoint = params[:endpoint]
-        response = EndpointResponse.new(endpoint)
-        if response.failed
-          render json: {"message" => "error, the requested resource does not exist"}
-        else
-          # find the appropriate filter_columns for a given user key
-          final_columns = @user_key.columns.restrict_to(endpoint).to_a.map{|c| c.name}
-          if final_columns.empty?
-            render json: {"message" => "error, no columns permitted for this resource"}
+
+        # this conditional filters out the rows of the response. if the params
+        # POSTed are not a valid combination of filters to use, it will
+        # immediately reject the response
+        request = EndpointRequest.new(@user_key, params)
+        # request.failed is an error message if the filters aren't permitted for this key.
+        unless request.failed
+          response = EndpointResponse.new(@user_key, params)
+          unless response.failed
+            render json: JSON(response.to_hash), status: 200
           else
-            response.restrict_to_columns(final_columns)
-            final_hash = response.to_hash
-            render json: JSON(final_hash), status: 200
+            # response.failed is an error message if something went wrong.
+            # response will fail if there are no columns for this resource, or if resource was invalid.
+            render json: {"message" => response.failed }
           end
+        else
+          render json: {"message" => request.failed }
         end
       end
       

@@ -1,5 +1,7 @@
 # config valid only for Capistrano 3.1
 lock '3.4.0'
+require 'whenever/capistrano'
+set :whenever_command, 'bundle exec whenever'
 
 set :application, 'bridgeapi'
 set :repo_url, 'git@github.com:aditisar/shinymetal.git'
@@ -61,4 +63,4 @@ end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"
 before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
-after "deploy:assets:precompile", "deploy:update_crontab"
+after "deploy:assets:precompile", "whenever:update_crontab"

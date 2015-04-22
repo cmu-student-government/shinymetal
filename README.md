@@ -34,3 +34,9 @@ it. Staff can continue to look at it.
 
 *Expired*: The expiration date has passed. The key is still active but can no longer get a
 valid value. The key cannot be renewed; a new key must be requested.
+
+
+TODO
+====
+* Crontab needs to be manually updated currently every time we change cronjobs, and should be on the apache user
+* Crontab is also not being updated on cap deploys

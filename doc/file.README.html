@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!file.README.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><p>Bite My Shiny Metal API Project for 67-373 Spring 2015.</p>
+
+<p>Still in development.</p>
+
+<p>To run, migrate with <strong>rake db:migrate</strong> and populate with <strong>rake db:populate</strong> to get an <strong>admin</strong> user, some approvers, some requesters, and data for their keys.</p>
+
+<p><strong>Note to team:</strong> For any comments that need to be returned to later, mark with <strong>FIXME</strong> so we can find them.</p>
+
+<p>This application provides functionality for requesting application keys. A key may be at one of five stages:</p>
+
+<p><em>Awaiting_submission</em>: The request for a key has been started by a user. The user fills in the key&#39;s name,
+8 text boxes describing the project that the key will be used for, and agrees to terms of use.
+At this stage, the request is only visible to its requester. The requester can save their progress,
+and decides when to submit the key. (A key that has been <em>reset</em> is sent back to this stage, with comments
+intact, to tell the user what needs to be changed.)</p>
+
+<p><em>Awaiting_filters</em>: Once the key is submitted, admins and staffmembers can see the key. Only admins can
+assign filter and organization access to the key. At this step and after this step, admins and staffmembers
+can comment on the key. The admin assigns rights by reading the request and deciding what access rights are
+appropriate. The exact filters that a key is assigned are never made public or shown to the requester (for
+security purposes, and so the requester doesn&#39;t have to learn the logic of the system).
+The admin also sets the expiration date at this time. All comments are visible only to staffmembers,
+except for admin comments that are marked as public, which can also be read by the requester.
+This step and its progress are invisible to the requester.</p>
+
+<p><em>Awaiting_confirmation</em>: Once the admin is done assigning rights, the request is opened up for approval.
+All admins, and all staffmembers who are also designated as approvers, can approve the key at this step.
+Once all approvers in the system have approved the key, the admin must confirm the key and release it
+to the requester. This step and its progress are invisible to the requester.</p>
+
+<p><em>Confirmed</em>: All staffmembers as well as the requester can now see the key&#39;s value and confirmed status.
+The admin can continue to make changes to the key. At any step, the admin can suspend a key by inactivating
+it. Staff can continue to look at it.</p>
+
+<p><em>Expired</em>: The expiration date has passed. The key is still active but can no longer get a
+valid value. The key cannot be renewed; a new key must be requested.</p>
+</div></div>
+
+    <div id="footer">
+  Generated on Wed Apr 22 17:03:28 2015 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

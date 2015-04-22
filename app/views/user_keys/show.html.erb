@@ -59,7 +59,8 @@
 <%# Permissions are only visible to the owner when the key is confirmed. %>
 <% if @current_user.role? :is_staff or (@current_user.owns?(@user_key) and @user_key.at_stage? :confirmed) %>
   <div class="staff_only panel">
-  <h3>Staff only</h3>
+  <%# Formerly this panel was indeed "staff_only", but changed to allow users to see their access rights. %>
+  <h3>Access Rights for Your Key</h3>
   <br>
     <%= render partial: 'user_keys/show_partials/list_of_resources' %>
     <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
@@ -89,7 +90,7 @@
 
 <div class="content" id="documentationPanel">
 
-<!-- FIXME add dynamic documentation content here -->
+  <%= render partial: 'user_keys/show_partials/documentation' %>
 
 </div>
 

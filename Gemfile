@@ -69,6 +69,9 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 
   # Sqlite3 for dev, test db
   gem 'sqlite3', group: [:development, :test]
+  
+  # Documentation
+  gem 'yard'
 
 group :development do
   gem 'rails_layout'

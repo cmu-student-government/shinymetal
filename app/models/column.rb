@@ -9,7 +9,7 @@ class Column < ActiveRecord::Base
   # Custom validation for column names as determined by resource
   
   # Scopes
-  scope :alphabetical, -> { order(:column_name) }
+  scope :alphabetical, -> { order(:resource).order(:column_name) }
   scope :restrict_to, ->(param) { where(resource: param) }
   
   # Methods
@@ -18,12 +18,11 @@ class Column < ActiveRecord::Base
   end
   
   # Load columns directly from CollegiateLink
-  # FIXME needs error handling in case there is no response
   def self.repopulate
     # Note that this will hit all resources and get the columns from the first item.
     for resource in Resources::RESOURCE_LIST
-      # First, get one response for this resource
-      endpoint_response = EndpointResponse.new(resource)
+      # First, get one response for this resource, not tied to any user key
+      endpoint_response = EndpointResponse.new(nil, endpoint: resource)
       # Return false if it failed
       return false if endpoint_response.failed
       # Otherwise, create a Column for each if it doesn't exist already

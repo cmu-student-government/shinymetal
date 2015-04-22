@@ -3,10 +3,16 @@ require 'test_helper'
 class EndpointResponseTest < ActiveSupport::TestCase
   context "Creating an endpoint response context" do
     setup do
-      @users_response = EndpointResponse.new("users")
-      @organizations_response = EndpointResponse.new("organizations", page_number: 2)
-      @bad_resource = EndpointResponse.new("invalid!")
-      @bad_page_number = EndpointResponse.new("users", page_number: 3)
+      create_everything
+      @user_key_response = EndpointResponse.new(@bender_key_submitted, endpoint: "organizations")
+      @users_response = EndpointResponse.new(nil, endpoint: "users")
+      @organizations_response = EndpointResponse.new(nil, endpoint: "organizations", page: "2")
+      @bad_resource = EndpointResponse.new(nil, endpoint: "invalid!")
+      @bad_page_number = EndpointResponse.new(nil, endpoint: "users", page: "3")
+    end
+    
+    teardown do
+      destroy_everything
     end
     
     should "have an expected fail response when the resource is invalid" do
@@ -33,16 +39,12 @@ class EndpointResponseTest < ActiveSupport::TestCase
     end
     
     should "become a hash like collegiatelink hash with to_hash method" do
-      assert_equal hit_api_endpoint("users"), @users_response.to_hash
+      assert_equal hit_api_endpoint({endpoint: "users"}), @users_response.to_hash
     end
     
-    should "have a restrict_to_columns method that keeps only the given columns" do
-      @organizations_response.restrict_to_columns(["organizationId","name"])
+    should "have a private restrict_columns method that keeps only the given columns" do
       assert_equal ["name","organizationId"], @organizations_response.columns.sort
-      @users_response.restrict_to_columns(["name", "dummy_value"])
-      assert_equal ["name"], @users_response.columns
-      @users_response.restrict_to_columns([])
-      assert_equal [], @users_response.columns
+      assert_equal ["organizationId"], @user_key_response.columns
     end
   end
 end

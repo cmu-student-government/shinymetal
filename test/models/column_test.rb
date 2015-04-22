@@ -15,16 +15,16 @@ class ColumnTest < ActiveSupport::TestCase
     end
     
     should "have a method to return the columns name" do
-      assert_equal "description", @organizations_description_column.name
+      assert_equal "organizationId", @organizations_id_column.name
     end
 	
     should "have a scope to sort columns alphabetically" do
-      assert_equal [["organizations", "description"], ["events", "eventName"]],
+      assert_equal [ ["events", "eventName"],["organizations", "organizationId"]],
                    Column.alphabetical.to_a.map {|f| [f.resource, f.name]}
     end
     
     should "have a scope to restrict column resources" do
-      assert_equal [["organizations", "description"]],
+      assert_equal [["organizations", "organizationId"]],
                    Column.alphabetical.restrict_to("organizations").to_a.map {|f| [f.resource, f.name]}
     end
       
@@ -40,6 +40,7 @@ class ColumnTest < ActiveSupport::TestCase
           assert_equal ["name","organizationId"], Column.restrict_to(resource).alphabetical.to_a.map{|o| o.column_name}
         end
       end
+      Column.destroy_all
       # Put back the other columns
       create_columns
     end

@@ -192,8 +192,11 @@ class UserKeysController < ApplicationController
     def sanitize_question_ids
       # question_id is something only we should be able to change.
       # It is included in params so that we can set question_id as part of updating nested attributes.
-      params[:user_key][:answers_attributes].each{|k,v| v[:question_id] = nil}
-      @questions.each_with_index{|q,i| params[:user_key][:answers_attributes][i.to_s][:question_id] = q.id}
+      # We check for 'empty' to prevent errors, in case no questions (and thus no answers) are added to the system yet.
+      unless @questions.empty?
+        params[:user_key][:answers_attributes].each{|k,v| v[:question_id] = nil}
+        @questions.each_with_index{|q,i| params[:user_key][:answers_attributes][i.to_s][:question_id] = q.id}
+      end
       # Any extra answers that the user hacked in will error out due to missing a question_id.
     end
 

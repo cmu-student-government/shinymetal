@@ -12,7 +12,7 @@ class UserKey < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   has_many :approvals, dependent: :destroy
   # has_many :answers requires inverse_of, to be created at the same time as its user_key.
-  has_many :answers, inverse_of: :user_key
+  has_many :answers, inverse_of: :user_key, dependent: :destroy
 
   has_many :questions, through: :answers
   has_many :columns, through: :user_key_columns
@@ -177,7 +177,7 @@ class UserKey < ActiveRecord::Base
                          and has an Administrator note explaining the issue to the requester.")
     end
   end
-
+  
   def gen_api_key
     if at_stage?(:confirmed)
       # the datetime of when the user_key was first requested

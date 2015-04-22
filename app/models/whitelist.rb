@@ -1,7 +1,7 @@
 class Whitelist < ActiveRecord::Base
   # Relationships
   belongs_to :user_key, inverse_of: :whitelists
-  has_many :whitelist_filters
+  has_many :whitelist_filters, dependent: :destroy
   has_many :filters, through: :whitelist_filters
   
   validates_presence_of :user_key
@@ -10,7 +10,7 @@ class Whitelist < ActiveRecord::Base
   
   # Scopes
   scope :chronological, -> { order(:created_at) }
-  # FIXME inefficient scope ignores the fact that each whitelist's filters all have the same resource
+  # This scope ignores the fact that each whitelist's filters all have the same resource; thus it may be inefficient.
   scope :restrict_to, ->(param) { joins(:filters).where("filters.resource = ?", param).distinct }
   
   def resource

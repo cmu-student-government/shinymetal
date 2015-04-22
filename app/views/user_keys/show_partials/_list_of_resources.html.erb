@@ -5,45 +5,62 @@
   
   <h3><strong><%= resourceName.capitalize %></strong></h3>
   
-  <!-- Whitelists for this resource -->
+  <%# Whitelists for this resource %>
   <% whitelists = @user_key.whitelists.restrict_to(resourceName).chronological %>
+  <% columns = @user_key.columns.restrict_to(resourceName).alphabetical %>
   
   <div class="row">
     <div class="small-7 columns">
     <h4>Whitelists</h4>
-      
+    <%#A resource with whitelists has access restricted to those whitelists %> 
     <% if !whitelists.empty? %>
+      <% if whitelists.size == 0 %>
+      This key only allows requests which include all of at least one of the following sets of filters:
+      <% else %>
+      This key only allows requests which include all of the following set of filters:
+      <% end %>
       <ol>
         <% for whitelist in whitelists %>
-          <% first_word_and = "Require: " %>
+          <% first_word = true %>
+          <br/>
           <li>
             <ul class="no_bullets">
               <% for filter in whitelist.filters %>                
-                <li><%= first_word_and %><span class="success"><%= filter.name %></span></li>
-                 <% first_word_and = "and " %>
+                <li>
+                  <% if first_word %>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <% else %>
+                    and &nbsp;
+                  <% end %>
+                  <span class="notice_explanation"><%= filter.name %></span></li>
+                 <% first_word = false %>
               <% end %>
             </ul>
             <br/>
           </li>
         <% end %>
       </ol>
+    <% elsif columns.empty? %>
+    <%# A resource with neither columns nor whitelists has absolutely no access %>
+      <p><span class="error_explanation"><i class="fi-x red"></i>&nbsp;&nbsp;This key has absolutely no access rights for this resource.</span></p>
     <% else %>
-      <p>None</p>
+      <p><span class="success_explanation"><i class="fi-check"></i>&nbsp;&nbsp;This key has complete, unrestricted access for this resource with the selected columns.</span></p>
+    <%# A key with at least one column, but no whitelists, has access to everything %>
+
     <% end %>
     </div>
     
       <!-- Columns -->
       <div class="small-5 columns">
       <h4>Columns Permitted</h4>
-      <% columns = @user_key.columns.restrict_to(resourceName).alphabetical %>
       <% if !columns.empty? %>
-        <ul>
+        <ul class="no_bullets">
           <% for col in columns %>
-            <li><span class="success"><%= col.name %></span></li>
+            <li><span class="success_explanation"><i class="fi-check"></i>&nbsp;&nbsp;<%= col.name %></span></li>
           <% end %>
         </ul>
       <% else %>
-      <p>None</p>
+      <p><span class="error_explanation">No columns permitted.</span></p>
       <% end %>
     
       </div>

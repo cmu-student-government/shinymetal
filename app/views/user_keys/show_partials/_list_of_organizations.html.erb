@@ -3,11 +3,13 @@
 <p>
   <h3>Special Organization Access</h3>
   <% if @user_key.organizations.empty? %>
-    None
+    <p><span class="error_explanation">No particular organization access.</span></p>
   <% else %>
-    <ul>
+    <ul class="no_bullets">
       <% for org in @user_key.organizations %>
-        <li><%= link_to org.name, org, class: (org.active ? "success" : "alert")%></li>
+        <li>&nbsp;&nbsp;<span class="notice_explanation"><i class="fi-check"></i>&nbsp;&nbsp; <%=org.name%>
+        &nbsp;&nbsp;<i class="fi-arrow-right"></i>&nbsp;&nbsp;
+        organizationId = <%=org.external_id%> </span></li>
       <% end %>
     </ul>
   <% end %>

@@ -13,6 +13,8 @@ class UserKeyTest < ActiveSupport::TestCase
 
   # Validations
   should accept_nested_attributes_for(:comments).limit(1)
+  should accept_nested_attributes_for(:answers)
+  should accept_nested_attributes_for(:whitelists).allow_destroy(true)
 
   # Status
   should allow_value("awaiting_submission").for(:status)

@@ -61,3 +61,4 @@ end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"
 before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
+after "deploy:updat_code", "whenever:update_crontab"

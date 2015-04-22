@@ -14,11 +14,7 @@ class EndpointRequest
     @params = params
     # It doesn't matter here if the resource passed in exists or not; that will cause errors in the response.
     @resource = params[:endpoint]
-    p
-    p "begin"
     @failed = "error, the request's combination of parameters is not allowed for this API key" unless self.valid?
-    p "end"
-    p
   end
   
   # Determines if the given user key is allowed to request the paramaters passed in.
@@ -45,14 +41,12 @@ class EndpointRequest
   private
   def matches_options?(filter_group)
     for filter in filter_group
-      p "begining " + filter.filter_name
       # Downcase the values, because CollegiateLink is case insensitive.
       # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
       if @params[filter.filter_name.to_sym].nil? or (@params[filter.filter_name.to_sym].downcase != filter.filter_value.downcase)
 	return false
       end
     end
-    p "FOUND TRUE"
     return true
   end
   

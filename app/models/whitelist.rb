@@ -2,8 +2,9 @@ class Whitelist < ActiveRecord::Base
   # Relationships
   
   # Using 'inverse_of: whitelists' here is necessary for nested forms to work properly,
-  #   otherwise there is an associations error.
+  #   when creating whitelists, otherwise there is an associations error.
   belongs_to :user_key, inverse_of: :whitelists
+  # Whitelist_filters are not dealt with directly, only though this association.
   has_many :whitelist_filters, dependent: :destroy
   has_many :filters, through: :whitelist_filters
   

@@ -201,23 +201,16 @@ module Contexts
     # A whitelist is only valid if it has filters, so create both at the same time here.
     # This is handled well by nested forms, but not by FactoryGirl.
     # 2 for Orgs, 1 for Positions.
-    new_whitelist = Whitelist.new(user_key: @bender_key_submitted)
-    new_whitelist.save(validate: false)
-    @bender_key_submitted_org_status = FactoryGirl.create(:whitelist_filter, whitelist: new_whitelist, filter: @organizations_status_filter)
-    @bender_key_submitted_org_inactive = FactoryGirl.create(:whitelist_filter, whitelist: new_whitelist, filter: @organizations_page_filter2)
-    @bender_key_submitted_whitelist = new_whitelist
+    @bender_key_submitted_whitelist = Whitelist.new(user_key: @bender_key_submitted)
+    @bender_key_submitted_whitelist.filter_ids = [@organizations_status_filter.id, @organizations_page_filter2.id]
     @bender_key_submitted_whitelist.save!
     
-    new_whitelist = Whitelist.new(user_key: @bender_key_submitted)
-    new_whitelist.save(validate: false)
-    @bender_key_submitted_org_page = FactoryGirl.create(:whitelist_filter, whitelist: new_whitelist, filter: @organizations_page_filter)
-    @bender_key_submitted_org_whitelist = new_whitelist
+    @bender_key_submitted_org_whitelist = Whitelist.new(user_key: @bender_key_submitted)
+    @bender_key_submitted_org_whitelist.filter_ids = [@organizations_page_filter.id]
     @bender_key_submitted_org_whitelist.save!
     
-    new_whitelist = Whitelist.new(user_key: @bender_key_submitted)
-    new_whitelist.save(validate: false)
-    @bender_key_submitted_pos_type = FactoryGirl.create(:whitelist_filter, whitelist: new_whitelist, filter: @positions_type_filter) 
-    @bender_key_submitted_pos_whitelist = new_whitelist
+    @bender_key_submitted_pos_whitelist = Whitelist.new(user_key: @bender_key_submitted)
+    @bender_key_submitted_pos_whitelist.filter_ids = [@positions_type_filter.id]
     @bender_key_submitted_pos_whitelist.save!
   end
   
@@ -225,13 +218,6 @@ module Contexts
     @bender_key_submitted_whitelist.destroy
     @bender_key_submitted_org_whitelist.destroy
     @bender_key_submitted_pos_whitelist.destroy
-  end
-    
-  # Whitelist_filters
-  def create_whitelist_filters
-  end
-  
-  def destroy_whitelist_filters
   end
 
   # Create everything at once with one method call

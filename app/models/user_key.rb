@@ -1,17 +1,20 @@
 class UserKey < ActiveRecord::Base
+  # Always make sure the user's name becomes nil if it is the same as the placeholder name.
   before_save :check_name
   
   # Relationships
+  
   belongs_to :user
 
-  # A User Key is the only thing that can be deleted (while still associated).
-  # Is components would be deleted automatically as well.
+  # A User Key is the only thing that can be deleted in the system (while still associated).
+  #   Filters can be deleted if they are unused; everything else can only be deleted through user key.
   has_many :user_key_organizations, dependent: :destroy
   has_many :whitelists, dependent: :destroy
   has_many :user_key_columns, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :approvals, dependent: :destroy
-  # has_many :answers requires inverse_of, to be created at the same time as its user_key.
+  # 'has_many :answers' requires inverse_of, so that both the key and its answers
+  #   can be created at the same time in the application.
   has_many :answers, inverse_of: :user_key, dependent: :destroy
 
   has_many :questions, through: :answers
@@ -20,8 +23,13 @@ class UserKey < ActiveRecord::Base
   has_many :approval_users, class_name: User, through: :approvals
   has_many :comment_users, class_name: User, through: :comments
 
+  # Only one comment can be added through a time.
+  #   Comments are not deleted through the nested form; they are deleted through their own form.
   accepts_nested_attributes_for :comments, limit: 1
+  # A user key's answers are created when the user key is created. After that, answers cannot be
+  #  added or deleted unless the user key is deleted.
   accepts_nested_attributes_for :answers
+  # Nested whitelists will cause validations to fail if they are completely blank.
   accepts_nested_attributes_for :whitelists, allow_destroy: true
 
   # Validations
@@ -37,8 +45,11 @@ class UserKey < ActiveRecord::Base
 
   # Validate that the requirements of the submission step and the filtering step
   #  are always met afterwards.
-  #  We do not validate that keys are always approvable afterwards,
+  #  We do not validate that keys are always approvable afterwards ("confirmed" step),
   #  because more approvers may be added to the system later.
+  #  We do not validate that keys are always at "awaiting_submission"
+  #  because a key is only set to this state when it is being reset, which requires comments,
+  #  but not all keys need comments.
   for status in STATUS_LIST
     if status == "awaiting_filters" or status == "awaiting_confirmation"
       validate Proc.new { |key| key.can_be_set_to?(status.to_sym) },
@@ -47,52 +58,67 @@ class UserKey < ActiveRecord::Base
   end
 
   # Scopes
+  
+  # These scopes 
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc).order(time_expired: :desc) }
   scope :active, -> { where(active: true) }
 
-  #scopes dealing with status for dashboards
+  # These scopes are used for organizing keys on user dashboards.
   scope :awaiting_filters, -> { where("status = ?", 'awaiting_filters')}
   scope :awaiting_confirmation, -> { where("status = ?", 'awaiting_confirmation')}
-  scope :confirmed, -> { where("status = ?", 'confirmed')}
   scope :awaiting_submission, -> { where("status = ?", 'awaiting_submission')}
-  scope :submitted, -> { where("status <> 'awaiting_submission'") }
   scope :expired, -> { where("time_expired < ?", DateTime.now)}
+  # This is also the first scope used to restrict permitted keys in the API controller.
+  scope :confirmed, -> { where("status = ?", 'confirmed')}
+  
+  # This scope is used to restrict the keys that the staff and admins can view.
+  #   They cannot see applications that have not been submitted yet.
+  scope :submitted, -> { where("status <> 'awaiting_submission'") }
+  
+  # This is the second scope used ot restrict permitted keys in the API controller. 
   scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
 
-  #scopes that will be used for email jobs
+  # Used in a cron job to send automatic emails the month before a key expires. 
   scope :expires_in_a_month, -> { where("time_expired = ?", 30.days.from_now.to_date) }
 
+  # Used in a cron job to send automatic emails when the key expires that day.
   scope :expires_today, -> { where("time_expired = ?", Date.today) }
 
   # Methods
+  
+  # Determine if the approver viewing the user key's permissions has approved it yet or not.
+  #
+  # @param user [User] The staff_approver or admin who is viewing the user key's permissions.
   def approved_by?(user)
-    return self.approval_users.approvers_only.to_a.include?(user)
+    return self.approval_users.to_a.include?(user)
   end
 
+  # Create an Approval by an approver user for this user key application.
+  #
+  # @param user [User] The staff_approver or admin who is approving this key.
   def set_approved_by(user)
     return Approval.create(user_key_id: self.id, user_id: user.id)
   end
 
+  # Destroy the Approval created by the approver user for this user key application.
+  #
+  # @param user [User] The staff_approver or admin who is revoking approval for this key.
   def undo_set_approved_by(user)
     old_approval = self.approvals.by(user).first
     old_approval.destroy
   end
 
+  # Used in the user key show page to indicate whether or not the key has expired.
   def expired?
     return false if self.time_expired.nil?
     return self.time_expired < Date.today
   end
   
+  # Used in the user key show page and the home page to indicate which of their keys will expire soon.
   def will_expire_soon?
     return false if self.time_expired.nil? or self.expired?
     return self.time_expired < 30.days.from_now
-  end
-
-  # Used on user_key show page to show "request form status" label
-  def request_form_done?
-    self.answers.each {|answer| return false if answer.message.blank? and answer.question.required }
-    return !self.name.blank?
   end
 
   def self.search(term, max=5)
@@ -203,25 +229,32 @@ class UserKey < ActiveRecord::Base
   end
 
   private
-  # Save changes to Ruby object to the database
+  # Save changes to the Ruby object to the database.
   def save_changes
     self.save!
   end
 
-  # Requirement for resetting a key
+  # Used as a requirement for resetting a key.
   def has_public_comments?
     return !self.comments.public_only.empty?
   end
 
-  # For a key being reset
+  # Used as a requirement for submitting a key.
+  def request_form_done?
+    self.answers.each {|answer| return false if answer.message.blank? and answer.question.required }
+    return !self.name.blank?
+  end
+
+  # Destroy each Approval for this key.
   def reset_approvals
-    # Delete all existing approvals
     self.approvals.destroy_all
   end
 
-  # This is for Reset, when a key has rejected and sent back to the requester
-  # Can only be sent back after submission but before "confirmed" stage
-  # Note: a key can only be reset if it has comments made by admin for the requester's benefit.
+  # Check that the key can have its status changed to next_stage.
+  #   Then, change the status of the key to next_stage, and change the timestamp to the new value.
+  #   If the key is being set to awaiting_submission, then it is being reset, and approvals
+  #   are deleted as well.
+  #   If there was an error, add an error to the error hash and do nothing else.
   def set_key_as_(next_stage, timestamp, timestamp_value, error)
     if self.can_be_set_to?(next_stage)
       self.status = next_stage.to_s
@@ -237,7 +270,9 @@ class UserKey < ActiveRecord::Base
   end
 
   # Callbacks
-  # don't allow "Unnamed Application" to be the name; set to nil
+  
+  # Don't allow "Unnamed Application" to be the name. Technically it would not cause problems,
+  #  but this is the display name for applications without names, so it could cause confusion.
   def check_name
     self.name = nil if self.name == "Unnamed Application"
   end

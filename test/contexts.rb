@@ -198,9 +198,9 @@ module Contexts
   
   # Whitelist_filters
   def create_whitelists
-    # A whitelist is only valid if it has filters, so create both at the same time here
-    # This is handled well by nested forms, but not by FactoryGirl
-    # 2 for Orgs, 1 for Positions
+    # A whitelist is only valid if it has filters, so create both at the same time here.
+    # This is handled well by nested forms, but not by FactoryGirl.
+    # 2 for Orgs, 1 for Positions.
     new_whitelist = Whitelist.new(user_key: @bender_key_submitted)
     new_whitelist.save(validate: false)
     @bender_key_submitted_org_status = FactoryGirl.create(:whitelist_filter, whitelist: new_whitelist, filter: @organizations_status_filter)
@@ -229,18 +229,9 @@ module Contexts
     
   # Whitelist_filters
   def create_whitelist_filters
-    # This should already have been created in create_whitelists
-    @bender_key_submitted_org_page ||= FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: @organizations_page_filter)
-    @bender_key_submitted_org_inactive ||= FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: @organizations_page_filter2)
-    @bender_key_submitted_org_status ||= FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: @organizations_status_filter)
-    @bender_key_submitted_pos_type ||= FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: @organizations_type_filter)
   end
   
   def destroy_whitelist_filters
-    @bender_key_submitted_org_inactive.destroy
-    @bender_key_submitted_org_page.destroy
-    @bender_key_submitted_org_status.destroy
-    @bender_key_submitted_pos_type.destroy
   end
 
   # Create everything at once with one method call
@@ -253,14 +244,12 @@ module Contexts
     create_organizations
     create_approvals
     create_whitelists
-    create_whitelist_filters
     create_user_key_columns
     create_user_key_organizations
   end
   
   # Destroy everything at once
   def destroy_everything
-    destroy_whitelist_filters
     destroy_user_key_columns
     destroy_user_key_organizations
     destroy_whitelists

@@ -10,7 +10,7 @@ class Whitelist < ActiveRecord::Base
   validates_presence_of :user_key
   
   # Do not allow any whitelist to be empty.
-  validate :has_filters
+  validate :has_valid_filters
   
   # Scopes
   scope :chronological, -> { order(:created_at) }
@@ -29,13 +29,16 @@ class Whitelist < ActiveRecord::Base
   end
   
   private
-  # Checks that the whitelist has filters.
+  # Checks that the whitelist has filters, all with the same resource.
   #
-  # @return [Boolean] True iff the whitelist has at least one filter.
+  # @return [Boolean] True iff the whitelist has at least one filter, and all filters have the same resource.
   # @note Adds an error if it returns false.
-  def has_filters
+  def has_valid_filters
     if self.filters.empty?
-      errors.add(:base, "A new clause has been created but does not have any filters.")
+      errors.add(:base, "There is a whitelist that does not have any filters.")
+      return false
+    elsif self.filters.map{|f| f.resource}.uniq.size != 1
+      errors.add(:base, "A whitelist has been given filters with different resources.")
       return false
     end
     return true

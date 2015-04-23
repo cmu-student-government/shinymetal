@@ -1,4 +1,7 @@
-# Dummy data used for unit testing
+# Dummy method used for unit testing, meant to represent something like a response from CollegiateLink.
+#
+# @param params [HashWithIndifferentAccess] Parameters passed in representing an API request.
+# @return [String, Hash] Dummy data response if the page number was valid, or a blank string if it wasn't.
 def hit_api_endpoint(params)
   page_number = params[:page] || "1"
   # Output successful result

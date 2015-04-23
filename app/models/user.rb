@@ -1,8 +1,8 @@
 # A user, created or retrieved in the controllers when someone logs in via Shibboleth.
 class User < ActiveRecord::Base
   # Get the user's name from CMU::Person.
-  #   This uses the user's andrew ID, which is provided by Shibboleth,
-  #   so it doesnt' need to be validated here.
+  # This uses the user's andrew ID, which is provided by Shibboleth,
+  # so it doesnt' need to be validated here.
   before_save :set_name
 
   # Relationships
@@ -12,10 +12,10 @@ class User < ActiveRecord::Base
   # Validations
   
   # Four roles exist. Admins can do most everything, requesters can only submit keys
-  #   and use API functionality. Staff can comment on key applications. Admins and staff who are also
-  #   approvers must all approve each key application, but only admins can edit access rights, activate
-  #   or inactivate or delete user keys or users or filters, or
-  #   release keys to users.
+  # and use API functionality. Staff can comment on key applications. Admins and staff who are also
+  # approvers must all approve each key application, but only admins can edit access rights, activate
+  # or inactivate or delete user keys or users or filters, or
+  # release keys to users.
   ROLE_LIST = {"requester" => "Requester",
                "admin" => "Administrator (Approver)",
                "staff_approver" => "Staff (Approver)",
@@ -97,7 +97,7 @@ class User < ActiveRecord::Base
   
   private
   # Set the person's name automatically as part of a callback. Relies on the CMU::Person gem to fetch
-  #   the data using the person's andrew id.
+  # the data using the person's andrew id.
   def set_name
     person = CMU::Person.find(andrew_id)
     if !person.nil?   

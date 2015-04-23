@@ -1,13 +1,13 @@
 # Used to connect a group of filters, all of which have the same resource, to a
-#   user key. The user key would be allowed to access a resource via a whitelist
-#   if the user's request includes all the whitelist's filters. A key can have
-#   multiple or no whitelists for a given resource; only one whitelist would need
-#   to be satisfied.
+# user key. The user key would be allowed to access a resource via a whitelist
+# if the user's request includes all the whitelist's filters. A key can have
+# multiple or no whitelists for a given resource; only one whitelist would need
+# to be satisfied.
 class Whitelist < ActiveRecord::Base
   # Relationships
   
   # Using 'inverse_of: whitelists' here is necessary for nested forms to work properly,
-  #   when creating whitelists, otherwise there is an associations error.
+  # when creating whitelists, otherwise there is an associations error.
   belongs_to :user_key, inverse_of: :whitelists
   # Whitelist_filters are not dealt with directly, only though this association.
   has_many :whitelist_filters, dependent: :destroy
@@ -21,8 +21,8 @@ class Whitelist < ActiveRecord::Base
   # Scopes
   scope :chronological, -> { order(:created_at) }
   # This scope relies on the fact that each whitelist's filters all have the same resource,
-  #   since a whitelist's resource is determined by looking at what filters it has.
-  #   A whitelist can only belong to one resource.
+  # since a whitelist's resource is determined by looking at what filters it has.
+  # A whitelist can only belong to one resource.
   scope :restrict_to, ->(param) { joins(:filters).where("filters.resource = ?", param).distinct }
   
   # Returns the resource that the whitelist belongs to.

@@ -1,5 +1,5 @@
 # Used to determine the routes that a known user or a guest can access.
-#   Only used for authorization in controllers, not views.
+# Only used for authorization in controllers, not views.
 class Ability
   include CanCan::Ability
  
@@ -31,7 +31,7 @@ class Ability
 
     # Admin-only rights.
     # Admin can do everything EXCEPT view other requester's keys
-    #   when they have not yet been submitted.
+    # when they have not yet been submitted.
     if user.role? :admin
 
       # User
@@ -159,11 +159,11 @@ class Ability
       # Can create a new key for themselves
       can :create, UserKey
 
-      # No universal Filter key rights exist for requesters
+      # No universal Filter key rights exist for requesters.
 
-    #End basic logged_in rights
+    #End basic logged_in rights.
     end
 
-  ##End def initialize
+  ##End def initialize.
   end
 end

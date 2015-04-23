@@ -1,6 +1,6 @@
 # A column, which is a component of an item's hash of columns and values,
-#   as part of the list of item hashes that make up a particular resource's
-#   response from CollegiateLink.
+# as part of the list of item hashes that make up a particular resource's
+# response from CollegiateLink.
 class Column < ActiveRecord::Base
   #Relationships
   
@@ -21,9 +21,9 @@ class Column < ActiveRecord::Base
   # Methods
   
   # Get the name of the column. This function would not be necessary if the column name attribute
-  #   was changed to just be name; the only reason for this function is that
-  #   calling the attribute 'column name' made it easier to differentiate in the
-  #   design phase of development, but 'name' is practically better.
+  # was changed to just be name; the only reason for this function is that
+  # calling the attribute 'column name' made it easier to differentiate in the
+  # design phase of development, but 'name' is practically better.
   #
   # @return [String] The name of the column.
   def name
@@ -31,7 +31,7 @@ class Column < ActiveRecord::Base
   end
   
   # Load columns directly from CollegiateLink into the database, done automatically by cronjob
-  #   or manually by admin.
+  # or manually by admin.
   #
   # @return [Boolean] True iff the request to CollegiateLink was successful.
   def self.repopulate

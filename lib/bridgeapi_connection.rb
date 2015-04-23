@@ -2,8 +2,10 @@ require 'base64'
 require 'openssl'
 require 'net/http'
 
-# call this function with the specific endpoint to hit
-# we can change this in the future to take in more options later
+# Called with request paramaters to get a response from CollegiateLink.
+#
+# @param params [HashWithIndifferentAccess] Parameters passed in representing an API request.
+# @return [String, Hash] Hash of data response if request worked, or a blank string if it didn't.
 # :nocov:
 def hit_api_endpoint(params)
   # Set the optional page number to the first page if not otherwise specified

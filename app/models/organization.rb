@@ -14,8 +14,8 @@ class Organization < ActiveRecord::Base
   # Methods
   
   # Class method to get the organizations which don't exist in CollegiateLink anymore,
-  #   but are still linked to ongoing keys. This method should never be needed to be used,
-  #   but is here just in case CollegiateLink changes organization id values for an organization.
+  # but are still linked to ongoing keys. This method should never be needed to be used,
+  # but is here just in case CollegiateLink changes organization id values for an organization.
   #
   # @return [Array<Organization>] Colleciton of organizations that have ongoing keys but are inactive.
   def self.inactive_but_with_nonexpired_keys
@@ -23,7 +23,7 @@ class Organization < ActiveRecord::Base
   end
   
   # Class method to repopulate the organizations look-up table, to be done automatically
-  #   at some time interval or manually by the website administrator.
+  # at some time interval or manually by the website administrator.
   #
   # @return [Boolean] True iff the method call was successful. 
   def self.repopulate
@@ -56,7 +56,7 @@ class Organization < ActiveRecord::Base
   # Class method to get hash of active organizations in this system.
   #
   # @return [Hash] Each key is of format [Integer,String], where the integer is the external id
-  #   and the string is the org name. Key's value is the Organization object.
+  # and the string is the org name. Key's value is the Organization object.
   def self.get_our_active_organizations_hash
     our_active_orgs_hash = {}
     Organization.active.to_a.each {|o| our_active_orgs_hash[[o.external_id, o.name]] = o }
@@ -67,7 +67,7 @@ class Organization < ActiveRecord::Base
   # Class method to get the complete list of organizationIds in CollegiateLink.
   #
   # @return [Array<Array>, nil] Nil if there was a failure to get data form CollegiateLink,
-  #   or a list of [Integer, String], corresponding to the organizationId and name of the Org.
+  # or a list of [Integer, String], corresponding to the organizationId and name of the Org.
   def self.get_their_result_list
     result_list = []
     page_number = 1

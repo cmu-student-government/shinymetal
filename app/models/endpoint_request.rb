@@ -50,6 +50,9 @@ class EndpointRequest
     return true
   end
   
+  # Check if the user key's request is valid through its organization id, whether it has one or not.
+  #
+  # @return [Boolean] True if the request had an org Id that is associated with the request's key.
   def has_valid_organization_id?
     return @user_key.organizations.active.map{|o| o.external_id.to_s}.include?(@params[:organizationId].to_s)
   end

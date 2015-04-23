@@ -1,5 +1,5 @@
 # Connection between user key and organization.
-#  By existing, it shows that the user key has access to that organization.
+# By existing, it shows that the user key has access to that organization.
 class UserKeyOrganization < ActiveRecord::Base
   # Relationships
   

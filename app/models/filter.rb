@@ -1,6 +1,7 @@
 class Filter < ActiveRecord::Base
   #Relationships
-  has_many :whitelist_filters, autosave: true
+  
+  has_many :whitelist_filters
   has_many :whitelists, through: :whitelist_filters
   
   # Validations
@@ -13,9 +14,11 @@ class Filter < ActiveRecord::Base
   scope :alphabetical, -> { order(:resource).order(:filter_name).order(:filter_value) }
   scope :restrict_to, ->(param) { where(resource: param) }
   
+  # Only allow filter to be destroyed if it is unused.
   before_destroy :is_destroyable?
   
-  # Methods  
+  # Methods
+  
   def name
     "\"#{filter_name}\" = \"#{filter_value}\""
   end

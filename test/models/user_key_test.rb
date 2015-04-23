@@ -82,12 +82,20 @@ class UserKeyTest < ActiveSupport::TestCase
     end
 
     should "have method to undo set approved by a user" do
-      @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
+      assert @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
+      @bender_key_awaiting_conf_approved.reload
+      # Don't allow double revoke.
+      deny @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
+      # Show that the approval was revoked.
       deny @bender_key_awaiting_conf_approved.approved_by?(@leela)
     end
 
     should "have method to set approved by" do
-      @bender_key_awaiting_conf.set_approved_by(@leela)
+      assert @bender_key_awaiting_conf.set_approved_by(@leela)
+      @bender_key_awaiting_conf.reload
+      # Don't allow double approval.
+      deny @bender_key_awaiting_conf.set_approved_by(@leela)
+      # Show that the approval was added.
       assert @bender_key_awaiting_conf.approved_by?(@leela)
     end
 

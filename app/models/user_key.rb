@@ -59,25 +59,28 @@ class UserKey < ActiveRecord::Base
 
   # Scopes
   
-  # These scopes 
+  # These scopes are used to organize keys in index pages.
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc).order(time_expired: :desc) }
-  scope :active, -> { where(active: true) }
 
   # These scopes are used for organizing keys on user dashboards.
   scope :awaiting_filters, -> { where("status = ?", 'awaiting_filters')}
   scope :awaiting_confirmation, -> { where("status = ?", 'awaiting_confirmation')}
   scope :awaiting_submission, -> { where("status = ?", 'awaiting_submission')}
   scope :expired, -> { where("time_expired < ?", DateTime.now)}
-  # This is also the first scope used to restrict permitted keys in the API controller.
+  # This is also the first of three scopes used to restrict permitted keys in the API controller.
   scope :confirmed, -> { where("status = ?", 'confirmed')}
   
   # This scope is used to restrict the keys that the staff and admins can view.
   #   They cannot see applications that have not been submitted yet.
   scope :submitted, -> { where("status <> 'awaiting_submission'") }
   
-  # This is the second scope used ot restrict permitted keys in the API controller. 
+  # This is the second of three scopes used ot restrict permitted keys in the API controller. 
   scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
+  
+    
+  # This is the third of three scopes used to restrict permitted keys in the API controller.
+  scope :active, -> { where(active: true) }
 
   # Used in a cron job to send automatic emails the month before a key expires. 
   scope :expires_in_a_month, -> { where("time_expired = ?", 30.days.from_now.to_date) }
@@ -90,6 +93,7 @@ class UserKey < ActiveRecord::Base
   # Determine if the approver viewing the user key's permissions has approved it yet or not.
   #
   # @param user [User] The staff_approver or admin who is viewing the user key's permissions.
+  # @return [Boolean] True iff the given user has an Approval for this key.
   def approved_by?(user)
     return self.approval_users.to_a.include?(user)
   end
@@ -97,61 +101,98 @@ class UserKey < ActiveRecord::Base
   # Create an Approval by an approver user for this user key application.
   #
   # @param user [User] The staff_approver or admin who is approving this key.
+  # @return [Boolean] True iff the given user does not have an Approval for this key yet.
+  # @note Adds an error if it returns false.
   def set_approved_by(user)
-    return Approval.create(user_key_id: self.id, user_id: user.id)
+    unless approved_by?(user)
+      Approval.create(user_key_id: self.id, user_id: user.id)
+      return true
+    end
+    errors.add(:base, "You have already approved this key.")
+    return false
   end
 
   # Destroy the Approval created by the approver user for this user key application.
   #
   # @param user [User] The staff_approver or admin who is revoking approval for this key.
+  # @return [Boolean] True iff the given user had an Approval for this key coming in.
+  # @note Adds an error if it returns false.
   def undo_set_approved_by(user)
-    old_approval = self.approvals.by(user).first
-    old_approval.destroy
+    if approved_by?(user)
+      # A user should only ever have at most one Approval for a given key,
+      #   so 'take' grabs that one Approval.
+      old_approval = self.approvals.by(user).take
+      old_approval.destroy
+      return true
+    end
+    errors.add(:base, "You have not approved this key yet.")
+    return false
   end
 
   # Used in the user key show page to indicate whether or not the key has expired.
+  #
+  # @return [Boolean] True only if the key has a value for time_expired, and that value is before today's date.
   def expired?
     return false if self.time_expired.nil?
     return self.time_expired < Date.today
   end
   
   # Used in the user key show page and the home page to indicate which of their keys will expire soon.
+  #
+  # @return [Boolean] True only if the key has a value for time_expired, and that value is in the next 30 days.
   def will_expire_soon?
     return false if self.time_expired.nil? or self.expired?
     return self.time_expired < 30.days.from_now
   end
 
+  # Class method to search for keys whose names match a search term.
+  #
+  # @param term [String] The term being searched for.
+  # @param max [Integer] The maximum number of keys allowed in the returned collection.
+  # @return [ActiveRecord::Relation] Collection of user keys, capped by the max, which match the search term.
   def self.search(term, max=5)
     term = "%#{term.to_s.downcase}%"
     name = 'LOWER(name)'
     where("#{name} LIKE ?", term).limit(max)
   end
 
-  # The form is ready to be submitted by the requester, or approved, or confirmed?
+  # Determines if the form is ready to be reset, or submitted, or shared with approvers, or confirmed.
+  #
+  # @param sym [Symbol] The status that they key is about to be set to.
+  # @return [Boolean] True iff the key's status can be set to sym.
   def can_be_set_to? sym
-    case sym # Do false cases first
-    when :awaiting_submission # For reset keys
+    case sym # Do false cases first.
+    when :awaiting_submission
+      # Only keys being "reset" are "set" to awaiting_submission.
+      # Every key starts at awaiting_submission by default and don't have these checks.
+      # To be reset, a key must be active and have public comments for the key owner to see.
       return false unless (at_stage? :awaiting_filters or at_stage? :awaiting_confirmation)
       return false unless (has_public_comments? and self.active)
     when :awaiting_filters
+      # Check that the requester has filled in their form.
       return false unless at_stage? :awaiting_submission
       return false unless request_form_done?
     when :awaiting_confirmation
+      # Check by admin that the key is ready to be approved by all approvers in the system.
       return false unless at_stage? :awaiting_filters
       return false if self.time_expired.nil?
     when :confirmed
+      # Check by admin that the key has been approved by everyone and can be confirmed.
       return false unless at_stage? :awaiting_confirmation
       # Simply counting all approvers and comparing approvals already earned
       # would have a bug when someone approves it but is soon demoted from approver.
-      # So, only find the number of approvers who are currently still active "approvers"
+      # So, only find the number of approvers who are currently still active "approvers".
       return false if !(self.approval_users.approvers_only.size == User.approvers_only.size)
     end
     return true
   end
 
-  # A key with 'allow_past' which is past the submission stage
-  # will be considered to be "at" the submission stage
-  # This is used in user_key show page
+  # Check in user key view pages and validations what stage the user key is in.
+  #
+  # @param sym [Symbol] Possible user key status.
+  # @param allow_past [Boolean] If true, then, for example, if the key is past the submission stage,
+  #   consider the key to be "at" the submission stage.
+  # @return [Boolean] True iff the user key is at sym's stage, or is past the stage (if allow_past).
   def at_stage?(sym, allow_past=false)
     case sym
     when :awaiting_submission
@@ -180,8 +221,9 @@ class UserKey < ActiveRecord::Base
     end
   end
 
-  # Used for index and show pages; overwrites displayed name if name is blank
-  # Note that this method is overwriting the :name attribute getter.
+  # In index and show pages, overwrites the displayed key name if the name is blank.
+  #
+  # @return [String] Name of the key, or "Unnnamed Application" if the name is nil.
   def display_name
     if name.blank? # No name given yet, make up a temporary one
       return "Unnamed Application"
@@ -190,6 +232,10 @@ class UserKey < ActiveRecord::Base
     end
   end
 
+  # Change the status of the key via the UserKeyController.
+  #
+  # @param sym [Symbol] A possible user key status.
+  # @return [Boolean] True iff the status was successfully changed to the requested sym.
   def set_status_as(sym)
     today = DateTime.now.in_time_zone("Pacific Time (US & Canada)")
     case sym
@@ -200,28 +246,31 @@ class UserKey < ActiveRecord::Base
       return set_key_as_(sym, :time_filtered, today, "The key needs an expiration date.")
     when :confirmed
       return set_key_as_(sym, :time_confirmed, today, "The key cannot be released until it has been approved by all approvers.")
-    # Key can be reset to the very beginning of its lifecycle here
+    # Key can be reset to the very beginning of its lifecycle here.
     when :awaiting_submission
+      # When resetting the key, time_filtered is set to nil, but time_submitted is not because
+      #   keeping the time_submitted allows requesters to see that a submission was already attempted.
       return set_key_as_(sym, :time_filtered, nil, "The key cannot be reset unless the key is both active, has not been confirmed yet,
                          and has an Administrator note explaining the issue to the requester.")
     end
   end
   
+  # Calculate and print the API key, iff the key has been confirmed. Does not store the API key.
+  #
+  # @return [String] The value of the key, or placeholder text if the user key has no key yet.
   def gen_api_key
     if at_stage?(:confirmed)
-      # the datetime of when the user_key was first requested
+      # Start with the datetime of when the user_key was first requested.
       date_string = self.time_submitted.to_s.split("")
-      # the andrew_id of the user who requested the user_key
+      # Get the andrew_id of the user who requested the user_key.
       andrew_id = self.user.andrew_id.split("")
-      # add some spice (salt) to the key as well
+      # Get the salt for the key as well.
       salt = SETTINGS[:default]["api_key_salt"].split("")
-      # intertwine the string of the andrewid and the date together to build
-      # the hash. This is so we can compare the passed in token to a hash
-      # we can recompute to ensure security and not have the key stored in
-      # the database. (ex: intertwining "hello" and "woo" => "hweololo")
-      # eventually add in the salt
+      # Intertwine the string of the andrewid, date, and salt together to build
+      #   the hash. This is so we can compare the passed in token to a hash
+      #   we can recompute to ensure security and not have the key stored in
+      #   the database. (ex: intertwining "hello" and "woo" => "hweololo")
       hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
-      # hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
       return Digest::SHA2.hexdigest hash_string
     else
       return "A key will be generated upon approval."
@@ -234,12 +283,16 @@ class UserKey < ActiveRecord::Base
     self.save!
   end
 
-  # Used as a requirement for resetting a key.
+  # Check if any administrator comments have been made. Used as a requirement for resetting a key.
+  #
+  # @return [Boolean] True iff administrator comments exist for this key.
   def has_public_comments?
     return !self.comments.public_only.empty?
   end
 
-  # Used as a requirement for submitting a key.
+  # Check if the required fields are filled in. Used as a requirement for submitting a key.
+  #
+  # @return [Boolean] True iff required fields are filled in and the key has a name.
   def request_form_done?
     self.answers.each {|answer| return false if answer.message.blank? and answer.question.required }
     return !self.name.blank?
@@ -255,6 +308,13 @@ class UserKey < ActiveRecord::Base
   #   If the key is being set to awaiting_submission, then it is being reset, and approvals
   #   are deleted as well.
   #   If there was an error, add an error to the error hash and do nothing else.
+  #
+  # @param next_stage [Symbol] The status the key is being updated to.
+  # @param timestamp [Symbol] The time attribute being updated.
+  # @param timestamp_value [DateTime, nil] The new value for the timestamp; today, or nil.
+  # @param error [String] The error added if false is returned.
+  # @return [Boolean] True iff the change was successful.
+  # @note Adds an error if it returns false.
   def set_key_as_(next_stage, timestamp, timestamp_value, error)
     if self.can_be_set_to?(next_stage)
       self.status = next_stage.to_s

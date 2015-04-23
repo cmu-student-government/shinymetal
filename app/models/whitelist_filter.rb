@@ -1,3 +1,5 @@
+# Connection between filter and whitelist.
+#  By existing, it shows that the filter is part of the whitelist.
 class WhitelistFilter < ActiveRecord::Base
   # Relationships
   

@@ -1,3 +1,4 @@
+# A filter that can be used as a restriction for authorizing API requests.
 class Filter < ActiveRecord::Base
   #Relationships
   

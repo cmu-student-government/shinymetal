@@ -1,3 +1,4 @@
+# A user, created or retrieved in the controllers when someone logs in via Shibboleth.
 class User < ActiveRecord::Base
   # Get the user's name from CMU::Person.
   #   This uses the user's andrew ID, which is provided by Shibboleth,

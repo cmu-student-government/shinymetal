@@ -1,3 +1,4 @@
+# A question to be answered in the initial application form for a key.
 class Question < ActiveRecord::Base
   # Relationships
   

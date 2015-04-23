@@ -1,4 +1,4 @@
-# Objectify requests to the API in the Api Controller
+# Objectify requests to the API as made in the Api Controller.
 class EndpointRequest
   # @return [String, nil] The error message for any endpoint request that was not allowed.
   attr_reader :failed

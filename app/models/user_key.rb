@@ -1,3 +1,4 @@
+# A key application, and its associated form data and key value, to be created by a requester.
 class UserKey < ActiveRecord::Base
   # Always make sure the user's name becomes nil if it is the same as the placeholder name.
   before_save :check_name

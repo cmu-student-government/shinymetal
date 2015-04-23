@@ -1,6 +1,11 @@
+# Used to determine the routes that a known user or a guest can access.
+#   Only used for authorization in controllers, not views.
 class Ability
   include CanCan::Ability
-
+ 
+  # Define which routes the user can access.
+  #
+  # @param user [User, nil] User object, or nil if the user is not logged in.
   def initialize(user)
     # Remember for future reference if the user was a guest.
     logged_in = !user.nil?

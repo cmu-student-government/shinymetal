@@ -6,7 +6,7 @@ class Question < ActiveRecord::Base
   
   # Validations
   
-  validates_presence_of :message, message: "cannot be blank."
+  validates_presence_of :message
   
   # Scopes
   

@@ -1,3 +1,8 @@
+# Used to connect a group of filters, all of which have the same resource, to a
+#   user key. The user key would be allowed to access a resource via a whitelist
+#   if the user's request includes all the whitelist's filters. A key can have
+#   multiple or no whitelists for a given resource; only one whitelist would need
+#   to be satisfied.
 class Whitelist < ActiveRecord::Base
   # Relationships
   

@@ -1,3 +1,5 @@
+# The approval for a key; just by existing, it reflects that its
+#   associated user approved its associated key. 
 class Approval < ActiveRecord::Base
   # Relationships
   

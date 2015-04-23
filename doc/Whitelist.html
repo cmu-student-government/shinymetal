@@ -101,7 +101,22 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Used to connect a group of filters, all of which have the same resource, to
+a user key. The user key would be allowed to access a resource via a
+whitelist if the user&#39;s request includes all the whitelist&#39;s
+filters. A key can have multiple or no whitelists for a given resource;
+only one whitelist would need to be satisfied.</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -119,7 +134,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#resource-instance_method" title="#resource (instance method)">- (Object) <strong>resource</strong> </a>
+      <a href="#resource-instance_method" title="#resource (instance method)">- (String) <strong>resource</strong> </a>
     
 
     
@@ -133,7 +148,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the resource that the whitelist belongs to.</p>
+</div></span>
   
 </li>
 
@@ -151,28 +168,59 @@
       <div class="method_details first">
   <h3 class="signature first" id="resource-instance_method">
   
-    - (<tt>Object</tt>) <strong>resource</strong> 
+    - (<tt>String</tt>) <strong>resource</strong> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the resource that the whitelist belongs to.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The resource that the whitelist belongs to.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-16
-17
-18
-19</pre>
+31
+32
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/whitelist.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'app/models/whitelist.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_resource'>resource</span>
-  <span class='comment'># All filters in a whitelist should have the same resource.
+  <span class='comment'># All filters in a whitelist should have the same resource,
+</span>  <span class='comment'># and all whitelists have at least one resource.
 </span>  <span class='kw'>return</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_filters'>filters</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span><span class='period'>.</span><span class='id identifier rubyid_resource'>resource</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -185,7 +233,7 @@
 </div>
 
     <div id="footer">
-  Generated on Wed Apr 22 17:03:28 2015 by
+  Generated on Thu Apr 23 13:50:42 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.0.0).
 </div>

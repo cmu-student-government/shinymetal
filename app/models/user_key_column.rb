@@ -1,3 +1,5 @@
+# Connection between user key and column.
+#  By existing, it shows that the user key has access to that column.
 class UserKeyColumn < ActiveRecord::Base
   # Relationships
   

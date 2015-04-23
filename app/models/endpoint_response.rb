@@ -7,8 +7,9 @@ else
   # :nocov:
 end
 
-# Objectify responses from bridgeapi_connection
+# Objectify responses from bridgeapi_connection to handle the logic for the API controller.
 class EndpointResponse
+  # Some of these readers are used in other models, i.e. the repopulate methods.
   # @return [Integer] The page number.
   attr_reader :page_number
   # @return [Integer] The page size.
@@ -19,6 +20,8 @@ class EndpointResponse
   attr_reader :total_pages
   # @return [Array<Hash>] The response items, such that each item is a hash in the list.
   attr_reader :items
+  
+  # This reader is used in the API controller and in model methods to check if the response failed.
   # @return [String, nil] Error message if the response failed.
   attr_reader :failed
   

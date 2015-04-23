@@ -1,3 +1,4 @@
+# A key application, and its associated form data and key value, to be created by a requester.
 class UserKey < ActiveRecord::Base
   # Always make sure the user's name becomes nil if it is the same as the placeholder name.
   before_save :check_name
@@ -7,14 +8,14 @@ class UserKey < ActiveRecord::Base
   belongs_to :user
 
   # A User Key is the only thing that can be deleted in the system (while still associated).
-  #   Filters can be deleted if they are unused; everything else can only be deleted through user key.
+  # Filters can be deleted if they are unused; everything else can only be deleted through user key.
   has_many :user_key_organizations, dependent: :destroy
   has_many :whitelists, dependent: :destroy
   has_many :user_key_columns, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :approvals, dependent: :destroy
   # 'has_many :answers' requires inverse_of, so that both the key and its answers
-  #   can be created at the same time in the application.
+  # can be created at the same time in the application.
   has_many :answers, inverse_of: :user_key, dependent: :destroy
 
   has_many :questions, through: :answers
@@ -24,7 +25,7 @@ class UserKey < ActiveRecord::Base
   has_many :comment_users, class_name: User, through: :comments
 
   # Only one comment can be added through a time.
-  #   Comments are not deleted through the nested form; they are deleted through their own form.
+  # Comments are not deleted through the nested form; they are deleted through their own form.
   accepts_nested_attributes_for :comments, limit: 1
   # A user key's answers are created when the user key is created. After that, answers cannot be
   #  added or deleted unless the user key is deleted.
@@ -44,12 +45,12 @@ class UserKey < ActiveRecord::Base
   validates_inclusion_of :status, in: STATUS_LIST
 
   # Validate that the requirements of the submission step and the filtering step
-  #  are always met afterwards.
-  #  We do not validate that keys are always approvable afterwards ("confirmed" step),
-  #  because more approvers may be added to the system later.
-  #  We do not validate that keys are always at "awaiting_submission"
-  #  because a key is only set to this state when it is being reset, which requires comments,
-  #  but not all keys need comments.
+  # are always met afterwards.
+  # We do not validate that keys are always approvable afterwards ("confirmed" step),
+  # because more approvers may be added to the system later.
+  # We do not validate that keys are always at "awaiting_submission"
+  # because a key is only set to this state when it is being reset, which requires comments,
+  # but not all keys need comments.
   for status in STATUS_LIST
     if status == "awaiting_filters" or status == "awaiting_confirmation"
       validate Proc.new { |key| key.can_be_set_to?(status.to_sym) },
@@ -72,7 +73,7 @@ class UserKey < ActiveRecord::Base
   scope :confirmed, -> { where("status = ?", 'confirmed')}
   
   # This scope is used to restrict the keys that the staff and admins can view.
-  #   They cannot see applications that have not been submitted yet.
+  # They cannot see applications that have not been submitted yet.
   scope :submitted, -> { where("status <> 'awaiting_submission'") }
   
   # This is the second of three scopes used ot restrict permitted keys in the API controller. 
@@ -304,10 +305,10 @@ class UserKey < ActiveRecord::Base
   end
 
   # Check that the key can have its status changed to next_stage.
-  #   Then, change the status of the key to next_stage, and change the timestamp to the new value.
-  #   If the key is being set to awaiting_submission, then it is being reset, and approvals
-  #   are deleted as well.
-  #   If there was an error, add an error to the error hash and do nothing else.
+  # Then, change the status of the key to next_stage, and change the timestamp to the new value.
+  # If the key is being set to awaiting_submission, then it is being reset, and approvals
+  # are deleted as well.
+  # If there was an error, add an error to the error hash and do nothing else.
   #
   # @param next_stage [Symbol] The status the key is being updated to.
   # @param timestamp [Symbol] The time attribute being updated.
@@ -332,7 +333,7 @@ class UserKey < ActiveRecord::Base
   # Callbacks
   
   # Don't allow "Unnamed Application" to be the name. Technically it would not cause problems,
-  #  but this is the display name for applications without names, so it could cause confusion.
+  # but this is the display name for applications without names, so it could cause confusion.
   def check_name
     self.name = nil if self.name == "Unnamed Application"
   end

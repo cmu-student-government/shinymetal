@@ -1,3 +1,4 @@
+# A filter that can be used as a restriction for authorizing API requests.
 class Filter < ActiveRecord::Base
   #Relationships
   
@@ -49,8 +50,8 @@ class Filter < ActiveRecord::Base
   private
   
   # Checks that the filter name is valid by looking up the resource in the hash of
-  #   params known to be accepted by the CollegiateLink API as stored statically in Resources.rb,
-  #   and checking that the param is there. 
+  # params known to be accepted by the CollegiateLink API as stored statically in Resources.rb,
+  # and checking that the param is there. 
   #
   # @return [Boolean] True iff the filter name is a recognized name for the given resource
   #   or if the resource name was invalid.

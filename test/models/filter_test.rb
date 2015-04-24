@@ -37,11 +37,9 @@ class FilterTest < ActiveSupport::TestCase
       create_users
       create_user_keys
       create_whitelists
-      create_whitelist_filters
       @organizations_page_filter.reload
       assert_equal @organizations_page_filter.user_keys.to_a.map{|o| o.name}, ["Bender Submitted"]
       destroy_whitelists
-      destroy_whitelist_filters
       destroy_user_keys
       destroy_users
     end
@@ -50,13 +48,11 @@ class FilterTest < ActiveSupport::TestCase
       create_users
       create_user_keys
       create_whitelists
-      create_whitelist_filters
       deny @organizations_page_filter.is_destroyable?
       unused_filter = FactoryGirl.create(:filter, filter_value: "A new, unused value")
       assert unused_filter.is_destroyable?
       unused_filter.destroy
       destroy_whitelists
-      destroy_whitelist_filters
       destroy_user_keys
       destroy_users
     end

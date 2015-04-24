@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Ability
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!Ability.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (A)</a> &raquo;
+    
+    
+    <span class="title">Ability</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Ability
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Ability</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+      <dt class="r2">Includes:</dt>
+      <dd class="r2">CanCan::Ability</dd>
+      
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">app/models/ability.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Used to determine the routes that a known user or a guest can access. Only
+used for authorization in controllers, not views.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Ability) <strong>initialize</strong>(user) </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Define which routes the user can access.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Ability (class)">Ability</a></span></tt>) <strong>initialize</strong>(user) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Define which routes the user can access.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="User.html" title="User (class)">User</a></span></tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>User object, or nil if the user is not logged in.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/models/ability.rb', line 9</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
+  <span class='comment'># Remember for future reference if the user was a guest.
+</span>  <span class='id identifier rubyid_logged_in'>logged_in</span> <span class='op'>=</span> <span class='op'>!</span><span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+
+  <span class='comment'># User is passed in from application controller, but is nil if it was a guest.
+</span>  <span class='id identifier rubyid_user'>user</span> <span class='op'>||=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+
+  <span class='comment'># Everyone can read the not-so-static pages.
+</span>  <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:read</span><span class='comma'>,</span> <span class='const'>Page</span>
+
+  <span class='comment'># Approver-only rights.
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_role?'>role?</span> <span class='symbol'>:is_approver</span>
+    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:approve_key</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_confirmation</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:undo_approve_key</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_confirmation</span>
+    <span class='kw'>end</span>
+
+  <span class='kw'>end</span>
+  <span class='comment'>#End of approver rights
+</span>
+  <span class='comment'># Admin-only rights.
+</span>  <span class='comment'># Admin can do everything EXCEPT view other requester&#39;s keys
+</span>  <span class='comment'># when they have not yet been submitted.
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_role?'>role?</span> <span class='symbol'>:admin</span>
+
+    <span class='comment'># User
+</span>    <span class='comment'># Admins should not be able to create or destroy users, since these routes don&#39;t exist.
+</span>    <span class='comment'># Users should be created automatically when logging in via shibboleth.
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:manage</span><span class='comma'>,</span> <span class='const'>User</span>
+
+    <span class='comment'># Filter
+</span>    <span class='comment'># Admin can do anything they want to with filters.
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:manage</span><span class='comma'>,</span> <span class='const'>Filter</span>
+    
+    <span class='comment'># Pages
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:manage</span><span class='comma'>,</span> <span class='const'>Page</span>
+    
+    <span class='comment'># Questions
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:manage</span><span class='comma'>,</span> <span class='const'>Question</span>
+    
+    <span class='comment'># Orgs
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:manage</span><span class='comma'>,</span> <span class='const'>Organization</span>
+
+    <span class='comment'># Whitelist
+</span>    <span class='comment'># Admin can do anything they want to with whitelists.
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:manage</span><span class='comma'>,</span> <span class='const'>Whitelist</span>
+
+    <span class='comment'># UserKey
+</span>    <span class='comment'># Comments cant be changed at awaiting_sub stage
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:update</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='op'>!</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_submission</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Only allow filter completion when at awaiting_filters stage
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:set_as_filtered</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_filters</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Only allow confirm when at awaiting_confirmation stage
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:set_as_confirmed</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_confirmation</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Only allow reset when awaiting confirmation or awaiting filters
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:set_as_reset</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_filters</span> <span class='kw'>or</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_confirmation</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># Admins can search on UserKey
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:search</span><span class='comma'>,</span> <span class='const'>UserKey</span>
+
+    <span class='comment'># Admins can destroy keys at any time
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:destroy</span><span class='comma'>,</span> <span class='const'>UserKey</span>
+
+  <span class='kw'>end</span>
+  <span class='comment'># End Admin rights
+</span>
+  <span class='comment'># Staff rights
+</span>  <span class='comment'># These are common rights among staff so that any staffmember can read most information.
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_role?'>role?</span> <span class='symbol'>:is_staff</span>
+
+    <span class='comment'># Users
+</span>    <span class='comment'># Can read (show, index) any user
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:read</span><span class='comma'>,</span> <span class='const'>User</span>
+
+    <span class='comment'># Filters
+</span>    <span class='comment'># Can read (show, index) filters
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:read</span><span class='comma'>,</span> <span class='const'>Filter</span>
+    
+    <span class='comment'># Questions
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:read</span><span class='comma'>,</span> <span class='const'>Question</span>
+    
+    <span class='comment'># Orgs
+</span>    <span class='comment'># Can read (show, index) orgs
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:read</span><span class='comma'>,</span> <span class='const'>Organization</span>
+
+    <span class='comment'># User Keys
+</span>    <span class='comment'># Can read (show, index) any submitted UserKeys
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:read</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='op'>!</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_submission</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Staffmembers can comment on any unsubmitted key
+</span>    <span class='comment'># Edge case: If a staffmember has their own key pending, they still can&#39;t comment on it.
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:add_comment</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='op'>!</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_submission</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:delete_comment</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='op'>!</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_submission</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># Admins can search on UserKey
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:search</span><span class='comma'>,</span> <span class='const'>UserKey</span>
+
+  <span class='kw'>end</span>
+  <span class='comment'># End is_staff rights
+</span>
+  <span class='comment'># Requester and Key Owner rights
+</span>  <span class='comment'># These rights are universally available to anyone who is logged in
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_logged_in'>logged_in</span>
+    
+    <span class='comment'># Can see the &#39;home&#39; page (distinct from the guest &#39;welcome&#39; page)
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:read</span><span class='comma'>,</span> <span class='symbol'>:home</span>
+    
+    <span class='comment'># Users
+</span>    <span class='comment'># Can see their own profile
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:show</span><span class='comma'>,</span> <span class='const'>User</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_accessed_user'>accessed_user</span><span class='op'>|</span>
+      <span class='id identifier rubyid_accessed_user'>accessed_user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span> <span class='op'>==</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># UserKey
+</span>    <span class='comment'># Can edit their own unsubmitted applications
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:update</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_owns?'>owns?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='kw'>and</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span><span class='lparen'>(</span><span class='symbol'>:awaiting_submission</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Can see their own user keys
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:show</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_owns?'>owns?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Can submit their own keys
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:set_as_submitted</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_owns?'>owns?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='kw'>and</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span><span class='lparen'>(</span><span class='symbol'>:awaiting_submission</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Can see their own keys
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:own_user_keys</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_owns?'>owns?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Can discard a new application
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:destroy</span><span class='comma'>,</span> <span class='const'>UserKey</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
+      <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_owns?'>owns?</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='kw'>and</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_submission</span>
+    <span class='kw'>end</span>
+    <span class='comment'># Can create a new key for themselves
+</span>    <span class='id identifier rubyid_can'>can</span> <span class='symbol'>:create</span><span class='comma'>,</span> <span class='const'>UserKey</span>
+
+    <span class='comment'># No universal Filter key rights exist for requesters.
+</span>
+  <span class='comment'>#End basic logged_in rights.
+</span>  <span class='kw'>end</span>
+
+<span class='comment'>##End def initialize.
+</span><span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+</div>
+
+    <div id="footer">
+  Generated on Thu Apr 23 13:50:42 2015 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

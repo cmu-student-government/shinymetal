@@ -13,6 +13,8 @@ class UserKeyTest < ActiveSupport::TestCase
 
   # Validations
   should accept_nested_attributes_for(:comments).limit(1)
+  should accept_nested_attributes_for(:answers)
+  should accept_nested_attributes_for(:whitelists).allow_destroy(true)
 
   # Status
   should allow_value("awaiting_submission").for(:status)
@@ -31,7 +33,6 @@ class UserKeyTest < ActiveSupport::TestCase
       destroy_everything
     end
 
-    # FIXME: Test the scopes with keys belonging to different users
     should "have a scope to sort by andrew_id" do
       assert_equal 9, UserKey.by_user.size
       assert_equal ["brodriguez", "hconrad"], UserKey.by_user.all.map{|o| o.user.andrew_id}.uniq
@@ -81,12 +82,20 @@ class UserKeyTest < ActiveSupport::TestCase
     end
 
     should "have method to undo set approved by a user" do
-      @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
+      assert @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
+      @bender_key_awaiting_conf_approved.reload
+      # Don't allow double revoke.
+      deny @bender_key_awaiting_conf_approved.undo_set_approved_by(@leela)
+      # Show that the approval was revoked.
       deny @bender_key_awaiting_conf_approved.approved_by?(@leela)
     end
 
     should "have method to set approved by" do
-      @bender_key_awaiting_conf.set_approved_by(@leela)
+      assert @bender_key_awaiting_conf.set_approved_by(@leela)
+      @bender_key_awaiting_conf.reload
+      # Don't allow double approval.
+      deny @bender_key_awaiting_conf.set_approved_by(@leela)
+      # Show that the approval was added.
       assert @bender_key_awaiting_conf.approved_by?(@leela)
     end
 
@@ -119,7 +128,6 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal 2, UserKey.expired.size
     end
 
-    #FIXME uncomment when corrected
     should "have a scope that returns keys that expire in a month" do 
       assert_equal 1, UserKey.expires_in_a_month.size
     end

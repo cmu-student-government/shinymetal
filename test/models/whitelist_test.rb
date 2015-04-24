@@ -49,14 +49,10 @@ class WhitelistTest < ActiveSupport::TestCase
     # Validations for filter-less whitelists
     should "not allow two filters with different resources" do
       # Bender Key's whitelist should only have organization filters
-      valid_orgs_filter = FactoryGirl.create(:filter, resource: "organizations", filter_name: Resources::PARAM_NAME_HASH[:organizations][0])
-      valid_whitelist_filter = FactoryGirl.create(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: valid_orgs_filter)
-      assert valid_whitelist_filter.valid?
       valid_attendees_filter = FactoryGirl.create(:filter, resource: "attendees", filter_name: Resources::PARAM_NAME_HASH[:attendees][0])
-      bad = FactoryGirl.build(:whitelist_filter, whitelist: @bender_key_submitted_whitelist, filter: valid_attendees_filter)
-      deny bad.valid?
+      @bender_key_submitted_whitelist.filter_ids = @bender_key_submitted_whitelist.filter_ids << valid_attendees_filter.id
+      deny @bender_key_submitted_whitelist.valid?
       valid_attendees_filter.destroy
-      valid_orgs_filter.destroy
     end
   end
 end

@@ -1,26 +1,14 @@
+# Connection between filter and whitelist.
+#  By existing, it shows that the filter is part of the whitelist.
 class WhitelistFilter < ActiveRecord::Base
+  # Relationships
+  
   belongs_to :filter
   belongs_to :whitelist
 
+  # Validations
+
   validates_presence_of :whitelist
   validates_presence_of :filter
-  
-  validate :whitelist_has_one_resource_only
-  validates_uniqueness_of :whitelist_id, scope: :filter_id 
-  
-  private
-  def whitelist_has_one_resource_only
-    # Check that all of a whitelist's filters have the same resource
-    return true unless Whitelist.all.to_a.map{|o| o.id}.include?(whitelist_id)
-    return true unless Filter.all.to_a.map{|o| o.id}.include?(filter_id)
-    incoming_filter = Filter.find(filter_id)
-    existing_whitelist_filters = Whitelist.find(whitelist_id).filters
-    return true if existing_whitelist_filters.empty?
-    unless existing_whitelist_filters.first.resource == incoming_filter.resource
-      errors.add(:base, "A clause was given filters for different API endpoints.")
-      return false
-    end
-    return true
-  end
-  
+  validates_uniqueness_of :whitelist_id, scope: :filter_id
 end

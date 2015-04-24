@@ -11,11 +11,9 @@ class WhitelistFilterTest < ActiveSupport::TestCase
       create_filters
       create_user_keys
       create_whitelists
-      create_whitelist_filters
     end
     
     teardown do
-      destroy_whitelist_filters
       destroy_user_keys
       destroy_filters
       destroy_whitelists

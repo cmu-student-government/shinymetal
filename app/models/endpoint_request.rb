@@ -1,9 +1,5 @@
-# Objectify requests to the API in the Api Controller
+# Objectify requests to the API as made in the Api Controller.
 class EndpointRequest
-  # @return [String] The resource passed into the URL.
-  attr_reader :resource
-  # @return [Hash] The paramaters passed into the URL, with blacklist values removed.
-  attr_reader :options
   # @return [String, nil] The error message for any endpoint request that was not allowed.
   attr_reader :failed
   
@@ -15,17 +11,16 @@ class EndpointRequest
   # @return [EndpointRequest]
   def initialize(user_key, params)
     @user_key = user_key
+    @params = params
     # It doesn't matter here if the resource passed in exists or not; that will cause errors in the response.
-    # Downcase them here, because we will need to change filters case insensitively. 
     @resource = params[:endpoint]
-    @options = params.reject{ |k,v| k == :endpoint}
     @failed = "error, the request's combination of parameters is not allowed for this API key" unless self.valid?
   end
   
   # Determines if the given user key is allowed to request the paramaters passed in.
   # Only the restrictions of one whitelist needs to be included for the request to be allowed.
   #
-  # @return [Boolean] True, iff these options are allowed for this user_key.
+  # @return [Boolean] True, iff the given options are allowed for this user_key.
   def valid?
     filter_group_list = @user_key.whitelists.restrict_to(@resource).to_a.map{|w| w.filters.to_a}
     # If the key has no whitelists at all, the key has unrestricted filter access.
@@ -48,14 +43,17 @@ class EndpointRequest
     for filter in filter_group
       # Downcase the values, because CollegiateLink is case insensitive.
       # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
-      if @options[filter.filter_name].nil? or @options[filter.filter_name].downcase != filter.filter_value.downcase
+      if @params[filter.filter_name.to_sym].nil? or (@params[filter.filter_name.to_sym].downcase != filter.filter_value.downcase)
 	return false
       end
     end
     return true
   end
   
+  # Check if the user key's request is valid through its organization id, whether it has one or not.
+  #
+  # @return [Boolean] True if the request had an org Id that is associated with the request's key.
   def has_valid_organization_id?
-    return @user_key.organizations.active.map{|o| o.external_id.to_s}.include?(@options[:organizationid].to_s)
+    return @user_key.organizations.active.map{|o| o.external_id.to_s}.include?(@params[:organizationId].to_s)
   end
 end

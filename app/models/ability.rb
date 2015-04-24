@@ -74,9 +74,6 @@ class Ability
         key.at_stage? :awaiting_filters or key.at_stage? :awaiting_confirmation
       end
 
-      # Admins can search on UserKey
-      can :search, UserKey
-
       # Admins can destroy keys at any time
       can :destroy, UserKey
 
@@ -90,13 +87,13 @@ class Ability
       # Users
       # Can read (show, index) any user
       can :read, User
+      
+      # All staff can search on User
+      can :search, User
 
       # Filters
       # Can read (show, index) filters
       can :read, Filter
-      
-      # Questions
-      can :read, Question
       
       # Orgs
       # Can read (show, index) orgs
@@ -116,7 +113,7 @@ class Ability
         !(key.at_stage? :awaiting_submission)
       end
 
-      # Admins can search on UserKey
+      # All staff can search on UserKey
       can :search, UserKey
 
     end

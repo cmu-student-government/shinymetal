@@ -4,6 +4,6 @@
 
 <% if @current_user and @current_user.role? :admin %>
 
-  <%= link_to 'Edit', edit_page_path(@page.url) %>
+  <%= link_to 'Edit', edit_page_path(@page.url), class: "small-button" %>
 
 <% end %>

@@ -70,6 +70,9 @@ valid value. The key cannot be renewed; a new key must be requested.
 
 ## Deployment Notes
 
+Security for this application follows Kerckhoffs's principle; the implementation details, but not the keys, are available
+to the public.
+
 tbd
 
 

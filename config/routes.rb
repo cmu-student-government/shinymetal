@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     # etc. for each endpoint
   end
 
-  root :to => "home#index"
+  root :to => "pages#show", page_url: 'welcome'
 
   # Home path
   get 'home' => 'home#index', as: :home

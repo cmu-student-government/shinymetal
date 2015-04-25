@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
       if user.active
         session[:user_id] = user.id
         flash[:notice] = "Welcome, #{user.name}! You are now logged in."
-        redirect_to session[:return_to] || root_path
+        redirect_to home_path
       else
         flash[:alert] = "You are not permitted to login because your account has been suspended."
         redirect_to root_path

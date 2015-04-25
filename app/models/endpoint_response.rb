@@ -9,9 +9,6 @@ end
 
 # Objectify responses from bridgeapi_connection to handle the logic for the API controller.
 class EndpointResponse
-  # Gets access to the hit_api_endpoint method.
-  include BridgeapiConnection
-  
   # Some of these readers are used in other models, i.e. the repopulate methods.
   # @return [Integer] The page number.
   attr_reader :page_number

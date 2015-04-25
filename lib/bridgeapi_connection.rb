@@ -39,12 +39,12 @@ module BridgeapiConnection
   # :nocov:
   def hit_api_direct
     # CollegiateLink API needs some data to be hashed and sent for auth purposes
-    time = (Time.now.to_f * 1000).to_i
+    time = (Time.now.to_f * 1000).to_i.to_s
     ipaddress = SETTINGS[:cl_ipaddress]
     apikey = SETTINGS[:cl_apikey]
     privatekey = SETTINGS[:cl_privatekey]
     random = SecureRandom.hex
-    hash = Digest::SHA256.base64digest(apikey + ipaddress + time + random + privatekey)
+    hash = Digest::SHA256.hexdigest(apikey + ipaddress + time + random + privatekey)
 
     url = SETTINGS[:cl_apiurl] + @resource + "?time=" + time + "&apikey=" + apikey + "&random=" + random + "&hash=" + hash + @url_options
     return send_request(url, nil)

@@ -1,3 +1,6 @@
+# This is called the "questions" controller, but is reffered to as
+# the "settings" page in the app because it also has the repopulate
+# methods.
 class QuestionsController < ApplicationController
   before_action :check_login
   before_action :set_question, only: [:show, :edit, :update, :destroy]

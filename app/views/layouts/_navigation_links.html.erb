@@ -54,13 +54,16 @@
         </div>
       </li>
     <% end %>
-
-      <li id="settings" class="<%= 'active' if cName == 'questions' %>">
-        <%= link_to questions_path do %>
-          <i class="show-for-medium-up fi-widget"></i>
-          <div class="show-for-small-only">Settings</div>
-        <% end %>
-      </li>
+    
+      <%# Only admin users can look at the settings page %>
+      <% if @current_user.role? :admin %>
+        <li id="settings" class="<%= 'active' if cName == 'questions' %>">
+          <%= link_to questions_path do %>
+            <i class="show-for-medium-up fi-widget"></i>
+            <div class="show-for-small-only">Settings</div>
+          <% end %>
+        </li>
+      <% end %>
 
     <%# For medium up %>
       <li class="has-dropdown show-for-medium-up">
@@ -75,7 +78,6 @@
     <%# For small %>
       <li class="show-for-small-only"><%= link_to "My Keys", own_user_keys_path %></li>
       <li class="show-for-small-only"><%= link_to "Logout", logout_path %></li>
-
 
 
   <% else %>

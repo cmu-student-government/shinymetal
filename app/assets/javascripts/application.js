@@ -27,15 +27,4 @@ $(document).on("click", '#key', function() {
 // On page load
 $(function() {
   $(document).foundation();
-
-  // hide the organization checkboxes
-  $('#organization_toggle_panel').hide();
-
-  $('#organization_toggle').click(function(){
-      $('#organization_toggle_panel').toggle();
-  });
-
-  $('#second_organization_toggle').click(function(){
-      $('#organization_toggle_panel').toggle();
-  });
 });

@@ -1,3 +1,5 @@
+# Manages admin filter functionality.
+# Other staff may only read filter pages.
 class FiltersController < ApplicationController
   before_action :check_login
   before_action :set_filter, only: [:show, :destroy]

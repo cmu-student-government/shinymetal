@@ -24,7 +24,7 @@ module BridgeapiConnection
     apikey = SETTINGS[:cl_apikey]
     privatekey = SETTINGS[:cl_privatekey]
     random = SecureRandom.hex
-    hash = Digest::SHA256.base64digest(apikey + ipaddress + time + random + privatekey)
+    hash = Digest::SHA256.hexdigest(apikey + ipaddress + time + random + privatekey)
 
     # Specify which endpoint we'd like to request from. If you want a specific
     #   id from this endpoint, just do <endpoint>/<id>, for example: events/105

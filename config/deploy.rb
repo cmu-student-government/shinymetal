@@ -4,7 +4,7 @@ require 'whenever/capistrano'
 set :whenever_command, 'bundle exec whenever'
 
 set :application, 'bridgeapi'
-set :repo_url, 'git@github.com:aditisar/shinymetal.git'
+set :repo_url, 'git@github.com:cmu-student-government/shinymetal.git'
 set :scm, :git
 set :use_sudo, false
 set :stages, %w(production staging)

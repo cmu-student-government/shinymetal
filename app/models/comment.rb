@@ -1,3 +1,4 @@
+# A private staff comment on a key application, or an administrator's notice to the key's owner.
 class Comment < ActiveRecord::Base
   # Relationships
   

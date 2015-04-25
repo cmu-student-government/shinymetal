@@ -1,3 +1,4 @@
+# Manages user key functionality, including approvals, comments, and status changes.
 class UserKeysController < ApplicationController
   before_action :check_login
   before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search]
@@ -155,6 +156,10 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/approve_key/
   def approve_key
     if @user_key.set_approved_by(@current_user)
+      if @user_key.can_be_set_to? :confirmed
+        # Tell admins that the key can be confirmed now.
+        UserKeyMailer.everyone_approved_key(@user_key).deliver
+      end
       redirect_to @user_key, notice: 'You have successfully approved this key.'
     else
       get_comments
@@ -172,6 +177,8 @@ class UserKeysController < ApplicationController
     end
   end
 
+  # GET /search
+  # Used for the search feature in the navigation bar.
   def search
     search_param = params[:term]
     matching_keys = UserKey.submitted.search(search_param).collect { |u| { value: "#{u.name}", data: u.id } }
@@ -189,45 +196,66 @@ class UserKeysController < ApplicationController
       @comment = @user_key.comments.build
     end
 
+    # Add the correct question ids to the answers in the params;
+    # because when creating a user key, the answers don't know what
+    # their question ids are yet. 
     def sanitize_question_ids
       # question_id is something only we should be able to change.
-      # It is included in params so that we can set question_id as part of updating nested attributes.
-      # We check for 'empty' to prevent errors, in case no questions (and thus no answers) are added to the system yet.
+      # It is included in params so that we can set question_id
+      # as part of updating nested attributes.
+      # We check for 'empty' to prevent errors, in case no questions
+      # (and thus no answers) are added to the system yet.
       unless @questions.empty?
         params[:user_key][:answers_attributes].each{|k,v| v[:question_id] = nil}
+        # The index of the answer is used to check which question the answer goes to.
         @questions.each_with_index{|q,i| params[:user_key][:answers_attributes][i.to_s][:question_id] = q.id}
       end
       # Any extra answers that the user hacked in will error out due to missing a question_id.
     end
 
+    # Gets the active questions in the system, so that answers can be generated.
+    # This is only used as part of creating a user key;
+    # question information can be retrieved through the answer itself in existing keys.
     def get_questions
       @questions = Question.active.chronological.to_a
     end
 
+    # Build empty answers for a new, blank User Key object in the new form,
+    # for each active question.
+    # When a user key is created, "answer" objects are created for the key immediately.
     def build_answers
       @questions.size.times do
         @user_key.answers.build
       end
     end
 
+    # Set the user key.
     def set_user_key
       @user_key = UserKey.find(params[:id])
     end
 
-    def create_user_key_params # For requester, upon creating application text
+    # Restricts the paramaters for the requester, upon creating an application. 
+    # Whatever question_id they pass in will be overwritten;
+    # it is here so that our own question_ids, added in later, will be permitted. 
+    def create_user_key_params 
       params.require(:user_key).permit(:name, answers_attributes: [:id, :message, :question_id])
     end
 
-    def owner_user_key_params # For requester, upon updating application text
+    # Restricts the paramaters for requester, upon updating application text.
+    def owner_user_key_params
       params.require(:user_key).permit(:name, answers_attributes: [:id, :message])
     end
 
-    def comment_user_key_params # For anyone who can comment
+    # Restricts the paramaters for anyone who can comment.
+    # Whatever user_id they pass in will be overwritten by the current user's id.
+    def comment_user_key_params
       params.require(:user_key).permit(:comments_attributes => [:id, :message, :public, :user_id])
     end
 
-    def admin_update_user_key_params # For admin, upon updating filters or anything else
+    # Restricts params for admin, upon updating filters or anything else.
+    def admin_update_user_key_params
       params.require(:user_key).permit(:time_expired, :active, :reason, :column_ids => [],
-                                       :organization_ids => [], :whitelists_attributes => [:id, :resource, :_destroy, :filter_ids => []])
+                                       :organization_ids => [],
+                                       :whitelists_attributes => [:id, :resource, :_destroy, :filter_ids => []])
     end
 end

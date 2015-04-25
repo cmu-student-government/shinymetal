@@ -7,8 +7,11 @@ else
   # :nocov:
 end
 
-# Objectify responses from bridgeapi_connection
+include BridgeapiConnection
+
+# Objectify responses from bridgeapi_connection to handle the logic for the API controller.
 class EndpointResponse
+  # Some of these readers are used in other models, i.e. the repopulate methods.
   # @return [Integer] The page number.
   attr_reader :page_number
   # @return [Integer] The page size.
@@ -19,9 +22,11 @@ class EndpointResponse
   attr_reader :total_pages
   # @return [Array<Hash>] The response items, such that each item is a hash in the list.
   attr_reader :items
+
+  # This reader is used in the API controller and in model methods to check if the response failed.
   # @return [String, nil] Error message if the response failed.
   attr_reader :failed
-  
+
   # Initialize an EndpointResponse to contain logic of handling an answer from CollegiateLink.
   #
   # @param user_key [UserKey, nil] The key of the requesting user, or nil if used by a repopulate method.
@@ -30,7 +35,7 @@ class EndpointResponse
   def initialize(user_key, params)
     @resource = params[:endpoint]
     if Resources::RESOURCE_LIST.include?(@resource)
-      hash_response = hit_api_endpoint(params)
+      hash_response = BridgeapiConnection::hit_api_endpoint(params)
       @user_key = user_key
       @page_number = hash_response["pageNumber"]
       @page_size = hash_response["pageSize"]
@@ -39,6 +44,7 @@ class EndpointResponse
       @items = hash_response["items"]
       # Set failed to true in case we got no response from collegiatelink
       @failed = "error, there was no response from CollegiateLink" if hash_response.blank?
+      @failed = "no records found for this query" if @items.nil? || @items.empty?
       # Restrict the columns in the response according to the passed-in user_key
       unless (@user_key.nil? or @failed)
         restrict_columns
@@ -49,7 +55,7 @@ class EndpointResponse
       @failed = "error, the requested resource does not exist"
     end
   end
-  
+
   # Get the columns that is an endpoint response has whitelisted on its items.
   #
   # @return [Array<String>] The columns that are used as keys in the first item.
@@ -57,7 +63,7 @@ class EndpointResponse
     # This function assumes that each item has the same columns.
     return @items.first.keys
   end
-  
+
   # Convert the response to a hash to be returned as a JSON response in the controller.
   #
   # @return [Hash] A hash that mirrors the format of what CollegiateLink returns.
@@ -68,7 +74,7 @@ class EndpointResponse
     end
     return hash_response
   end
-  
+
   private
   # Restrict the response based on the columns permitted for the user_key.
   def restrict_columns

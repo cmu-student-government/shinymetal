@@ -1,5 +1,8 @@
+# Contains a generalized helper function for use in views.
 module ApplicationHelper
-  # This method is called on markdown text, output as html
+  # This method is called on markdown text, output as html.
+  # @param text [String] Text to be formatted as markdown.
+  # @return [HTML] HTML to be evaluated on the webpage.
   def markdown(text)
     # Create the @markdowner object if it doesn't exist
     @markdowner ||= Redcarpet::Markdown.new(

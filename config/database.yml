@@ -8,6 +8,8 @@ default: &default
   adapter: sqlite3
   pool: 5
   timeout: 5000
+
+deploy: &deploy
   database: <%= SETTINGS[:db] %>
   username: <%= SETTINGS[:db_user] %>
   password: <%= SETTINGS[:db_pass] %>
@@ -15,17 +17,21 @@ default: &default
 
 development:
   <<: *default
+  database: db/development.sqlite3
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
+  database: db/test.sqlite3
 
 production:
   <<: *default
+  <<: *deploy
   adapter: mysql2
 
 staging:
   <<: *default
+  <<: *deploy
   adapter: mysql2

@@ -111,7 +111,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="top-level-namespace.html#hit_api_endpoint-instance_method" title="#hit_api_endpoint (instance method)">- (Object) <strong>hit_api_endpoint</strong>(params) </a>
+      <a href="top-level-namespace.html#hit_api_endpoint-instance_method" title="#hit_api_endpoint (instance method)">- (String, Hash) <strong>hit_api_endpoint</strong>(params) </a>
     
 
     
@@ -126,7 +126,8 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Dummy data used for unit testing.</p>
+<p>Dummy method used for unit testing, meant to represent something like a
+response from CollegiateLink.</p>
 </div></span>
   
 </li>
@@ -144,7 +145,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="hit_api_endpoint-instance_method">
   
-    - (<tt>Object</tt>) <strong>hit_api_endpoint</strong>(params) 
+    - (<tt>String</tt>, <tt>Hash</tt>) <strong>hit_api_endpoint</strong>(params) 
   
 
   
@@ -153,13 +154,53 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Dummy data used for unit testing</p>
+<p>Dummy method used for unit testing, meant to represent something like a
+response from CollegiateLink.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>params</span>
+      
+      
+        <span class='type'>(<tt>HashWithIndifferentAccess</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Parameters passed in representing an API request.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Dummy data response if the page number was valid, or a blank string if it
+wasn&#39;t.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -167,8 +208,6 @@
       <pre class="lines">
 
 
-8
-9
 10
 11
 12
@@ -215,10 +254,12 @@
 53
 54
 55
-56</pre>
+56
+57
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/bridgeapi_connection.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'lib/bridgeapi_connection.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hit_api_endpoint'>hit_api_endpoint</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
   <span class='comment'># Set the optional page number to the first page if not otherwise specified
@@ -279,7 +320,7 @@
 </div>
 
     <div id="footer">
-  Generated on Wed Apr 22 17:03:28 2015 by
+  Generated on Thu Apr 23 13:50:41 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.0.0).
 </div>

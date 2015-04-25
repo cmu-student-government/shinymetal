@@ -102,7 +102,8 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>Objectify responses from bridgeapi_connection</p>
+<p>Objectify responses from bridgeapi_connection to handle the logic for the
+API controller.</p>
 
 
   </div>
@@ -140,7 +141,8 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Error message if the response failed.</p>
+<p>This reader is used in the API controller and in model methods to check if
+the response failed.</p>
 </div></span>
   
 </li>
@@ -198,7 +200,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The page number.</p>
+<p>Some of these readers are used in other models, i.e.</p>
 </div></span>
   
 </li>
@@ -449,9 +451,6 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-30
-31
-32
 33
 34
 35
@@ -470,10 +469,13 @@ CollegiateLink.</p>
 48
 49
 50
-51</pre>
+51
+52
+53
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_user_key'>user_key</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
   <span class='ivar'>@resource</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:endpoint</span><span class='rbracket'>]</span>
@@ -521,7 +523,8 @@ CollegiateLink.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns Error message if the response failed.</p>
+<p>This reader is used in the API controller and in model methods to check if
+the response failed.</p>
 
 
   </div>
@@ -553,12 +556,12 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-23
-24
-25</pre>
+26
+27
+28</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 26</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_failed'>failed</span>
   <span class='ivar'>@failed</span>
@@ -614,12 +617,12 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-21
 22
-23</pre>
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 21</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_items'>items</span>
   <span class='ivar'>@items</span>
@@ -643,7 +646,8 @@ CollegiateLink.</p>
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns The page number.</p>
+<p>Some of these readers are used in other models, i.e. the repopulate
+methods.</p>
 
 
   </div>
@@ -675,12 +679,12 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-13
 14
-15</pre>
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 13</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 14</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_page_number'>page_number</span>
   <span class='ivar'>@page_number</span>
@@ -736,12 +740,12 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-15
 16
-17</pre>
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_page_size'>page_size</span>
   <span class='ivar'>@page_size</span>
@@ -797,12 +801,12 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-17
 18
-19</pre>
+19
+20</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 17</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_total_items'>total_items</span>
   <span class='ivar'>@total_items</span>
@@ -858,12 +862,12 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-19
 20
-21</pre>
+21
+22</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 20</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_total_pages'>total_pages</span>
   <span class='ivar'>@total_pages</span>
@@ -924,13 +928,13 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-56
-57
-58
-59</pre>
+59
+60
+61
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 56</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 59</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_columns'>columns</span>
   <span class='comment'># This function assumes that each item has the same columns.
@@ -986,16 +990,16 @@ controller.</p>
       <pre class="lines">
 
 
-64
-65
-66
 67
 68
 69
-70</pre>
+70
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 67</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_hash'>to_hash</span>
   <span class='id identifier rubyid_hash_response'>hash_response</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -1014,7 +1018,7 @@ controller.</p>
 </div>
 
     <div id="footer">
-  Generated on Wed Apr 22 17:03:29 2015 by
+  Generated on Thu Apr 23 13:50:42 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.0.0).
 </div>

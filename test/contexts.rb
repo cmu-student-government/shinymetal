@@ -96,16 +96,17 @@ module Contexts
 
   #Filters
   def create_filters
-    @organizations_page_filter = FactoryGirl.create(:filter)
-    @organizations_page_filter2 = FactoryGirl.create(:filter, filter_value: 'inactive')
-    @organizations_status_filter = FactoryGirl.create(:filter, filter_name: 'category', filter_value: 'sports' )
-    @positions_type_filter = FactoryGirl.create(:filter, resource: 'positions', filter_name: 'type')
+    @organizations_status_active = FactoryGirl.create(:filter)
+    @organizations_status_inactive = FactoryGirl.create(:filter, filter_value: 'inactive')
+    @organizations_category_sports = FactoryGirl.create(:filter, filter_name: 'category', filter_value: 'sports' )
+    @positions_type_active = FactoryGirl.create(:filter, resource: 'positions', filter_name: 'type')
   end
 
   def destroy_filters
-    @organizations_page_filter.destroy
-    @organizations_page_filter2.destroy
-    @organizations_status_filter.destroy
+    @organizations_status_active.destroy
+    @organizations_status_inactive.destroy
+    @organizations_category_sports.destroy
+    @positions_type_active.destroy
   end
   
   #Columns
@@ -198,19 +199,20 @@ module Contexts
   
   # Whitelist_filters
   def create_whitelists
-    # A whitelist is only valid if it has filters, so create both at the same time here.
+    # A whitelist is only valid if it has filters, so create both whitelist and whitelist filters
+    # at the same time here.
     # This is handled well by nested forms, but not by FactoryGirl.
     # 2 for Orgs, 1 for Positions.
     @bender_key_submitted_whitelist = Whitelist.new(user_key: @bender_key_submitted)
-    @bender_key_submitted_whitelist.filter_ids = [@organizations_status_filter.id, @organizations_page_filter2.id]
+    @bender_key_submitted_whitelist.filter_ids = [@organizations_category_sports.id, @organizations_status_inactive.id]
     @bender_key_submitted_whitelist.save!
     
     @bender_key_submitted_org_whitelist = Whitelist.new(user_key: @bender_key_submitted)
-    @bender_key_submitted_org_whitelist.filter_ids = [@organizations_page_filter.id]
+    @bender_key_submitted_org_whitelist.filter_ids = [@organizations_status_active.id]
     @bender_key_submitted_org_whitelist.save!
     
     @bender_key_submitted_pos_whitelist = Whitelist.new(user_key: @bender_key_submitted)
-    @bender_key_submitted_pos_whitelist.filter_ids = [@positions_type_filter.id]
+    @bender_key_submitted_pos_whitelist.filter_ids = [@positions_type_active.id]
     @bender_key_submitted_pos_whitelist.save!
   end
   

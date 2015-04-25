@@ -1,3 +1,6 @@
+# Manages pages which hold content unrelated to functionality.
+# These pages are created the first time their urls are visited,
+# and fetched from the database every time after that.
 class PagesController < ApplicationController
   before_action :set_page
 
@@ -19,8 +22,8 @@ class PagesController < ApplicationController
   end
   
   private
+    # Get the home, contact, etc page
     def set_page
-      # Get the home, contact, etc page
       @page = Page.find_or_create(params[:page_url])
       # Does this page exist? If not, raise 404 error.
       raise ActiveRecord::RecordNotFound unless @page

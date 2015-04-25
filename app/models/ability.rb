@@ -1,6 +1,11 @@
+# Used to determine the routes that a known user or a guest can access.
+# Only used for authorization in controllers, not views.
 class Ability
   include CanCan::Ability
-
+ 
+  # Define which routes the user can access.
+  #
+  # @param user [User, nil] User object, or nil if the user is not logged in.
   def initialize(user)
     # Remember for future reference if the user was a guest.
     logged_in = !user.nil?
@@ -26,7 +31,7 @@ class Ability
 
     # Admin-only rights.
     # Admin can do everything EXCEPT view other requester's keys
-    #   when they have not yet been submitted.
+    # when they have not yet been submitted.
     if user.role? :admin
 
       # User
@@ -69,9 +74,6 @@ class Ability
         key.at_stage? :awaiting_filters or key.at_stage? :awaiting_confirmation
       end
 
-      # Admins can search on UserKey
-      can :search, UserKey
-
       # Admins can destroy keys at any time
       can :destroy, UserKey
 
@@ -85,13 +87,13 @@ class Ability
       # Users
       # Can read (show, index) any user
       can :read, User
+      
+      # All staff can search on User
+      can :search, User
 
       # Filters
       # Can read (show, index) filters
       can :read, Filter
-      
-      # Questions
-      can :read, Question
       
       # Orgs
       # Can read (show, index) orgs
@@ -111,7 +113,7 @@ class Ability
         !(key.at_stage? :awaiting_submission)
       end
 
-      # Admins can search on UserKey
+      # All staff can search on UserKey
       can :search, UserKey
 
     end
@@ -154,11 +156,11 @@ class Ability
       # Can create a new key for themselves
       can :create, UserKey
 
-      # No universal Filter key rights exist for requesters
+      # No universal Filter key rights exist for requesters.
 
-    #End basic logged_in rights
+    #End basic logged_in rights.
     end
 
-  ##End def initialize
+  ##End def initialize.
   end
 end

@@ -1,3 +1,4 @@
+# A question to be answered in the initial application form for a key.
 class Question < ActiveRecord::Base
   # Relationships
   
@@ -6,7 +7,7 @@ class Question < ActiveRecord::Base
   
   # Validations
   
-  validates_presence_of :message, message: "cannot be blank."
+  validates_presence_of :message
   
   # Scopes
   

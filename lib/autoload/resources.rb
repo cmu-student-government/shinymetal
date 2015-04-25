@@ -1,3 +1,5 @@
+# Library for the known parameters recognized by CollegiateLink.
+# Only the resources that Carnegie Mellon University uses are used here.
 module Resources  
   # RESOURCE_LIST is used by both the Column and Filter models.
   # Also used in views: creating valid filters in the filter form, for list of resources in user key pages.

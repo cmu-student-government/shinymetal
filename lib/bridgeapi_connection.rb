@@ -70,7 +70,7 @@ module BridgeapiConnection
   end
   # :nocov:
 
-  def send_request(requrl, direct, digest)
+  def send_request(requrl, digest)
     url = URI.parse(requrl)
     # Create our request object and set the Authentication header with our encrypted data
     https = Net::HTTP.new(url.host, url.port)
@@ -79,7 +79,7 @@ module BridgeapiConnection
 
     # Make our request object with Auth field
     req = Net::HTTP::Get.new(url.to_s)
-    req.add_field("Authentication", digest) unless direct
+    req.add_field("Authentication", digest) if digest
 
     # Send the request, put response into res
 

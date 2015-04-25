@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 
 SETTINGS = {}
 if (Rails.env.test?)
-    SETTINGS.merge! ENV
+    SETTINGS[:api_key_salt] = ENV["api_key_salt"]
 else
     # Load our settings.yml file
     SETTINGS = YAML.load(File.read(File.expand_path('../settings.yml', __FILE__)))

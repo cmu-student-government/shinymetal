@@ -1,4 +1,5 @@
 ## The Bridge API Project
+[![Build Status](https://travis-ci.org/cmu-student-government/shinymetal.svg?branch=master)](https://travis-ci.org/cmu-student-government/shinymetal)
 
 *Developed by the Shiny Metal Team for 67-373, Spring 2015.*
 

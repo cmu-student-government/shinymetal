@@ -2,6 +2,7 @@
 # symlink protected
 # double handshake
 module Api
+  # Holds the first version of the API controller.
   module V1
     # This controller is in a API/v1 folder to allow for
     # for future versions of the API to coexist with this one in the future.

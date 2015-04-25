@@ -14,7 +14,6 @@ module ActiveRecord
       # @example
       #   concat('foo', 'bar') # => "foo || bar"
       # :nocov:
-      # @param *args Some strings.
       # @return [String] String to be used in sqlite database query (useful for development database).
       def concat(*args)
         args * " || "
@@ -31,7 +30,6 @@ module ActiveRecord
       #
       # @example
       #   concat('foo', 'bar') # => "CONCAT(foo, bar)"
-      # @param *args Some strings.
       # @return [String] String to be used in mysql database query (useful for staging/production database).
       # :nocov:
       def concat(*args)

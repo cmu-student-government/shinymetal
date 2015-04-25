@@ -128,7 +128,7 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal 2, UserKey.expired.size
     end
 
-    should "have a scope that returns keys that expire in a month" do 
+    should "have a scope that returns keys that expire in a month" do
       assert_equal 1, UserKey.expires_in_a_month.size
     end
 
@@ -144,7 +144,7 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
                    @bender_key.time_submitted.to_formatted_s(:pretty)
     end
-    
+
     should "have a method to show if the key will expire within 30 days" do
       deny @bender_key.will_expire_soon?
       assert @expires_in_month_key.will_expire_soon?
@@ -185,7 +185,7 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal "awaiting_confirmation",
                    @bender_key_submitted.status
     end
-    
+
     should "have status changed when request is confirmed" do
       assert_equal "awaiting_confirmation",
                    @bender_key_awaiting_conf_approved.status
@@ -195,49 +195,49 @@ class UserKeyTest < ActiveSupport::TestCase
       assert_equal "confirmed",
                    @bender_key_awaiting_conf_approved.status
     end
-    
+
     should "not allow submission-ready key to be set as filtered too early" do
       # Try and fail to set key as filtered
       deny @bender_key.set_status_as :awaiting_confirmation
       assert_equal "awaiting_submission",
                    @bender_key.status
     end
-    
+
     should "not allow approval-ready key to be set as submitted again" do
       # Try and fail to set it as submitted again
       deny @bender_key_submitted.set_status_as :awaiting_filters
       assert_equal "awaiting_filters",
                    @bender_key_submitted.status
     end
-    
+
     should "not allow key without expiration date to be set as awaiting_confirmation" do
       # Try and fail to set it as submitted again
       deny @bender_key_submitted.set_status_as :awaiting_confirmation
       assert_equal "awaiting_filters",
                    @bender_key_submitted.status
     end
-    
+
     should "not allow submission-ready key to be set as confirmed too early" do
       # Try and fail to set key as filtered
       deny @bender_key.set_status_as :awaiting_confirmation
       assert_equal "awaiting_submission",
                    @bender_key.status
     end
-    
+
     should "not allow unapproved key to be set as confirmed" do
       # Try and fail to set key as filtered
       deny @bender_key_awaiting_conf.set_status_as :confirmed
       assert_equal "awaiting_confirmation",
                    @bender_key_awaiting_conf.status
     end
-    
+
     should "not allow approved key to be set as reset" do
       # Try and fail to set key as reset
       deny @bender_key_confirmed.set_status_as :awaiting_submission
       assert_equal "confirmed",
                    @bender_key_confirmed.status
     end
-    
+
     # Reset a key awaiting confirmation. Check that:
     # -Time is rest, approvals reset
     # -Admin comment remains
@@ -259,33 +259,33 @@ class UserKeyTest < ActiveSupport::TestCase
       # Time_filtered is reset
       assert @bender_key_awaiting_conf_approved.time_filtered.nil?
     end
-    
+
     # Validations for foreign key ids
     should "not allow invalid user_id" do
       bad_key = FactoryGirl.build(:user_key, user_id: "invalid")
       deny bad_key.valid?
     end
-    
+
     # Validating API key is properly generated
     should "have a gen_api_key method for confirmed keys" do
       key = @bender_key_confirmed
       # Algorithm used here mimics algorithm used in model
       date_string = key.time_submitted.to_s.split("")
       andrew_id = key.user.andrew_id.split("")
-      salt = SETTINGS[:default]["api_key_salt"].split("")
+      salt = ENV["api_key_salt"].split("")
       hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
       # hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
       answer = Digest::SHA2.hexdigest hash_string
       assert_equal answer, key.gen_api_key
     end
-  
+
     should "not have a gen_api_key method for non-confirmed keys" do
       expected = "A key will be generated upon approval."
       assert_equal expected, @bender_key.gen_api_key
       assert_equal expected, @bender_key_submitted.gen_api_key
       assert_equal expected, @bender_key_awaiting_conf.gen_api_key
     end
-    
+
     should "have expired? method" do
       deny @bender_key.expired?
       @bender_key.time_expired = 1.day.from_now.to_date
@@ -293,7 +293,7 @@ class UserKeyTest < ActiveSupport::TestCase
       deny @bender_key.expired?
       assert @expired_key.expired?
     end
-    
+
     should "not allow Unnamed Application name" do
       # Set name to nil if someone tries
       @bender_key.name = "Unnamed Application"
@@ -301,6 +301,6 @@ class UserKeyTest < ActiveSupport::TestCase
       @bender_key.reload
       assert @bender_key.name.nil?
     end
-    
+
   end
 end

@@ -2,9 +2,9 @@
 class UserKey < ActiveRecord::Base
   # Always make sure the user's name becomes nil if it is the same as the placeholder name.
   before_save :check_name
-  
+
   # Relationships
-  
+
   belongs_to :user
 
   # A User Key is the only thing that can be deleted in the system (while still associated).
@@ -59,7 +59,7 @@ class UserKey < ActiveRecord::Base
   end
 
   # Scopes
-  
+
   # These scopes are used to organize keys in index pages.
   scope :by_user, -> { joins(:user).order("andrew_id") }
   scope :chronological, -> { order(time_submitted: :desc).order(time_filtered: :desc).order(time_confirmed: :desc).order(time_expired: :desc) }
@@ -71,26 +71,26 @@ class UserKey < ActiveRecord::Base
   scope :expired, -> { where("time_expired < ?", DateTime.now)}
   # This is also the first of three scopes used to restrict permitted keys in the API controller.
   scope :confirmed, -> { where("status = ?", 'confirmed')}
-  
+
   # This scope is used to restrict the keys that the staff and admins can view.
   # They cannot see applications that have not been submitted yet.
   scope :submitted, -> { where("status <> 'awaiting_submission'") }
-  
-  # This is the second of three scopes used ot restrict permitted keys in the API controller. 
+
+  # This is the second of three scopes used ot restrict permitted keys in the API controller.
   scope :not_expired, -> { where("time_expired >= ?", DateTime.now) }
-  
-    
+
+
   # This is the third of three scopes used to restrict permitted keys in the API controller.
   scope :active, -> { where(active: true) }
 
-  # Used in a cron job to send automatic emails the month before a key expires. 
+  # Used in a cron job to send automatic emails the month before a key expires.
   scope :expires_in_a_month, -> { where("time_expired = ?", 30.days.from_now.to_date) }
 
   # Used in a cron job to send automatic emails when the key expires that day.
   scope :expires_today, -> { where("time_expired = ?", Date.today) }
 
   # Methods
-  
+
   # Determine if the approver viewing the user key's permissions has approved it yet or not.
   #
   # @param user [User] The staff_approver or admin who is viewing the user key's permissions.
@@ -137,7 +137,7 @@ class UserKey < ActiveRecord::Base
     return false if self.time_expired.nil?
     return self.time_expired < Date.today
   end
-  
+
   # Used in the user key show page and the home page to indicate which of their keys will expire soon.
   #
   # @return [Boolean] True only if the key has a value for time_expired, and that value is in the next 30 days.
@@ -255,7 +255,7 @@ class UserKey < ActiveRecord::Base
                          and has an Administrator note explaining the issue to the requester.")
     end
   end
-  
+
   # Calculate and print the API key, iff the key has been confirmed. Does not store the API key.
   #
   # @return [String] The value of the key, or placeholder text if the user key has no key yet.
@@ -266,7 +266,7 @@ class UserKey < ActiveRecord::Base
       # Get the andrew_id of the user who requested the user_key.
       andrew_id = self.user.andrew_id.split("")
       # Get the salt for the key as well.
-      salt = SETTINGS[:default]["api_key_salt"].split("")
+      salt = ENV["api_key_salt"] || SETTINGS[:default]["api_key_salt"].split("")
       # Intertwine the string of the andrewid, date, and salt together to build
       #   the hash. This is so we can compare the passed in token to a hash
       #   we can recompute to ensure security and not have the key stored in
@@ -331,7 +331,7 @@ class UserKey < ActiveRecord::Base
   end
 
   # Callbacks
-  
+
   # Don't allow "Unnamed Application" to be the name. Technically it would not cause problems,
   # but this is the display name for applications without names, so it could cause confusion.
   def check_name

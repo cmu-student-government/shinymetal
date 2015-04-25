@@ -6,10 +6,12 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-# Load our settings.yml file
-SETTINGS = YAML.load(File.read(File.expand_path('../settings.yml', __FILE__)))
-SETTINGS.merge! SETTINGS.fetch(Rails.env, {})
-SETTINGS.symbolize_keys!
+if (!Rails.env.test?)
+    # Load our settings.yml file
+    SETTINGS = YAML.load(File.read(File.expand_path('../settings.yml', __FILE__)))
+    SETTINGS.merge! SETTINGS.fetch(Rails.env, {})
+    SETTINGS.symbolize_keys!
+end
 
 module Shinymetal
   class Application < Rails::Application

@@ -13,9 +13,7 @@ module BridgeapiConnection
     # Set the optional page number to the first page if not otherwise specified
     params[:page] ||= "1"
     
-    # Specify which endpoint we'd like to request from. If you want a specific
-    #   id from this endpoint, just do <endpoint>/<id>, for example: events/105
-    @resource = params[:endpoint]
+    #@resource = params[:endpoint] <= Should already be set in EndpointResponse
     options = params.reject{ |k,v| k == :endpoint }
 
     # Any optional parameters that are listed for this endpoint in the API docs

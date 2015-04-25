@@ -19,7 +19,7 @@ module BridgeapiConnection
   private
   def hit_api_direct(params)
     # CollegiateLink API needs some data to be hashed and sent for auth purposes
-    time = (Time.now.to_f * 1000).to_i
+    time = (Time.now.to_f * 1000).to_i.to_s
     ipaddress = SETTINGS[:cl_ipaddress]
     apikey = SETTINGS[:cl_apikey]
     privatekey = SETTINGS[:cl_privatekey]

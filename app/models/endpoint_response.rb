@@ -7,6 +7,8 @@ else
   # :nocov:
 end
 
+include BridgeapiConnection
+
 # Objectify responses from bridgeapi_connection to handle the logic for the API controller.
 class EndpointResponse
   # Some of these readers are used in other models, i.e. the repopulate methods.

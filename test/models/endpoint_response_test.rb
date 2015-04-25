@@ -39,7 +39,17 @@ class EndpointResponseTest < ActiveSupport::TestCase
     end
     
     should "become a hash like collegiatelink hash with to_hash method" do
-      assert_equal hit_api_endpoint({endpoint: "users"}), @users_response.to_hash
+      # Expected response for hit_api_endpoint({endpoint: "users"})
+      expected_response =
+	   {"pageNumber" => 1,
+            "pageSize" => 2,
+            "totalItems" => 4,
+            "totalPages" => 2,
+            "items" => [{"name" => "First Test Item", "organizationId" => 10},
+                        {"name" => "Second Test Item", "organizationId" => 20}]
+            }      
+      assert_equal expected_response,
+                   @users_response.to_hash
     end
     
     should "have a private restrict_columns method that keeps only the given columns" do

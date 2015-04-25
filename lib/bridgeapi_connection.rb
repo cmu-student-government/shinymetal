@@ -2,6 +2,7 @@ require 'base64'
 require 'openssl'
 require 'net/http'
 
+# Stores the inter-server logic for hitting an API endpoint with some params.
 module BridgeapiConnection
   # Called with request paramaters to get a response from CollegiateLink.
   #

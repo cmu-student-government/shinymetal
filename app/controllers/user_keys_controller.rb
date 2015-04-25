@@ -156,6 +156,10 @@ class UserKeysController < ApplicationController
   # PATCH/PUT /user_keys/1/approve_key/
   def approve_key
     if @user_key.set_approved_by(@current_user)
+      if @user_key.can_be_set_to? :confirmed
+        # Tell admins that the key can be confirmed now.
+        UserKeyMailer.everyone_approved_key(@user_key).deliver
+      end
       redirect_to @user_key, notice: 'You have successfully approved this key.'
     else
       get_comments

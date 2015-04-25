@@ -15,7 +15,7 @@ class FilterTest < ActiveSupport::TestCase
     end
 
     should "have a method to return the filters name" do
-      assert_equal "\"status\" = \"active\"", @organizations_page_filter.name
+      assert_equal "\"status\" = \"active\"", @organizations_status_active.name
     end
 	
     should "have a scope to sort filters alphabetically" do
@@ -33,12 +33,12 @@ class FilterTest < ActiveSupport::TestCase
     end
     
     should "have a method to get all the user keys that use the filter" do
-      assert_equal @organizations_page_filter.user_keys, []
+      assert_equal @organizations_status_active.user_keys, []
       create_users
       create_user_keys
       create_whitelists
-      @organizations_page_filter.reload
-      assert_equal @organizations_page_filter.user_keys.to_a.map{|o| o.name}, ["Bender Submitted"]
+      @organizations_status_active.reload
+      assert_equal @organizations_status_active.user_keys.to_a.map{|o| o.name}, ["Bender Submitted"]
       destroy_whitelists
       destroy_user_keys
       destroy_users
@@ -48,7 +48,7 @@ class FilterTest < ActiveSupport::TestCase
       create_users
       create_user_keys
       create_whitelists
-      deny @organizations_page_filter.is_destroyable?
+      deny @organizations_status_active.is_destroyable?
       unused_filter = FactoryGirl.create(:filter, filter_value: "A new, unused value")
       assert unused_filter.is_destroyable?
       unused_filter.destroy

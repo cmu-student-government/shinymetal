@@ -3,28 +3,32 @@
 # double handshake
 module Api
   module V1
+    # This controller is in a API/v1 folder to allow for
+    # for future versions of the API to coexist with this one in the future.
+    # Changes are not expected, but this would allow for changes to be more easily
+    # made to the API in the future.
     class ApiController < ApplicationController
+      # Allow POST request to be made from another application.
+      # No CSRF concern, since the post request includes API key credentials.
       skip_before_filter :verify_authenticity_token
-      # apparently it's bad to pass in tokens in the URL directly,
-      # it can be unsafe. will fix in future
+      
+      # Validate and fetch the key data before processing the API request.
       before_filter :verify_access_with_api_key
 
+      # Used to process all API requests. 
       def index        
-        # To test "users", comment out the before_filter, and uncomment the next line:
-        #@user_key = UserKey.select{|uk| uk.columns.restrict_to("users").size>0}.to_a.first
-
-        # this conditional filters out the rows of the response. if the params
-        # POSTed are not a valid combination of filters to use, it will
-        # immediately reject the response
+        # If the params POSTed are not a valid combination of filters to use, i
+        # the "request" will fail.
         request = EndpointRequest.new(@user_key, params)
         # request.failed is an error message if the filters aren't permitted for this key.
         unless request.failed
+          # The 'response' will fail if there are no columns for this key for this
+          # resource, or if resource name was invalid.
           response = EndpointResponse.new(@user_key, params)
           unless response.failed
             render json: JSON(response.to_hash), status: 200
           else
             # response.failed is an error message if something went wrong.
-            # response will fail if there are no columns for this resource, or if resource was invalid.
             render json: {"message" => response.failed }
           end
         else
@@ -33,12 +37,18 @@ module Api
       end
       
       private
-      #return whether the passed in api_key exists in our system
+      # Returns whether the passed-in api_key exists in our system,
+      # and is confirmed/not expired/active.
+      # Also sets @user_key to the key it finds, if it finds one.
+      #
+      # @param api_key [String] A potential key value.
+      # @param andrew_id [String] A potential CMU andrew id.
+      # @return [Boolean] True iff a valid ke was found.
       def key_matches?(api_key, andrew_id)
+        # This is safe to do, because all andrew_ids are guaranteed to be unique.
         @cur_user = User.find_by_andrew_id(andrew_id)
         if @cur_user
-          # Safe because all andrew_ids are guaranteed to be unique
-          # Find the user key that belngs to the given API number
+          # Find the user key that belngs to the given API number.
           for key in @cur_user.user_keys.active.not_expired.confirmed
             if key.gen_api_key == api_key
               @user_key = key
@@ -49,7 +59,8 @@ module Api
         return false
       end
 
-      # if there's a key and it exists in our system, it's verified
+      # Used in the before_filter callback to verify whether or not
+      # the api key and andrew ID passed in.
       def verify_access_with_api_key
         api_key   = request.headers["HTTP_API_KEY"]
         andrew_id = request.headers["HTTP_ANDREW_ID"]
@@ -57,6 +68,7 @@ module Api
           render json: {error: "Error, bad request"}, status: 400
         elsif !(key_matches?(api_key, andrew_id))
           render json: {error: "Error, unauthorized user or API key"}, status: 401
+        # Inactive users are not allowed to use their keys for any reason.
         elsif !@cur_user.active
           render json: {error: "Error, the account associated with this andrew ID has been suspended"}, status: 401
         end

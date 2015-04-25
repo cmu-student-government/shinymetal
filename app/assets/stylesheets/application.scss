@@ -35,6 +35,11 @@
 .alert {
   color: $alert-color;
 }
+.organization_checkboxes {
+  height: 30em;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
 .admin_only {
   background-color: lighten($primary-color, 65)
 }

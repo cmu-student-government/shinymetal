@@ -1,3 +1,4 @@
+# Manages requester, staff, and admin users.
 class UsersController < ApplicationController
   before_action :check_login
   before_action :set_user, only: [:show, :edit, :update]
@@ -15,9 +16,10 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     if @user.id == @current_user.id
-      # This user is looking at their own data, so they see all their keys
+      # This user is looking at their own data, so they see all their keys.
       @user_keys = @user.user_keys.chronological
-    else # This is a staffmember, so they only see submitted keys
+    else
+      # This is a staffmember, so they only see submitted keys.
       @user_keys = @user.user_keys.submitted.chronological
     end
   end
@@ -35,6 +37,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # Used for the search function in the navigation bar.
   def search
     search_param = params[:term]
     matching_users = User.search(search_param).collect { |u| { value: "#{u.name} (#{u.andrew_id})", data: u.id } }

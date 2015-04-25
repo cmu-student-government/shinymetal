@@ -1,48 +1,42 @@
 <hr/>
 
-<h3>Special Access to All Organization Data</h3>
+<h3>Special Access for Checked Organizations</h3>
 
 <br/>
 
-<div id="organization_toggle" class="big-button">Toggle Organization Checkboxes</div>
+<div class="checkbox_panel">
 
-<div id="organization_toggle_panel">
- <div class="checkbox_panel">
-  <p>
-    <% if Organization.active.empty? %>
-    No organizations can be selected because there are no active organizations in the system.
-    <% else %>
-      <ul class="no_bullets">
-        <% Organization.active.alphabetical.in_groups_of(3,false) do |org_group| %>
-          <div class="row">
-          <%= f.collection_check_boxes(:organization_ids, org_group, :id, :name) do |b| %>
-            <div class="small-4 columns">
-            <li><%= b.label { b.check_box + ' ' + b.text} %></li>
-            <% %>
-            </div>
-          <% end %>
-          </div>
-        <% end %>
-      </ul>
-    <% end %>
-  </p>
+  <% if Organization.active.empty? %>
+  No organizations can be selected because there are no active organizations in the system.
+  <% else %>
+     
+    <div class="organization_checkboxes">
+     <ul class="no_bullets">
+       <% Organization.active.alphabetical.in_groups_of(4,false) do |org_group| %>
+         <div class="row">
+         <%= f.collection_check_boxes(:organization_ids, org_group, :id, :name) do |b| %>
+           <div class="small-3 columns">
+             <li><%= b.label { b.check_box + ' ' + b.text} %></li>
+           </div>
+         <% end %>
+         <hr/>
+         </div>
+       <% end %>
+     </ul>
+    </div>
   
-  <p>
-    <% unless @user_key.organizations.inactive.empty? %>
-    <strong>These organizations belong to this user key, but no longer exist in CollegiateLink.</strong>
-      <ul class="no_bullets">
-      <%= f.collection_check_boxes(:organization_ids, @user_key.organizations.inactive.alphabetical, :id, :name) do |b| %>
-        <li><%= b.check_box + ' ' + b.text %></li>
-      <% end %>
-      </ul>
-    <% end %>
-  </p>
-  
-  <div id="second_organization_toggle" class="big-button">
-    Toggle Organization Checkboxes
-  </div>
+  <% end %>
  
- </div>
+ <p>
+   <% unless @user_key.organizations.inactive.empty? %>
+   <strong>These organizations belong to this user key, but no longer exist in CollegiateLink.</strong>
+     <ul class="no_bullets">
+     <%= f.collection_check_boxes(:organization_ids, @user_key.organizations.inactive.alphabetical, :id, :name) do |b| %>
+       <li><%= b.check_box + ' ' + b.text %></li>
+     <% end %>
+     </ul>
+   <% end %>
+ </p>
 </div>
 
 <br/>

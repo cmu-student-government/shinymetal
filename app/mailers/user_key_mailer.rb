@@ -1,3 +1,5 @@
+# Manages emails that are sent automatically via cronjob (for expiring keys)
+# or immediately after doing some action on the site.
 class UserKeyMailer < ApplicationMailer
 
   # This will not send any real email in development mode.

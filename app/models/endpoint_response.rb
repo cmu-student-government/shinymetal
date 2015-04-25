@@ -44,6 +44,7 @@ class EndpointResponse
       @items = hash_response["items"]
       # Set failed to true in case we got no response from collegiatelink
       @failed = "error, there was no response from CollegiateLink" if hash_response.blank?
+      @failed = "no records found for this query" if @items.nil? || @items.empty?
       # Restrict the columns in the response according to the passed-in user_key
       unless (@user_key.nil? or @failed)
         restrict_columns

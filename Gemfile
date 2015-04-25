@@ -69,7 +69,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 
   # Sqlite3 for dev, test db
   gem 'sqlite3', group: [:development, :test]
-  
+
   # Documentation
   gem 'yard'
 
@@ -83,7 +83,7 @@ group :development do
   # The following gems were taken straight from Prof H's gemfiles
   gem 'quiet_assets'
   gem 'thin'
-  gem 'better_errors'
+  gem 'better_errors', '~> 1.1.0'
   gem 'binding_of_caller'
   gem 'meta_request'
   gem 'wirble'

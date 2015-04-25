@@ -451,8 +451,6 @@ CollegiateLink.</p>
       <pre class="lines">
 
 
-33
-34
 35
 36
 37
@@ -472,15 +470,18 @@ CollegiateLink.</p>
 51
 52
 53
-54</pre>
+54
+55
+56
+57</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 33</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 35</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_user_key'>user_key</span><span class='comma'>,</span> <span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
   <span class='ivar'>@resource</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:endpoint</span><span class='rbracket'>]</span>
   <span class='kw'>if</span> <span class='const'>Resources</span><span class='op'>::</span><span class='const'>RESOURCE_LIST</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='ivar'>@resource</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_hash_response'>hash_response</span> <span class='op'>=</span> <span class='id identifier rubyid_hit_api_endpoint'>hit_api_endpoint</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_hash_response'>hash_response</span> <span class='op'>=</span> <span class='const'>BridgeapiConnection</span><span class='op'>::</span><span class='id identifier rubyid_hit_api_endpoint'>hit_api_endpoint</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
     <span class='ivar'>@user_key</span> <span class='op'>=</span> <span class='id identifier rubyid_user_key'>user_key</span>
     <span class='ivar'>@page_number</span> <span class='op'>=</span> <span class='id identifier rubyid_hash_response'>hash_response</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pageNumber</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
     <span class='ivar'>@page_size</span> <span class='op'>=</span> <span class='id identifier rubyid_hash_response'>hash_response</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pageSize</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -489,6 +490,7 @@ CollegiateLink.</p>
     <span class='ivar'>@items</span> <span class='op'>=</span> <span class='id identifier rubyid_hash_response'>hash_response</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>items</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
     <span class='comment'># Set failed to true in case we got no response from collegiatelink
 </span>    <span class='ivar'>@failed</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>error, there was no response from CollegiateLink</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_hash_response'>hash_response</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
+    <span class='ivar'>@failed</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>no records found for this query</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='ivar'>@items</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='ivar'>@items</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
     <span class='comment'># Restrict the columns in the response according to the passed-in user_key
 </span>    <span class='kw'>unless</span> <span class='lparen'>(</span><span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='kw'>or</span> <span class='ivar'>@failed</span><span class='rparen'>)</span>
       <span class='id identifier rubyid_restrict_columns'>restrict_columns</span>
@@ -556,12 +558,12 @@ the response failed.</p>
       <pre class="lines">
 
 
-26
-27
-28</pre>
+28
+29
+30</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_failed'>failed</span>
   <span class='ivar'>@failed</span>
@@ -617,12 +619,12 @@ the response failed.</p>
       <pre class="lines">
 
 
-22
-23
-24</pre>
+24
+25
+26</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 24</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_items'>items</span>
   <span class='ivar'>@items</span>
@@ -679,12 +681,12 @@ methods.</p>
       <pre class="lines">
 
 
-14
-15
-16</pre>
+16
+17
+18</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_page_number'>page_number</span>
   <span class='ivar'>@page_number</span>
@@ -740,12 +742,12 @@ methods.</p>
       <pre class="lines">
 
 
-16
-17
-18</pre>
+18
+19
+20</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_page_size'>page_size</span>
   <span class='ivar'>@page_size</span>
@@ -801,12 +803,12 @@ methods.</p>
       <pre class="lines">
 
 
-18
-19
-20</pre>
+20
+21
+22</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 20</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_total_items'>total_items</span>
   <span class='ivar'>@total_items</span>
@@ -862,12 +864,12 @@ methods.</p>
       <pre class="lines">
 
 
-20
-21
-22</pre>
+22
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 20</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_total_pages'>total_pages</span>
   <span class='ivar'>@total_pages</span>
@@ -928,13 +930,13 @@ methods.</p>
       <pre class="lines">
 
 
-59
-60
-61
-62</pre>
+62
+63
+64
+65</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 59</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 62</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_columns'>columns</span>
   <span class='comment'># This function assumes that each item has the same columns.
@@ -990,16 +992,16 @@ controller.</p>
       <pre class="lines">
 
 
-67
-68
-69
 70
 71
 72
-73</pre>
+73
+74
+75
+76</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 67</span>
+      <pre class="code"><span class="info file"># File 'app/models/endpoint_response.rb', line 70</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_hash'>to_hash</span>
   <span class='id identifier rubyid_hash_response'>hash_response</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -1018,9 +1020,9 @@ controller.</p>
 </div>
 
     <div id="footer">
-  Generated on Thu Apr 23 13:50:42 2015 by
+  Generated on Sat Apr 25 15:33:29 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-2.0.0).
+  0.8.7.6 (ruby-2.2.0).
 </div>
 
   </body>

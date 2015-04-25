@@ -103,7 +103,18 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Manages logging in and logging out.</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -135,7 +146,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>GET /login.</p>
+</div></span>
   
 </li>
 
@@ -157,7 +170,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>GET /logout.</p>
+</div></span>
   
 </li>
 
@@ -187,15 +202,23 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>GET /login</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-2
-3
-4
 5
 6
 7
@@ -215,28 +238,35 @@
 21
 22
 23
-24</pre>
+24
+25
+26
+27
+28
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/sessions_controller.rb', line 2</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/sessions_controller.rb', line 5</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_login'>login</span>
-  <span class='id identifier rubyid_remote_user'>remote_user</span> <span class='op'>=</span> <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_env'>env</span><span class='period'>.</span><span class='id identifier rubyid_development?'>development?</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>aditisar</span><span class='tstring_end'>&quot;</span></span> <span class='op'>:</span> <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_env'>env</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>REMOTE_USER</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
-
+  <span class='comment'># Get the user&#39;s andrew Id through Shibboleth.
+</span>  <span class='id identifier rubyid_remote_user'>remote_user</span> <span class='op'>=</span> <span class='const'>Rails</span><span class='period'>.</span><span class='id identifier rubyid_env'>env</span><span class='period'>.</span><span class='id identifier rubyid_development?'>development?</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>aditisar</span><span class='tstring_end'>&quot;</span></span> <span class='op'>:</span> <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_env'>env</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>REMOTE_USER</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+  
   <span class='kw'>if</span> <span class='id identifier rubyid_remote_user'>remote_user</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
     <span class='id identifier rubyid_render_500'>render_500</span>
   <span class='kw'>else</span>
-    <span class='id identifier rubyid_andrew_id'>andrew_id</span> <span class='op'>=</span> <span class='id identifier rubyid_remote_user'>remote_user</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>@</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+    <span class='comment'># Shibboleth stores email address format, so split off the email part.
+</span>    <span class='id identifier rubyid_andrew_id'>andrew_id</span> <span class='op'>=</span> <span class='id identifier rubyid_remote_user'>remote_user</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>@</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
     <span class='id identifier rubyid_user'>user</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_find_by_andrew_id'>find_by_andrew_id</span><span class='lparen'>(</span><span class='id identifier rubyid_andrew_id'>andrew_id</span><span class='rparen'>)</span>
 
-    <span class='comment'># Create a new user account for any CMU person not already in the system
+    <span class='comment'># Create a new user account for any CMU person not already in the system.
 </span>    <span class='id identifier rubyid_user'>user</span> <span class='op'>||=</span> <span class='id identifier rubyid_new_user'>new_user</span><span class='lparen'>(</span><span class='id identifier rubyid_andrew_id'>andrew_id</span><span class='rparen'>)</span>
     
-    <span class='comment'># Do not allow inactive users to login 
+    <span class='comment'># Do not allow inactive users to login.
 </span>    <span class='kw'>if</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_active'>active</span>
       <span class='id identifier rubyid_session'>session</span><span class='lbracket'>[</span><span class='symbol'>:user_id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span>
       <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:notice</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Welcome, </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_user'>user</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>! You are now logged in.</span><span class='tstring_end'>&quot;</span></span>
-      <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_session'>session</span><span class='lbracket'>[</span><span class='symbol'>:return_to</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id identifier rubyid_root_path'>root_path</span>
+      <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_home_path'>home_path</span>
     <span class='kw'>else</span>
       <span class='id identifier rubyid_flash'>flash</span><span class='lbracket'>[</span><span class='symbol'>:alert</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>You are not permitted to login because your account has been suspended.</span><span class='tstring_end'>&quot;</span></span>
       <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='id identifier rubyid_root_path'>root_path</span>
@@ -257,23 +287,38 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>GET /logout</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-26
-27
-28
-29</pre>
+33
+34
+35
+36
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/sessions_controller.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/sessions_controller.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_logout'>logout</span>
-  <span class='id identifier rubyid_session'>session</span><span class='lbracket'>[</span><span class='symbol'>:user_id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>nil</span>
-  <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://webiso.andrew.cmu.edu/logout.cgi</span><span class='tstring_end'>&quot;</span></span>
+  <span class='comment'># Log out of the application.
+</span>  <span class='id identifier rubyid_session'>session</span><span class='lbracket'>[</span><span class='symbol'>:user_id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='comment'># Log out of Shibboleth.
+</span>  <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://webiso.andrew.cmu.edu/logout.cgi</span><span class='tstring_end'>&quot;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -285,9 +330,9 @@
 </div>
 
     <div id="footer">
-  Generated on Thu Apr 23 13:50:42 2015 by
+  Generated on Sat Apr 25 15:33:29 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-2.0.0).
+  0.8.7.6 (ruby-2.2.0).
 </div>
 
   </body>

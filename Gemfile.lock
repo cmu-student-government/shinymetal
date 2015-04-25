@@ -49,10 +49,9 @@ GEM
     addressable (2.3.8)
     ansi (1.5.0)
     arel (5.0.1.20140414130214)
-    better_errors (2.1.1)
+    better_errors (1.1.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
-      rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     bourbon (4.2.2)
@@ -198,7 +197,7 @@ GEM
     simplecov-html (0.10.0)
     single_test (0.6.0)
       rake
-    sprockets (3.0.1)
+    sprockets (3.0.2)
       rack (~> 1.0)
     sprockets-rails (2.2.4)
       actionpack (>= 3.0)
@@ -244,7 +243,7 @@ PLATFORMS
 
 DEPENDENCIES
   actionpack-page_caching
-  better_errors
+  better_errors (~> 1.1.0)
   binding_of_caller
   bourbon
   cancancan (~> 1.10)

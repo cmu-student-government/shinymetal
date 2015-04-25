@@ -103,7 +103,19 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Manages user key functionality, including approvals, comments, and status
+changes.</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -351,7 +363,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>GET /search Used for the search feature in the navigation bar.</p>
+</div></span>
   
 </li>
 
@@ -566,7 +580,6 @@
       <pre class="lines">
 
 
-71
 72
 73
 74
@@ -578,10 +591,11 @@
 80
 81
 82
-83</pre>
+83
+84</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 71</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_comment'>add_comment</span>
   <span class='comment'># Set user_id of new comment to current user&#39;s id.
@@ -627,20 +641,28 @@
       <pre class="lines">
 
 
-156
 157
 158
 159
 160
 161
 162
-163</pre>
+163
+164
+165
+166
+167
+168</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 156</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 157</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_approve_key'>approve_key</span>
   <span class='kw'>if</span> <span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_set_approved_by'>set_approved_by</span><span class='lparen'>(</span><span class='ivar'>@current_user</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_can_be_set_to?'>can_be_set_to?</span> <span class='symbol'>:confirmed</span>
+      <span class='comment'># Tell admins that the key can be confirmed now.
+</span>      <span class='const'>UserKeyMailer</span><span class='period'>.</span><span class='id identifier rubyid_everyone_approved_key'>everyone_approved_key</span><span class='lparen'>(</span><span class='ivar'>@user_key</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_deliver'>deliver</span>
+    <span class='kw'>end</span>
     <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@user_key</span><span class='comma'>,</span> <span class='label'>notice:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>You have successfully approved this key.</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>else</span>
     <span class='id identifier rubyid_get_comments'>get_comments</span>
@@ -678,7 +700,6 @@
       <pre class="lines">
 
 
-37
 38
 39
 40
@@ -693,10 +714,11 @@
 49
 50
 51
-52</pre>
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 38</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
   <span class='comment'># Questions needed to sanitize ids, or for question data in render :new if there is an error.
@@ -745,7 +767,6 @@
       <pre class="lines">
 
 
-86
 87
 88
 89
@@ -754,10 +775,11 @@
 92
 93
 94
-95</pre>
+95
+96</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 86</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 87</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete_comment'>delete_comment</span>
   <span class='comment'># Delete single comment;
@@ -800,17 +822,17 @@
       <pre class="lines">
 
 
-98
 99
 100
 101
 102
 103
 104
-105</pre>
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 98</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
   <span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_destroy'>destroy</span>
@@ -851,11 +873,11 @@
       <pre class="lines">
 
 
-33
-34</pre>
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 33</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_edit'>edit</span>
 <span class='kw'>end</span></pre>
@@ -890,13 +912,13 @@
       <pre class="lines">
 
 
-9
 10
 11
-12</pre>
+12
+13</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 9</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_index'>index</span>
   <span class='comment'># Staffmember only wants to see key applications that have been submitted.
@@ -933,14 +955,14 @@
       <pre class="lines">
 
 
-26
 27
 28
 29
-30</pre>
+30
+31</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 26</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new'>new</span>
   <span class='ivar'>@user_key</span> <span class='op'>=</span> <span class='const'>UserKey</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -978,13 +1000,13 @@
       <pre class="lines">
 
 
-15
 16
 17
-18</pre>
+18
+19</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_own_user_keys'>own_user_keys</span>
   <span class='comment'># Any logged-in user can see all of their own keys.
@@ -1004,20 +1026,31 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>GET /search Used for the search feature in the navigation bar.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-175
-176
-177
-178
-179</pre>
+182
+183
+184
+185
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 175</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 182</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_search'>search</span>
   <span class='id identifier rubyid_search_param'>search_param</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:term</span><span class='rbracket'>]</span>
@@ -1055,7 +1088,6 @@
       <pre class="lines">
 
 
-133
 134
 135
 136
@@ -1063,10 +1095,11 @@
 138
 139
 140
-141</pre>
+141
+142</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 133</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 134</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_as_confirmed'>set_as_confirmed</span>
   <span class='kw'>if</span> <span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_set_status_as'>set_status_as</span> <span class='symbol'>:confirmed</span>
@@ -1108,7 +1141,6 @@
       <pre class="lines">
 
 
-122
 123
 124
 125
@@ -1116,10 +1148,11 @@
 127
 128
 129
-130</pre>
+130
+131</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 122</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 123</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_as_filtered'>set_as_filtered</span>
   <span class='kw'>if</span> <span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_set_status_as'>set_status_as</span> <span class='symbol'>:awaiting_confirmation</span>
@@ -1161,7 +1194,6 @@
       <pre class="lines">
 
 
-144
 145
 146
 147
@@ -1170,10 +1202,11 @@
 150
 151
 152
-153</pre>
+153
+154</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 144</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 145</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_as_reset'>set_as_reset</span>
   <span class='kw'>if</span> <span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_set_status_as'>set_status_as</span> <span class='symbol'>:awaiting_submission</span>
@@ -1216,7 +1249,6 @@
       <pre class="lines">
 
 
-108
 109
 110
 111
@@ -1227,10 +1259,11 @@
 116
 117
 118
-119</pre>
+119
+120</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 108</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 109</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_as_submitted'>set_as_submitted</span>
   <span class='kw'>if</span> <span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_set_status_as'>set_status_as</span> <span class='symbol'>:awaiting_filters</span>
@@ -1275,12 +1308,12 @@
       <pre class="lines">
 
 
-21
 22
-23</pre>
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 21</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_show'>show</span>
   <span class='id identifier rubyid_get_comments'>get_comments</span>
@@ -1316,17 +1349,17 @@
       <pre class="lines">
 
 
-166
-167
-168
-169
-170
 171
 172
-173</pre>
+173
+174
+175
+176
+177
+178</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 166</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 171</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_undo_approve_key'>undo_approve_key</span>
   <span class='kw'>if</span> <span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_undo_set_approved_by'>undo_set_approved_by</span><span class='lparen'>(</span><span class='ivar'>@current_user</span><span class='rparen'>)</span>
@@ -1367,7 +1400,6 @@
       <pre class="lines">
 
 
-55
 56
 57
 58
@@ -1380,10 +1412,11 @@
 65
 66
 67
-68</pre>
+68
+69</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/user_keys_controller.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_update'>update</span>
   <span class='kw'>if</span> <span class='ivar'>@current_user</span><span class='period'>.</span><span class='id identifier rubyid_role?'>role?</span> <span class='symbol'>:admin</span> <span class='kw'>and</span> <span class='op'>!</span><span class='lparen'>(</span><span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_at_stage?'>at_stage?</span> <span class='symbol'>:awaiting_submission</span><span class='rparen'>)</span>
@@ -1409,9 +1442,9 @@
 </div>
 
     <div id="footer">
-  Generated on Thu Apr 23 13:50:43 2015 by
+  Generated on Sat Apr 25 15:33:30 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-2.0.0).
+  0.8.7.6 (ruby-2.2.0).
 </div>
 
   </body>

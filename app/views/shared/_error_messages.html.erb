@@ -2,7 +2,8 @@
   <fieldset class="error_explanation">
     <% object.errors.each do |key, message| %>
       <p><strong>Error: </strong></hp>
-      <%= key unless key==:base %> <%= message %></li>
+      <%# Don't print the key to the error for base messages, which are written to be full sentences. %>
+      <%= key unless key.to_s.split('.').last=="base" %> <%= message %></li>
     <% end %>
   </fieldset>
 <% end %>

@@ -14,7 +14,8 @@
     <%#  Only admin is allowed to make a post visible to the requester  %>
     <% if @current_user.role? :admin %>
       <div class="row">
-	  <%= p.label "Check here to post this comment as a note to the requester." %>
+	  Check here to post this comment as a note to the requester.
+	  &nbsp;&nbsp;
 	  <%= p.check_box :public %>
       </div>
     <% end %>

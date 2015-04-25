@@ -7,6 +7,8 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 if (!Rails.env.test?)
+    SETTINGS = ENV
+else
     # Load our settings.yml file
     SETTINGS = YAML.load(File.read(File.expand_path('../settings.yml', __FILE__)))
     SETTINGS.merge! SETTINGS.fetch(Rails.env, {})

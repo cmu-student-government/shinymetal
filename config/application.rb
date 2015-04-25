@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-if (!Rails.env.test?)
+if (Rails.env.test?)
     SETTINGS = ENV
 else
     # Load our settings.yml file

@@ -76,7 +76,7 @@ class UserKeysController < ApplicationController
     params[:user_key][:comments_attributes]["0"][:user_id] = @current_user.id
     # FIXME Adding a user_key_comment note from administrator should send email to requester?
     if @user_key.update(comment_user_key_params)
-      redirect_to @user_key, notice: 'Comment was successfully added.'
+      redirect_to url_for(@user_key) + "#commentsPanel", notice: 'Comment was successfully deleted.'
     else
       get_comments
       render :show
@@ -92,7 +92,7 @@ class UserKeysController < ApplicationController
     # FIXME: should this be validated?
     @bad_comment = Comment.find(params[:comment_id])
     @bad_comment.destroy
-    redirect_to @user_key, notice: 'Comment was successfully deleted.'
+    redirect_to url_for(@user_key) + "#commentsPanel", notice: 'Comment was successfully deleted.'
   end
 
   # DELETE /user_keys/1

@@ -1,4 +1,5 @@
-## The Bridge API Project [![Build Status](https://travis-ci.org/cmu-student-government/shinymetal.svg?branch=master)](https://travis-ci.org/cmu-student-government/shinymetal) [![Code Climate](https://codeclimate.com/github/cmu-student-government/shinymetal/badges/gpa.svg)](https://codeclimate.com/github/cmu-student-government/shinymetal)
+## The Bridge API Project
+[![Build Status](https://travis-ci.org/cmu-student-government/shinymetal.svg?branch=master)](https://travis-ci.org/cmu-student-government/shinymetal) [![Code Climate](https://codeclimate.com/github/cmu-student-government/shinymetal/badges/gpa.svg)](https://codeclimate.com/github/cmu-student-government/shinymetal) [![Test Coverage](https://codeclimate.com/github/cmu-student-government/shinymetal/badges/coverage.svg)](https://codeclimate.com/github/cmu-student-government/shinymetal)
 
 *Developed by the Shiny Metal Team for 67-373, Spring 2015.*
 
@@ -13,7 +14,7 @@ get an **admin** user, some approvers, some requesters, and test data for their 
 ## Setup by Admin
 
 Before the application can be useful, an administrator must fill in the content of the "static" pages
-(optionally using Markdown shortcuts to format the text more nicely). 
+(optionally using Markdown shortcuts to format the text more nicely).
 
 Admins must also create questions in the settings page, add filters to the system, populate Organization
 data, populate Filter data, and promote users to Staff (Approver) or Staff as needed.

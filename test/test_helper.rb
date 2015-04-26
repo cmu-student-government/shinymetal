@@ -1,3 +1,7 @@
+# https://codeclimate.com
+require 'codeclimate-test-reporter'
+CodeClimate::TestReporter.start
+
 #Copied this test_helper stuff from Prof H files
 
 require 'simplecov'
@@ -15,13 +19,13 @@ require 'contexts'
 
 class ActiveSupport::TestCase
   ActiveRecord::Migration.check_pending!
-  
+
   # Contexts for factory girl testing
   include Contexts
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   # Commenting out fixtures
-  # fixtures :all  
+  # fixtures :all
 
   # Helper method for context tests
   def deny(condition)

@@ -65,7 +65,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'redcarpet', '~> 3.2.3'
 
   # Schedules tasks (used for email)
-  gem 'whenever', '~> 0.9.4', :require => false
+  gem 'whenever', '~> 0.9.4', require: false
 
   # Sqlite3 for dev, test db
   gem 'sqlite3', group: [:development, :test]
@@ -107,6 +107,9 @@ group :test do
   # This one is NOT from Prof H, replaces turn gem, turn gem is deprecated
   gem 'minitest-reporters'
   # gem 'tconsole'  # issues with matchers and minitest, so skip for now
+
+  # https://codeclimate.com hook
+  gem 'codeclimate-test-reporter', require: false
 end
 
 

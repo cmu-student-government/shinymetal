@@ -1,4 +1,5 @@
-## The Bridge API Project [![Build Status](https://travis-ci.org/cmu-student-government/shinymetal.svg?branch=master)](https://travis-ci.org/cmu-student-government/shinymetal) [![Code Climate](https://codeclimate.com/github/cmu-student-government/shinymetal/badges/gpa.svg)](https://codeclimate.com/github/cmu-student-government/shinymetal) [![Test Coverage](https://codeclimate.com/github/cmu-student-government/shinymetal/badges/coverage.svg)](https://codeclimate.com/github/cmu-student-government/shinymetal)
+## The Bridge API Project
+[![Build Status](https://travis-ci.org/cmu-student-government/shinymetal.svg?branch=master)](https://travis-ci.org/cmu-student-government/shinymetal) [![Code Climate](https://codeclimate.com/github/cmu-student-government/shinymetal/badges/gpa.svg)](https://codeclimate.com/github/cmu-student-government/shinymetal) [![Test Coverage](https://codeclimate.com/github/cmu-student-government/shinymetal/badges/coverage.svg)](https://codeclimate.com/github/cmu-student-government/shinymetal)
 
 *Developed by the Shiny Metal Team for 67-373, Spring 2015.*
 

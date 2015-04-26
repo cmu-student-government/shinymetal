@@ -7,7 +7,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 # Capistrano for deployment
   gem 'capistrano', '~> 3.4'
   gem 'capistrano-rails', '~> 1.1.2' # Use Capistrano for deployment
-  gem 'capistrano-bundler'
+  gem 'capistrano-bundler', '~> 1.1.4'
 
 
 # Asset gems
@@ -21,11 +21,11 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'coffee-rails', '~> 4.1.0'
 
   # Use Bourbon for SCSS vendor prefix mixins
-  gem 'bourbon'
+  gem 'bourbon', '~> 4.2.2'
 
   # Use jquery as the JavaScript library
   gem 'jquery-rails', '~> 3.1.2'
-  gem 'jquery-turbolinks'
+  gem 'jquery-turbolinks', '~> 2.1.0'
 
   # Foundation gems
   gem 'foundation-rails', '= 5.5.1.0'
@@ -41,37 +41,37 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 
 # Utility gems
   # Pagination gem that is still being maintained
-  gem 'kaminari'
+  gem 'kaminari', '~> 0.16.3'
 
   # Authorization gem
   gem 'cancancan', '~> 1.10'
 
   # Error handler
-  gem 'gaffe'
+  gem 'gaffe', '~> 1.0.2'
 
   # Load .env files into ENV
   gem 'dotenv-rails', github: "bkeepers/dotenv", tag: 'v2.0.1', require: 'dotenv/rails-now'
 
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-  gem 'turbolinks'
+  gem 'turbolinks', '~> 2.5.3'
 
   # Gives us access to students names/info from CMU's LDAP service
   gem 'cmu_person', github: "jkcorrea/cmu_person", ref: "d615d5837575e226aaf3a056e4392015e67cc183"
 
   # Nested filter forms
-  gem 'cocoon'
+  gem 'cocoon', '~> 1.2.6'
 
   # Markdown rendering
-  gem 'redcarpet'
+  gem 'redcarpet', '~> 3.2.3'
 
   # Schedules tasks (used for email)
-  gem 'whenever', :require => false
+  gem 'whenever', '~> 0.9.4', require: false
 
   # Sqlite3 for dev, test db
   gem 'sqlite3', group: [:development, :test]
 
   # Documentation
-  gem 'yard'
+  gem 'yard', '~> 0.8.7.6'
 
 group :development do
   gem 'rails_layout'
@@ -107,6 +107,9 @@ group :test do
   # This one is NOT from Prof H, replaces turn gem, turn gem is deprecated
   gem 'minitest-reporters'
   # gem 'tconsole'  # issues with matchers and minitest, so skip for now
+
+  # https://codeclimate.com hook
+  gem 'codeclimate-test-reporter', require: false
 end
 
 

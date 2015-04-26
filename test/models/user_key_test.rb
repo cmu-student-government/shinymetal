@@ -272,7 +272,7 @@ class UserKeyTest < ActiveSupport::TestCase
       # Algorithm used here mimics algorithm used in model
       date_string = key.time_submitted.to_s.split("")
       andrew_id = key.user.andrew_id.split("")
-      salt = ENV["api_key_salt"].split("")
+      salt = SETTINGS[:api_key_salt].split("")
       hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
       # hash_string = date_string.zip(andrew_id).map{|a, b| b.nil? ? a : a + b}.reduce(:+)
       answer = Digest::SHA2.hexdigest hash_string

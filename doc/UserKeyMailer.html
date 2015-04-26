@@ -103,7 +103,19 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Manages emails that are sent automatically via cronjob (for expiring keys)
+or immediately after doing some action on the site.</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -136,7 +148,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>email for admin when an application has been submitted.</p>
+<p>Emails for admins when an application has been submitted.</p>
 </div></span>
   
 </li>
@@ -160,7 +172,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>email for requester when their application has been reopened.</p>
+<p>Email for requester when their application has been reopened.</p>
 </div></span>
   
 </li>
@@ -169,7 +181,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#everyone_approved_key-instance_method" title="#everyone_approved_key (instance method)">- (Object) <strong>everyone_approved_key</strong>(admin, user_key) </a>
+      <a href="#everyone_approved_key-instance_method" title="#everyone_approved_key (instance method)">- (Object) <strong>everyone_approved_key</strong>(user_key) </a>
     
 
     
@@ -184,7 +196,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>email for admin when all approvers have approved.</p>
+<p>Email for admins when all approvers have approved.</p>
 </div></span>
   
 </li>
@@ -208,7 +220,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>email for requester when their key expires.</p>
+<p>Email for requester when their key expired.</p>
 </div></span>
   
 </li>
@@ -232,7 +244,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>email for requester when their key will expire in 30 days.</p>
+<p>Email for requester when their key will expire in 30 days.</p>
 </div></span>
   
 </li>
@@ -256,7 +268,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>email for requester when process is complete and they have a key.</p>
+<p>Email for requester when process is complete and they have a key.</p>
 </div></span>
   
 </li>
@@ -280,7 +292,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>email for approvers when a key has been marked ready for approval.</p>
+<p>Emails for approvers when a key has been marked ready for approval.</p>
 </div></span>
   
 </li>
@@ -304,7 +316,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>email for user when they submit an application.</p>
+<p>Email for user when they submit an application.</p>
 </div></span>
   
 </li>
@@ -338,13 +350,49 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>email for admin when an application has been submitted</p>
+<p>Emails for admins when an application has been submitted.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="User.html" title="User (class)">User</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Requester who submitted the key.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_key</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="UserKey.html" title="UserKey (class)">UserKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The user key that the requester submitted.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -352,15 +400,15 @@
       <pre class="lines">
 
 
-14
-15
-16
-17
-18
-19</pre>
+19
+20
+21
+22
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 19</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_admin_submit_msg'>admin_submit_msg</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_user_key'>user_key</span><span class='rparen'>)</span>
   <span class='ivar'>@user</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span>
@@ -385,13 +433,49 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>email for requester when their application has been reopened</p>
+<p>Email for requester when their application has been reopened.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="User.html" title="User (class)">User</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Requester who owns the key.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_key</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="UserKey.html" title="UserKey (class)">UserKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The user key that has been reset.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -399,15 +483,15 @@
       <pre class="lines">
 
 
-46
-47
-48
-49
-50
-51</pre>
+61
+62
+63
+64
+65
+66</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 46</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_app_reset_msg'>app_reset_msg</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_user_key'>user_key</span><span class='rparen'>)</span>
   <span class='ivar'>@recipient</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span>
@@ -423,7 +507,7 @@
       <div class="method_details ">
   <h3 class="signature " id="everyone_approved_key-instance_method">
   
-    - (<tt>Object</tt>) <strong>everyone_approved_key</strong>(admin, user_key) 
+    - (<tt>Object</tt>) <strong>everyone_approved_key</strong>(user_key) 
   
 
   
@@ -432,13 +516,33 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>email for admin when all approvers have approved</p>
+<p>Email for admins when all approvers have approved.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>user_key</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="UserKey.html" title="UserKey (class)">UserKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The user key that has been approved.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -446,20 +550,18 @@
       <pre class="lines">
 
 
-63
-64
-65
-66
-67
-68</pre>
+81
+82
+83
+84
+85</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 81</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_everyone_approved_key'>everyone_approved_key</span><span class='lparen'>(</span><span class='id identifier rubyid_admin'>admin</span><span class='comma'>,</span> <span class='id identifier rubyid_user_key'>user_key</span><span class='rparen'>)</span>
-  <span class='ivar'>@recipient</span> <span class='op'>=</span> <span class='id identifier rubyid_admin'>admin</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_everyone_approved_key'>everyone_approved_key</span><span class='lparen'>(</span><span class='id identifier rubyid_user_key'>user_key</span><span class='rparen'>)</span>
   <span class='ivar'>@user_key</span> <span class='op'>=</span> <span class='id identifier rubyid_user_key'>user_key</span>
-  <span class='id identifier rubyid_mail'>mail</span><span class='lparen'>(</span><span class='symbol'>:to</span> <span class='op'>=&gt;</span> <span class='ivar'>@recipient</span><span class='period'>.</span><span class='id identifier rubyid_email'>email</span><span class='comma'>,</span> 
+  <span class='id identifier rubyid_mail'>mail</span><span class='lparen'>(</span><span class='symbol'>:to</span> <span class='op'>=&gt;</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_admin'>admin</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:email</span><span class='rparen'>)</span><span class='comma'>,</span>
        <span class='symbol'>:subject</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The Bridge API Notice: </span><span class='embexpr_beg'>#{</span><span class='ivar'>@user_key</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> Key Has Been Approved by All Parties</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -479,13 +581,57 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>email for requester when their key expires</p>
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>This is executed as part of a cronjob.</p>
+</div>
+  </div>
+
+
+<p>Email for requester when their key expired.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="User.html" title="User (class)">User</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Requester who owns the key.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_key</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="UserKey.html" title="UserKey (class)">UserKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The user key about to expire.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -493,15 +639,15 @@
       <pre class="lines">
 
 
-38
-39
-40
-41
-42
-43</pre>
+51
+52
+53
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 51</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_expiry_msg'>expiry_msg</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_user_key'>user_key</span><span class='rparen'>)</span>
   <span class='ivar'>@recipient</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span>
@@ -526,13 +672,57 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>email for requester when their key will expire in 30 days</p>
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>This is executed as part of a cronjob.</p>
+</div>
+  </div>
+
+
+<p>Email for requester when their key will expire in 30 days.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="User.html" title="User (class)">User</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Requester who owns the key.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_key</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="UserKey.html" title="UserKey (class)">UserKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The user key about to expire.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -540,15 +730,15 @@
       <pre class="lines">
 
 
-30
-31
-32
-33
-34
-35</pre>
+40
+41
+42
+43
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_expiry_warning_msg'>expiry_warning_msg</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_user_key'>user_key</span><span class='rparen'>)</span>
   <span class='ivar'>@recipient</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span>
@@ -573,13 +763,49 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>email for requester when process is complete and they have a key</p>
+<p>Email for requester when process is complete and they have a key.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="User.html" title="User (class)">User</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Requester who owns the key.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_key</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="UserKey.html" title="UserKey (class)">UserKey</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The user key that has been approved.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -587,16 +813,16 @@
       <pre class="lines">
 
 
-54
-55
-56
-57
-58
-59
-60</pre>
+71
+72
+73
+74
+75
+76
+77</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 54</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_key_approved_msg'>key_approved_msg</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_user_key'>user_key</span><span class='rparen'>)</span>
   <span class='ivar'>@recipient</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span>
@@ -622,13 +848,49 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>email for approvers when a key has been marked ready for approval</p>
+<p>Emails for approvers when a key has been marked ready for approval.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="User.html" title="User (class)">User</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Requester who submitted the key.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user_key</span>
+      
+      
+        <span class='type'>(<tt>Userkey</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The user key that the requester submitted.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -636,15 +898,15 @@
       <pre class="lines">
 
 
-22
-23
-24
-25
-26
-27</pre>
+29
+30
+31
+32
+33
+34</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 29</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_share_with_approver_msg'>share_with_approver_msg</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='comma'>,</span> <span class='id identifier rubyid_user_key'>user_key</span><span class='rparen'>)</span>
   <span class='ivar'>@user</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span>
@@ -669,13 +931,33 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>email for user when they submit an application</p>
+<p>Email for user when they submit an application.</p>
 
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="User.html" title="User (class)">User</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Requester who submitted the key.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -683,14 +965,14 @@
       <pre class="lines">
 
 
-7
-8
-9
 10
-11</pre>
+11
+12
+13
+14</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 7</span>
+      <pre class="code"><span class="info file"># File 'app/mailers/user_key_mailer.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submitted_msg'>submitted_msg</span><span class='lparen'>(</span><span class='id identifier rubyid_user'>user</span><span class='rparen'>)</span>
   <span class='ivar'>@recipient</span> <span class='op'>=</span> <span class='id identifier rubyid_user'>user</span>
@@ -707,9 +989,9 @@
 </div>
 
     <div id="footer">
-  Generated on Thu Apr 23 13:50:42 2015 by
+  Generated on Sat Apr 25 15:33:29 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-2.0.0).
+  0.8.7.6 (ruby-2.2.0).
 </div>
 
   </body>

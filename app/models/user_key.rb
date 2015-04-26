@@ -168,24 +168,23 @@ class UserKey < ActiveRecord::Base
       # Every key starts at awaiting_submission by default and don't have these checks.
       # To be reset, a key must be active and have public comments for the key owner to see.
       return false unless (at_stage? :awaiting_filters or at_stage? :awaiting_confirmation)
-      return false unless (has_public_comments? and self.active)
+      return (has_public_comments? and self.active)
     when :awaiting_filters
       # Check that the requester has filled in their form.
       return false unless at_stage? :awaiting_submission
-      return false unless request_form_done?
+      return request_form_done?
     when :awaiting_confirmation
       # Check by admin that the key is ready to be approved by all approvers in the system.
       return false unless at_stage? :awaiting_filters
-      return false if self.time_expired.nil?
-    when :confirmed
+      return !self.time_expired.nil?
+    else # :confirmed
       # Check by admin that the key has been approved by everyone and can be confirmed.
       return false unless at_stage? :awaiting_confirmation
       # Simply counting all approvers and comparing approvals already earned
       # would have a bug when someone approves it but is soon demoted from approver.
       # So, only find the number of approvers who are currently still active "approvers".
-      return false if !(self.approval_users.approvers_only.size == User.approvers_only.size)
+      return (self.approval_users.approvers_only.size == User.approvers_only.size)
     end
-    return true
   end
 
   # Check in user key view pages and validations what stage the user key is in.
@@ -260,22 +259,19 @@ class UserKey < ActiveRecord::Base
   #
   # @return [String] The value of the key, or placeholder text if the user key has no key yet.
   def gen_api_key
-    if at_stage?(:confirmed)
-      # Start with the datetime of when the user_key was first requested.
-      date_string = self.time_submitted.to_s.split("")
-      # Get the andrew_id of the user who requested the user_key.
-      andrew_id = self.user.andrew_id.split("")
-      # Get the salt for the key as well.
-      salt = SETTINGS[:api_key_salt].split("")
-      # Intertwine the string of the andrewid, date, and salt together to build
-      #   the hash. This is so we can compare the passed in token to a hash
-      #   we can recompute to ensure security and not have the key stored in
-      #   the database. (ex: intertwining "hello" and "woo" => "hweololo")
-      hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| c.nil? && b.nil? ? a : c.nil? ? a + b : a + b + c}.reduce(:+)
-      return Digest::SHA2.hexdigest hash_string
-    else
-      return "A key will be generated upon approval."
-    end
+    return "A key will be generated upon approval." unless at_stage?(:confirmed)
+    # Start with the datetime of when the user_key was first requested.
+    date_string = self.time_submitted.to_s.split("")
+    # Get the andrew_id of the user who requested the user_key.
+    andrew_id = self.user.andrew_id.split("")
+    # Get the salt for the key as well.
+    salt = SETTINGS[:api_key_salt].split("")
+    # Intertwine the string of the andrewid, date, and salt together to build
+    # the hash. This is so we can compare the passed in token to a hash
+    # we can recompute to ensure security and not have the key stored in
+    # the database. (ex: intertwining "hello" and "woo" => "hweololo")
+    hash_string = salt.zip(date_string, andrew_id).map{|a, b, c| a + (b || "") + (c || "")}.reduce(:+)
+    return Digest::SHA2.hexdigest hash_string
   end
 
   private

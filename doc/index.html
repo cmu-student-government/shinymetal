@@ -61,55 +61,93 @@
 
     <iframe id="search_frame"></iframe>
 
-    <div id="content"><div id='filecontents'><p>Bite My Shiny Metal API Project for 67-373 Spring 2015.</p>
+    <div id="content"><div id='filecontents'><h2>The Bridge API Project</h2>
 
-<p>Still in development.</p>
+<p><em>Developed by the Shiny Metal Team for 67-373, Spring 2015.</em></p>
 
-<p>To run, migrate with <strong>rake db:migrate</strong> and populate with <strong>rake db:populate</strong> to get an <strong>admin</strong> user, some approvers, some requesters, and data for their keys.</p>
+<p>This app is for Carnegie Mellon University use. Users login through CMU&#39;s Shibboleth.
+Non-CMU users will be unable to login.</p>
 
-<p><strong>Note to team:</strong> For any comments that need to be returned to later, mark with <strong>FIXME</strong> so we can find them.</p>
+<p>Requires use with <strong>Ruby 2.0</strong>. Has documentation generated using the YARD gem.
+To run this app, migrate with <strong>rake db:migrate</strong> and populate with <strong>rake db:populate</strong> to
+get an <strong>admin</strong> user, some approvers, some requesters, and test data for their keys.</p>
 
-<p>This application provides functionality for requesting application keys. A key may be at one of five stages:</p>
+<h2>Setup by Admin</h2>
 
-<p><em>Awaiting_submission</em>: The request for a key has been started by a user. The user fills in the key&#39;s name,
-8 text boxes describing the project that the key will be used for, and agrees to terms of use.
+<p>Before the application can be useful, an administrator must fill in the content of the &quot;static&quot; pages
+(optionally using Markdown shortcuts to format the text more nicely). </p>
+
+<p>Admins must also create questions in the settings page, add filters to the system, populate Organization
+data, populate Filter data, and promote users to Staff (Approver) or Staff as needed.</p>
+
+<h2>User Key Status Logic</h2>
+
+<p>There are two parts to this app: the front-end key application processing, and the API.</p>
+
+<p>For the first part, this application provides functionality for requesting keys, which can be used to access
+restricted data from the Bridge. A key application may be at one of five stages:</p>
+
+<p><strong>Awaiting_submission</strong>: The request for a key has been started by a user. The user fills in the key&#39;s name,
+text boxes describing the project that the key will be used for, and agrees to terms of use.
 At this stage, the request is only visible to its requester. The requester can save their progress,
-and decides when to submit the key. (A key that has been <em>reset</em> is sent back to this stage, with comments
+and decides when to submit the key. (A key that has been <em>reset</em> is sent back to this stage, with public comments
 intact, to tell the user what needs to be changed.)</p>
 
-<p><em>Awaiting_filters</em>: Once the key is submitted, admins and staffmembers can see the key. Only admins can
+<p><strong>Awaiting_filters</strong>: Once the key is submitted, admins and staffmembers can see the key. Only admins can
 assign filter and organization access to the key. At this step and after this step, admins and staffmembers
 can comment on the key. The admin assigns rights by reading the request and deciding what access rights are
-appropriate. The exact filters that a key is assigned are never made public or shown to the requester (for
-security purposes, and so the requester doesn&#39;t have to learn the logic of the system).
-The admin also sets the expiration date at this time. All comments are visible only to staffmembers,
-except for admin comments that are marked as public, which can also be read by the requester.
-This step and its progress are invisible to the requester.</p>
+appropriate. The exact filters that a key is assigned are not made public or shown to the requester (for
+security purposes, and so the requester doesn&#39;t have to learn the logic of the system) until, and if,
+they get those rights later (so they know what filters they should use for the API).
+The admin also sets the expiration date at this time. Any comments made are visible only to staffmembers,
+except for admin comments that are marked as public, which can also be read by the requester. Admins
+can delete comments at any time.</p>
 
-<p><em>Awaiting_confirmation</em>: Once the admin is done assigning rights, the request is opened up for approval.
+<p>Administrators need to add filters to the system manually, since it is not clear to the development
+team what filter values will be needed.
+Columns and Organizations can be populated automatically via the settings page by admins
+(there is a settings icon in the navigation bar for staff). Organization names, tied to external ids,
+must be stored in the system so that admins can assign organization access by name.</p>
+
+<p>This step and its progress are invisible to the requester.</p>
+
+<p><strong>Awaiting_confirmation</strong>: Once the admin is done assigning rights, the request can be opened up for approval.
 All admins, and all staffmembers who are also designated as approvers, can approve the key at this step.
-Once all approvers in the system have approved the key, the admin must confirm the key and release it
+Once all approvers in the system have approved the key, the admin can confirm the key and release it
 to the requester. This step and its progress are invisible to the requester.</p>
 
-<p><em>Confirmed</em>: All staffmembers as well as the requester can now see the key&#39;s value and confirmed status.
-The admin can continue to make changes to the key. At any step, the admin can suspend a key by inactivating
-it. Staff can continue to look at it.</p>
+<p>The &quot;approve key&quot; button is intentionally at the bottom of the Permissions panel so that approvers are encouraged
+to read the permission data.</p>
 
-<p><em>Expired</em>: The expiration date has passed. The key is still active but can no longer get a
+<p><strong>Confirmed</strong>: All staffmembers as well as the requester can now see the key&#39;s value and confirmed status.
+The key&#39;s owner and the staff can all see the access rights that the key has.
+The admin can continue to make changes to the key. At any step, the admin can suspend a key by
+inactivating it. The key&#39;s owner and staff can continue to look at inactive keys.</p>
+
+<p><em>Expired</em>: The expiration date has passed. The key may have any status, but if it has a passed expiration date,
+it is considered to be expired. The key is still active but can no longer get a
 valid value. The key cannot be renewed; a new key must be requested.</p>
+
+<h2>Deployment Notes</h2>
+
+<p>Security for this application follows Kerckhoffs&#39;s principle; the implementation details, but not the keys, are available
+to the public.</p>
+
+<p>tbd</p>
 
 <h1>TODO</h1>
 
 <ul>
 <li>Crontab needs to be manually updated currently every time we change cronjobs, and should be on the apache user</li>
 <li>Crontab is also not being updated on cap deploys</li>
+<li>Fill in deployment notes for future teams</li>
 </ul>
 </div></div>
 
     <div id="footer">
-  Generated on Thu Apr 23 13:50:41 2015 by
+  Generated on Sat Apr 25 15:33:28 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.6 (ruby-2.0.0).
+  0.8.7.6 (ruby-2.2.0).
 </div>
 
   </body>

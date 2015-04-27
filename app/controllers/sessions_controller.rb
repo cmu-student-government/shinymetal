@@ -40,6 +40,7 @@ class SessionsController < ApplicationController
   private
   # Creates a User in the database.
   # @param andrew_id [String] The andrew id of the new User object.
+  # @return [User] The user created.
   def new_user(andrew_id)
     user = User.new
     user.andrew_id = andrew_id
@@ -47,5 +48,6 @@ class SessionsController < ApplicationController
     # Otherwise, everyone starts as a requester.
     user.role = User.first.nil? ? "admin" : "requester"
     user.save!
+    return user
   end
 end

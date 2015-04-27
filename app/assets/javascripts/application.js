@@ -27,4 +27,12 @@ $(document).on("click", '#key', function() {
 // On page load
 $(function() {
   $(document).foundation();
+
+  // to handle redirect to comments tab after add or delete
+  if(window.location.hash){
+      $('ul.tabs li a').each(function(){
+          var hash = '#' + $(this).attr('href').split('#')[1];
+          if (window.location.hash) $('[data-tab] [href="' + hash + '"]').trigger('click.fndtn.tab');
+      });
+  }
 });

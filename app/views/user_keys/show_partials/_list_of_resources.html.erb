@@ -40,13 +40,9 @@
           </li>
         <% end %>
       </ol>
-    <% elsif columns.empty? %>
-    <%# A resource with neither columns nor whitelists has absolutely no access %>
-      <p><span class="error_explanation"><i class="fi-x red"></i>&nbsp;&nbsp;This key has absolutely no access rights for this resource.</span></p>
     <% else %>
-      <p><span class="success_explanation"><i class="fi-check"></i>&nbsp;&nbsp;This key has complete, unrestricted access for this resource with the selected columns.</span></p>
-    <%# A key with at least one column, but no whitelists, has access to everything %>
-
+    <%# A resource with no whitelists has absolutely no access through filters. %>
+      <p><span class="error_explanation"><i class="fi-x red"></i>&nbsp;&nbsp;This key has no access rights for this resource through any whitelists.</span></p>
     <% end %>
     </div>
     

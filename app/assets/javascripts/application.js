@@ -27,17 +27,12 @@ $(document).on("click", '#key', function() {
 // On page load
 $(function() {
   $(document).foundation();
-  console.log("wtf is this")
+
+  // to handle redirect to comments tab after add or delete
   if(window.location.hash){
       $('ul.tabs li a').each(function(){
           var hash = '#' + $(this).attr('href').split('#')[1];
-          console.log(hash)
-          console.log(window.location.hash)
-          console.log(this)
           if (window.location.hash) $('[data-tab] [href="' + hash + '"]').trigger('click.fndtn.tab');
-          // if(hash == window.location.hash){
-          //     $(this).trigger('click.fndtn.tab');
-          // }
       });
   }
 });

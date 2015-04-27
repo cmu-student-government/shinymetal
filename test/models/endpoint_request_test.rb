@@ -43,10 +43,10 @@ class EndpointRequestTest < ActiveSupport::TestCase
       assert pos_request.failed
     end
     
-    should "show that a request is valid when no whitelists exist for the resource" do
+    should "show that a request is invalid when no whitelists exist for the resource" do
       # @bender_key_confirmed has no whitelists
       users_request = EndpointRequest.new(@bender_key_confirmed, HashWithIndifferentAccess.new({endpoint: "users", page: "2", status: "active"}))
-      deny users_request.failed
+      assert users_request.failed
     end
   end
 end

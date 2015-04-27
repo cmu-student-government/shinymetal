@@ -11,7 +11,8 @@ class Page < ActiveRecord::Base
   PAGE_LIST = {"welcome" => "Welcome to the Bridge API",
                "contact" => "Contact Us",
                "about" => "About Us",
-               "terms" => "Terms and Conditions"
+               "terms" => "Terms and Conditions",
+               "instructions" => "Instructions for Applying"
   }
   
   # Class method to fetch one of the four possible Pages.

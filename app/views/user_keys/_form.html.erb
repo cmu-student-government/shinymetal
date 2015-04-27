@@ -1,13 +1,20 @@
-<%= form_for(@user_key) do |f| %>
+<%# The instructions Page's content is rendered here. %>
+<h4>Instructions for Applying</h4>
 
+<%= markdown(Page.find_or_create("instructions").message) %>
+
+<br/>
+
+<%= form_for(@user_key) do |f| %>
   <%= render 'shared/error_messages', object: @user_key %>
   
   <%#  Begin requester form  %>
   <%#  On create, @user_key.id is nil and not yet owned by its creator.  %>
   <% if @user_key.id.nil? or @current_user.owns? @user_key %>
     <fieldset>
-    <%#  Application text boxes. Note that the form object is passed in as :f %>
-    <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
+      <legend>Application Form</legend>
+      <%#  Application text boxes. Note that the form object is passed in as :f %>
+      <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
     </fieldset>
   <% end %>
   <%#  End requester input %>

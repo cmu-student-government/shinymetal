@@ -8,7 +8,6 @@ module ApplicationHelper
     @markdowner ||= Redcarpet::Markdown.new(
     Redcarpet::Render::HTML.new(
       :filter_html => true,
-      :no_links => true,
       :safe_links_only => true,
       :hard_wrap => true),
     :autolink => true,

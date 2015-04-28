@@ -1,2 +1,94 @@
-<h3>FAQ</h3>
+<div class="staff_only panel">
+  <h3>Authentication</h3>
+  <p> All requests to the API require an API key and the corresponding andrewID of the
+      individual who initially requested the API key. The API key is generated pending
+      the approval of the Student Life Administration.  </p>
+  <p><%= "Your andrewID is: #{@current_user.andrew_id}" %></br>
+  <% if @user_key.at_stage?(:confirmed) %>
+    <%= "Your API key is: #{@user_key.gen_api_key}" %>
+  <% else %>
+    Your API key has not yet been approved
+  <% end %>
+  </p>
+  <hr/>
 
+  <h3> Making A Request to the Shiny Metal API </h3>
+  <p> All requests to the Shiny Metal API need to be <code>POST</code> requests with two
+      header fields: <code>andrew_id</code> and <code>api_key</code>. Requests follow the same syntax
+      as the <a href="http://support.collegiatelink.net/hc/en-us/articles/204033994-Documentation-for-Web-Services-API-Version-2-0-">CollegiateLink API</a>.
+      Only specific endopints and combinations of parameters are allowed for specific keys, however, as determined by the Student Life Office. You
+      can check the set of allowed permissions and parameters for your API key by clicking on the above "Permissions" tab.
+  </p>
+  <p> The base URL for making API calls is: <code>https://stugov.andrew.cmu.edu/staging/bridgeapi/api/v1/</code></p>
+  <hr/>
+  <h3> Testing API Credentials </h3>
+  <p> For authentication purposes, there is an endpoint named "demo_endpoint" that is useful for simply testing
+      whether a set of credentials is correct </p>
+
+  <ul class="tabs" data-tab>
+    <li class="tab-title active"><a href="#curlTestRequest">curl</a></li>
+    <li class="tab-title"><a href="#rubyTestRequest">ruby</a></li>
+  </ul>
+
+  <div class="tabs-content">
+
+    <div class="content active" id="curlTestRequest">
+
+      <pre class="prettyprint">  class Voila {
+      public:
+        // Voila
+        static const string VOILA = "Voila";
+
+        // will not interfere with embedded <a href="#voila2">tags</a>.
+      }</pre>
+      <br/>
+
+      <h3>Expected Response: </h3>
+      <pre class="prettyprint">  {"message": "Success! You've made an API request with valid credentials!"}</pre>
+
+    </div>
+
+    <div class="content" id="rubyTestRequest">
+      <pre class="prettyprint">  http.get()</pre>
+      <br/>
+      <h3>Response: </h3>
+      
+    </div>
+  </div>
+  <hr/>
+  <h3> More Sample API Calls </h3>
+  <p> For example, assuming you have access to the <code>Events</code> endpoint and can
+      see all <code>public</code> events </p>
+  <ul class="tabs" data-tab>
+    <li class="tab-title active"><a href="#curlRequest">curl</a></li>
+    <li class="tab-title"><a href="#rubyRequest">ruby</a></li>
+  </ul>
+
+  <div class="tabs-content">
+
+    <div class="content active" id="curlRequest">
+
+      <pre class="prettyprint">  class Voila {
+      public:
+        // Voila
+        static const string VOILA = "Voila";
+
+        // will not interfere with embedded <a href="#voila2">tags</a>.
+      }</pre>
+      <br/>
+
+      <h3>Response: </h3>
+
+    </div>
+
+    <div class="content" id="rubyRequest">
+      <pre class="prettyprint">  http.get()</pre>
+      <br/>
+      <h3>Response: </h3>
+      
+    </div>
+
+  </div>
+
+
+</div>

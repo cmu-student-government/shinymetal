@@ -1,10 +1,5 @@
 <%# The terms Page's content is rendered as part of a tooltip. %>
-<p>By submitting, you agree to the
-<span class="has-tip tip-top" data-tooltip aria-haspopup="true"
-      title="<%= markdown(Page.find_or_create("terms").message) %>">
-  <%= link_to "terms and conditions", page_path("terms") %></span>
-for using The Bridge API.
-</p>
+<p>By submitting, you agree to the <%= link_to "terms and conditions", page_path("terms") %> for using The Bridge API.</p>
 
 <%# Key owner can submit the key or edit the application before submitting. %>
   <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will submit this application for approval.

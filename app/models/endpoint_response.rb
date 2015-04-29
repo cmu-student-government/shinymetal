@@ -35,23 +35,21 @@ class EndpointResponse
   def initialize(user_key, params)
     @resource = params[:endpoint]
     if Resources::RESOURCE_LIST.include?(@resource)
-      unless @resource == "demo_endpoint"
-        hash_response = BridgeapiConnection::hit_api_endpoint(params)
-        @user_key = user_key
-        @page_number = hash_response["pageNumber"]
-        @page_size = hash_response["pageSize"]
-        @total_items = hash_response["totalItems"]
-        @total_pages = hash_response["totalPages"]
-        @items = hash_response["items"]
-        # Set failed to true in case we got no response from collegiatelink
-        @failed = "error, there was no response from CollegiateLink" if hash_response.blank?
-        @failed = "no records found for this query" if @items.nil? || @items.empty?
-        # Restrict the columns in the response according to the passed-in user_key
-        unless (@user_key.nil? or @failed)
-          restrict_columns
-          # Set failed if there are no columns left
-          @failed = "error, no columns permitted for this resource" if self.columns.empty?
-        end
+      hash_response = BridgeapiConnection::hit_api_endpoint(params)
+      @user_key = user_key
+      @page_number = hash_response["pageNumber"]
+      @page_size = hash_response["pageSize"]
+      @total_items = hash_response["totalItems"]
+      @total_pages = hash_response["totalPages"]
+      @items = hash_response["items"]
+      # Set failed to true in case we got no response from collegiatelink
+      @failed = "error, there was no response from CollegiateLink" if hash_response.blank?
+      @failed = "no records found for this query" if @items.nil? || @items.empty?
+      # Restrict the columns in the response according to the passed-in user_key
+      unless (@user_key.nil? or @failed)
+        restrict_columns
+        # Set failed if there are no columns left
+        @failed = "error, no columns permitted for this resource" if self.columns.empty?
       end
     else # not a valid resource
       @failed = "error, the requested resource does not exist"
@@ -71,12 +69,8 @@ class EndpointResponse
   # @return [Hash] A hash that mirrors the format of what CollegiateLink returns.
   def to_hash
     hash_response = Hash.new
-    if @resource == "demo_endpoint"
-      hash_response["message"] = "Success! You've made an API request with valid credentials!"
-    else
-      for label in ["pageNumber", "pageSize", "totalItems", "totalPages","items"]
-        hash_response[label] = self.send(label.underscore.to_sym)
-      end
+    for label in ["pageNumber", "pageSize", "totalItems", "totalPages","items"]
+      hash_response[label] = self.send(label.underscore.to_sym)
     end
     return hash_response
   end
@@ -87,7 +81,7 @@ class EndpointResponse
     columns_whitelist = @user_key.columns.restrict_to(@resource).to_a.map{|c| c.name}
     for item in @items
       for column in item.keys
-	      item.delete(column) unless columns_whitelist.include?(column)
+        item.delete(column) unless columns_whitelist.include?(column)
       end
     end
   end

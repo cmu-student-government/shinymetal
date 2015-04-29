@@ -22,19 +22,15 @@ class EndpointRequest
   #
   # @return [Boolean] True, iff the given options are allowed for this user_key.
   def valid?
-    if @resource == "demo_endpoint"
-      return true
-    else
-      filter_group_list = @user_key.whitelists.restrict_to(@resource).to_a.map{|w| w.filters.to_a}
-      # If the key has no whitelists at all, the key has no access through normal filters.
-      # (If the key has no columns, the key has no access at all, but we check for that in EndpointResponse.)
-      # Map the filters for each individual whitelist into a list to be checked.
-      for filter_group in filter_group_list
-        return true if matches_options?(filter_group)
-      end
-      # No filters were matched, so check for organizations instead.
-      return has_valid_organization_id?
+    filter_group_list = @user_key.whitelists.restrict_to(@resource).to_a.map{|w| w.filters.to_a}
+    # If the key has no whitelists at all, the key has no access through normal filters.
+    # (If the key has no columns, the key has no access at all, but we check for that in EndpointResponse.)
+    # Map the filters for each individual whitelist into a list to be checked.
+    for filter_group in filter_group_list
+      return true if matches_options?(filter_group)
     end
+    # No filters were matched, so check for organizations instead.
+    return has_valid_organization_id?
   end
   
   # Determines if the paramaters passed contain the values of a given list of filters.
@@ -47,7 +43,7 @@ class EndpointRequest
       # Downcase the values, because CollegiateLink is case insensitive.
       # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
       if @params[filter.filter_name.to_sym].nil? or (@params[filter.filter_name.to_sym].downcase != filter.filter_value.downcase)
-      	return false
+        return false
       end
     end
     return true

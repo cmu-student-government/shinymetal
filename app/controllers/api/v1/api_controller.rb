@@ -17,23 +17,29 @@ module Api
       before_filter :verify_access_with_api_key
 
       # Used to process all API requests. 
-      def index        
-        # If the params POSTed are not a valid combination of filters to use, i
-        # the "request" will fail.
-        request = EndpointRequest.new(@user_key, params)
-        # request.failed is an error message if the filters aren't permitted for this key.
-        unless request.failed
-          # The 'response' will fail if there are no columns for this key for this
-          # resource, or if resource name was invalid.
-          response = EndpointResponse.new(@user_key, params)
-          unless response.failed
-            render json: JSON(response.to_hash), status: 200
-          else
-            # response.failed is an error message if something went wrong.
-            render json: {"message" => response.failed }
-          end
+      def index
+        # if the endpoint is the demo endpoint for checking credentials,
+        # just return a straightforward success response
+        if params[:endpoint] == "demo_endpoint"
+          render json: {"message" => "Success! You've made an API request with valid credentials!"}
         else
-          render json: {"message" => request.failed }
+          # If the params POSTed are not a valid combination of filters to use, i
+          # the "request" will fail.
+          request = EndpointRequest.new(@user_key, params)
+          # request.failed is an error message if the filters aren't permitted for this key.
+          unless request.failed
+            # The 'response' will fail if there are no columns for this key for this
+            # resource, or if resource name was invalid.
+            response = EndpointResponse.new(@user_key, params)
+            unless response.failed
+              render json: JSON(response.to_hash), status: 200
+            else
+              # response.failed is an error message if something went wrong.
+              render json: {"message" => response.failed }
+            end
+          else
+            render json: {"message" => request.failed }
+          end
         end
       end
       

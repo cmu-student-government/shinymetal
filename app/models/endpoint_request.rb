@@ -47,7 +47,7 @@ class EndpointRequest
       # Downcase the values, because CollegiateLink is case insensitive.
       # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
       if @params[filter.filter_name.to_sym].nil? or (@params[filter.filter_name.to_sym].downcase != filter.filter_value.downcase)
-	return false
+      	return false
       end
     end
     return true

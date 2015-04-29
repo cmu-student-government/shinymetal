@@ -12,8 +12,8 @@ module BridgeapiConnection
   def hit_api_endpoint(params)
     # Set the optional page number to the first page if not otherwise specified
     params[:page] ||= "1"
-    
-    #@resource = params[:endpoint] <= Should already be set in EndpointResponse
+
+    @resource ||= params[:endpoint] # Should already be set in EndpointResponse
     options = params.reject{ |k,v| k == :endpoint }
 
     # Any optional parameters that are listed for this endpoint in the API docs
@@ -22,7 +22,7 @@ module BridgeapiConnection
     options.each do |k, v|
       @url_options = @url_options + "&#{k.to_s}=#{v}"
     end
-    
+
     if (Rails.env.staging? || Rails.env.production?)
       hit_api_direct
     else
@@ -48,7 +48,7 @@ module BridgeapiConnection
     return send_request(url, nil)
   end
   # :nocov:
-  
+
   # Hit the CollegiateLink API by using a script located at stugov_api_base_url, for when using the app
   # from localhost.
   # :nocov:

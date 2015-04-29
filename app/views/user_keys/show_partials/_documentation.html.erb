@@ -12,8 +12,8 @@
   </p>
   <hr/>
 
-  <h3> Making A Request to the Bridge API </h3>
-  <p> All requests to the Bridge API need to be <code>POST</code> requests with two
+  <h3> Making A Request to The Bridge API </h3>
+  <p> All requests to The Bridge API need to be <code>POST</code> requests with two
       header fields: <code>andrew_id</code> and <code>api_key</code>. Requests follow the same syntax
       as the <a href="http://support.collegiatelink.net/hc/en-us/articles/204033994-Documentation-for-Web-Services-API-Version-2-0-">CollegiateLink API</a>.
       Only specific endopints and combinations of parameters are allowed for specific keys, however, as determined by the Student Activities Office. You
@@ -92,10 +92,10 @@ print(r.text)
     <div class="content" id="phpTestRequest">
       <h3> Sample API Call </h3>
       <pre class="prettyprint"><%="$url = '#{root_url + 'api/v1/'}demo_endpoint';
-$options = array( 
-  'http' => array( 
-      'header'  => array('andrew_id: #{@current_user.andrew_id}', 
-                         'api_key: #{@user_key.gen_api_key}'), 
+$options = array(
+  'http' => array(
+      'header'  => array('andrew_id: #{@current_user.andrew_id}',
+                         'api_key: #{@user_key.gen_api_key}'),
       'method'  => 'POST'));
 $context = stream_context_create($options);
 $result = file_get_contents($url, false, $context);
@@ -173,11 +173,11 @@ print(r.text)
     <div class="content" id="phpRequest">
       <h3> Sample API Call </h3>
       <pre class="prettyprint"><%="$url = '#{root_url + 'api/v1/'}events';
-$options = array( 
-  'http' => array( 
-      'header'  => array('andrew_id: #{@current_user.andrew_id}', 
-                         'api_key: #{@user_key.gen_api_key}'), 
-      'method'  => 'POST', 
+$options = array(
+  'http' => array(
+      'header'  => array('andrew_id: #{@current_user.andrew_id}',
+                         'api_key: #{@user_key.gen_api_key}'),
+      'method'  => 'POST',
       'content' => http_build_query(array('type'     => 'public',
                                           'pageSize' => 2))));
 $context = stream_context_create($options);

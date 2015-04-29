@@ -19,7 +19,7 @@
       Only specific endopints and combinations of parameters are allowed for specific keys, however, as determined by the Student Activities Office. You
       can check the set of allowed permissions and parameters for your API key by clicking on the above "Permissions" tab.
   </p>
-  <p> The base URL for making API calls is: <code>https://stugov.andrew.cmu.edu/staging/bridgeapi/api/v1/</code></p>
+  <p> The base URL for making API calls is: <code><%= "#{root_url + 'api/v1/'}" %></code></p>
   <hr/>
   <h3> Pagination </h3>
   <p> All API calls can also have two pagination parameters, <code>page</code> and <code>pageSize</code>. <code>page</code> 
@@ -89,13 +89,29 @@ print(r.text)
 
     </div>
 
+    <div class="content" id="phpTestRequest">
+      <h3> Sample API Call </h3>
+      <pre class="prettyprint"><%="$url = '#{root_url + 'api/v1/'}demo_endpoint';
+$options = array( 
+  'http' => array( 
+      'header'  => array('andrew_id: #{@current_user.andrew_id}', 
+                         'api_key: #{@user_key.gen_api_key}'), 
+      'method'  => 'POST'));
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+print_r($result);"
+%></pre>
 
+      <%= render partial: 'user_keys/show_partials/documentation_test_response' %>
+
+    </div>
 
   </div>
   <hr/>
   <h3> More Sample API Calls </h3>
-  <p> For example, assuming you have access to the <code>Events</code> endpoint and can
-      see all <code>public</code> events </p>
+  <p> For example, assuming you have access to the <code>Events</code> endpoint, can
+      see all <code>public</code> events, and wish to limit the response to 2 records
+      per page: </p>
   <ul class="tabs" data-tab>
     <li class="tab-title active"><a href="#curlRequest">curl</a></li>
     <li class="tab-title"><a href="#rubyRequest">Ruby</a></li>
@@ -154,8 +170,28 @@ print(r.text)
 
     </div>
 
+    <div class="content" id="phpRequest">
+      <h3> Sample API Call </h3>
+      <pre class="prettyprint"><%="$url = '#{root_url + 'api/v1/'}events';
+$options = array( 
+  'http' => array( 
+      'header'  => array('andrew_id: #{@current_user.andrew_id}', 
+                         'api_key: #{@user_key.gen_api_key}'), 
+      'method'  => 'POST', 
+      'content' => http_build_query(array('type'     => 'public',
+                                          'pageSize' => 2))));
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+print_r($result);"
+%></pre>
+
+      <%= render partial: 'user_keys/show_partials/documentation_sample_response' %>
+
+    </div>
+
+
   </div>
-  
+
 </div>
 
 

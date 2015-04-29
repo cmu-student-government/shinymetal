@@ -3,7 +3,7 @@
   <p> All requests to the API require an API key and the corresponding andrewID of the
       individual who initially requested the API key. The API key is generated pending
       the approval of the Student Activities Administration.  </p>
-  <p><%= "Your andrewID is: #{@current_user.andrew_id}" %></br>
+  <p><%= "Your andrewID is: #{@user_key.user.andrew_id}" %></br>
   <% if @user_key.at_stage?(:confirmed) %>
     <%= "Your API key is: #{@user_key.gen_api_key}" %>
   <% else %>
@@ -42,8 +42,8 @@
 
     <div class="content active" id="curlTestRequest">
       <h3> Sample API Call </h3>
-      <pre class="prettyprint"><%= "curl -X POST \\
-  -H 'andrew_id: #{@current_user.andrew_id}' \\
+      <pre class="prettyprint"><%= "curl -X POST \\ 
+  -H 'andrew_id: #{@user_key.user.andrew_id}' \\
   -H 'api_key: #{@user_key.gen_api_key}' \\
   '#{root_url + "api/v1/"}demo_endpoint'" %></pre>
 
@@ -64,7 +64,7 @@ https.use_ssl = true
 https.verify_mode = OpenSSL::SSL::VERIFY_NONE
 req = Net::HTTP::Post.new(uri)
 # set the headers
-req['andrew_id'] = '#{@current_user.andrew_id}'
+req['andrew_id'] = '#{@user_key.user.andrew_id}'
 req['api_key'] = '#{@user_key.gen_api_key}'
 res = https.request(req)
 JSON.parse(res.body)"%></pre>
@@ -79,7 +79,7 @@ JSON.parse(res.body)"%></pre>
 # sudo pip install requests
 import requests
 
-headers = {'andrew_id' : '#{@current_user.andrew_id}', 'api_key': '#{@user_key.gen_api_key}'}
+headers = {'andrew_id' : '#{@user_key.user.andrew_id}', 'api_key': '#{@user_key.gen_api_key}'}
 r = requests.post('#{root_url + "api/v1/"}demo_endpoint', headers=headers)
 print(r.text)
 # can also do r.json()
@@ -92,10 +92,10 @@ print(r.text)
     <div class="content" id="phpTestRequest">
       <h3> Sample API Call </h3>
       <pre class="prettyprint"><%="$url = '#{root_url + 'api/v1/'}demo_endpoint';
-$options = array(
-  'http' => array(
-      'header'  => array('andrew_id: #{@current_user.andrew_id}',
-                         'api_key: #{@user_key.gen_api_key}'),
+$options = array( 
+  'http' => array( 
+      'header'  => array('andrew_id: #{@user_key.user.andrew_id}', 
+                         'api_key: #{@user_key.gen_api_key}'), 
       'method'  => 'POST'));
 $context = stream_context_create($options);
 $result = file_get_contents($url, false, $context);
@@ -124,7 +124,7 @@ print_r($result);"
     <div class="content active" id="curlRequest">
       <h3>Sample API Call: </h3>
       <pre class="prettyprint"><%= "curl -X POST \\
-  -H 'andrew_id: #{@current_user.andrew_id}' \\
+  -H 'andrew_id: #{@user_key.user.andrew_id}' \\
   -H 'api_key: #{@user_key.gen_api_key}' \\
   '#{root_url + "api/v1/"}events?pageSize=2&amp;type=public'" %></pre>
 
@@ -145,7 +145,7 @@ https.use_ssl = true
 https.verify_mode = OpenSSL::SSL::VERIFY_NONE
 req = Net::HTTP::Post.new(uri)
 # set the headers
-req['andrew_id'] = '#{@current_user.andrew_id}'
+req['andrew_id'] = '#{@user_key.user.andrew_id}'
 req['api_key'] = '#{@user_key.gen_api_key}'
 res = https.request(req)
 JSON.parse(res.body)"%></pre>
@@ -160,7 +160,7 @@ JSON.parse(res.body)"%></pre>
 # sudo pip install requests
 import requests
 
-headers = {'andrew_id' : '#{@current_user.andrew_id}', 'api_key': '#{@user_key.gen_api_key}'}
+headers = {'andrew_id' : '#{@user_key.user.andrew_id}', 'api_key': '#{@user_key.gen_api_key}'}
 r = requests.post('#{root_url + "api/v1/"}events?pageSize=2&type=public', headers=headers)
 print(r.text)
 # can also do r.json()
@@ -173,11 +173,11 @@ print(r.text)
     <div class="content" id="phpRequest">
       <h3> Sample API Call </h3>
       <pre class="prettyprint"><%="$url = '#{root_url + 'api/v1/'}events';
-$options = array(
-  'http' => array(
-      'header'  => array('andrew_id: #{@current_user.andrew_id}',
-                         'api_key: #{@user_key.gen_api_key}'),
-      'method'  => 'POST',
+$options = array( 
+  'http' => array( 
+      'header'  => array('andrew_id: #{@user_key.user.andrew_id}', 
+                         'api_key: #{@user_key.gen_api_key}'), 
+      'method'  => 'POST', 
       'content' => http_build_query(array('type'     => 'public',
                                           'pageSize' => 2))));
 $context = stream_context_create($options);

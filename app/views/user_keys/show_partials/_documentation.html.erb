@@ -21,6 +21,12 @@
   </p>
   <p> The base URL for making API calls is: <code>https://stugov.andrew.cmu.edu/staging/bridgeapi/api/v1/</code></p>
   <hr/>
+  <h3> Pagination </h3>
+  <p> All API calls can also have two pagination parameters, <code>page</code> and <code>pageSize</code>. <code>page</code> 
+    is a parameter that determines which page of the overall response will be returned. <code>pageSize</code> will determine how many
+    records will be returned in one response. In order to get all relevant records, an iterator will need to be constructed in
+    client code to repeatedly request specific pages. </p>
+  <hr />
   <h3> Testing API Credentials </h3>
   <p> For authentication purposes, there is an endpoint named "demo_endpoint" that is useful for simply testing
       whether a set of credentials is correct </p>
@@ -40,7 +46,6 @@
   -H 'andrew_id: #{@current_user.andrew_id}' \\
   -H 'api_key: #{@user_key.gen_api_key}' \\
   '#{root_url + "api/v1/"}demo_endpoint'" %></pre>
-      <br/>
 
       <%= render partial: 'user_keys/show_partials/documentation_test_response' %>
 
@@ -53,7 +58,7 @@ require 'openssl'
 require 'net/http'
 require 'JSON'
 
-uri = URI.parse('https://stugov.andrew.cmu.edu/staging/bridgeapi/api/v1/demo_endpoint')
+uri = URI.parse('#{root_url + "api/v1/"}demo_endpoint')
 https = Net::HTTP.new(uri.host, uri.port)
 https.use_ssl = true
 https.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -63,10 +68,29 @@ req['andrew_id'] = '#{@current_user.andrew_id}'
 req['api_key'] = '#{@user_key.gen_api_key}'
 res = https.request(req)
 JSON.parse(res.body)"%></pre>
-      <br/>
+
       <%= render partial: 'user_keys/show_partials/documentation_test_response' %>
 
     </div>
+
+    <div class="content" id="pythonTestRequest">
+      <h3> Sample API Call </h3>
+      <pre class="prettyprint"><%= "# assumes the requests library has been installed previously with
+# sudo pip install requests
+import requests
+
+headers = {'andrew_id' : '#{@current_user.andrew_id}', 'api_key': '#{@user_key.gen_api_key}'}
+r = requests.post('#{root_url + "api/v1/"}demo_endpoint', headers=headers)
+print(r.text)
+# can also do r.json()
+"%></pre>
+
+      <%= render partial: 'user_keys/show_partials/documentation_test_response' %>
+
+    </div>
+
+
+
   </div>
   <hr/>
   <h3> More Sample API Calls </h3>
@@ -86,9 +110,7 @@ JSON.parse(res.body)"%></pre>
       <pre class="prettyprint"><%= "curl -X POST \\
   -H 'andrew_id: #{@current_user.andrew_id}' \\
   -H 'api_key: #{@user_key.gen_api_key}' \\
-  '#{root_url + "api/v1/"}events?type=public'" %></pre>
-
-      <br/>
+  '#{root_url + "api/v1/"}events?pageSize=2&amp;type=public'" %></pre>
 
       <%= render partial: 'user_keys/show_partials/documentation_sample_response' %>
 
@@ -101,7 +123,7 @@ require 'openssl'
 require 'net/http'
 require 'JSON'
 
-uri = URI.parse('https://stugov.andrew.cmu.edu/staging/bridgeapi/api/v1/events?pageSize=2&type=public')
+uri = URI.parse('#{root_url + "api/v1/"}events?pageSize=2&type=public')
 https = Net::HTTP.new(uri.host, uri.port)
 https.use_ssl = true
 https.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -111,13 +133,29 @@ req['andrew_id'] = '#{@current_user.andrew_id}'
 req['api_key'] = '#{@user_key.gen_api_key}'
 res = https.request(req)
 JSON.parse(res.body)"%></pre>
-      <br/>
 
       <%= render partial: 'user_keys/show_partials/documentation_sample_response' %>
       
     </div>
 
+    <div class="content" id="pythonRequest">
+      <h3>Sample API Call: </h3>
+      <pre class="prettyprint"><%= "# assumes the requests library has been installed previously with
+# sudo pip install requests
+import requests
+
+headers = {'andrew_id' : '#{@current_user.andrew_id}', 'api_key': '#{@user_key.gen_api_key}'}
+r = requests.post('#{root_url + "api/v1/"}events?pageSize=2&type=public', headers=headers)
+print(r.text)
+# can also do r.json()
+  "%></pre>
+
+      <%= render partial: 'user_keys/show_partials/documentation_sample_response' %>
+
+    </div>
+
   </div>
-
-
+  
 </div>
+
+

@@ -81,7 +81,7 @@ class EndpointResponse
     columns_whitelist = @user_key.columns.restrict_to(@resource).to_a.map{|c| c.name}
     for item in @items
       for column in item.keys
-	      item.delete(column) unless columns_whitelist.include?(column)
+        item.delete(column) unless columns_whitelist.include?(column)
       end
     end
   end

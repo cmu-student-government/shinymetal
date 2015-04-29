@@ -7,6 +7,7 @@
     <title><%= content_for?(:title) ? "#{yield(:title)} - " : nil %>The Bridge API</title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : 'The Bridge API' %>">
     <meta name="description" content="<%= content_for?(:keywords) ? yield(:keywords) : 'cmu,bridgeapi,thebridge,api,stugov' %>">
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=sunburst"></script>
 
     <%= stylesheet_link_tag     'application',      'data-turbolinks-track' => true, media: 'all' %>
     <%= javascript_include_tag  'vendor/modernizr', 'data-turbolinks-track' => true %>

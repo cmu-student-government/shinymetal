@@ -74,7 +74,25 @@ valid value. The key cannot be renewed; a new key must be requested.
 Security for this application follows Kerckhoffs's principle; the implementation details, but not the keys, are available
 to the public.
 
-tbd
+To deploy this app:
++ Ensure that you have a `settings.yml` with the correct private info uploaded to your target server, and located under `<APP_DIRECTORY>/shared/config/`.
++ Ensure that settings.yml is in your gitignore, and not commited. If it does end up getting commited, reset all keys and private data inside it and ignore before moving forward.
++ use `capistrano staging|production deploy` to run the deploy script
+
+Depending on server access, you may have to manually update the crontab on your user account, use the following crontab as guidance:
+
+```bash
+PATH=/usr/bin:/bin:/usr/local/bin
+
+0 0 * * * /bin/bash -l -c 'cd /var/www/staging/webapps/bridgeapi/current && RAILS_ENV=staging bundle exec rake email:expiry_warning --silent'
+
+0 0 * * * /bin/bash -l -c 'cd /var/www/staging/webapps/bridgeapi/current && RAILS_ENV=staging bundle exec rake email:expired --silent'
+
+0 0 1,8,15,22 * * /bin/bash -l -c 'cd /var/www/staging/webapps/bridgeapi/current && RAILS_ENV=staging bundle exec rake repopulate:orgs --silent'
+
+0 0 1 * * /bin/bash -l -c 'cd /var/www/staging/webapps/bridgeapi/current && RAILS_ENV=staging bundle exec rake repopulate:columns --silent'
+```
+
 
 
 TODO

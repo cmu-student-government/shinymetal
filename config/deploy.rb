@@ -33,12 +33,12 @@ namespace :deploy do
     run "bundle exec whenever --update-crontab #{application}"
   end
 
-  task :symlink_php_endpoints do
-    on roles(:all) do
-      execute :ln, "-nfs #{shared_path}/public/jira.php #{release_path}/public/jira.php"
-      execute :ln, "-nfs #{shared_path}/public/api.php #{release_path}/public/api.php"
-    end
-  end
+  # task :symlink_php_endpoints do
+  #   on roles(:all) do
+  #     execute :ln, "-nfs #{shared_path}/public/jira.php #{release_path}/public/jira.php"
+  #     execute :ln, "-nfs #{shared_path}/public/api.php #{release_path}/public/api.php"
+  #   end
+  # end
 
   desc 'Restart application'
   task :restart do
@@ -62,6 +62,6 @@ namespace :deploy do
 end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"
-before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
+# before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
 #after "deploy:assets:precompile", "whenever:update_crontab"
 #Don't want to overwrite working crontab

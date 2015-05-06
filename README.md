@@ -84,13 +84,13 @@ Depending on server access, you may have to manually update the crontab on your 
 ```bash
 PATH=/usr/bin:/bin:/usr/local/bin
 
-0 0 * * * /bin/bash -l -c 'cd /var/www/staging/webapps/bridgeapi/current && RAILS_ENV=staging bundle exec rake email:expiry_warning --silent'
+0 0 * * * /bin/bash -l -c 'cd /path/to/app/bridgeapi/current && RAILS_ENV=staging bundle exec rake email:expiry_warning --silent'
 
-0 0 * * * /bin/bash -l -c 'cd /var/www/staging/webapps/bridgeapi/current && RAILS_ENV=staging bundle exec rake email:expired --silent'
+0 0 * * * /bin/bash -l -c 'cd /path/to/app/bridgeapi/current && RAILS_ENV=staging bundle exec rake email:expired --silent'
 
-0 0 1,8,15,22 * * /bin/bash -l -c 'cd /var/www/staging/webapps/bridgeapi/current && RAILS_ENV=staging bundle exec rake repopulate:orgs --silent'
+0 0 1,8,15,22 * * /bin/bash -l -c 'cd /path/to/app/current && RAILS_ENV=staging bundle exec rake repopulate:orgs --silent'
 
-0 0 1 * * /bin/bash -l -c 'cd /var/www/staging/webapps/bridgeapi/current && RAILS_ENV=staging bundle exec rake repopulate:columns --silent'
+0 0 1 * * /bin/bash -l -c 'cd /path/to/app/current && RAILS_ENV=staging bundle exec rake repopulate:columns --silent'
 ```
 
 

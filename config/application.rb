@@ -7,8 +7,8 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 
-SETTINGS = {}
 if (Rails.env.test?)
+    SETTINGS = {}
     SETTINGS[:api_key_salt] = ENV["api_key_salt"]
 else
     # Load our settings.yml file

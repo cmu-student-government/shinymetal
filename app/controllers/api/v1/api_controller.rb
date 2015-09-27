@@ -47,6 +47,21 @@ module Api
         end
       end
 
+      def jsonp
+        request = EndpointRequest.new(@user_key, params)
+        unless request.failed
+          response = EndpointResponse.new(@user_key, params)
+          unless response.failed
+            render json: JSON(response.to_hash), status: 200, callback: params[:callback]
+          else
+              render json: {"message" => response.failed }
+            end
+          else
+            render json: {"message" => request.failed }
+          end
+        end
+      end
+
       private
       # Returns whether the passed-in api_key exists in our system,
       # and is confirmed/not expired/active.

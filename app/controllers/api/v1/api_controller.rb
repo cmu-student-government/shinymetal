@@ -54,11 +54,10 @@ module Api
           unless response.failed
             render json: JSON(response.to_hash), status: 200, callback: params[:callback]
           else
-              render json: {"message" => "something went wrong" }
-            end
-          else
-            render json: {"message" => "something went wrong!" }
+            render json: {"message" => "something went wrong" }
           end
+        else
+          render json: {"message" => "something went wrong!" }
         end
       end
 

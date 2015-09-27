@@ -10,9 +10,9 @@ default: &default
   timeout: 5000
 
 deploy: &deploy
-  database: <%= SETTINGS[:db] %>
-  username: <%= SETTINGS[:db_user] %>
-  password: <%= SETTINGS[:db_pass] %>
+  database: <%= ENV['db'] %>
+  username: <%= ENV['db_user'] %>
+  password: <%= ENV['db_pass'] %>
 
 
 development:

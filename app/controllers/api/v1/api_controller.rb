@@ -44,18 +44,17 @@ module Api
       end
 
       def jsonp
-        render json: JSON("msg: 1"), status: 200, callback: params[:callback]
-        # request = EndpointRequest.new(@user_key, params)
-        # unless request.failed
-        #   response = EndpointResponse.new(@user_key, params)
-        #   unless response.failed
-        #     render json: JSON(response.to_hash), status: 200, callback: params[:callback]
-        #   else
-        #     render json: {"message" => "something went wrong" }
-        #   end
-        # else
-        #   render json: {"message" => "something went wrong!" }
-        # end
+        request = EndpointRequest.new(@user_key, params)
+        unless request.failed
+          response = EndpointResponse.new(@user_key, params)
+          unless response.failed
+            render json: JSON(response.to_hash), status: 200, callback: params[:callback]
+          else
+            render json: {"message" => "something went wrong" }
+          end
+        else
+          render json: {"message" => "something went wrong!" }
+        end
       end
 
       private
@@ -84,8 +83,8 @@ module Api
       # Used in the before_filter callback to verify whether or not
       # the api key and andrew ID passed in.
       def verify_access_with_api_key
-        api_key   = request.headers["HTTP_API_KEY"]
-        andrew_id = request.headers["HTTP_ANDREW_ID"]
+        api_key   = request.headers["HTTP_API_KEY"] || params[:api_key]
+        andrew_id = request.headers["HTTP_ANDREW_ID"] || params[:andrew_id]
         if (api_key.nil? || andrew_id.nil?)
           render json: {error: "Error, bad request"}, status: 400
         elsif !(key_matches?(api_key, andrew_id))

@@ -32,11 +32,7 @@ module Api
             # resource, or if resource name was invalid.
             response = EndpointResponse.new(@user_key, params)
             unless response.failed
-              if (params[:callback)
-                render json: JSON(response.to_hash), status: 200, callback: params[:callback]
-              else
                 render json: JSON(response.to_hash), status: 200
-              end
             else
               # response.failed is an error message if something went wrong.
               render json: {"message" => response.failed }

@@ -44,18 +44,17 @@ module Api
       end
 
       def jsonp
-        render json: JSON("msg: 1"), status: 200, callback: params[:callback]
-        # request = EndpointRequest.new(@user_key, params)
-        # unless request.failed
-        #   response = EndpointResponse.new(@user_key, params)
-        #   unless response.failed
-        #     render json: JSON(response.to_hash), status: 200, callback: params[:callback]
-        #   else
-        #     render json: {"message" => "something went wrong" }
-        #   end
-        # else
-        #   render json: {"message" => "something went wrong!" }
-        # end
+        request = EndpointRequest.new(@user_key, params)
+        unless request.failed
+          response = EndpointResponse.new(@user_key, params)
+          unless response.failed
+            render json: JSON(response.to_hash), status: 200, callback: params[:callback]
+          else
+            render json: {"message" => "something went wrong" }
+          end
+        else
+          render json: {"message" => "something went wrong!" }
+        end
       end
 
       private

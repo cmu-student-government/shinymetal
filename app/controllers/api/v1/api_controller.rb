@@ -12,11 +12,11 @@ module Api
       # Allow POST request to be made from another application.
       # No CSRF concern, since the post request includes API key credentials.
       skip_before_filter :verify_authenticity_token
-
+      
       # Validate and fetch the key data before processing the API request.
       before_filter :verify_access_with_api_key
 
-      # Used to process all API requests.
+      # Used to process all API requests. 
       def index
         # if the endpoint is the demo endpoint for checking credentials,
         # just return a straightforward success response
@@ -32,7 +32,7 @@ module Api
             # resource, or if resource name was invalid.
             response = EndpointResponse.new(@user_key, params)
             unless response.failed
-                render json: JSON(response.to_hash), status: 200
+              render json: JSON(response.to_hash), status: 200
             else
               # response.failed is an error message if something went wrong.
               render json: {"message" => response.failed }
@@ -42,21 +42,7 @@ module Api
           end
         end
       end
-
-      def jsonp
-        request = EndpointRequest.new(@user_key, params)
-        unless request.failed
-          response = EndpointResponse.new(@user_key, params)
-          unless response.failed
-            render json: JSON(response.to_hash), status: 200, callback: params[:callback]
-          else
-            render json: {"message" => "something went wrong" }
-          end
-        else
-          render json: {"message" => "something went wrong!" }
-        end
-      end
-
+      
       private
       # Returns whether the passed-in api_key exists in our system,
       # and is confirmed/not expired/active.
@@ -83,8 +69,8 @@ module Api
       # Used in the before_filter callback to verify whether or not
       # the api key and andrew ID passed in.
       def verify_access_with_api_key
-        api_key   = request.headers["HTTP_API_KEY"] || params[:api_key]
-        andrew_id = request.headers["HTTP_ANDREW_ID"] || params[:andrew_id]
+        api_key   = request.headers["HTTP_API_KEY"]
+        andrew_id = request.headers["HTTP_ANDREW_ID"]
         if (api_key.nil? || andrew_id.nil?)
           render json: {error: "Error, bad request"}, status: 400
         elsif !(key_matches?(api_key, andrew_id))

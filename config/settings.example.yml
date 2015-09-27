@@ -1,9 +1,11 @@
 # In the settings.yml file we can add constants that we don't want the public to see
 #
 # We load these files in application.rb via:
-# ENV.update YAML.load_file('config/settings.yml')[Rails.env] rescue {}
+#  SETTINGS = YAML.load(File.read(File.expand_path('../settings.yml', __FILE__)))
+#  SETTINGS.merge! SETTINGS.fetch(Rails.env, {})
+#  SETTINGS.symbolize_keys!
 #
-# To access these constants (anywhere in the app), just do ENV['constant']
+# To access these constants (anywhere in the app), just do SETTINGS[:constant]
 # where 'constant' is the name of the constant in here
 #
 # IMPORTANT

@@ -38,13 +38,13 @@ module BridgeapiConnection
   def hit_api_direct
     # CollegiateLink API needs some data to be hashed and sent for auth purposes
     time = (Time.now.to_f * 1000).to_i.to_s
-    ipaddress = ENV['cl_ipaddress']
-    apikey = ENV['cl_apikey']
-    privatekey = ENV['cl_privatekey']
+    ipaddress = SETTINGS[:cl_ipaddress]
+    apikey = SETTINGS[:cl_apikey]
+    privatekey = SETTINGS[:cl_privatekey]
     random = SecureRandom.hex
     hash = Digest::SHA256.hexdigest(apikey + ipaddress + time + random + privatekey)
 
-    url = ENV['cl_apiurl'] + @resource + "?time=" + time + "&apikey=" + apikey + "&random=" + random + "&hash=" + hash + @url_options
+    url = SETTINGS[:cl_apiurl] + @resource + "?time=" + time + "&apikey=" + apikey + "&random=" + random + "&hash=" + hash + @url_options
     return send_request(url, nil)
   end
   # :nocov:
@@ -54,10 +54,10 @@ module BridgeapiConnection
   # :nocov:
   def hit_api_local
     # Authentication info
-    pass = ENV['stugov_api_user']
-    priv = ENV['stugov_api_pass']
+    pass = SETTINGS[:stugov_api_user]
+    priv = SETTINGS[:stugov_api_pass]
     # Our base URL hosted on stugov's server
-    base_url = ENV['stugov_api_base_url']
+    base_url = SETTINGS[:stugov_api_base_url]
 
     # We make a sha256 hash of this in binary format, then base64 encode that
     digest = Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new("sha256"), priv, pass)).chomp

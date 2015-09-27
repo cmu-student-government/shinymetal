@@ -48,7 +48,6 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       post ':endpoint' => 'api#index', controller: 'api'
-      get ':endpoint' => 'api#jsonp', controller: 'api'
     end
 
     # in the future, we can simply do

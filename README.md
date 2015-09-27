@@ -77,7 +77,7 @@ to the public.
 To deploy this app:
 + Ensure that you have a `settings.yml` with the correct private info uploaded to your target server, and located under `<APP_DIRECTORY>/shared/config/`.
 + Ensure that settings.yml is in your gitignore, and not commited. If it does end up getting commited, reset all keys and private data inside it and ignore before moving forward.
-+ use `capistrano <environment> deploy` to run the deploy script
++ Use `capistrano <environment> deploy` to run the deploy script
 
 Depending on server access, you may have to manually update the crontab on your user account, use the following crontab as guidance:
 

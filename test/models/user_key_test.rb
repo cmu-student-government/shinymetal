@@ -141,7 +141,7 @@ class UserKeyTest < ActiveSupport::TestCase
       @bender_key.set_status_as :awaiting_filters
       # Uses to_s formatting to test, since DateTime changes too quickly to be tested...
       @bender_key.reload
-      assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
+      assert_equal DateTime.now.in_time_zone('Eastern Time (US & Canada)').to_formatted_s(:pretty),
                    @bender_key.time_submitted.to_formatted_s(:pretty)
     end
 
@@ -169,7 +169,7 @@ class UserKeyTest < ActiveSupport::TestCase
       @bender_key_submitted.set_status_as :awaiting_confirmation
       #uses to_s to test, since DateTime changes too quickly to be tested...
       @bender_key_submitted.reload
-      assert_equal DateTime.now.in_time_zone('Central Time (US & Canada)').to_formatted_s(:pretty),
+      assert_equal DateTime.now.in_time_zone('Eastern Time (US & Canada)').to_formatted_s(:pretty),
                    @bender_key_submitted.time_filtered.to_formatted_s(:pretty)
     end
 

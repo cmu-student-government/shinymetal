@@ -17,9 +17,6 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   # Use Uglifier as compressor for JavaScript assets
   gem 'uglifier', '>= 1.3.0'
 
-  # Use CoffeeScript for .coffee assets and views
-  gem 'coffee-rails', '~> 4.1.0'
-
   # Use Bourbon for SCSS vendor prefix mixins
   gem 'bourbon', '~> 4.2.2'
 
@@ -28,7 +25,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'jquery-turbolinks', '~> 2.1.0'
 
   # Foundation gems
-  gem 'foundation-rails', '= 5.5.1.0'
+  gem 'foundation-rails', '= 5.5.2.1'
 
 
 # API gems

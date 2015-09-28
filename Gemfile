@@ -112,7 +112,7 @@ end
 
 group :production, :staging do
   # Use mysql2 for deploy db
-  gem 'mysql2'
+  gem 'mysql2', '~> 0.3.18'
 
   # Need this otherwise mod_rails throws a fit on deploy server
   gem 'actionpack-page_caching'

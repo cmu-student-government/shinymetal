@@ -8,6 +8,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'capistrano', '~> 3.4'
   gem 'capistrano-rails', '~> 1.1.2' # Use Capistrano for deployment
   gem 'capistrano-bundler', '~> 1.1.4'
+  gem 'capistrano-rvm', '~> 0.1.2'
 
 
 # Asset gems

@@ -10,7 +10,6 @@ set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
 
-fetch(:default_env).merge!(rvm_path: "~/.rvm")
 set :rvm1_ruby_version, '2.1.6'
 
 set :password, ask("StuGov server password", "", echo: false)

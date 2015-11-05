@@ -10,7 +10,7 @@ set :stages, %w(production staging)
 set :default_stage, "staging"
 
 set :default_environment, {
-  'PATH' => '$PATH:/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/gems/ruby-1.9.3-p551/bin:/home/jkcorrea/.rvm/gems/ruby-1.9.3-p551@global/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/jkcorrea/.rvm/bin:/home/jkcorrea/bin'
+  'PATH' => '$PATH:/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/gems/ruby-1.9.3-p551/bin:/home/jkcorrea/.rvm/gems/ruby-1.9.3-p551@global/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/jkcorrea/.rvm/bin:/home/jkcorrea/bin',
   'RUBY_VERSION' => 'ruby 2.1.6',
   'GEM_HOME'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6',
   'GEM_PATH'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global',

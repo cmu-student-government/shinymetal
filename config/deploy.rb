@@ -22,6 +22,16 @@ set :ssh_options, {
 # Load .env files into ENV
 set :linked_files, fetch(:linked_files, []).push('.env')
 
+namespace :rvm1 do # https://github.com/rvm/rvm1-capistrano3/issues/45
+  desc "Install Bundler"
+  task :install_bundler do
+    on release_roles :all do
+      execute "cd #{release_path} && #{fetch(:rvm1_auto_script_path)}/rvm-auto.sh . gem install bundler"
+    end
+  end
+end
+after 'rvm1:install:ruby', 'rvm1:install_bundler'
+
 namespace :deploy do
 
   task :symlink_shared do

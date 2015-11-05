@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
-gem 'rails', '4.1.1'
-gem 'rake', '10.0.4'
+gem 'rails', '4.2.4'
+gem 'rake', '>= 10.0'
 gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 
 
@@ -96,9 +96,7 @@ end
 
 group :test do
   gem 'shoulda'
-  gem 'shoulda-matchers'
   gem 'factory_girl_rails'
-  gem 'mocha', require: false
   gem 'simplecov'
   gem 'single_test'
 

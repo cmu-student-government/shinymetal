@@ -9,8 +9,13 @@ set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
 
-set :rvm_type, :system
-set :rvm_ruby_version, '2.1.6'
+set :default_environment, {
+  'PATH' => '$PATH:/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/gems/ruby-1.9.3-p551/bin:/home/jkcorrea/.rvm/gems/ruby-1.9.3-p551@global/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/jkcorrea/.rvm/bin:/home/jkcorrea/bin'
+  'RUBY_VERSION' => 'ruby 2.1.6',
+  'GEM_HOME'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6',
+  'GEM_PATH'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global',
+  'BUNDLE_PATH'  => '/home/jkcorrea/.rvm/gems/ruby-2.1.6'  # If you are using bundler.
+}
 
 set :password, ask("StuGov server password", "", echo: false)
 set :ssh_options, {
@@ -46,21 +51,11 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      # execute :touch, release_path.join('tmp/restart.txt')
+      execute :touch, release_path.join('tmp/restart.txt')
     end
   end
 
   after :publishing, :restart
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
-
 end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"

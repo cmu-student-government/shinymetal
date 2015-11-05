@@ -11,12 +11,18 @@ set :default_stage, "staging"
 
 set :bundle_env_variables, { 'NOKOGIRI_USE_SYSTEM_LIBRARIES' => 1 }
 set :default_environment, {
-  'PATH' => '$PATH:/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/gems/ruby-1.9.3-p551/bin:/home/jkcorrea/.rvm/gems/ruby-1.9.3-p551@global/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/jkcorrea/.rvm/bin:/home/jkcorrea/bin',
+  'PATH' => '/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/bin:$PATH',
   'RUBY_VERSION' => 'ruby 2.1.6',
   'GEM_HOME'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6',
   'GEM_PATH'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global',
   'BUNDLE_PATH'  => '/home/jkcorrea/.rvm/gems/ruby-2.1.6'  # If you are using bundler.
 }
+namespace :rvm do
+  task :trust_rvmrc do
+    run "rvm rvmrc trust #{release_path}"
+  end
+end
+after "deploy", "rvm:trust_rvmrc"
 
 set :password, ask("StuGov server password", "", echo: false)
 set :ssh_options, {

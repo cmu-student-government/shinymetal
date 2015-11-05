@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
-gem 'rails', '4.1.1'
-gem 'rake', '10.0.4'
+gem 'rails', '4.2.4'
+gem 'rake', '>= 10.0'
 gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 
 
@@ -8,6 +8,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'capistrano', '~> 3.4'
   gem 'capistrano-rails', '~> 1.1.2' # Use Capistrano for deployment
   gem 'capistrano-bundler', '~> 1.1.4'
+  gem 'capistrano-rvm', '~> 0.1.2'
 
 
 # Asset gems
@@ -95,9 +96,7 @@ end
 
 group :test do
   gem 'shoulda'
-  gem 'shoulda-matchers'
   gem 'factory_girl_rails'
-  gem 'mocha', require: false
   gem 'simplecov'
   gem 'single_test'
 

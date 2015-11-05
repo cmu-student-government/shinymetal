@@ -2,8 +2,6 @@
 require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
 
-#Copied this test_helper stuff from Prof H files
-
 require 'simplecov'
 SimpleCov.start 'rails'
 ENV["RAILS_ENV"] ||= "test"

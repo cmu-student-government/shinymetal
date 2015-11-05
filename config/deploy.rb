@@ -9,6 +9,8 @@ set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
 
+set :rvm_type, :system
+set :rvm_ruby_version, '2.1.6'
 
 set :password, ask("StuGov server password", "", echo: false)
 set :ssh_options, {

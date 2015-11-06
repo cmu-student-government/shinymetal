@@ -24,6 +24,9 @@
       </li>
 
     <% end %>
+      <li class="<%= 'active' if cName == 'user_keys' && aName == 'express' %>">
+        <%= link_to "Express App", express_path %>
+      </li>
   <% end %>
 </ul>
 
@@ -54,7 +57,7 @@
         </div>
       </li>
     <% end %>
-    
+
       <%# Only admin users can look at the settings page %>
       <% if @current_user.role? :admin %>
         <li id="settings" class="<%= 'active' if cName == 'questions' %>">

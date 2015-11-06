@@ -1,7 +1,7 @@
 # Manages user key functionality, including approvals, comments, and status changes.
 class UserKeysController < ApplicationController
   before_action :check_login
-  before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search]
+  before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search, :express]
 
   # CanCan checks
   authorize_resource
@@ -28,6 +28,10 @@ class UserKeysController < ApplicationController
     @user_key = UserKey.new
     get_questions
     build_answers
+  end
+
+  def express
+    @user_key = UserKey.new
   end
 
   # GET /user_keys/1/edit
@@ -198,7 +202,7 @@ class UserKeysController < ApplicationController
 
     # Add the correct question ids to the answers in the params;
     # because when creating a user key, the answers don't know what
-    # their question ids are yet. 
+    # their question ids are yet.
     def sanitize_question_ids
       # question_id is something only we should be able to change.
       # It is included in params so that we can set question_id
@@ -234,10 +238,10 @@ class UserKeysController < ApplicationController
       @user_key = UserKey.find(params[:id])
     end
 
-    # Restricts the paramaters for the requester, upon creating an application. 
+    # Restricts the paramaters for the requester, upon creating an application.
     # Whatever question_id they pass in will be overwritten;
-    # it is here so that our own question_ids, added in later, will be permitted. 
-    def create_user_key_params 
+    # it is here so that our own question_ids, added in later, will be permitted.
+    def create_user_key_params
       params.require(:user_key).permit(:name, answers_attributes: [:id, :message, :question_id])
     end
 

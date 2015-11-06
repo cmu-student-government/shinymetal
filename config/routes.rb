@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :organizations, only: [:show, :index]
 
   get 'user_keys/search' => 'user_keys#search', as: :user_keys_search # this needs to go before resource :user_keys to override the path
+  get 'express' => 'user_keys#express', as: :express
   resources :user_keys
 
   resources :questions, except: [:show]

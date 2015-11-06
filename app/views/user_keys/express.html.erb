@@ -1,0 +1,158 @@
+<h4>Express Application</h4>
+
+<p>Description about how express app works.</p>
+
+<br/>
+
+<%= form_for(@user_key) do |f| %>
+  <%= render 'shared/error_messages', object: @user_key %>
+
+  <%#  Begin requester form  %>
+  <%#  On create, @user_key.id is nil and not yet owned by its creator.  %>
+  <% if @user_key.id.nil? or @current_user.owns? @user_key %>
+    <fieldset>
+      <legend>Application Form</legend>
+      <ol>
+        <li>
+          This application is being submitted on behalf of a
+          <%= select "express_app", "applicant_type", [["Individual (Class)", 0], ["Individual (Extracurricular)", 1], ["Professor/Department", 2], ["Organization", 3], ["Other", 4]] %>
+        </li>
+        <li>
+          In a sentence or two, describe the goal of your project and how the data you are requesting will be used.
+          <%= text_area "express_app", "reasoning", rows: 5 %>
+        </li>
+        <li>
+          Access to student data can only be provisioned for short periods of time. Select your target end date for this project here, up to 5 months from now. (If longer term access is needed at the end of this period, a regular API application can be submitted when necessary).
+          <%= date_field :time_expired, order: [:month, :day, :year], start_year: Date.today.year, end_year: 3.months.from_now %>
+        </li>
+        <li>
+          Please select the types of data you are requesting.
+          <% columns = [Column.restrict_to("organizations"), Column.restrict_to("events")] %>
+          <table>
+            <thead>
+              <tr>
+                <th>Organizations</th>
+                <th>Events</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% columns[0].zip(*columns[1..-1]).each do |row| %>
+                <tr>
+                  <% row.each do |column| %>
+                    <td><%= column.column_name %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </li>
+        <li>
+          Please select any special filters you may need for this data.
+          <% filters = [Filter.restrict_to("organizations"), Filter.restrict_to("events")] %>
+          <table>
+            <thead>
+              <tr>
+                <th>Organizations</th>
+                <th>Events</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% filters[0].zip(*filters[1..-1]).each do |row| %>
+                <tr>
+                  <% row.each do |filter| %>
+                    <td><%= filter.filter_name %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </li>
+        <li>
+          Check below to certify that you agree to the following:
+          <ul>
+            <li>I've read and agree to abide by the <a href="#">Terms of Service</a>.</li>
+            <li>I pledge to keep the data accessed via The Bridge API secure and to myself.</li>
+            <li>I understand that any acts in violation of this agreement will be reported as a <a href="http://www.cmu.edu/student-affairs/theword/comm_standards/standards.html">Community Standards</a> violation.</li>
+          </ul>
+          <br>
+          <%= check_box "express_app", "agree" %> Check here to certify that you've read the Terms of Service and pledge to keep the data accessed via The Bridge API secure and to yourself.
+        </li>
+      </ol>
+    </fieldset>
+  <% end %>
+  <%#  End requester input %>
+
+  <%#  Begin admin input  %>
+
+  <%#  @current_user can only see both above and below if they are both admin and key owner.  %>
+  <%#  Admin rights should be unavailable if the key is not submitted or created yet.  %>
+  <% if false #@current_user.role? :admin and !(@user_key.id.nil? or @user_key.at_stage? :awaiting_submission) %>
+
+    <!-- Only admins can assign filters, and they can do so at any time -->
+    <!-- Added tab for admin to view application text while editing access -->
+    <ul class="tabs" data-tab>
+      <li class="tab-title active"><a href="#accessPanel">Edit Access</a></li>
+      <li class="tab-title"><a href="#applicationPanel">View Application</a></li>
+    </ul>
+
+    <div class="tabs-content active">
+      <div class="admin_only content active" id="accessPanel">
+        <h2>Admin only</h2>
+
+        <hr/>
+
+        <p><i>Set or change filters, columns, and organizations that this key may automatically have access to for each endpoint.</i></p>
+
+        <p><i>Any columns and organizations that are selected are available to the user.</i></p>
+
+        <p><i>For filtering out data, the system uses "whitelists" to define access rights. A "whitelist" is a group of filters.
+        User requests to an API resource will be accepted as long as they satisfy all filters for at least one whitelist for the resource.
+        Any user request to an API resource that does not satisfy any whitelists for the resource here will be rejected by the system.</i></p>
+
+        <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>
+        <%= render partial: 'user_keys/form_partials/organizations_checkboxes', locals: {f: f} %>
+
+        <!--Expiration date-->
+        <p><i>Set or change the expiration date for the key.</i></p>
+        <div class="collapsed_row">
+          <div class="s3">
+            <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
+          </div>
+          <div class="s3">
+            <%= f.date_field :time_expired, order: [:month, :day, :year],
+                            start_year: Date.today.year, end_year: 2.years.from_now %>
+          </div>
+        </div>
+
+        <p><i>Marking a key as inactive
+        suspends the application process, or revokes access rights if the key is already confirmed.</i></p>
+
+        <div class="collapsed_row">
+          <%= f.check_box :active %>
+          <%= f.label :active %>
+          <% if @user_key.active %>
+            &nbsp; <i>This key is currently active.</i>
+          <% else %>
+            &nbsp; <i>This key is inactive and has been suspended.</i>
+          <% end %>
+        </div>
+
+      </div>
+      <div class="content" id="applicationPanel">
+        <strong>Application text:</strong>
+        <%= render partial: 'user_keys/show_partials/application_text' %>
+
+      </div>
+    </div>
+  <% end %>
+  <!-- End admin form -->
+
+  <br/>
+
+  <div class="actions">
+    <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will save changes to this application.">
+      <%= f.submit "Submit application", class: "big-button success", data: {disable_with: "Please Wait..." } %>
+    </span>
+  </div>
+
+<% end %>

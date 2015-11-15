@@ -22,7 +22,7 @@
         <br>
         <em>*If longer term access is needed at the end of this period, a regular API application can be submitted when necessary.</em>
         <br>
-        <%= f.date_field :time_expired, order: [:month, :day, :year] %>
+        <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: Date.today + 5.months %>
       </li>
       <li>
         Please select the types of data you are requesting.

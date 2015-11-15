@@ -56,8 +56,7 @@
             <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
           </div>
           <div class="s3">
-            <%= f.date_field :time_expired, order: [:month, :day, :year],
-                            start_year: Date.today.year, end_year: 2.years.from_now %>
+            <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: 3.years.from_now %>
           </div>
         </div>
 

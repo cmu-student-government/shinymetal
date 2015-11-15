@@ -2,7 +2,7 @@
 
 <p>Description about how express app works.</p>
 
-<br/>
+<br>
 
 <%= form_for(@user_key) do |f| %>
   <%= render 'shared/error_messages', object: @user_key %>
@@ -10,75 +10,7 @@
   <%#  Begin requester form  %>
   <%#  On create, @user_key.id is nil and not yet owned by its creator.  %>
   <% if @user_key.id.nil? or @current_user.owns? @user_key %>
-    <fieldset>
-      <legend>Application Form</legend>
-      <ol>
-        <li>
-          This application is being submitted on behalf of a
-          <%= select "express_app", "applicant_type", [["Individual (Class)", 0], ["Individual (Extracurricular)", 1], ["Professor/Department", 2], ["Organization", 3], ["Other", 4]] %>
-        </li>
-        <li>
-          In a sentence or two, describe the goal of your project and how the data you are requesting will be used.
-          <%= text_area "express_app", "reasoning", rows: 5 %>
-        </li>
-        <li>
-          Access to student data can only be provisioned for short periods of time. Select your target end date for this project here, up to 5 months from now. (If longer term access is needed at the end of this period, a regular API application can be submitted when necessary).
-          <%= date_field :time_expired, order: [:month, :day, :year], start_year: Date.today.year, end_year: 3.months.from_now %>
-        </li>
-        <li>
-          Please select the types of data you are requesting.
-          <% columns = [Column.restrict_to("organizations"), Column.restrict_to("events")] %>
-          <table>
-            <thead>
-              <tr>
-                <th>Organizations</th>
-                <th>Events</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% columns[0].zip(*columns[1..-1]).each do |row| %>
-                <tr>
-                  <% row.each do |column| %>
-                    <td><%= column.column_name %></td>
-                  <% end %>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </li>
-        <li>
-          Please select any special filters you may need for this data.
-          <% filters = [Filter.restrict_to("organizations"), Filter.restrict_to("events")] %>
-          <table>
-            <thead>
-              <tr>
-                <th>Organizations</th>
-                <th>Events</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% filters[0].zip(*filters[1..-1]).each do |row| %>
-                <tr>
-                  <% row.each do |filter| %>
-                    <td><%= filter.filter_name %></td>
-                  <% end %>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </li>
-        <li>
-          Check below to certify that you agree to the following:
-          <ul>
-            <li>I've read and agree to abide by the <a href="#">Terms of Service</a>.</li>
-            <li>I pledge to keep the data accessed via The Bridge API secure and to myself.</li>
-            <li>I understand that any acts in violation of this agreement will be reported as a <a href="http://www.cmu.edu/student-affairs/theword/comm_standards/standards.html">Community Standards</a> violation.</li>
-          </ul>
-          <br>
-          <%= check_box "express_app", "agree" %> Check here to certify that you've read the Terms of Service and pledge to keep the data accessed via The Bridge API secure and to yourself.
-        </li>
-      </ol>
-    </fieldset>
+    <%= render partial: 'user_keys/form_partials/express_questions', locals: {f: f} %>
   <% end %>
   <%#  End requester input %>
 

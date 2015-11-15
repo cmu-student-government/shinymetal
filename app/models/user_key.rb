@@ -4,8 +4,8 @@ class UserKey < ActiveRecord::Base
   before_save :check_name
 
   # Relationships
-
   belongs_to :user
+
 
   # A User Key is the only thing that can be deleted in the system (while still associated).
   # Filters can be deleted if they are unused; everything else can only be deleted through user key.
@@ -17,6 +17,8 @@ class UserKey < ActiveRecord::Base
   # 'has_many :answers' requires inverse_of, so that both the key and its answers
   # can be created at the same time in the application.
   has_many :answers, inverse_of: :user_key, dependent: :destroy
+  # If defined, is an express app user key
+  has_one :express_app, dependent: :destroy
 
   has_many :questions, through: :answers
   has_many :columns, through: :user_key_columns
@@ -32,6 +34,8 @@ class UserKey < ActiveRecord::Base
   accepts_nested_attributes_for :answers
   # Nested whitelists will cause validations to fail if they are completely blank.
   accepts_nested_attributes_for :whitelists, allow_destroy: true
+  # Express application attributes
+  accepts_nested_attributes_for :express_app, limit: 1
 
   # Validations
   # Statuses for keys are currently:

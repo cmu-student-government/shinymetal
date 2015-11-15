@@ -1,0 +1,12 @@
+#express-app-fields {
+  #user_key_express_app_attributes_requester_type,
+  #user_key_express_app_attributes_requester_additional_info,
+  #user_key_time_expired {
+    width: auto;
+    display: inline;
+  }
+
+  #requester-type-additional:not(.hide) {
+    display: inline;
+  }
+}

@@ -1,0 +1,100 @@
+<%= f.fields_for :express_app do |express_app| %>
+  <fieldset id="express-app-fields">
+    <legend>Application</legend>
+    <ol>
+      <li>
+        This application is being submitted on behalf of a
+        <%= express_app.select(:requester_type,
+              ExpressApp.requester_types.keys.map { |k| [ExpressApp::REQUESTER_TYPES_HUMANIZED[k.to_sym][0], k] },
+              include_blank: true)
+        %>
+        <div id="requester-type-additional" class="hide">
+          &nbsp;<span></span>:&nbsp;
+          <%= express_app.text_field(:requester_additional_info) %>
+        </div>
+      </li>
+      <li>
+        In a sentence or two, describe the goal of your project and how the data you are requesting will be used.
+        <%= express_app.text_area :reasoning, rows: 5, placeholder: "e.g. We are looking to create a mobile app that showcases events happening on campus based on the user's current location. We'd like to use the Bridge API to collect the most up-to-date information on organization's events on campus. The project is for our course XX-XXX and will culminate with a final presentation at the end of this semester." %>
+      </li>
+      <li>
+        Access to student data can only be provisioned for short periods of time. Select your target end date for this project here, up to 5 months from now.
+        <br>
+        <em>*If longer term access is needed at the end of this period, a regular API application can be submitted when necessary.</em>
+        <br>
+        <%= f.date_field :time_expired, order: [:month, :day, :year] %>
+      </li>
+      <li>
+        Please select the types of data you are requesting.
+        <% columns = [Column.restrict_to("organizations"), Column.restrict_to("events")] %>
+        <table>
+          <thead>
+            <tr>
+              <th>Organizations</th>
+              <th>Events</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% columns[0].zip(*columns[1..-1]).each do |row| %>
+              <tr>
+                <% row.each do |column| %>
+                  <td><%= column.column_name %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </li>
+      <li>
+        Please select any special filters you may need for this data.
+        <% filters = [Filter.restrict_to("organizations"), Filter.restrict_to("events")] %>
+        <table>
+          <thead>
+            <tr>
+              <th>Organizations</th>
+              <th>Events</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% filters[0].zip(*filters[1..-1]).each do |row| %>
+              <tr>
+                <% row.each do |filter| %>
+                  <td><%= filter.filter_name %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </li>
+      <li>
+        Check below to certify that you agree to the following:
+        <ul>
+          <li>I've read and agree to abide by the <a href="#">Terms of Service</a>.</li>
+          <li>I pledge to keep the data accessed via The Bridge API secure and to myself.</li>
+          <li>I understand that any acts in violation of this agreement will be reported as a <a href="http://www.cmu.edu/student-affairs/theword/comm_standards/standards.html">Community Standards</a> violation.</li>
+        </ul>
+        <br>
+        <%= express_app.check_box :tos_agree %> Check here to certify that you've read the Terms of Service and pledge to keep the data accessed via The Bridge API secure and to yourself.
+      </li>
+    </ol>
+  </fieldset>
+<% end %>
+
+<% content_for :js do %>
+  <script type="text/javascript">
+    var req_types = <%= ExpressApp::REQUESTER_TYPES_HUMANIZED.to_json.html_safe %>,
+        req_type_div = $("#requester-type-additional"),
+        additional_q_div = $("#requester-type-additional");
+    $("#user_key_express_app_attributes_requester_type").change(function() {
+      var val = $(this).val();
+      if (val === "") {
+        additional_q_div.addClass("hide");
+        return;
+      }
+
+      additional_q_div.removeClass("hide");
+      additional_q_div.find("span").text(req_types[val][1]);
+      additional_q_div.find("input").attr("placeholder", "e.g. " + req_types[val][2]);
+    });
+  </script>
+<% end %>

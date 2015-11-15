@@ -32,6 +32,7 @@ class UserKeysController < ApplicationController
 
   def express
     @user_key = UserKey.new
+    @user_key.build_express_app
   end
 
   # GET /user_keys/1/edit
@@ -242,7 +243,9 @@ class UserKeysController < ApplicationController
     # Whatever question_id they pass in will be overwritten;
     # it is here so that our own question_ids, added in later, will be permitted.
     def create_user_key_params
-      params.require(:user_key).permit(:name, answers_attributes: [:id, :message, :question_id])
+      params.require(:user_key).permit(:name,
+        answers_attributes: [:id, :message, :question_id],
+        express_app_attributes: [:id, :requester_type, :reasoning, :requester_additional_info, :tos_agree])
     end
 
     # Restricts the paramaters for requester, upon updating application text.
@@ -253,13 +256,13 @@ class UserKeysController < ApplicationController
     # Restricts the paramaters for anyone who can comment.
     # Whatever user_id they pass in will be overwritten by the current user's id.
     def comment_user_key_params
-      params.require(:user_key).permit(:comments_attributes => [:id, :message, :public, :user_id])
+      params.require(:user_key).permit(comments_attributes: [:id, :message, :public, :user_id])
     end
 
     # Restricts params for admin, upon updating filters or anything else.
     def admin_update_user_key_params
-      params.require(:user_key).permit(:time_expired, :active, :reason, :column_ids => [],
-                                       :organization_ids => [],
-                                       :whitelists_attributes => [:id, :resource, :_destroy, :filter_ids => []])
+      params.require(:user_key).permit(:time_expired, :active, :reason, column_ids: [],
+       organization_ids: [],
+       whitelists_attributes: [:id, :resource, :_destroy, filter_ids: []])
     end
 end

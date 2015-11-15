@@ -2,7 +2,7 @@
 class EndpointRequest
   # @return [String, nil] The error message for any endpoint request that was not allowed.
   attr_reader :failed
-  
+
   # Initialize an EndpontRequest.
   #
   # @param user_key [UserKey] User key with the Gen API Key that matches the one passed in earlier.
@@ -16,7 +16,7 @@ class EndpointRequest
     @resource = params[:endpoint]
     @failed = "error, the request's combination of parameters is not allowed for this API key" unless self.valid?
   end
-  
+
   # Determines if the given user key is allowed to request the paramaters passed in.
   # Only the restrictions of one whitelist needs to be included for the request to be allowed.
   #
@@ -32,7 +32,7 @@ class EndpointRequest
     # No filters were matched, so check for organizations instead.
     return has_valid_organization_id?
   end
-  
+
   # Determines if the paramaters passed contain the values of a given list of filters.
   #
   # @param filter_group [Array<Filter>] List of filter objects, already mapped earlier from one of the whitelists.
@@ -42,13 +42,16 @@ class EndpointRequest
     for filter in filter_group
       # Downcase the values, because CollegiateLink is case insensitive.
       # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
-      if @params[filter.filter_name.to_sym].nil? or (@params[filter.filter_name.to_sym].downcase != filter.filter_value.downcase)
-        return false
-      end
+      requested_filter_value = @params[filter.filter_name.to_sym]
+      # Accepts anything for this filter, let it pass
+      next if filter.filter_value == "*"
+      return false if
+        requested_filter_value.nil? ||
+        requested_filter_value.downcase != filter.filter_value.downcase
     end
     return true
   end
-  
+
   # Check if the user key's request is valid through its organization id, whether it has one or not.
   #
   # @return [Boolean] True if the request had an org Id that is associated with the request's key.

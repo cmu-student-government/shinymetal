@@ -26,9 +26,8 @@ class EndpointRequest
     # If the key has no whitelists at all, the key has no access through normal filters.
     # (If the key has no columns, the key has no access at all, but we check for that in EndpointResponse.)
     # Map the filters for each individual whitelist into a list to be checked.
-    for filter_group in filter_group_list
-      return true if matches_options?(filter_group)
-    end
+    return true if filter_group_list.any? { |fg| matches_options? fg }
+
     # No filters were matched, so check for organizations instead.
     return has_valid_organization_id?
   end
@@ -59,13 +58,13 @@ class EndpointRequest
       # Get the requests value for this filter
       # If it's not set then it will obviously not match any of our accepted values
       requested_val = @params[filter.filter_name.to_sym]
-      break false if requested_val.nil?
+      return false if requested_val.nil?
 
       # Build an array out of any comma-separated accepted filter values
       accepted_vals = filter.filter_value.split(",")
 
       # Do any of the accepted values for this filter match (case-insensitive)?
-      accepted_vals.any? { |val| val.casecmp(requested_val) == 0 }
+      next accepted_vals.any? { |val| val.casecmp(requested_val) == 0 }
     end
   end
 

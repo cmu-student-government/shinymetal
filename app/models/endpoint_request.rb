@@ -38,18 +38,35 @@ class EndpointRequest
   # @param filter_group [Array<Filter>] List of filter objects, already mapped earlier from one of the whitelists.
   # @return [Boolean] Whether or not the given filter group contains this list of filters.
   private
+  # def matches_options?(filter_group)
+  #   for filter in filter_group
+  #     # Downcase the values, because CollegiateLink is case insensitive.
+  #     # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
+  #     requested_filter_value = @params[filter.filter_name.to_sym]
+  #     # Accepts anything for this filter, let it pass
+  #     next if filter.filter_value == "*"
+  #     return false if
+  #       requested_filter_value.nil? ||
+  #       requested_filter_value.downcase != filter.filter_value.downcase
+  #   end
+  #   return true
+  # end
+
   def matches_options?(filter_group)
-    for filter in filter_group
-      # Downcase the values, because CollegiateLink is case insensitive.
-      # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
-      requested_filter_value = @params[filter.filter_name.to_sym]
-      # Accepts anything for this filter, let it pass
-      next if filter.filter_value == "*"
-      return false if
-        requested_filter_value.nil? ||
-        requested_filter_value.downcase != filter.filter_value.downcase
+    return filter_group.all? do |filter|
+      next true if filter.filter_value == "*" # Accepts anything for this filter, let it pass
+
+      # Get the requests value for this filter
+      # If it's not set then it will obviously not match any of our accepted values
+      requested_val = @params[filter.filter_name.to_sym]
+      break false if requested_val.nil?
+
+      # Build an array out of any comma-separated accepted filter values
+      accepted_vals = filter.filter_value.split(",")
+
+      # Do any of the accepted values for this filter match (case-insensitive)?
+      accepted_vals.any? { |val| val.casecmp(requested_val) == 0 }
     end
-    return true
   end
 
   # Check if the user key's request is valid through its organization id, whether it has one or not.

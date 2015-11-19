@@ -16,4 +16,39 @@ class ExpressApp < ActiveRecord::Base
     # other: ["Other", ". Please explain", ""]
   }
 
+
+  WHITELIST_COLUMNS = {
+    events: %w(eventId name shortName description organizationId organizationName startDateTime endDateTime addressStreet1 addressStreet2 addressCity otherLocation eventUrl flyerUrl thumbnailUrl),
+    organizations: %w(organizationId name shortName summary description email externalWebsite facebookUrl twitterUrl flickrFeedUrl youtubeChannelUrl googleCalendarUrl profileImageUrl profileUrl primaryContactName primaryContactCampusEmail)
+  }
+
+  WHITELIST_FILTERS = {
+    # [filter_name, filter_value]
+    events: [["status", "*"], ["category", "*"], ["name", "*"], ["currentEventsOnly", "true,false"], ["startDate", "*"], ["endDate", "*"], ["type", "Public,Campus Only"]],
+    organizations: [["status", "*"], ["category", "*"], ["name", "*"], ["excludeHiddenOrganizations", "true"]]
+  }
 end
+
+
+      # TODO
+
+      #   <% orgs_cols = ExpressApp::WHITELIST_COLUMNS[:organizations] %>
+      #   <% events_cols = ExpressApp::WHITELIST_COLUMNS[:events] %>
+      #   <table id="columns-selection-table">
+      #     <thead>
+      #       <tr>
+      #         <th>Organizations</th>
+      #         <th>Events</th>
+      #       </tr>
+      #     </thead>
+      #     <tbody>
+      #       <% [orgs_cols.count, events_cols.count].max.times do |i| %>
+      #         <tr>
+      #           <td><%= orgs_cols[i] %></td>
+      #           <td><%= events_cols[i]  %></td>
+      #         </tr>
+      #       <% end %>
+      #     </tbody>
+      #   </table>
+      # </li>
+

@@ -25,46 +25,11 @@
         <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: Date.today + 5.months %>
       </li>
       <li>
-        Please select the types of data you are requesting.
-        <% columns = [Column.restrict_to("organizations"), Column.restrict_to("events")] %>
-        <table>
-          <thead>
-            <tr>
-              <th>Organizations</th>
-              <th>Events</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% columns[0].zip(*columns[1..-1]).each do |row| %>
-              <tr>
-                <% row.each do |column| %>
-                  <td><%= column.column_name %></td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </li>
-      <li>
-        Please select any special filters you may need for this data.
-        <% filters = [Filter.restrict_to("organizations"), Filter.restrict_to("events")] %>
-        <table>
-          <thead>
-            <tr>
-              <th>Organizations</th>
-              <th>Events</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% filters[0].zip(*filters[1..-1]).each do |row| %>
-              <tr>
-                <% row.each do |filter| %>
-                  <td><%= filter.filter_name %></td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+        Please select all Endpoints and columns that you will need access to:
+        <br>
+        <% ExpressApp::WHITELIST_COLUMNS.keys.map(&:to_s).each do |endpoint| %>
+          <span class="button secondary endpoint-column-selector" data-endpoint="<%= endpoint %>" data-reveal-id="whitelist-picker"><%= endpoint.humanize %></span>
+        <% end %>
       </li>
       <li>
         Check below to certify that you agree to the following:
@@ -80,11 +45,17 @@
   </fieldset>
 <% end %>
 
+<div id="whitelist-picker" class="reveal-modal" data-reveal aria-labelled-by="whitelist-picker-title" aria-hidden="true" role="dialog">
+  <h3 id="whitelist-picker-title"></h3>
+  <div id="whitelist-inputs"></div>
+</div>
+
 <% content_for :js do %>
   <script type="text/javascript">
-    var req_types = <%= ExpressApp::REQUESTER_TYPES_HUMANIZED.to_json.html_safe %>,
-        req_type_div = $("#requester-type-additional"),
-        additional_q_div = $("#requester-type-additional");
+    var req_types = <%= ExpressApp::REQUESTER_TYPES_HUMANIZED.to_json.html_safe %>
+      , req_type_div = $("#requester-type-additional")
+      , additional_q_div = $("#requester-type-additional");
+
     $("#user_key_express_app_attributes_requester_type").change(function() {
       var val = $(this).val();
       if (val === "") {
@@ -96,5 +67,55 @@
       additional_q_div.find("span").text(req_types[val][1]);
       additional_q_div.find("input").attr("placeholder", "e.g. " + req_types[val][2]);
     });
+
+    var whitelist_columns = <%= ExpressApp::WHITELIST_COLUMNS.to_json.html_safe %>
+      , whitelist_filters = <%= ExpressApp::WHITELIST_FILTERS.to_json.html_safe %>
+      , selected_columns = {}
+      , selected_filters = {};
+
+    $(".endpoint-column-selector").click(function() {
+      var endpoint = $(this).data("endpoint");
+      var columns = whitelist_columns[endpoint];
+
+      // Set the modals help text and clear any inputs previously generated
+      $("#whitelist-picker-title").text($(this).text() + " Columns:");
+      $("#whitelist-inputs").html("");
+
+      // For each column that is available to choose from...
+      $.each(columns, function(i, col) {
+        var id = guid();
+        // Create a checkbox for the column..
+        var container = $("<div style='white-space:nowrap;'></div>");
+        $("<input />", {
+          id: id,
+          type: 'checkbox',
+          checked: Boolean(selected_columns[endpoint] && selected_columns[endpoint][col]),
+          'data-endpoint': endpoint,
+          'data-column': col,
+          'class': 'whitelist-checkbox',
+          change: updateSelectedWhitelist
+        }).appendTo(container);
+        // Now create the label for the checkbox...
+        $("<label/>", { 'for': id, text: col }).appendTo(container);
+
+        // Finally, append the container to our modal
+        container.appendTo("#whitelist-inputs");
+      });
+    });
+
+    var updateSelectedWhitelist = function () {
+      var endpoint = $(this).data("endpoint")
+        , column = $(this).data("column");
+      if (selected_columns[endpoint] && selected_columns[endpoint][column]) {
+        selected_columns[endpoint][column] = 0
+      } else if (selected_columns[endpoint]) {
+        selected_columns[endpoint][column] = 1
+      } else {
+        selected_columns[endpoint] = {};
+        selected_columns[endpoint][column] = 1
+      }
+
+      console.log(selected_columns)
+    }
   </script>
 <% end %>

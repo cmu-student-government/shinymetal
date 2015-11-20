@@ -5,7 +5,7 @@
       <li>
         This application is being submitted on behalf of a
         <%= express_app.select(:requester_type,
-              ExpressApp.requester_types.keys.map { |k| [ExpressApp::REQUESTER_TYPES_HUMANIZED[k.to_sym][0], k] },
+              ExpressApp.requester_types.keys.map { |k| [t("requester_types.#{k}.title"), k] },
               include_blank: true)
         %>
         <div id="requester-type-additional" class="hide">
@@ -28,7 +28,7 @@
         Please select all Endpoints and columns that you will need access to:
         <br>
         <% ExpressApp::WHITELIST_COLUMNS.keys.map(&:to_s).each do |endpoint| %>
-          <span class="button secondary endpoint-column-selector" data-endpoint="<%= endpoint %>" data-reveal-id="whitelist-picker"><%= endpoint.humanize %></span>
+          <span class="button secondary" data-endpoint="<%= endpoint %>" data-reveal-id="whitelist-picker"><%= endpoint.humanize %></span>
         <% end %>
       </li>
       <li>
@@ -47,88 +47,62 @@
 
 <div id="whitelist-picker" class="reveal-modal" data-reveal aria-labelled-by="whitelist-picker-title" aria-hidden="true" role="dialog">
   <h3 class="header"><span></span> Columns:</h3>
-  <table id="columns-table"></table>
-  <h3 class="header"><span></span> Filters:</h3>
-  <table id="filters-table"></table>
+  <% ExpressApp::WHITELIST_COLUMNS.keys.map(&:to_s).each do |endpoint| %>
+    <table id="<%= endpoint %>-columns-table" class="hide columns-table">
+      <tr>
+        <th colspan="1"></th>
+        <th>Column</th>
+        <th>Description</th>
+        <th>Example</th>
+      </tr>
+      <% ExpressApp::WHITELIST_COLUMNS[endpoint.to_sym].each do |col_name| %>
+        <% column = Column.restrict_to(endpoint).find_by_column_name(col_name) %>
+        <tr data-checkbox-id="user_keys_column_ids_<%= column.id %>">
+          <td>
+            <%= hidden_field_tag "user_key[column_ids][]" %>
+            <%= check_box_tag "user_key[column_ids][]", column.id, @user_key.columns.include?(column), id: "user_keys_column_ids_#{column.id}" %>
+          </td>
+          <td><%= col_name.underscore.humanize.titleize %></td>
+          <td><%= t("columns.#{endpoint}.#{col_name}.description") %></td>
+          <td><%= t("columns.#{endpoint}.#{col_name}.example") %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
 </div>
 
 <% content_for :js do %>
   <script type="text/javascript">
-    var req_types = <%= ExpressApp::REQUESTER_TYPES_HUMANIZED.to_json.html_safe %>
-      , req_type_div = $("#requester-type-additional")
-      , additional_q_div = $("#requester-type-additional")
-      , whitelist_picker_modal = $("#whitelist-picker")
-      , columns_table = $("#columns-table")
-      , filters_table = $("#filters-table");
+    $(function () {
 
-    $("#user_key_express_app_attributes_requester_type").change(function() {
-      var val = $(this).val();
-      if (val === "") {
-        additional_q_div.addClass("hide");
-        return;
-      }
+      var req_types = <%= t("requester_types").to_json.html_safe %>;
+      var additional_q_div = $("#requester-type-additional");
 
-      additional_q_div.removeClass("hide");
-      additional_q_div.find("span").text(req_types[val][1]);
-      additional_q_div.find("input").attr("placeholder", "e.g. " + req_types[val][2]);
+      $("#user_key_express_app_attributes_requester_type").change(function() {
+        var val = $(this).val();
+        if (val === "") {
+          additional_q_div.addClass("hide");
+          return;
+        }
+
+        additional_q_div.removeClass("hide");
+        additional_q_div.find("span").text(req_types[val]['additional_q']);
+        additional_q_div.find("input").attr("placeholder", "e.g. " + req_types[val]['example']);
+      });
+
+      $("[data-reveal-id='whitelist-picker']").click(function() {
+        var endpoint = $(this).data("endpoint");
+        $(".columns-table").addClass("hide");
+        $("#" + endpoint + "-columns-table").removeClass("hide");
+        $("#whitelist-picker .header span").text(endpoint.charAt(0).toUpperCase() + endpoint.slice(1));
+      });
+
+      $(".columns-table tr").click(function (e) {
+        if (e.target.tagName.toLowerCase() === "input") return;
+        var checkbox = $("#" + $(this).data("checkbox-id"));
+        checkbox.prop("checked", !checkbox.prop("checked"));
+      });
+
     });
-
-    var whitelist_columns = <%= ExpressApp::WHITELIST_COLUMNS.to_json.html_safe %>
-      , whitelist_filters = <%= ExpressApp::WHITELIST_FILTERS.to_json.html_safe %>
-      , selected_columns = {}
-      , selected_filters = {};
-
-    $(".endpoint-column-selector").click(function() {
-      var endpoint = $(this).data("endpoint");
-      var columns = whitelist_columns[endpoint];
-
-      // Set the modals help text and clear any inputs previously generated
-      whitelist_picker_modal.find(".header span").text($(this).text());
-      columns_table.html("");
-      filters_table.html("");
-
-      // For each column that is available to choose from...
-      $.each(columns, function(i, column) {
-        // Now create the label for the checkbox...
-        // $("<label/>", { 'for': id, text: column });
-
-        // Add the row to table
-        var x = generateWhitelistRow(endpoint, column);
-        x.appendTo(columns_table);
-      }); // $.each
-    }); // .click
-
-    var generateWhitelistRow = function (endpoint, column) { // [name, description, example]
-      var id = guid(); // Generate a unique id to associate the label and input
-      var tr = $("<tr><td class='checkbox-cell'></td></tr>");
-      $("<input/>", {
-        id: id,
-        type: 'checkbox',
-        checked: Boolean(selected_columns[endpoint] && selected_columns[endpoint][column]),
-        'data-endpoint': endpoint,
-        'data-column': column,
-        'class': 'whitelist-checkbox',
-        change: updateSelectedColumn
-      }).appendTo(tr.find(".checkbox-cell"));
-
-      // Now create the label for the checkbox...
-      $("<label/>", { 'for': id, text: column }).appendTo(tr.find(".label-cell"));
-
-
-      return tr;
-    }
-
-    var updateSelectedColumn = function () {
-      var endpoint = $(this).data("endpoint")
-        , column = $(this).data("column");
-      if (selected_columns[endpoint] && selected_columns[endpoint][column]) {
-        selected_columns[endpoint][column] = 0
-      } else if (selected_columns[endpoint]) {
-        selected_columns[endpoint][column] = 1
-      } else {
-        selected_columns[endpoint] = {};
-        selected_columns[endpoint][column] = 1
-      }
-    }
   </script>
 <% end %>

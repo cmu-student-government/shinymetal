@@ -11,11 +11,15 @@
   <%#  Begin requester form  %>
   <%#  On create, @user_key.id is nil and not yet owned by its creator.  %>
   <% if @user_key.id.nil? or @current_user.owns? @user_key %>
-    <fieldset>
-      <legend>Application Form</legend>
-      <%#  Application text boxes. Note that the form object is passed in as :f %>
-      <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
-    </fieldset>
+    <% if @user_key.express_app %>
+      <%= render partial: 'user_keys/form_partials/express_questions', locals: {f: f} %>
+    <% else %>
+      <fieldset>
+        <legend>Application Form</legend>
+        <%#  Application text boxes. Note that the form object is passed in as :f %>
+        <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
+      </fieldset>
+    <% end %>
   <% end %>
   <%#  End requester input %>
 

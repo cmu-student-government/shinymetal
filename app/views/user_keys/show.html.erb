@@ -28,7 +28,7 @@
 <%# Only Staff should see this status bar.%>
 <% if @current_user.role? :is_staff %>
   <%= render partial: 'user_keys/show_partials/approval_status' %>
-<% end %> 
+<% end %>
 
 <% if @user_key.at_stage? :confirmed or @current_user.role? :staff %>
   <table>
@@ -47,10 +47,14 @@
   </table>
 <% end %>
 
-<p>
-  <strong>Application text:</strong>
-  <%= render partial: 'user_keys/show_partials/application_text' %>
-</p>
+<% if @user_key.express_app %>
+  <%= render partial: 'user_keys/show_partials/express_app' %>
+<% else %>
+  <p>
+    <strong>Application text:</strong>
+    <%= render partial: 'user_keys/show_partials/application_text' %>
+  </p>
+<% end %>
 
 </div>
 
@@ -65,7 +69,7 @@
     <%= render partial: 'user_keys/show_partials/list_of_resources' %>
     <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
   </div>
-  
+
     <% if @user_key.at_stage? :awaiting_confirmation %>
       <div class="staff_only panel row">
       <%# Show the key's approvers if the key is at the approval stage. %>
@@ -81,9 +85,9 @@
     <% end %>
 
 <% else %>
-    
+
   <p>No API access rights exist yet. Once this key request is approved, access rights will be granted by an administrator.</p>
-    
+
 <% end %>
 
 </div> <%# End of permissions tab. %>
@@ -97,7 +101,7 @@
 <div class="content" id="commentsPanel">
   <div class="public_comments">
     <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
-  </div> 
+  </div>
 <%= render partial: 'user_keys/show_partials/list_of_comments' %>
 </div>
 

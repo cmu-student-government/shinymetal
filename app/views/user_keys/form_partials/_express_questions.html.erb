@@ -1,7 +1,7 @@
 <%= f.fields_for :express_app do |express_app| %>
   <ol id="express-app-fields">
     <li>
-      <%= express_app.label(:name) { "<b>Application Name</b>".html_safe } %>
+      <%= f.label(:name) { "<b>Application Name</b>".html_safe } %>
       <%= f.text_field(:name, placeholder: "Something short but relevant.", size: 24) %>
     </li>
     <li>

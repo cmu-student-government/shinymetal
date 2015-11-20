@@ -158,6 +158,7 @@ class Ability
 
       # Custom express app
       can :express, UserKey
+      can :create_express, UserKey
 
       # No universal Filter key rights exist for requesters.
 

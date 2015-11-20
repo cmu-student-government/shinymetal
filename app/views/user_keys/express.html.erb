@@ -4,81 +4,11 @@
 
 <br>
 
-<%= form_for(@user_key) do |f| %>
+<%= form_for(@user_key, url: express_app_path, method: :post) do |f| %>
   <%= render 'shared/error_messages', object: @user_key %>
+  <%= render partial: 'user_keys/form_partials/express_questions', locals: {f: f} %>
 
-  <%#  Begin requester form  %>
-  <%#  On create, @user_key.id is nil and not yet owned by its creator.  %>
-  <% if @user_key.id.nil? or @current_user.owns? @user_key %>
-    <%= render partial: 'user_keys/form_partials/express_questions', locals: {f: f} %>
-  <% end %>
-  <%#  End requester input %>
-
-  <%#  Begin admin input  %>
-
-  <%#  @current_user can only see both above and below if they are both admin and key owner.  %>
-  <%#  Admin rights should be unavailable if the key is not submitted or created yet.  %>
-  <% if false #@current_user.role? :admin and !(@user_key.id.nil? or @user_key.at_stage? :awaiting_submission) %>
-
-    <!-- Only admins can assign filters, and they can do so at any time -->
-    <!-- Added tab for admin to view application text while editing access -->
-    <ul class="tabs" data-tab>
-      <li class="tab-title active"><a href="#accessPanel">Edit Access</a></li>
-      <li class="tab-title"><a href="#applicationPanel">View Application</a></li>
-    </ul>
-
-    <div class="tabs-content active">
-      <div class="admin_only content active" id="accessPanel">
-        <h2>Admin only</h2>
-
-        <hr/>
-
-        <p><i>Set or change filters, columns, and organizations that this key may automatically have access to for each endpoint.</i></p>
-
-        <p><i>Any columns and organizations that are selected are available to the user.</i></p>
-
-        <p><i>For filtering out data, the system uses "whitelists" to define access rights. A "whitelist" is a group of filters.
-        User requests to an API resource will be accepted as long as they satisfy all filters for at least one whitelist for the resource.
-        Any user request to an API resource that does not satisfy any whitelists for the resource here will be rejected by the system.</i></p>
-
-        <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>
-        <%= render partial: 'user_keys/form_partials/organizations_checkboxes', locals: {f: f} %>
-
-        <!--Expiration date-->
-        <p><i>Set or change the expiration date for the key.</i></p>
-        <div class="collapsed_row">
-          <div class="s3">
-            <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
-          </div>
-          <div class="s3">
-            <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today.year, max_date: 3.years.from_now %>
-          </div>
-        </div>
-
-        <p><i>Marking a key as inactive
-        suspends the application process, or revokes access rights if the key is already confirmed.</i></p>
-
-        <div class="collapsed_row">
-          <%= f.check_box :active %>
-          <%= f.label :active %>
-          <% if @user_key.active %>
-            &nbsp; <i>This key is currently active.</i>
-          <% else %>
-            &nbsp; <i>This key is inactive and has been suspended.</i>
-          <% end %>
-        </div>
-
-      </div>
-      <div class="content" id="applicationPanel">
-        <strong>Application text:</strong>
-        <%= render partial: 'user_keys/show_partials/application_text' %>
-
-      </div>
-    </div>
-  <% end %>
-  <!-- End admin form -->
-
-  <br/>
+  <br>
 
   <div class="actions">
     <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will save changes to this application.">

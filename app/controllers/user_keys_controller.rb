@@ -1,7 +1,7 @@
 # Manages user key functionality, including approvals, comments, and status changes.
 class UserKeysController < ApplicationController
   before_action :check_login
-  before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search, :express]
+  before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search, :express, :create_express]
 
   # CanCan checks
   authorize_resource
@@ -30,6 +30,7 @@ class UserKeysController < ApplicationController
     build_answers
   end
 
+  # GET /user_keys/express
   def express
     @user_key = UserKey.new
     @user_key.build_express_app
@@ -49,6 +50,17 @@ class UserKeysController < ApplicationController
     # Build new key
     @user_key = UserKey.new(create_user_key_params)
     # Set user_key's user to be the current user
+    @user_key.user_id = @current_user.id
+    if @user_key.save
+      redirect_to @user_key, notice: 'Application was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  # POST /user_keys/express
+  def create_express
+    @user_key = UserKey.new(create_express_app_params)
     @user_key.user_id = @current_user.id
     if @user_key.save
       redirect_to @user_key, notice: 'Application was successfully created.'
@@ -244,8 +256,7 @@ class UserKeysController < ApplicationController
     # it is here so that our own question_ids, added in later, will be permitted.
     def create_user_key_params
       params.require(:user_key).permit(:name,
-        answers_attributes: [:id, :message, :question_id],
-        express_app_attributes: [:id, :requester_type, :reasoning, :requester_additional_info, :tos_agree])
+        answers_attributes: [:id, :message, :question_id])
     end
 
     # Restricts the paramaters for requester, upon updating application text.
@@ -264,5 +275,11 @@ class UserKeysController < ApplicationController
       params.require(:user_key).permit(:time_expired, :active, :reason, column_ids: [],
        organization_ids: [],
        whitelists_attributes: [:id, :resource, :_destroy, filter_ids: []])
+    end
+
+    # Restricts the parameters for creating an express application.
+    def create_express_app_params
+      params.require(:user_key).permit(:name, :time_expired, column_ids: [],
+        express_app_attributes: [:id, :requester_type, :reasoning, :requester_additional_info, :tos_agree])
     end
 end

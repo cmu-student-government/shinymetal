@@ -176,7 +176,7 @@ class UserKey < ActiveRecord::Base
     when :awaiting_filters
       # Check that the requester has filled in their form.
       return false unless at_stage? :awaiting_submission
-      return request_form_done?
+      return request_form_done?# TODO or (self.express_app && self.express_app.valid?)
     when :awaiting_confirmation
       # Check by admin that the key is ready to be approved by all approvers in the system.
       return false unless at_stage? :awaiting_filters

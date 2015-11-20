@@ -46,15 +46,20 @@
 <% end %>
 
 <div id="whitelist-picker" class="reveal-modal" data-reveal aria-labelled-by="whitelist-picker-title" aria-hidden="true" role="dialog">
-  <h3 id="whitelist-picker-title"></h3>
-  <div id="whitelist-inputs"></div>
+  <h3 class="header"><span></span> Columns:</h3>
+  <table id="columns-table"></table>
+  <h3 class="header"><span></span> Filters:</h3>
+  <table id="filters-table"></table>
 </div>
 
 <% content_for :js do %>
   <script type="text/javascript">
     var req_types = <%= ExpressApp::REQUESTER_TYPES_HUMANIZED.to_json.html_safe %>
       , req_type_div = $("#requester-type-additional")
-      , additional_q_div = $("#requester-type-additional");
+      , additional_q_div = $("#requester-type-additional")
+      , whitelist_picker_modal = $("#whitelist-picker")
+      , columns_table = $("#columns-table")
+      , filters_table = $("#filters-table");
 
     $("#user_key_express_app_attributes_requester_type").change(function() {
       var val = $(this).val();
@@ -78,32 +83,42 @@
       var columns = whitelist_columns[endpoint];
 
       // Set the modals help text and clear any inputs previously generated
-      $("#whitelist-picker-title").text($(this).text() + " Columns:");
-      $("#whitelist-inputs").html("");
+      whitelist_picker_modal.find(".header span").text($(this).text());
+      columns_table.html("");
+      filters_table.html("");
 
       // For each column that is available to choose from...
-      $.each(columns, function(i, col) {
-        var id = guid();
-        // Create a checkbox for the column..
-        var container = $("<div style='white-space:nowrap;'></div>");
-        $("<input />", {
-          id: id,
-          type: 'checkbox',
-          checked: Boolean(selected_columns[endpoint] && selected_columns[endpoint][col]),
-          'data-endpoint': endpoint,
-          'data-column': col,
-          'class': 'whitelist-checkbox',
-          change: updateSelectedWhitelist
-        }).appendTo(container);
+      $.each(columns, function(i, column) {
         // Now create the label for the checkbox...
-        $("<label/>", { 'for': id, text: col }).appendTo(container);
+        // $("<label/>", { 'for': id, text: column });
 
-        // Finally, append the container to our modal
-        container.appendTo("#whitelist-inputs");
-      });
-    });
+        // Add the row to table
+        var x = generateWhitelistRow(endpoint, column);
+        x.appendTo(columns_table);
+      }); // $.each
+    }); // .click
 
-    var updateSelectedWhitelist = function () {
+    var generateWhitelistRow = function (endpoint, column) { // [name, description, example]
+      var id = guid(); // Generate a unique id to associate the label and input
+      var tr = $("<tr><td class='checkbox-cell'></td></tr>");
+      $("<input/>", {
+        id: id,
+        type: 'checkbox',
+        checked: Boolean(selected_columns[endpoint] && selected_columns[endpoint][column]),
+        'data-endpoint': endpoint,
+        'data-column': column,
+        'class': 'whitelist-checkbox',
+        change: updateSelectedColumn
+      }).appendTo(tr.find(".checkbox-cell"));
+
+      // Now create the label for the checkbox...
+      $("<label/>", { 'for': id, text: column }).appendTo(tr.find(".label-cell"));
+
+
+      return tr;
+    }
+
+    var updateSelectedColumn = function () {
       var endpoint = $(this).data("endpoint")
         , column = $(this).data("column");
       if (selected_columns[endpoint] && selected_columns[endpoint][column]) {
@@ -114,8 +129,6 @@
         selected_columns[endpoint] = {};
         selected_columns[endpoint][column] = 1
       }
-
-      console.log(selected_columns)
     }
   </script>
 <% end %>

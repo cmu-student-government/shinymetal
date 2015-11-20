@@ -30,7 +30,7 @@ class ExpressApp < ActiveRecord::Base
 end
 
 
-      # TODO
+      # TODO figure out how to get desc and examples through to view
 
       #   <% orgs_cols = ExpressApp::WHITELIST_COLUMNS[:organizations] %>
       #   <% events_cols = ExpressApp::WHITELIST_COLUMNS[:events] %>

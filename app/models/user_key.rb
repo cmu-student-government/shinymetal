@@ -48,6 +48,11 @@ class UserKey < ActiveRecord::Base
   validates_presence_of :user
   validates_inclusion_of :status, in: STATUS_LIST
 
+  # Define our requester types, and their humanized values
+  enum requester_type: [:course, :extracurricular, :department, :organization]
+  # validates_presence_of :requester_type
+  # validates_presence_of :requester_additional_info
+
   # Validate that the requirements of the submission step and the filtering step
   # are always met afterwards.
   # We do not validate that keys are always approvable afterwards ("confirmed" step),

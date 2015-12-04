@@ -65,6 +65,8 @@ Rails.application.routes.draw do
   # Home path
   get 'home' => 'home#index', as: :home
 
+  get 'toggle_admin' => 'sessions#toggle_admin', as: :toggle_admin if Rails.env.development?
+
   # Catch-all for About, Contact, etc pages
   get ':page_url/edit' => 'pages#edit', as: :edit_page
   get ':page_url' => 'pages#show', as: :page

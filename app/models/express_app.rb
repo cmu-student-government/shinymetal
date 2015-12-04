@@ -3,11 +3,6 @@
 class ExpressApp < ActiveRecord::Base
   belongs_to :user_key
 
-
-  # Define our requester types, and their humanized values
-  enum requester_type: [:course, :extracurricular, :department, :organization]
-
-
   WHITELIST_COLUMNS = {
     events: %w(eventId name shortName description organizationId organizationName startDateTime endDateTime addressStreet1 addressStreet2 addressCity otherLocation eventUrl flyerUrl thumbnailUrl),
     organizations: %w(organizationId name shortName summary description email externalWebsite facebookUrl twitterUrl flickrFeedUrl youtubeChannelUrl googleCalendarUrl profileImageUrl profileUrl primaryContactName primaryContactCampusEmail)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151111192059) do
+ActiveRecord::Schema.define(version: 20151204071843) do
 
   create_table "answers", force: :cascade do |t|
     t.integer  "user_key_id"
@@ -31,10 +31,10 @@ ActiveRecord::Schema.define(version: 20151111192059) do
   add_index "approvals", ["user_key_id"], name: "index_approvals_on_user_key_id"
 
   create_table "columns", force: :cascade do |t|
-    t.string   "resource",    limit: 255
-    t.string   "column_name", limit: 255
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.string   "resource"
+    t.string   "column_name"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   add_index "columns", ["resource", "column_name"], name: "index_columns_on_resource_and_column_name"
@@ -51,43 +51,41 @@ ActiveRecord::Schema.define(version: 20151111192059) do
   add_index "comments", ["user_key_id"], name: "index_comments_on_user_key_id"
 
   create_table "express_apps", force: :cascade do |t|
-    t.integer  "requester_type"
     t.text     "reasoning"
-    t.text     "requester_additional_info"
     t.boolean  "tos_agree"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "user_key_id"
   end
 
   add_index "express_apps", ["user_key_id"], name: "index_express_apps_on_user_key_id"
 
   create_table "filters", force: :cascade do |t|
-    t.string   "resource",     limit: 255
-    t.string   "filter_name",  limit: 255
-    t.string   "filter_value", limit: 255
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "resource"
+    t.string   "filter_name"
+    t.string   "filter_value"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "filters", ["resource", "filter_name", "filter_value"], name: "resource_name_value_index"
 
   create_table "organizations", force: :cascade do |t|
-    t.string   "name",        limit: 255
+    t.string   "name"
     t.integer  "external_id"
-    t.boolean  "active",                  default: true
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "organizations", ["name"], name: "index_organizations_on_name"
 
   create_table "pages", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "url",        limit: 255
+    t.string   "name"
+    t.string   "url"
     t.text     "message"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "questions", force: :cascade do |t|
@@ -118,28 +116,30 @@ ActiveRecord::Schema.define(version: 20151111192059) do
 
   create_table "user_keys", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "status",         limit: 255, default: "awaiting_submission"
+    t.string   "status",                    default: "awaiting_submission"
     t.datetime "time_submitted"
     t.datetime "time_filtered"
     t.datetime "time_confirmed"
     t.date     "time_expired"
-    t.boolean  "active",                     default: true
-    t.string   "name",           limit: 255
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.boolean  "active",                    default: true
+    t.string   "name"
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.integer  "requester_type"
+    t.text     "requester_additional_info"
   end
 
   add_index "user_keys", ["time_submitted", "time_filtered", "time_confirmed", "time_expired"], name: "user_key_ordering_index"
   add_index "user_keys", ["user_id"], name: "user_key_fetching_index"
 
   create_table "users", force: :cascade do |t|
-    t.string   "andrew_id",  limit: 255
-    t.string   "role",       limit: 255, default: "requester"
-    t.boolean  "active",                 default: true
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
-    t.string   "first_name", limit: 255
-    t.string   "last_name",  limit: 255
+    t.string   "andrew_id"
+    t.string   "role",       default: "requester"
+    t.boolean  "active",     default: true
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["andrew_id"], name: "index_users_on_andrew_id"

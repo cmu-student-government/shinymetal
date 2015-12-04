@@ -222,7 +222,7 @@ class UserKeysController < ApplicationController
       # as part of updating nested attributes.
       # We check for 'empty' to prevent errors, in case no questions
       # (and thus no answers) are added to the system yet.
-      unless @questions.empty?
+      unless @questions.empty? || params["user_key"]["express_app_attributes"]
         params[:user_key][:answers_attributes].each{|k,v| v[:question_id] = nil}
         # The index of the answer is used to check which question the answer goes to.
         @questions.each_with_index{|q,i| params[:user_key][:answers_attributes][i.to_s][:question_id] = q.id}

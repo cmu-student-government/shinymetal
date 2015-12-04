@@ -1,22 +1,9 @@
 <%= f.fields_for :express_app do |express_app| %>
   <ol id="express-app-fields">
+    <%= render partial: 'user_keys/form_partials/common_form_items', locals: {f: f} %>
+
     <li>
-      <%= f.label(:name) { "<b>Application Name</b>".html_safe } %>
-      <%= f.text_field(:name, placeholder: "Something short but relevant.", size: 24) %>
-    </li>
-    <li>
-      <%= express_app.label(:requester_type) { "<b>This application is being submitted on behalf of a</b>".html_safe } %>
-      <%= express_app.select(:requester_type,
-            ExpressApp.requester_types.keys.map { |k| [t("requester_types.#{k}.title"), k] },
-            include_blank: true)
-      %>
-      <div id="requester-type-additional" class="hide">
-        &nbsp;<span></span>:&nbsp;
-        <%= express_app.text_field(:requester_additional_info) %>
-      </div>
-    </li>
-    <li>
-      In a sentence or two, <b>describe the goal of your project</b> and how the data you are requesting will be used.
+      In a few sentences, <b>describe the goal of your project</b> and how the data you are requesting will be used.
       <%= express_app.text_area :reasoning, rows: 5, placeholder: "e.g. We are looking to create a mobile app that showcases events happening on campus based on the user's current location. We'd like to use the Bridge API to collect the most up-to-date information on organization's events on campus. The project is for our course XX-XXX and will culminate with a final presentation at the end of this semester." %>
     </li>
     <li>
@@ -36,7 +23,7 @@
     <li>
       Check below to <b>certify that you agree</b> to the following:
       <ul>
-        <li>I've read and agree to abide by the <a href="#">Terms of Service</a>.</li>
+        <li>I have read and agree to abide by the <%= link_to "Terms and Conditions", page_path("terms") %>.</li>
         <li>I pledge to keep the data accessed via The Bridge API secure and to myself.</li>
         <li>I understand that any acts in violation of this agreement will be reported as a <a href="http://www.cmu.edu/student-affairs/theword/comm_standards/standards.html">Community Standards</a> violation.</li>
       </ul>
@@ -59,6 +46,8 @@
       </tr>
       <% ExpressApp::WHITELIST_COLUMNS[endpoint.to_sym].each do |col_name| %>
         <% column = Column.restrict_to(endpoint).find_by_column_name(col_name) %>
+        <%# TODO look into why collegiatelink sometimes has columns and sometimes doesnt in responses %>
+        <% next if column.nil? %>
         <tr data-checkbox-id="user_keys_column_ids_<%= column.id %>">
           <td>
             <%= hidden_field_tag "user_key[column_ids][]" %>
@@ -76,22 +65,6 @@
 <% content_for :js do %>
   <script type="text/javascript">
     $(function () {
-
-      var req_types = <%= t("requester_types").to_json.html_safe %>;
-      var additional_q_div = $("#requester-type-additional");
-
-      $("#user_key_express_app_attributes_requester_type").change(function() {
-        var val = $(this).val();
-        if (val === "") {
-          additional_q_div.addClass("hide");
-          return;
-        }
-
-        additional_q_div.removeClass("hide");
-        additional_q_div.find("span").text(req_types[val]['additional_q']);
-        additional_q_div.find("input").attr("placeholder", "e.g. " + req_types[val]['example']);
-      });
-
       $("[data-reveal-id='whitelist-picker']").click(function() {
         var endpoint = $(this).data("endpoint");
         $(".columns-table").addClass("hide");
@@ -113,7 +86,6 @@
           .toggleClass("success",
             $("#"+endpoint+"-columns-table input:checked").length > 0);
       });
-
     });
   </script>
 <% end %>

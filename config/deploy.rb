@@ -3,25 +3,11 @@ require 'whenever/capistrano'
 set :whenever_command, 'bundle exec whenever'
 
 set :application, 'bridgeapi'
-set :repo_url, 'git@github.com:cmu-student-government/shinymetal.git'
+set :repo_url, 'git@github.com:jkcorrea/shinymetal.git'
 set :scm, :git
 set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
-
-set :default_environment, {
-  'PATH' => '/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/bin:$PATH',
-  'RUBY_VERSION' => 'ruby 2.1.6',
-  'GEM_HOME'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6',
-  'GEM_PATH'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global',
-  'BUNDLE_PATH'  => '/home/jkcorrea/.rvm/gems/ruby-2.1.6'  # If you are using bundler.
-}
-namespace :rvm do
-  task :trust_rvmrc do
-    run "rvm rvmrc trust #{release_path}"
-  end
-end
-after "deploy", "rvm:trust_rvmrc"
 
 set :password, ask("StuGov server password", "", echo: false)
 set :ssh_options, {

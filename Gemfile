@@ -9,6 +9,9 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'capistrano-rails', '~> 1.1.2'
   gem 'capistrano-bundler', '~> 1.1.4'
 
+  # Force updating nokogiri to latest
+  # <= 1.6.6.2 seems to be bugging out on stugov server
+  gem 'nokogiri', '~> 1.6.7'
 
 # Asset gems
   # Use SCSS for stylesheets

@@ -1,0 +1,91 @@
+<%= f.fields_for :express_app do |express_app| %>
+  <ol id="express-app-fields">
+    <%= render partial: 'user_keys/form_partials/common_form_items', locals: {f: f} %>
+
+    <li>
+      In a few sentences, <b>describe the goal of your project</b> and how the data you are requesting will be used.
+      <%= express_app.text_area :reasoning, rows: 5, placeholder: "e.g. We are looking to create a mobile app that showcases events happening on campus based on the user's current location. We'd like to use the Bridge API to collect the most up-to-date information on organization's events on campus. The project is for our course XX-XXX and will culminate with a final presentation at the end of this semester." %>
+    </li>
+    <li>
+      Access to student data can only be provisioned for short periods of time. <b>Select your target end date</b> for this project here, up to 5 months from now.
+      <br>
+      <em style="font-size:0.7rem;">*If longer term access is needed at the end of this period, a regular API application can be submitted when necessary.</em>
+      <br>
+      <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: Date.today + 5.months %>
+    </li>
+    <li>
+      Please <b>select all API endpoints and columns</b> that you will need access to:
+      <br>
+      <% ExpressApp::WHITELIST_COLUMNS.keys.map(&:to_s).each do |endpoint| %>
+        <span class="button secondary whitelist-engage" data-endpoint="<%= endpoint %>" data-reveal-id="whitelist-picker"><%= endpoint.humanize %></span>
+      <% end %>
+    </li>
+    <li>
+      Check below to <b>certify that you agree</b> to the following:
+      <ul>
+        <li>I have read and agree to abide by the <%= link_to "Terms and Conditions", page_path("terms") %>.</li>
+        <li>I pledge to keep the data accessed via The Bridge API secure and to myself.</li>
+        <li>I understand that any acts in violation of this agreement will be reported as a <a href="http://www.cmu.edu/student-affairs/theword/comm_standards/standards.html">Community Standards</a> violation.</li>
+      </ul>
+      <br>
+      <%= express_app.check_box :tos_agree %>
+      <%= express_app.label :tos_agree, "Check here to certify that you've read the Terms of Service and pledge to keep the data accessed via The Bridge API secure and to yourself." %>
+    </li>
+  </ol>
+<% end %>
+
+<div id="whitelist-picker" class="reveal-modal" data-reveal aria-labelled-by="whitelist-picker-title" aria-hidden="true" role="dialog">
+  <h3 class="header"><span></span> Columns:</h3>
+  <% ExpressApp::WHITELIST_COLUMNS.keys.map(&:to_s).each do |endpoint| %>
+    <table id="<%= endpoint %>-columns-table" class="hide columns-table">
+      <tr>
+        <th colspan="1"></th>
+        <th>Column</th>
+        <th>Description</th>
+        <th>Example</th>
+      </tr>
+      <% ExpressApp::WHITELIST_COLUMNS[endpoint.to_sym].each do |col_name| %>
+        <% column = Column.restrict_to(endpoint).find_by_column_name(col_name) %>
+        <%# TODO look into why collegiatelink sometimes has columns and sometimes doesnt in responses %>
+        <% next if column.nil? %>
+        <tr data-checkbox-id="user_keys_column_ids_<%= column.id %>">
+          <td>
+            <%= hidden_field_tag "user_key[column_ids][]" %>
+            <%= check_box_tag "user_key[column_ids][]", column.id, @user_key.columns.include?(column), id: "user_keys_column_ids_#{column.id}", "data-endpoint" => endpoint %>
+          </td>
+          <td><%= col_name.underscore.humanize.titleize + (col_name.last(2) == "Id" ? " ID" : "")%></td>
+          <td><%= t("columns.#{endpoint}.#{col_name}.description") %></td>
+          <td><%= t("columns.#{endpoint}.#{col_name}.example") %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+</div>
+
+<% content_for :js do %>
+  <script type="text/javascript">
+    $(function () {
+      $("[data-reveal-id='whitelist-picker']").click(function() {
+        var endpoint = $(this).data("endpoint");
+        $(".columns-table").addClass("hide");
+        $("#" + endpoint + "-columns-table").removeClass("hide");
+        $("#whitelist-picker .header span").text(endpoint.charAt(0).toUpperCase() + endpoint.slice(1));
+      });
+
+      $(".columns-table tr").click(function (e) {
+        if (e.target.tagName.toLowerCase() === "input") return;
+        var checkbox = $("#" + $(this).data("checkbox-id"));
+        checkbox
+          .prop("checked", !checkbox.prop("checked"))
+          .trigger("change");
+      });
+
+      $(".columns-table input").change(function (e) {
+        var endpoint = $(this).data("endpoint");
+        $(".whitelist-engage[data-endpoint='"+endpoint+"']")
+          .toggleClass("success",
+            $("#"+endpoint+"-columns-table input:checked").length > 0);
+      });
+    });
+  </script>
+<% end %>

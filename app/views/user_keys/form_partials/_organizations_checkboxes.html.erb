@@ -7,9 +7,9 @@
 <div class="checkbox_panel">
 
   <% if Organization.active.empty? %>
-  No organizations can be selected because there are no active organizations in the system.
+    No organizations can be selected because there are no active organizations in the system.
   <% else %>
-     
+
     <div class="organization_checkboxes">
      <ul class="no_bullets">
        <% Organization.active.alphabetical.in_groups_of(4,false) do |org_group| %>
@@ -24,9 +24,9 @@
        <% end %>
      </ul>
     </div>
-  
+
   <% end %>
- 
+
  <p>
    <% unless @user_key.organizations.inactive.empty? %>
    <strong>These organizations belong to this user key, but no longer exist in CollegiateLink.</strong>

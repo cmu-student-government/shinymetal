@@ -1,7 +1,7 @@
 # Manages user key functionality, including approvals, comments, and status changes.
 class UserKeysController < ApplicationController
   before_action :check_login
-  before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search]
+  before_action :set_user_key, except: [:index, :own_user_keys, :new, :create, :search, :express, :create_express]
 
   # CanCan checks
   authorize_resource
@@ -30,6 +30,12 @@ class UserKeysController < ApplicationController
     build_answers
   end
 
+  # GET /user_keys/express
+  def express
+    @user_key = UserKey.new
+    @user_key.build_express_app
+  end
+
   # GET /user_keys/1/edit
   def edit
   end
@@ -44,6 +50,17 @@ class UserKeysController < ApplicationController
     # Build new key
     @user_key = UserKey.new(create_user_key_params)
     # Set user_key's user to be the current user
+    @user_key.user_id = @current_user.id
+    if @user_key.save
+      redirect_to @user_key, notice: 'Application was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  # POST /user_keys/express
+  def create_express
+    @user_key = UserKey.new(create_express_app_params)
     @user_key.user_id = @current_user.id
     if @user_key.save
       redirect_to @user_key, notice: 'Application was successfully created.'
@@ -198,14 +215,14 @@ class UserKeysController < ApplicationController
 
     # Add the correct question ids to the answers in the params;
     # because when creating a user key, the answers don't know what
-    # their question ids are yet. 
+    # their question ids are yet.
     def sanitize_question_ids
       # question_id is something only we should be able to change.
       # It is included in params so that we can set question_id
       # as part of updating nested attributes.
       # We check for 'empty' to prevent errors, in case no questions
       # (and thus no answers) are added to the system yet.
-      unless @questions.empty?
+      unless @questions.empty? || params["user_key"]["express_app_attributes"]
         params[:user_key][:answers_attributes].each{|k,v| v[:question_id] = nil}
         # The index of the answer is used to check which question the answer goes to.
         @questions.each_with_index{|q,i| params[:user_key][:answers_attributes][i.to_s][:question_id] = q.id}
@@ -234,11 +251,12 @@ class UserKeysController < ApplicationController
       @user_key = UserKey.find(params[:id])
     end
 
-    # Restricts the paramaters for the requester, upon creating an application. 
+    # Restricts the paramaters for the requester, upon creating an application.
     # Whatever question_id they pass in will be overwritten;
-    # it is here so that our own question_ids, added in later, will be permitted. 
-    def create_user_key_params 
-      params.require(:user_key).permit(:name, answers_attributes: [:id, :message, :question_id])
+    # it is here so that our own question_ids, added in later, will be permitted.
+    def create_user_key_params
+      params.require(:user_key).permit(:name,
+        answers_attributes: [:id, :message, :question_id])
     end
 
     # Restricts the paramaters for requester, upon updating application text.
@@ -249,13 +267,19 @@ class UserKeysController < ApplicationController
     # Restricts the paramaters for anyone who can comment.
     # Whatever user_id they pass in will be overwritten by the current user's id.
     def comment_user_key_params
-      params.require(:user_key).permit(:comments_attributes => [:id, :message, :public, :user_id])
+      params.require(:user_key).permit(comments_attributes: [:id, :message, :public, :user_id])
     end
 
     # Restricts params for admin, upon updating filters or anything else.
     def admin_update_user_key_params
-      params.require(:user_key).permit(:time_expired, :active, :reason, :column_ids => [],
-                                       :organization_ids => [],
-                                       :whitelists_attributes => [:id, :resource, :_destroy, :filter_ids => []])
+      params.require(:user_key).permit(:time_expired, :active, :reason, column_ids: [],
+       organization_ids: [],
+       whitelists_attributes: [:id, :resource, :_destroy, filter_ids: []])
+    end
+
+    # Restricts the parameters for creating an express application.
+    def create_express_app_params
+      params.require(:user_key).permit(:name, :time_expired, column_ids: [],
+        express_app_attributes: [:id, :requester_type, :reasoning, :requester_additional_info, :tos_agree])
     end
 end

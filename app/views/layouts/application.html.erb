@@ -11,9 +11,9 @@
 
     <%= stylesheet_link_tag     'application',      'data-turbolinks-track' => true, media: 'all' %>
     <%= javascript_include_tag  'vendor/modernizr', 'data-turbolinks-track' => true %>
-    
+
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    
+
     <%= favicon_link_tag "favicon.ico" %>
     <%= favicon_link_tag "favicon.ico", rel: "apple-touch-icon" %>
 
@@ -36,5 +36,6 @@
       <%= render 'layouts/footer' %>
     </div>
 
+    <%= yield :js %>
   </body>
 </html>

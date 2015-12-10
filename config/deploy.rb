@@ -9,7 +9,6 @@ set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
 
-set :bundle_env_variables, { 'NOKOGIRI_USE_SYSTEM_LIBRARIES' => 1 }
 set :default_environment, {
   'PATH' => '/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/bin:$PATH',
   'RUBY_VERSION' => 'ruby 2.1.6',

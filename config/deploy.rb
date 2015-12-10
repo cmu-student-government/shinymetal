@@ -1,6 +1,5 @@
 lock '3.4.0'
 require 'whenever/capistrano'
-set :whenever_command, 'bundle exec whenever'
 
 set :application, 'bridgeapi'
 set :repo_url, 'git@github.com:jkcorrea/shinymetal.git'
@@ -19,8 +18,9 @@ set :ssh_options, {
 # Load .env files into ENV
 set :linked_files, fetch(:linked_files, []).push('.env')
 
-namespace :deploy do
+set :whenever_command, 'bundle exec whenever'
 
+namespace :deploy do
   task :symlink_shared do
     on roles(:all) do
       execute :ln, "-nfs #{shared_path}/config/settings.yml #{release_path}/config/"
@@ -54,14 +54,3 @@ before "deploy:assets:precompile", "deploy:symlink_shared"
 # before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
 #after "deploy:assets:precompile", "whenever:update_crontab"
 #Don't want to overwrite working crontab
-
-namespace :rvmrc do
-  desc "Trust rvmrc file"
-  task :trust do
-    on roles(:all) do
-      command = "rvmrc trust #{release_path}/#{fetch(:current_revision)}"
-      execute :rvm, command
-    end
-  end
-end
-before 'deploy:set_current_revision', 'rvmrc:trust'

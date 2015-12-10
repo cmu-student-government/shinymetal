@@ -2,7 +2,7 @@
 class EndpointRequest
   # @return [String, nil] The error message for any endpoint request that was not allowed.
   attr_reader :failed
-
+  
   # Initialize an EndpontRequest.
   #
   # @param user_key [UserKey] User key with the Gen API Key that matches the one passed in earlier.
@@ -16,7 +16,7 @@ class EndpointRequest
     @resource = params[:endpoint]
     @failed = "error, the request's combination of parameters is not allowed for this API key" unless self.valid?
   end
-
+  
   # Determines if the given user key is allowed to request the paramaters passed in.
   # Only the restrictions of one whitelist needs to be included for the request to be allowed.
   #
@@ -26,48 +26,29 @@ class EndpointRequest
     # If the key has no whitelists at all, the key has no access through normal filters.
     # (If the key has no columns, the key has no access at all, but we check for that in EndpointResponse.)
     # Map the filters for each individual whitelist into a list to be checked.
-    return true if filter_group_list.any? { |fg| matches_options? fg }
-
+    for filter_group in filter_group_list
+      return true if matches_options?(filter_group)
+    end
     # No filters were matched, so check for organizations instead.
     return has_valid_organization_id?
   end
-
+  
   # Determines if the paramaters passed contain the values of a given list of filters.
   #
   # @param filter_group [Array<Filter>] List of filter objects, already mapped earlier from one of the whitelists.
   # @return [Boolean] Whether or not the given filter group contains this list of filters.
   private
-  # def matches_options?(filter_group)
-  #   for filter in filter_group
-  #     # Downcase the values, because CollegiateLink is case insensitive.
-  #     # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
-  #     requested_filter_value = @params[filter.filter_name.to_sym]
-  #     # Accepts anything for this filter, let it pass
-  #     next if filter.filter_value == "*"
-  #     return false if
-  #       requested_filter_value.nil? ||
-  #       requested_filter_value.downcase != filter.filter_value.downcase
-  #   end
-  #   return true
-  # end
-
   def matches_options?(filter_group)
-    return filter_group.all? do |filter|
-      next true if filter.filter_value == "*" # Accepts anything for this filter, let it pass
-
-      # Get the requests value for this filter
-      # If it's not set then it will obviously not match any of our accepted values
-      requested_val = @params[filter.filter_name.to_sym]
-      return false if requested_val.nil?
-
-      # Build an array out of any comma-separated accepted filter values
-      accepted_vals = filter.filter_value.split(",")
-
-      # Do any of the accepted values for this filter match (case-insensitive)?
-      next accepted_vals.any? { |val| val.casecmp(requested_val) == 0 }
+    for filter in filter_group
+      # Downcase the values, because CollegiateLink is case insensitive.
+      # We could theoretically downcase all keys and values from the beginning; this would require changing outcomes in unit tests.
+      if @params[filter.filter_name.to_sym].nil? or (@params[filter.filter_name.to_sym].downcase != filter.filter_value.downcase)
+        return false
+      end
     end
+    return true
   end
-
+  
   # Check if the user key's request is valid through its organization id, whether it has one or not.
   #
   # @return [Boolean] True if the request had an org Id that is associated with the request's key.

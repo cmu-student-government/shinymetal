@@ -15,11 +15,9 @@
 @import "bourbon";
 @import "foundation_and_overrides";
 @import "foundation-icons/foundation-icons";
-@import "foundation-datepicker";
 @import "vars";
 @import "layout";
 @import "user_keys";
-@import "express_app";
 
 .checkbox_panel {
   @extend .panel;

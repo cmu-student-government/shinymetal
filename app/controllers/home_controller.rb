@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   # Users must be logged in to see this dashboard.
   # However, there is no Home class, and we need tell CanCan this.
   authorize_resource :class => false
-
+  
   # GET /home
   # Note: this is NOT a response to the root url.
   # PagesController handles the root url.

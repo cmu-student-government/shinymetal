@@ -6,8 +6,6 @@ Rails.application.routes.draw do
   resources :organizations, only: [:show, :index]
 
   get 'user_keys/search' => 'user_keys#search', as: :user_keys_search # this needs to go before resource :user_keys to override the path
-  get 'express' => 'user_keys#express', as: :express_app
-  post 'express' => 'user_keys#create_express'
   resources :user_keys
 
   resources :questions, except: [:show]
@@ -64,8 +62,6 @@ Rails.application.routes.draw do
 
   # Home path
   get 'home' => 'home#index', as: :home
-
-  get 'toggle_admin' => 'sessions#toggle_admin', as: :toggle_admin if Rails.env.development?
 
   # Catch-all for About, Contact, etc pages
   get ':page_url/edit' => 'pages#edit', as: :edit_page

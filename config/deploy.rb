@@ -1,3 +1,4 @@
+# config valid only for Capistrano 3.1
 lock '3.4.0'
 require 'whenever/capistrano'
 set :whenever_command, 'bundle exec whenever'
@@ -8,20 +9,6 @@ set :scm, :git
 set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
-
-set :default_environment, {
-  'PATH' => '/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/bin:$PATH',
-  'RUBY_VERSION' => 'ruby 2.1.6',
-  'GEM_HOME'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6',
-  'GEM_PATH'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global',
-  'BUNDLE_PATH'  => '/home/jkcorrea/.rvm/gems/ruby-2.1.6'  # If you are using bundler.
-}
-namespace :rvm do
-  task :trust_rvmrc do
-    run "rvm rvmrc trust #{release_path}"
-  end
-end
-after "deploy", "rvm:trust_rvmrc"
 
 set :password, ask("StuGov server password", "", echo: false)
 set :ssh_options, {
@@ -57,11 +44,21 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      execute :touch, release_path.join('tmp/restart.txt')
+      # execute :touch, release_path.join('tmp/restart.txt')
     end
   end
 
   after :publishing, :restart
+
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
+    end
+  end
+
 end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"

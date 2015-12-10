@@ -76,6 +76,8 @@ GEM
     capistrano-bundler (1.1.4)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
+    capistrano-passenger (0.2.0)
+      capistrano (~> 3.0)
     capistrano-rails (1.1.5)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
@@ -269,6 +271,7 @@ DEPENDENCIES
   cancancan (~> 1.10)
   capistrano (~> 3.4)
   capistrano-bundler (~> 1.1.4)
+  capistrano-passenger (~> 0.2.0)
   capistrano-rails (~> 1.1.2)
   cmu_person!
   cocoon (~> 1.2.6)
@@ -287,7 +290,6 @@ DEPENDENCIES
   meta_request
   minitest-reporters
   mysql2 (~> 0.3.18)
-  nokogiri (~> 1.6.7)
   populator3
   quiet_assets
   railroady

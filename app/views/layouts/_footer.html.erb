@@ -7,7 +7,7 @@
   <% if @current_user %>
     <%= link_to 'Home', home_path %>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <% end %>
-
+  
   <%# Provide a link for each possible not-so-static page. %>
   <% Page::PAGE_LIST.keys.each_with_index do |page_url, index| %>
     <% unless index == 0 %>
@@ -15,17 +15,7 @@
     <% end %>
     <%= link_to page_url.capitalize, page_path(page_url) %>
   <% end %>
-
-  <% if Rails.env.development? %>
-    <% if @current_user and @current_user.role? :admin %>
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <%= link_to 'Drop Admin', toggle_admin_path %>
-    <% elsif @current_user %>
-      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <%= link_to 'Become Admin', toggle_admin_path %>
-    <% end %>
-  <% end %>
-
+  
   <br />
   <div id="copy">
     &copy; 2015 Carnegie Mellon University &mdash; Information Systems

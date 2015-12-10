@@ -1,11 +1,11 @@
 # Manages logging in and logging out.
 class SessionsController < ApplicationController
-
+ 
   # GET /login
   def login
     # Get the user's andrew Id through Shibboleth.
-    remote_user = Rails.env.development? ? "jkcorrea" : request.env["REMOTE_USER"]
-
+    remote_user = Rails.env.development? ? "aditisar" : request.env["REMOTE_USER"]
+    
     if remote_user.blank?
       render_500
     else
@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
 
       # Create a new user account for any CMU person not already in the system.
       user ||= new_user(andrew_id)
-
+      
       # Do not allow inactive users to login.
       if user.active
         session[:user_id] = user.id
@@ -28,7 +28,7 @@ class SessionsController < ApplicationController
     end
   end
 
-
+  
   # GET /logout
   def logout
     # Log out of the application.
@@ -36,16 +36,7 @@ class SessionsController < ApplicationController
     # Log out of Shibboleth.
     redirect_to "https://webiso.andrew.cmu.edu/logout.cgi"
   end
-
-  if Rails.env.development?
-    before_action :check_login, only: :toggle_admin
-    def toggle_admin
-      @current_user.role = (@current_user.role? :admin) ? "requester" : "admin"
-      @current_user.save!
-      redirect_to home_path
-    end
-  end
-
+  
   private
   # Creates a User in the database.
   # @param andrew_id [String] The andrew id of the new User object.

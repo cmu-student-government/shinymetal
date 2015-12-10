@@ -7,19 +7,15 @@
 
 <%= form_for(@user_key) do |f| %>
   <%= render 'shared/error_messages', object: @user_key %>
-
+  
   <%#  Begin requester form  %>
   <%#  On create, @user_key.id is nil and not yet owned by its creator.  %>
   <% if @user_key.id.nil? or @current_user.owns? @user_key %>
-    <% if @user_key.express_app %>
-      <%= render partial: 'user_keys/form_partials/express_questions', locals: {f: f} %>
-    <% else %>
-      <fieldset>
-        <legend>Application Form</legend>
-        <%#  Application text boxes. Note that the form object is passed in as :f %>
-        <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
-      </fieldset>
-    <% end %>
+    <fieldset>
+      <legend>Application Form</legend>
+      <%#  Application text boxes. Note that the form object is passed in as :f %>
+      <%= render partial: 'user_keys/form_partials/application_text', locals: {:f=>f} %>
+    </fieldset>
   <% end %>
   <%#  End requester input %>
 
@@ -28,7 +24,7 @@
   <%#  @current_user can only see both above and below if they are both admin and key owner.  %>
   <%#  Admin rights should be unavailable if the key is not submitted or created yet.  %>
   <% if @current_user.role? :admin and !(@user_key.id.nil? or @user_key.at_stage? :awaiting_submission) %>
-
+    
     <!-- Only admins can assign filters, and they can do so at any time -->
     <!-- Added tab for admin to view application text while editing access -->
     <ul class="tabs" data-tab>
@@ -36,69 +32,69 @@
       <li class="tab-title"><a href="#applicationPanel">View Application</a></li>
     </ul>
 
-    <div class="tabs-content active">
-      <div class="admin_only content active" id="accessPanel">
-        <h2>Admin only</h2>
+<div class="tabs-content active">
+    <div class="admin_only content active" id="accessPanel">
+      <h2>Admin only</h2>
+      
+      <hr/>
+      
+      <p><i>Set or change filters, columns, and organizations that this key may automatically have access to for each endpoint.</i></p>
+     
+      <p><i>Any columns and organizations that are selected are available to the user.</i></p>
 
-        <hr/>
-
-        <p><i>Set or change filters, columns, and organizations that this key may automatically have access to for each endpoint.</i></p>
-
-        <p><i>Any columns and organizations that are selected are available to the user.</i></p>
-
-        <p><i>For filtering out data, the system uses "whitelists" to define access rights. A "whitelist" is a group of filters.
-        User requests to an API resource will be accepted as long as they satisfy all filters for at least one whitelist for the resource.
-        Any user request to an API resource that does not satisfy any whitelists for the resource here will be rejected by the system.</i></p>
-
-        <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>
-        <%= render partial: 'user_keys/form_partials/organizations_checkboxes', locals: {f: f} %>
-
-        <!--Expiration date-->
-        <p><i>Set or change the expiration date for the key.</i></p>
-        <div class="collapsed_row">
-          <div class="s3">
-            <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
-          </div>
-          <div class="s3">
-            <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: 3.years.from_now %>
-          </div>
+      <p><i>For filtering out data, the system uses "whitelists" to define access rights. A "whitelist" is a group of filters. 
+      User requests to an API resource will be accepted as long as they satisfy all filters for at least one whitelist for the resource.
+      Any user request to an API resource that does not satisfy any whitelists for the resource here will be rejected by the system.</i></p>
+      
+      <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>
+      <%= render partial: 'user_keys/form_partials/organizations_checkboxes', locals: {f: f} %>    
+    
+      <!--Expiration date-->
+      <p><i>Set or change the expiration date for the key.</i></p>
+      <div class="collapsed_row">
+        <div class="s3">
+          <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
         </div>
-
-        <p><i>Marking a key as inactive
-        suspends the application process, or revokes access rights if the key is already confirmed.</i></p>
-
-        <div class="collapsed_row">
-          <%= f.check_box :active %>
-          <%= f.label :active %>
-          <% if @user_key.active %>
-            &nbsp; <i>This key is currently active.</i>
-          <% else %>
-            &nbsp; <i>This key is inactive and has been suspended.</i>
-          <% end %>
+        <div class="s3">
+          <%= f.date_field :time_expired, order: [:month, :day, :year], 
+                          start_year: Date.today.year, end_year: 2.years.from_now %>
         </div>
-
       </div>
-      <div class="content" id="applicationPanel">
-          <strong>Application text:</strong>
-          <%= render partial: 'user_keys/show_partials/application_text' %>
-
+              
+      <p><i>Marking a key as inactive
+      suspends the application process, or revokes access rights if the key is already confirmed.</i></p>
+    
+      <div class="collapsed_row">
+        <%= f.check_box :active %>
+        <%= f.label :active %>
+        <% if @user_key.active %>
+          &nbsp; <i>This key is currently active.</i>
+        <% else %>
+          &nbsp; <i>This key is inactive and has been suspended.</i>
+        <% end %>
       </div>
+      
+    </div>
+    <div class="content" id="applicationPanel">
+        <strong>Application text:</strong>
+        <%= render partial: 'user_keys/show_partials/application_text' %>
+
     </div>
   <% end %>
   <!-- End admin form -->
 
   <br/>
-
+  
   <% msg = (@user_key.at_stage?(:awaiting_submission) ? "After saving, you will be able to submit the application or make further changes." : "Additional changes can always be made later.") %>
-
+  
   <!-- "cancel_url" is passed as a local variable from new and edit-->
   <div class="actions">
     <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will save changes to this application. " + <%=msg%>>
     <%= f.submit current_page?(:action => 'new')? "Create application" : "Update application",
         class: "big-button success", data: {disable_with: "Please Wait..." } %>
         </span>
-        |
+        | 
     <%= link_to 'Cancel', cancel_url, class: "big-button secondary" %>
   </div>
-
+  
 <% end %>

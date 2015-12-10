@@ -1,4 +1,7 @@
+#ruby=2.2.1
+ruby '2.2.1'
 source 'https://rubygems.org'
+
 gem 'rails', '4.2.4'
 gem 'rake', '>= 10.0'
 gem 'therubyracer', '~> 0.12.1',  platforms: :ruby

@@ -54,3 +54,14 @@ before "deploy:assets:precompile", "deploy:symlink_shared"
 # before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
 #after "deploy:assets:precompile", "whenever:update_crontab"
 #Don't want to overwrite working crontab
+
+namespace :rvmrc do
+  desc "Trust rvmrc file"
+  task :trust do
+    on roles(:all) do
+      command = "rvmrc trust #{release_path}/#{fetch(:current_revision)}"
+      execute :rvm, command
+    end
+  end
+end
+before 'deploy:set_current_revision', 'rvmrc:trust'

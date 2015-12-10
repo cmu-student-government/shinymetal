@@ -1,0 +1,19 @@
+<h4>Express Application</h4>
+
+<p>Description about how express app works.</p>
+
+<br>
+
+<%= form_for(@user_key, url: express_app_path, method: :post) do |f| %>
+  <%= render 'shared/error_messages', object: @user_key %>
+  <%= render partial: 'user_keys/form_partials/express_questions', locals: {f: f} %>
+
+  <br>
+
+  <div class="actions">
+    <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will save changes to this application.">
+      <%= f.submit "Submit application", class: "big-button success", data: {disable_with: "Please Wait..." } %>
+    </span>
+  </div>
+
+<% end %>

@@ -2,7 +2,7 @@
 # Only used for authorization in controllers, not views.
 class Ability
   include CanCan::Ability
- 
+
   # Define which routes the user can access.
   #
   # @param user [User, nil] User object, or nil if the user is not logged in.
@@ -42,13 +42,13 @@ class Ability
       # Filter
       # Admin can do anything they want to with filters.
       can :manage, Filter
-      
+
       # Pages
       can :manage, Page
-      
+
       # Questions
       can :manage, Question
-      
+
       # Orgs
       can :manage, Organization
 
@@ -87,14 +87,14 @@ class Ability
       # Users
       # Can read (show, index) any user
       can :read, User
-      
+
       # All staff can search on User
       can :search, User
 
       # Filters
       # Can read (show, index) filters
       can :read, Filter
-      
+
       # Orgs
       # Can read (show, index) orgs
       can :read, Organization
@@ -122,10 +122,10 @@ class Ability
     # Requester and Key Owner rights
     # These rights are universally available to anyone who is logged in
     if logged_in
-      
+
       # Can see the 'home' page (distinct from the guest 'welcome' page)
       can :read, :home
-      
+
       # Users
       # Can see their own profile
       can :show, User do |accessed_user|
@@ -155,6 +155,10 @@ class Ability
       end
       # Can create a new key for themselves
       can :create, UserKey
+
+      # Custom express app
+      can :express, UserKey
+      can :create_express, UserKey
 
       # No universal Filter key rights exist for requesters.
 

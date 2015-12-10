@@ -6,10 +6,12 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
 
 # Capistrano for deployment
   gem 'capistrano', '~> 3.4'
-  gem 'capistrano-rails', '~> 1.1.2' # Use Capistrano for deployment
+  gem 'capistrano-rails', '~> 1.1.2'
   gem 'capistrano-bundler', '~> 1.1.4'
-  gem 'capistrano-rvm', '~> 0.1.2'
 
+  # Force updating nokogiri to latest
+  # <= 1.6.6.2 seems to be bugging out on stugov server
+  gem 'nokogiri', '~> 1.6.7'
 
 # Asset gems
   # Use SCSS for stylesheets
@@ -111,7 +113,7 @@ end
 
 group :production, :staging do
   # Use mysql2 for deploy db
-  gem 'mysql2'
+  gem 'mysql2', '~> 0.3.18'
 
   # Need this otherwise mod_rails throws a fit on deploy server
   gem 'actionpack-page_caching'

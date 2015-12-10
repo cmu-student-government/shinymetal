@@ -1,4 +1,7 @@
-<p><%= link_to  'Apply for a new key', new_user_key_path, class: "big-button" %></p>
+<p>
+  <%= link_to 'Apply for an Express key', express_app_path, class: "big-button" %>
+  <%= link_to 'Apply for long-term or more specialized access', new_user_key_path, class: "big-button" %>
+</p>
 
 <h3>Your Existing Keys</h3>
 <% if @confirmed_keys.size > 0 %>
@@ -68,7 +71,7 @@
   </tr>
 <% @expired_keys.each do |key| %>
   <tr>
-    <td><%= link_to key.display_name, user_key_path(key) %></td> 
+    <td><%= link_to key.display_name, user_key_path(key) %></td>
     <td><%= key.time_expired ? key.time_expired.to_formatted_s(:long_ordinal) : "N/A" %></td>
   </tr>
 <% end %>

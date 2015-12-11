@@ -47,6 +47,18 @@
   </table>
 <% end %>
 
+
+
+<p>
+  <b>Requester Type:</b>
+  <span><%= I18n.t "requester_types.#{@user_key.requester_type}.title" %></span>
+</p>
+
+<p>
+  <b>Requester Additional Info:</b>
+  <span><%= @user_key.requester_additional_info || "No additional info" %></span>
+</p>
+
 <% if @user_key.express_app %>
   <%= render partial: 'user_keys/show_partials/express_app' %>
 <% else %>

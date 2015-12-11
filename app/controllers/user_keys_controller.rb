@@ -62,6 +62,7 @@ class UserKeysController < ApplicationController
   def create_express
     @user_key = UserKey.new(create_express_app_params)
     @user_key.user_id = @current_user.id
+    # TODO time_expired??
     if @user_key.save
       redirect_to @user_key, notice: 'Application was successfully created.'
     else
@@ -279,7 +280,7 @@ class UserKeysController < ApplicationController
 
     # Restricts the parameters for creating an express application.
     def create_express_app_params
-      params.require(:user_key).permit(:name, :time_expired, column_ids: [],
-        express_app_attributes: [:id, :requester_type, :reasoning, :requester_additional_info, :tos_agree])
+      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info, column_ids: [],
+        express_app_attributes: [:id, :reasoning, :tos_agree])
     end
 end

@@ -1,5 +1,3 @@
-#ruby=2.1.6
-ruby '2.1.6'
 source 'https://rubygems.org'
 
 gem 'rails', '4.2.4'

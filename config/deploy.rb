@@ -9,11 +9,10 @@ set :stages, %w(production staging)
 set :default_stage, "staging"
 
 set :password, ask("StuGov server password", "", echo: false)
-set :ssh_options, {
- forward_agent: true,
- auth_methods: %w(password),
- password: fetch(:password)
-}
+set :ssh_options, { forward_agent: true }
+
+# Restart passenger the old-school way
+set :passenger_restart_with_touch, true
 
 # Load .env files into ENV
 set :linked_files, fetch(:linked_files, []).push('.env')

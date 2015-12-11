@@ -24,7 +24,7 @@
       </li>
 
     <% end %>
-      <li class="<%= 'active' if cName == 'user_keys' && aName == 'express' %>">
+      <li class="new-badge <%= 'active' if cName == 'user_keys' && aName == 'express' %>">
         <%= link_to "Express App", express_app_path %>
       </li>
   <% end %>

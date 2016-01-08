@@ -1,3 +1,5 @@
+<%= markdown(Page.find_or_create("filter-instructions").message) %>
+
 <%= form_for(@filter) do |f| %>
   <fieldset>
 
@@ -5,7 +7,12 @@
 
   <div class="collapsed_row">
     <div class="s3">
-      <%= f.label :resource, class: "prefix" %>
+      <%= f.label :resource, class: "prefix" do %>
+        Resource
+        <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="The resource to filter on.">
+          ?
+        </span>
+      <% end %>
     </div>
     <div class="s9">
       <%= f.select :resource, Resources::RESOURCE_LIST %>
@@ -13,7 +20,12 @@
   </div>
   <div class="collapsed_row">
     <div class="s3">
-      <%= f.label :filter_name, class: "prefix" %>
+      <%= f.label :filter_name, class: "prefix" do %>
+        Filter Name
+        <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="The column to which the filter will be applied.">
+          ?
+        </span>
+      <% end %>
     </div>
     <div class="s9">
       <%= f.select :filter_name, Resources::PARAM_NAME_HASH %>
@@ -21,7 +33,12 @@
   </div>
   <div class="collapsed_row">
     <div class="s3">
-      <%= f.label :filter_value, class: "prefix" %>
+      <%= f.label :filter_value, class: "prefix" do %>
+        Filter Value
+        <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="The value to filter by. Separate multiple values with commas (,). A wildcard (*) may also be used to allow for any value.">
+          ?
+        </span>
+      <% end %>
     </div>
     <div class="s9">
       <%= f.text_field :filter_value %>

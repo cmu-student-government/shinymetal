@@ -14,7 +14,8 @@ class Page < ActiveRecord::Base
     "about" => "About Us",
     "terms" => "Terms and Conditions",
     "lt-instructions" => "Instructions for Long Term Apps",
-    "x-instructions" => "Instructions for Express Apps"
+    "x-instructions" => "Instructions for Express Apps",
+    "filter-instructions" => "Instructions for Filters"
   }
 
   # Class method to fetch one of the four possible Pages.

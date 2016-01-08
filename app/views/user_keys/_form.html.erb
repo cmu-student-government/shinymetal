@@ -1,7 +1,7 @@
 <%# The instructions Page's content is rendered here. %>
 <h4>Instructions for Applying</h4>
 
-<%= markdown(Page.find_or_create("instructions").message) %>
+<%= markdown(Page.find_or_create(@user_key.express_app ? "x-instructions" : "lt-instructions").message) %>
 
 <br/>
 

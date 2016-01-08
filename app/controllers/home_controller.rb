@@ -3,7 +3,7 @@ class HomeController < ApplicationController
   # CanCan checks; this is not the guest 'welcome' page.
   # Users must be logged in to see this dashboard.
   # However, there is no Home class, and we need tell CanCan this.
-  authorize_resource :class => false
+  authorize_resource class: false
 
   # GET /home
   # Note: this is NOT a response to the root url.
@@ -24,5 +24,11 @@ class HomeController < ApplicationController
       @awaiting_admin_review = current_user_keys.awaiting_filters + current_user_keys.awaiting_confirmation
       @expired_keys = current_user_keys.expired
     end
+  end
+
+  # GET /admin
+  # Basic admin's panel
+  def admin
+    @active_questions = Question.active.chronological.to_a
   end
 end

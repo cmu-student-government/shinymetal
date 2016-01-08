@@ -34,6 +34,9 @@ class Ability
     # when they have not yet been submitted.
     if user.role? :admin
 
+      # Admin panel
+      can :manage, :home
+
       # User
       # Admins should not be able to create or destroy users, since these routes don't exist.
       # Users should be created automatically when logging in via shibboleth.
@@ -123,8 +126,8 @@ class Ability
     # These rights are universally available to anyone who is logged in
     if logged_in
 
-      # Can see the 'home' page (distinct from the guest 'welcome' page)
-      can :read, :home
+      # Can see the 'home#index' page (distinct from the guest 'welcome' page)
+      can :index, :home
 
       # Users
       # Can see their own profile

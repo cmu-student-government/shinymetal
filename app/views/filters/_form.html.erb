@@ -1,5 +1,3 @@
-<%= markdown(Page.find_or_create("filter-instructions").message) %>
-
 <%= form_for(@filter) do |f| %>
   <fieldset>
 
@@ -9,7 +7,7 @@
     <div class="s3">
       <%= f.label :resource, class: "prefix" do %>
         Resource
-        <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="The resource to filter on.">
+        <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="The resource to that this filter will be on.">
           ?
         </span>
       <% end %>

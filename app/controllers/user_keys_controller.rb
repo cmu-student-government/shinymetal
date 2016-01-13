@@ -256,7 +256,7 @@ class UserKeysController < ApplicationController
     # Whatever question_id they pass in will be overwritten;
     # it is here so that our own question_ids, added in later, will be permitted.
     def create_user_key_params
-      params.require(:user_key).permit(:name,
+      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info,
         answers_attributes: [:id, :message, :question_id])
     end
 

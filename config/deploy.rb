@@ -49,4 +49,4 @@ namespace :figaro do
   end
 end
 after "deploy:started", "figaro:transfer"
-after "deploy:updating", "figaro:symlink"
+after "deploy:symlink:release", "figaro:symlink"

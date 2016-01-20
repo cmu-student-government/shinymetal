@@ -25,7 +25,7 @@ class QuestionsController < ApplicationController
   # PATCH/PUT /questions/1
   def update
     if @question.update(question_params)
-      redirect_to questions_url, notice: 'Question was successfully updated.'
+      redirect_to admin_path, notice: 'Question was successfully updated.'
     else
       render :edit
     end
@@ -35,7 +35,7 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
     if @question.save
-      redirect_to questions_url, notice: 'Question was successfully created.'
+      redirect_to admin_path, notice: 'Question was successfully created.'
     else
       render :new
     end
@@ -45,7 +45,7 @@ class QuestionsController < ApplicationController
   def destroy
     # Don't actually destroy the question; we need to preserve it for existing keys.
     @question.inactivate
-    redirect_to questions_url, notice: 'Question was successfully deleted.'
+    redirect_to admin_path, notice: 'Question was successfully deleted.'
   end
 
   # PATCH /repopulate_columns

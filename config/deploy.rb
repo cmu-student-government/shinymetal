@@ -14,23 +14,13 @@ set :ssh_options, { forward_agent: true }
 # Restart passenger the old-school way
 set :passenger_restart_with_touch, true
 
-# Load .env files into ENV
-set :linked_files, fetch(:linked_files, []).push('.env')
-
 set :whenever_command, 'bundle exec whenever'
 
-namespace :deploy do
-  desc "Create symbolic link to master settings.yml"
-  task :symlink_shared do
-    on roles(:all) do
-      execute :ln, "-nfs #{shared_path}/config/settings.yml #{release_path}/config/"
-    end
-  end
-
-  desc "Update the crontab file"
-  task :update_crontab do
-    run "bundle exec whenever --update-crontab #{application}"
-  end
+# namespace :deploy do
+  # desc "Update the crontab file"
+  # task :update_crontab do
+  #   run "bundle exec whenever --update-crontab #{application}"
+  # end
 
   # task :symlink_php_endpoints do
   #   on roles(:all) do
@@ -38,21 +28,24 @@ namespace :deploy do
   #     execute :ln, "-nfs #{shared_path}/public/api.php #{release_path}/public/api.php"
   #   end
   # end
+# end
+# before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
+# after "deploy:assets:precompile", "whenever:update_crontab" Don't want to overwrite working crontab
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      execute :touch, release_path.join('tmp/restart.txt')
+namespace :figaro do
+  desc "SCP transfer figaro configuration to the shared folder"
+  task :setup do
+    on roles(:app) do
+      upload! "config/application.yml", "#{shared_path}/application.yml", via: :scp
     end
   end
 
+  desc "Symlink application.yml to the release path"
+  task :symlink do
+    on roles(:app) do
+      execute "ln -sf #{shared_path}/application.yml #{current_path}/config/application.yml"
+    end
+  end
 end
-
-before "deploy:assets:precompile", "deploy:symlink_shared"
-after "deploy:publishing", "deploy:restart"
-
-
-# before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
-#after "deploy:assets:precompile", "whenever:update_crontab"
-#Don't want to overwrite working crontab
+after "deploy:started", "figaro:setup"
+after "deploy:symlink:release", "figaro:symlink"

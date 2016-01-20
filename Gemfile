@@ -48,8 +48,9 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   # Error handler
   gem 'gaffe', '~> 1.0.2'
 
-  # Load .env files into ENV
+  # Handle ENV variables
   # gem 'dotenv-rails', github: "bkeepers/dotenv", tag: 'v2.0.1', require: 'dotenv/rails-now'
+  gem 'figaro', '1.1.1'
 
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
   gem 'turbolinks', '~> 2.5.3'

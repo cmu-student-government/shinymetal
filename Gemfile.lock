@@ -1,13 +1,4 @@
 GIT
-  remote: git://github.com/bkeepers/dotenv.git
-  revision: d358810b049d9b6126162c9802e3571fdebbd9a7
-  tag: v2.0.1
-  specs:
-    dotenv (2.0.1)
-    dotenv-rails (2.0.1)
-      dotenv (= 2.0.1)
-
-GIT
   remote: git://github.com/jkcorrea/cmu_person.git
   revision: d615d5837575e226aaf3a056e4392015e67cc183
   ref: d615d5837575e226aaf3a056e4392015e67cc183
@@ -276,7 +267,6 @@ DEPENDENCIES
   cmu_person!
   cocoon (~> 1.2.6)
   codeclimate-test-reporter
-  dotenv-rails!
   factory_girl_rails
   faker
   foundation-rails (= 5.5.2.1)

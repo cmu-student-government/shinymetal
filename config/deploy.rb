@@ -20,6 +20,7 @@ set :linked_files, fetch(:linked_files, []).push('.env')
 set :whenever_command, 'bundle exec whenever'
 
 namespace :deploy do
+  desc "Create symbolic link to master settings.yml"
   task :symlink_shared do
     on roles(:all) do
       execute :ln, "-nfs #{shared_path}/config/settings.yml #{release_path}/config/"
@@ -46,10 +47,12 @@ namespace :deploy do
     end
   end
 
-  after :publishing, :restart
 end
 
 before "deploy:assets:precompile", "deploy:symlink_shared"
+after "deploy:publishing", "deploy:restart"
+
+
 # before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
 #after "deploy:assets:precompile", "whenever:update_crontab"
 #Don't want to overwrite working crontab

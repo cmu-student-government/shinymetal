@@ -25,7 +25,7 @@ class QuestionsController < ApplicationController
   # PATCH/PUT /questions/1
   def update
     if @question.update(question_params)
-      redirect_to action: 'index', notice: 'Question was successfully updated.'
+      redirect_to questions_url, notice: 'Question was successfully updated.'
     else
       render :edit
     end

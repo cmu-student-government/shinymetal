@@ -1,0 +1,36 @@
+# For new projects, copy this to a new file named
+# Put app configuration vars into application.yml
+# We load these settings in via the Figaro gem
+#
+# To access these constants (anywhere in the app), just do ENV['constant']
+# where 'constant' is the name of the constant in here
+#
+# IMPORTANT
+# Git ignore the application.yml file and NEVER commit it
+# If you do accidentally commit it, you must change all the secrets stored
+# here, as even if later removed it will still be viewable in Git history.
+#
+
+stugov_api_user:
+stugov_api_pass:
+stugov_api_base_url:
+api_key_salt:
+email_login:
+email_password:
+cl_ipaddress:
+cl_apikey:
+cl_privatekey:
+cl_apiurl:
+
+staging:
+  secret_key_base: # generated with 'rake secret'
+  db:
+  db_user:
+  db_pass:
+
+production:
+  secret_key_base:
+  db:
+  db_user:
+  db_pass:
+

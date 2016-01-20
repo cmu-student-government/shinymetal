@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   post 'express' => 'user_keys#create_express'
   resources :user_keys
 
-  resources :questions, except: [:show, :index]
+  resources :questions
 
   # Users are not deleted, only inactivated.
   # They are not created directly; they are meant to be created automatically via shibboleth login.

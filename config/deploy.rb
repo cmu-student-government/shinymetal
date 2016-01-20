@@ -32,9 +32,10 @@ set :whenever_command, 'bundle exec whenever'
 # before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
 # after "deploy:assets:precompile", "whenever:update_crontab" Don't want to overwrite working crontab
 
+# Taken from https://gist.github.com/patte/7684360
 namespace :figaro do
   desc "SCP transfer figaro configuration to the shared folder"
-  task :setup do
+  task :transfer do
     on roles(:app) do
       upload! "config/application.yml", "#{shared_path}/application.yml", via: :scp
     end
@@ -47,5 +48,5 @@ namespace :figaro do
     end
   end
 end
-after "deploy:started", "figaro:setup"
-after "deploy:symlink:release", "figaro:symlink"
+after "deploy:started", "figaro:transfer"
+after "deploy:updating", "figaro:symlink"

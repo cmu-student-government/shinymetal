@@ -262,7 +262,7 @@ class UserKeysController < ApplicationController
 
     # Restricts the paramaters for requester, upon updating application text.
     def owner_user_key_params
-      params.require(:user_key).permit(:name, answers_attributes: [:id, :message])
+      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info, answers_attributes: [:id, :message])
     end
 
     # Restricts the paramaters for anyone who can comment.
@@ -274,8 +274,9 @@ class UserKeysController < ApplicationController
     # Restricts params for admin, upon updating filters or anything else.
     def admin_update_user_key_params
       params.require(:user_key).permit(:time_expired, :active, :reason, column_ids: [],
-       organization_ids: [],
-       whitelists_attributes: [:id, :resource, :_destroy, filter_ids: []])
+        :requester_type, :requester_additional_info,
+        organization_ids: [],
+        whitelists_attributes: [:id, :resource, :_destroy, filter_ids: []])
     end
 
     # Restricts the parameters for creating an express application.

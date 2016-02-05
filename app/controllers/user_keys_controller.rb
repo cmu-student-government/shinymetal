@@ -273,8 +273,8 @@ class UserKeysController < ApplicationController
 
     # Restricts params for admin, upon updating filters or anything else.
     def admin_update_user_key_params
-      params.require(:user_key).permit(:time_expired, :active, :reason, column_ids: [],
-        :requester_type, :requester_additional_info,
+      params.require(:user_key).permit(:time_expired, :active, :reason, :requester_type, :requester_additional_info,
+        column_ids: [],
         organization_ids: [],
         whitelists_attributes: [:id, :resource, :_destroy, filter_ids: []])
     end

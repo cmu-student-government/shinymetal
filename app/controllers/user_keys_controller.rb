@@ -256,13 +256,13 @@ class UserKeysController < ApplicationController
     # Whatever question_id they pass in will be overwritten;
     # it is here so that our own question_ids, added in later, will be permitted.
     def create_user_key_params
-      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info,
+      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info, :time_expired,
         answers_attributes: [:id, :message, :question_id])
     end
 
     # Restricts the paramaters for requester, upon updating application text.
     def owner_user_key_params
-      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info, answers_attributes: [:id, :message])
+      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info, :time_expired, answers_attributes: [:id, :message])
     end
 
     # Restricts the paramaters for anyone who can comment.
@@ -280,7 +280,7 @@ class UserKeysController < ApplicationController
 
     # Restricts the parameters for creating an express application.
     def create_express_app_params
-      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info, column_ids: [],
+      params.require(:user_key).permit(:name, :requester_type, :requester_additional_info, :time_expired, column_ids: [],
         express_app_attributes: [:id, :reasoning, :tos_agree])
     end
 end

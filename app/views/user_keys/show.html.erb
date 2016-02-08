@@ -63,11 +63,6 @@
   </p>
 
   <p>
-    <b>Project End Date</b>
-    <span><%= @user_key.time_expired.strftime("%d %B %Y") %></span>
-  </p>
-
-  <p>
     <% if @user_key.express_app.nil? %>
       <b>Application text:</b>
       <%= render partial: 'user_keys/show_partials/application_text' %>

@@ -34,14 +34,10 @@
     <table>
       <tr>
         <th>API Key Value</th>
-        <th>Expiration Date</th>
       </tr>
       <tr>
         <td>
         <%= @user_key.gen_api_key %>
-        </td>
-        <td>
-        <%= @user_key.time_expired.nil? ? "N/A" : @user_key.time_expired.to_formatted_s(:long) %>
         </td>
       </tr>
     </table>
@@ -60,6 +56,11 @@
   <p>
     <b>Requester Additional Info:</b>
     <span><%= @user_key.requester_additional_info.blank? ? "No additional info" : @user_key.requester_additional_info %></span>
+  </p>
+
+  <p>
+    <b>Project End Date</b>
+    <span><%= @user_key.time_expired.nil? "Expiration not set" : @user_key.time_expired.strftime("%d %B %Y") %></span>
   </p>
 
   <p>

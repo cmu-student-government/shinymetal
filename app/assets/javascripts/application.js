@@ -38,20 +38,21 @@ $(function() {
   }
 
   // Use Foundation Date Picker plugin on date fields
-  $("input[type='date']").each(function() {
-    var parseDate = $.fn.fdatepicker.DPGlobal.parseDate.bind($.fn.fdatepicker.DPGlobal);
-    $(this).attr("type", "text");
+  // $("input[type='date']").each(function() {
+  //   var parseDate = $.fn.fdatepicker.DPGlobal.parseDate.bind($.fn.fdatepicker.DPGlobal);
+  //   $(this).attr("type", "text");
 
-    var min = parseDate($(this).attr("min_date")).valueOf(),
-        max = parseDate($(this).attr("max_date")).valueOf();
-    $(this).fdatepicker({
-      todayBtn: true,
-      todayHighlight: true,
-      onRender: function(date) { return (date.valueOf() < min || date.valueOf() > max) ? 'disabled' : ''; }
-    });
+  //   var min = parseDate($(this).attr("min_date")).valueOf(),
+  //       max = parseDate($(this).attr("max_date")).valueOf();
+  //   $(this).fdatepicker({
+  //     format: 'mm/dd/yyyy',
+  //     todayBtn: true,
+  //     todayHighlight: true,
+  //     onRender: function(date) { return (date.valueOf() < min || date.valueOf() > max) ? 'disabled' : ''; }
+  //   });
 
-    $(this).attr("placeholder", "Click to select a date");
-  });
+  //   $(this).attr("placeholder", "Click to select a date");
+  // });
 });
 
 var guid = function () {

@@ -6,32 +6,41 @@
       In a few sentences, <b>describe the goal of your project</b> and how the data you are requesting will be used.
       <%= express_app.text_area :reasoning, rows: 5, placeholder: "e.g. We are looking to create a mobile app that showcases events happening on campus based on the user's current location. We'd like to use the Bridge API to collect the most up-to-date information on organization's events on campus. The project is for our course XX-XXX and will culminate with a final presentation at the end of this semester." %>
     </li>
-    <li>
-      Access to student data can only be provisioned for short periods of time. <b>Select your target end date</b> for this project here, up to 5 months from now.
-      <br>
-      <em style="font-size:0.7rem;">*If longer term access is needed at the end of this period, a regular API application can be submitted when necessary.</em>
-      <br>
-      <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: Date.today + 5.months %>
-    </li>
-    <li>
-      Please <b>select all API endpoints and columns</b> that you will need access to:
-      <br>
-      <% ExpressApp::WHITELIST_COLUMNS.keys.map(&:to_s).each do |endpoint| %>
-        <span class="button secondary whitelist-engage" data-endpoint="<%= endpoint %>" data-reveal-id="whitelist-picker"><%= endpoint.humanize %></span>
-      <% end %>
-    </li>
-    <li>
-      Check below to <b>certify that you agree</b> to the following:
-      <ul>
-        <li>I have read and agree to abide by the <%= link_to "Terms and Conditions", page_path("terms") %>.</li>
-        <li>I pledge to keep the data accessed via The Bridge API secure and to myself.</li>
-        <li>I understand that any acts in violation of this agreement will be reported as a <a href="http://www.cmu.edu/student-affairs/theword/comm_standards/standards.html">Community Standards</a> violation.</li>
-      </ul>
-      <br>
-      <%= express_app.check_box :tos_agree %>
-      <%= express_app.label :tos_agree, "Check here to certify that you've read the Terms of Service and pledge to keep the data accessed via The Bridge API secure and to yourself." %>
-    </li>
+
+    <% unless @current_user.role? :admin and !(@user_key.id.nil? or @user_key.at_stage? :awaiting_submission) %>
+      <li>
+        Access to student data can only be provisioned for short periods of time. <b>Select your target end date</b> for this project here, up to 5 months from now.
+        <br>
+        <em style="font-size:0.7rem;">*If longer term access is needed at the end of this period, a regular API application can be submitted when necessary.</em>
+        <br>
+        <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: Date.today + 5.months %>
+      </li>
+
+      <li>
+        Please <b>select all API endpoints and columns</b> that you will need access to:
+        <br>
+        <% ExpressApp::WHITELIST_COLUMNS.keys.map(&:to_s).each do |endpoint| %>
+          <span class="button secondary whitelist-engage" data-endpoint="<%= endpoint %>" data-reveal-id="whitelist-picker"><%= endpoint.humanize %></span>
+        <% end %>
+      </li>
+
+      <li>
+        Check below to <b>certify that you agree</b> to the following:
+        <ul>
+          <li>I have read and agree to abide by the <%= link_to "Terms and Conditions", page_path("terms") %>.</li>
+          <li>I pledge to keep the data accessed via The Bridge API secure and to myself.</li>
+          <li>I understand that any acts in violation of this agreement will be reported as a <a href="http://www.cmu.edu/student-affairs/theword/comm_standards/standards.html">Community Standards</a> violation.</li>
+        </ul>
+        <br>
+        <%= express_app.check_box :tos_agree %>
+        <%= express_app.label :tos_agree, "Check here to certify that you've read the Terms of Service and pledge to keep the data accessed via The Bridge API secure and to yourself." %>
+      </li>
+    <% end %>
+
   </ol>
+
+  <br>
+
 <% end %>
 
 <div id="whitelist-picker" class="reveal-modal" data-reveal aria-labelled-by="whitelist-picker-title" aria-hidden="true" role="dialog">

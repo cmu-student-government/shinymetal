@@ -5,7 +5,7 @@
 
 <br>
 
-<%= form_for(@user_key, url: express_app_path, method: :post) do |f| %>
+<%= form_for(@user_key, { url: express_app_path, method: :post }) do |f| %>
   <%= render 'shared/error_messages', object: @user_key %>
   <%= render partial: 'user_keys/form_partials/express_questions', locals: {f: f} %>
 

@@ -60,7 +60,7 @@
 
   <p>
     <b>Project End Date</b>
-    <span><%= @user_key.time_expired.nil? "Expiration not set" : @user_key.time_expired.strftime("%d %B %Y") %></span>
+    <span><%= @user_key.time_expired.nil? ? "Expiration not set" : @user_key.time_expired.strftime("%d %B %Y") %></span>
   </p>
 
   <p>

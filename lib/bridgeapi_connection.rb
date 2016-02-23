@@ -20,7 +20,7 @@ module BridgeapiConnection
     # can then be constructed into the URL
     @url_options = ""
     options.each do |k, v|
-      @url_options = @url_options + "&#{k.to_s}=#{v}"
+      @url_options = @url_options + "&#{k.to_s}=#{CGI::escape(v)}"
     end
 
     if (Rails.env.staging? || Rails.env.production?)

@@ -29,6 +29,25 @@ class HomeController < ApplicationController
   # GET /admin
   # Basic admin's panel
   def admin
+    authorize! :administer, :home
     @active_questions = Question.active.chronological.to_a
+  end
+
+  # PATCH /repopulate_columns
+  def repopulate_columns
+    if Column.repopulate
+      redirect_to admin_path, notice: "The columns in the system were successfully updated."
+    else
+      redirect_to admin_path, alert: "The request to CollegiateLink failed. Please try again later."
+    end
+  end
+
+  # PATCH /repopulate_organizations
+  def repopulate_organizations
+    if Organization.repopulate
+      redirect_to admin_path, notice: "The organizations look-up table was successfully updated."
+    else
+      redirect_to admin_path, alert: "The request to CollegiateLink failed. Please try again later."
+    end
   end
 end

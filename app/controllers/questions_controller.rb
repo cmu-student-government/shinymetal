@@ -48,24 +48,6 @@ class QuestionsController < ApplicationController
     redirect_to admin_path, notice: 'Question was successfully deleted.'
   end
 
-  # PATCH /repopulate_columns
-  def repopulate_columns
-    if Column.repopulate
-      redirect_to questions_path, notice: "The columns in the system were successfully updated."
-    else
-      redirect_to questions_path, alert: "The request to CollegiateLink failed. Please try again later."
-    end
-  end
-
-  # PATCH /repopulate_organizations
-  def repopulate_organizations
-    if Organization.repopulate
-      redirect_to questions_path, notice: "The organizations look-up table was successfully updated."
-    else
-      redirect_to questions_path, alert: "The request to CollegiateLink failed. Please try again later."
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_question

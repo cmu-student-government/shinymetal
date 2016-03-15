@@ -21,12 +21,6 @@ Rails.application.routes.draw do
   get 'logout' => 'sessions#logout', as: :logout
   get 'login' => 'sessions#login', as: :login
 
-  # Path to repopulate the organizations look-up table
-  patch 'repopulate_organizations' => 'questions#repopulate_organizations', as: :repopulate_organizations
-
-  # Path to add columns from CollegiateLink
-  patch 'repopulate_columns' => 'questions#repopulate_columns', as: :repopulate_columns
-
   # Path to see a user's own keys
   get 'own_user_keys' => 'user_keys#own_user_keys', as: :own_user_keys
 
@@ -64,7 +58,13 @@ Rails.application.routes.draw do
 
   # Home path
   get 'home' => 'home#index', as: :home
+
+  # Admin panel
   get 'admin' => 'home#admin', as: :admin
+  # Path to repopulate the organizations look-up table
+  patch 'repopulate_organizations' => 'home#repopulate_organizations', as: :repopulate_organizations
+  # Path to add columns from CollegiateLink
+  patch 'repopulate_columns' => 'home#repopulate_columns', as: :repopulate_columns
 
   get 'toggle_admin' => 'sessions#toggle_admin', as: :toggle_admin if Rails.env.development?
 

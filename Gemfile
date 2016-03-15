@@ -90,6 +90,7 @@ group :development do
   gem 'hirb'
   gem 'populator3'
   gem 'faker'
+  gem 'byebug'
 
   # letter_opener safely opens development emails in browser, does not send.
   # Dev emails are stored in tmp/letter_opener

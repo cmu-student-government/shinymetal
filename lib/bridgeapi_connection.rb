@@ -13,7 +13,7 @@ module BridgeapiConnection
     # Set the optional page number to the first page if not otherwise specified
     params[:page] ||= "1"
 
-    @resource ||= params[:endpoint] # Should already be set in EndpointResponse
+    @resource = params[:endpoint] # Should already be set in EndpointResponse
     options = params.reject{ |k,v| k == :endpoint }
 
     # Any optional parameters that are listed for this endpoint in the API docs

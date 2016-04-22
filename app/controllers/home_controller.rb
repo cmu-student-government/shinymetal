@@ -33,6 +33,14 @@ class HomeController < ApplicationController
     @active_questions = Question.active.chronological.to_a
   end
 
+  # GET /admin_docs
+  # Download admin docs
+  def admin_docs
+    authorize! :administer, :home
+    pdf = File.join(Rails.root, "doc/BridgeAPIAdminHowto.pdf")
+    send_file(pdf, filename: "BridgeAPIAdminHowto.pdf", disposition: 'inline', type: "application/pdf")
+  end
+
   # PATCH /repopulate_columns
   def repopulate_columns
     if Column.repopulate

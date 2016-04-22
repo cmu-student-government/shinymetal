@@ -61,6 +61,8 @@ Rails.application.routes.draw do
 
   # Admin panel
   get 'admin' => 'home#admin', as: :admin
+  # Download admin docs pdf
+  get 'admin_docs' => 'home#admin_docs', as: :admin_docs
   # Path to repopulate the organizations look-up table
   patch 'repopulate_organizations' => 'home#repopulate_organizations', as: :repopulate_organizations
   # Path to add columns from CollegiateLink

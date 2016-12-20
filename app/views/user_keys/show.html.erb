@@ -25,70 +25,87 @@
 
 <div class="content active" id="statusPanel">
 
-<%# Only Staff should see this status bar.%>
-<% if @current_user.role? :is_staff %>
-  <%= render partial: 'user_keys/show_partials/approval_status' %>
-<% end %>
+  <%# Only Staff should see this status bar.%>
+  <% if @current_user.role? :is_staff %>
+    <%= render partial: 'user_keys/show_partials/approval_status' %>
+  <% end %>
 
-<% if @user_key.at_stage? :confirmed or @current_user.role? :staff %>
-  <table>
-    <tr>
-      <th>API Key Value</th>
-      <th>Expiration Date</th>
-    </tr>
-    <tr>
-      <td>
-      <%= @user_key.gen_api_key %>
-      </td>
-      <td>
-      <%= @user_key.time_expired.nil? ? "N/A" : @user_key.time_expired.to_formatted_s(:long) %>
-      </td>
-    </tr>
-  </table>
-<% end %>
+  <% if @user_key.at_stage? :confirmed or @current_user.role? :staff %>
+    <table>
+      <tr>
+        <th>API Key Value</th>
+      </tr>
+      <tr>
+        <td>
+        <%= @user_key.gen_api_key %>
+        </td>
+      </tr>
+    </table>
+  <% end %>
 
-<% if @user_key.express_app %>
-  <%= render partial: 'user_keys/show_partials/express_app' %>
-<% else %>
   <p>
-    <strong>Application text:</strong>
-    <%= render partial: 'user_keys/show_partials/application_text' %>
+    <b>Application Type:</b>
+    <span><%= @user_key.express_app.nil? ? 'Long Term' : 'Express' %></span>
   </p>
-<% end %>
+
+  <p>
+    <b>Requester Type:</b>
+    <span><%= I18n.t "requester_types.#{@user_key.requester_type}.title" %></span>
+  </p>
+
+  <p>
+    <b>Requester Additional Info:</b>
+    <span><%= @user_key.requester_additional_info.blank? ? "No additional info" : @user_key.requester_additional_info %></span>
+  </p>
+
+  <p>
+    <b>Project End Date</b>
+    <span><%= @user_key.time_expired.nil? ? "Expiration not set" : @user_key.time_expired.strftime("%d %B %Y") %></span>
+  </p>
+
+  <p>
+    <% if @user_key.express_app.nil? %>
+      <b>Application text:</b>
+      <%= render partial: 'user_keys/show_partials/application_text' %>
+    <% else %>
+      <b>Project Description:</b>
+      <span><%= @user_key.express_app.reasoning %></span>
+    <% end %>
+  </p>
 
 </div>
 
 <div class="content" id="permissionsPanel">
 
-<%# Permissions are only visible to the owner when the key is confirmed. %>
-<% if @current_user.role? :is_staff or (@current_user.owns?(@user_key) and @user_key.at_stage? :confirmed) %>
-  <div class="staff_only panel">
-  <%# Formerly this panel was indeed "staff_only", but changed to allow users to see their access rights. %>
-  <h3>Access Rights for Your Key</h3>
-  <br>
-    <%= render partial: 'user_keys/show_partials/list_of_resources' %>
-    <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
-  </div>
+  <%# Permissions are only visible to the owner when the key is confirmed. %>
+  <% if @current_user.role? :is_staff or (@current_user.owns?(@user_key) and @user_key.at_stage? :confirmed) %>
+    <div class="staff_only panel">
+      <%# Formerly this panel was indeed "staff_only", but changed to allow users to see their access rights. %>
+      <h3>Access Rights for Your Key</h3>
+      <br>
+      <%= render partial: 'user_keys/show_partials/list_of_resources' %>
+      <%= render partial: 'user_keys/show_partials/list_of_organizations' %>
+    </div>
 
+    <%# Show the key's approvers if the key is at the approval stage. %>
     <% if @user_key.at_stage? :awaiting_confirmation %>
       <div class="staff_only panel row">
-      <%# Show the key's approvers if the key is at the approval stage. %>
-          <div class="column">
-            <%= render partial: 'user_keys/show_partials/list_of_approvers' %>
-          </div>
-          <div class="column">
-            <% if @current_user.role? :is_approver %>
-              <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
-            <% end %>
-          </div>
+        <div class="column">
+          <%= render partial: 'user_keys/show_partials/list_of_approvers' %>
+        </div>
+        <div class="column">
+          <% if @current_user.role? :is_approver %>
+            <%= render partial: 'user_keys/show_partials/approval_checkbox' %>
+          <% end %>
+        </div>
       </div>
     <% end %>
 
-<% else %>
+  <% else %>
 
-  <p>No API access rights exist yet. Once this key request is approved, access rights will be granted by an administrator.</p>
+    <p>No API access rights exist yet. Once this key request is approved, access rights will be granted by an administrator.</p>
 
-<% end %>
+  <% end %>
 
 </div> <%# End of permissions tab. %>
 
@@ -102,7 +119,7 @@
   <div class="public_comments">
     <%= render partial: 'user_keys/show_partials/sublist_of_comments', locals: { comments: @public_comments, comment_type: "Messages from Administrator" } %>
   </div>
-<%= render partial: 'user_keys/show_partials/list_of_comments' %>
+    <%= render partial: 'user_keys/show_partials/list_of_comments' %>
 </div>
 
 <%# Confirm, reset, delete, and apply filters here. %>

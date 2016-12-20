@@ -1,5 +1,7 @@
 <h1>Listing Filters</h1>
 
+<%= markdown(Page.find_or_create("filter-instructions").message) %>
+
 <table>
   <thead>
     <tr>
@@ -21,7 +23,7 @@
     <% end %>
    &nbsp;
   </div>
-  
+
   <%#  Kaminari paginate  %>
   <div class="s6">
     <div id="paginator">

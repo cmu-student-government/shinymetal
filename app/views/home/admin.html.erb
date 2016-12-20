@@ -1,0 +1,62 @@
+<h1>Admin Panel</h1>
+
+<br>
+
+<span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will pull data from CollegiateLink API
+to refresh the list of organizations in the system. This action is executed automatically by the system every week.">
+<%= link_to 'Sync Organizations Look-up Table',
+               repopulate_organizations_path,
+               method: :patch, class: "small-button center",
+               data: { disable_with: "Please Wait...",
+               confirm: "Are you sure? This will send multiple requests to CollegiateLink API for their organizations." } %>
+</span>
+
+<span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will pull data from CollegiateLink API
+to refresh the list of columns known to be used by CollegiateLink. This action is executed automatically by the system every week.">
+<%= link_to 'Sync Columns', repopulate_columns_path,
+      method: :patch, class: "small-button center",
+      data: { disable_with: "Please Wait...",
+      confirm: "Are you sure? This will send 6 requests to CollegiateLink API for their colummns." } %>
+</span>
+
+<br>
+<br>
+
+<h3><%= link_to 'Admin Documentation/Howto Guide', admin_docs_path %></h3>
+
+<br>
+
+<h3>Long Term Application Questions</h3>
+<fieldset>
+  <ol>
+    <% @active_questions.each do |question| %>
+    <div class="row">
+      <div class="s11">
+        <li>
+          <%= markdown((question.required ? "**Required** " : "") + question.message) %>
+        </li>
+      </div>
+      <div class="s1">
+          <%= link_to '<i class="fi-page-edit"></i>'.html_safe, edit_question_path(question) %>
+          &nbsp; | &nbsp;
+          <span class="has-tip tip-top" data-tooltip aria-haspopup="true" title="This action will remove this question from future applications.
+          Existing applications will still have answers to this question.">
+            <%= link_to '<i class="fi-x"></i>'.html_safe, question_path(question), method: :delete, class: "red" %>
+          </span>
+        </div>
+    </div>
+    <% end %>
+  </ol>
+
+  <%= link_to 'Add question', new_question_path, class: "small-button right" %>
+</fieldset>
+
+<br>
+
+<h3>Static Pages</h3>
+<ul>
+  <% Page::PAGE_LIST.each do |url, name| %>
+    <li><%= link_to name, url %></li>
+  <% end %>
+</ul>
+

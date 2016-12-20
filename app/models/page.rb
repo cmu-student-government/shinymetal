@@ -8,11 +8,17 @@ class Page < ActiveRecord::Base
   # Static pages, with content to be determined by an admin.
   # Theoretically, functionality could be extended so that the admin can add pages,
   # but this would add unnecessary complexity to this app.
-  PAGE_LIST = {"welcome" => "Welcome to The Bridge API",
-               "contact" => "Contact Us",
-               "about" => "About Us",
-               "terms" => "Terms and Conditions",
-               "instructions" => "Instructions for Applying"
+  PAGE_LIST = {
+    # Pages to put in footer
+    "welcome" => "Welcome to The Bridge API",
+    "contact" => "Contact Us",
+    "about" => "About Us",
+    "terms" => "Terms and Conditions",
+
+    # Other pages
+    "lt-instructions" => "Instructions for Long Term Apps",
+    "x-instructions" => "Instructions for Express Apps",
+    "filter-instructions" => "Instructions for Filters"
   }
 
   # Class method to fetch one of the four possible Pages.

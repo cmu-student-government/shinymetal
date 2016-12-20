@@ -1,14 +1,10 @@
 require File.expand_path('../boot', __FILE__)
-require 'yaml'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-
-ENV.update YAML.load_file('config/settings.yml')[Rails.env] rescue {}
-ENV['api_key_salt'] = ENV["api_key_salt"] if Rails.env.test?
 
 module Shinymetal
   class Application < Rails::Application

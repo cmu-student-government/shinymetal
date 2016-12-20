@@ -57,14 +57,14 @@ class EndpointRequest
 
       # Get the requests value for this filter
       # If it's not set then it will obviously not match any of our accepted values
-      requested_val = @params[filter.filter_name.to_sym]
+      requested_val = CGI::unescape(@params[filter.filter_name.to_sym])
       return false if requested_val.nil?
 
       # Build an array out of any comma-separated accepted filter values
       accepted_vals = filter.filter_value.split(",")
 
       # Do any of the accepted values for this filter match (case-insensitive)?
-      next accepted_vals.any? { |val| val.casecmp(requested_val) == 0 }
+      next accepted_vals.any? { |val| val.strip.casecmp(requested_val) == 0 }
     end
   end
 

@@ -1,50 +1,26 @@
 lock '3.4.0'
 require 'whenever/capistrano'
-set :whenever_command, 'bundle exec whenever'
 
 set :application, 'bridgeapi'
-set :repo_url, 'git@github.com:cmu-student-government/shinymetal.git'
+set :repo_url, 'git@github.com:jkcorrea/shinymetal.git'
 set :scm, :git
 set :use_sudo, false
 set :stages, %w(production staging)
 set :default_stage, "staging"
 
-set :default_environment, {
-  'PATH' => '/home/jkcorrea/.rvm/gems/ruby-2.1.6/bin:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:/usr/local/rvm/bin:/home/jkcorrea/.rvm/bin:$PATH',
-  'RUBY_VERSION' => 'ruby 2.1.6',
-  'GEM_HOME'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6',
-  'GEM_PATH'     => '/home/jkcorrea/.rvm/gems/ruby-2.1.6:/home/jkcorrea/.rvm/gems/ruby-2.1.6@global',
-  'BUNDLE_PATH'  => '/home/jkcorrea/.rvm/gems/ruby-2.1.6'  # If you are using bundler.
-}
-namespace :rvm do
-  task :trust_rvmrc do
-    run "rvm rvmrc trust #{release_path}"
-  end
-end
-after "deploy", "rvm:trust_rvmrc"
-
 set :password, ask("StuGov server password", "", echo: false)
-set :ssh_options, {
- forward_agent: true,
- auth_methods: %w(password),
- password: fetch(:password)
-}
+set :ssh_options, { forward_agent: true }
 
-# Load .env files into ENV
-set :linked_files, fetch(:linked_files, []).push('.env')
+# Restart passenger the old-school way
+set :passenger_restart_with_touch, true
 
-namespace :deploy do
+set :whenever_command, 'bundle exec whenever'
 
-  task :symlink_shared do
-    on roles(:all) do
-      execute :ln, "-nfs #{shared_path}/config/settings.yml #{release_path}/config/"
-    end
-  end
-
-  desc "Update the crontab file"
-  task :update_crontab do
-    run "bundle exec whenever --update-crontab #{application}"
-  end
+# namespace :deploy do
+  # desc "Update the crontab file"
+  # task :update_crontab do
+  #   run "bundle exec whenever --update-crontab #{application}"
+  # end
 
   # task :symlink_php_endpoints do
   #   on roles(:all) do
@@ -52,19 +28,25 @@ namespace :deploy do
   #     execute :ln, "-nfs #{shared_path}/public/api.php #{release_path}/public/api.php"
   #   end
   # end
+# end
+# before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
+# after "deploy:assets:precompile", "whenever:update_crontab" Don't want to overwrite working crontab
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      execute :touch, release_path.join('tmp/restart.txt')
+# Taken from https://gist.github.com/patte/7684360
+namespace :figaro do
+  desc "SCP transfer figaro configuration to the shared folder"
+  task :transfer do
+    on roles(:app) do
+      upload! "config/application.yml", "#{shared_path}/application.yml", via: :scp
     end
   end
 
-  after :publishing, :restart
+  desc "Symlink application.yml to the release path"
+  task :symlink do
+    on roles(:app) do
+      execute "ln -sf #{shared_path}/application.yml #{current_path}/config/application.yml"
+    end
+  end
 end
-
-before "deploy:assets:precompile", "deploy:symlink_shared"
-# before "deploy:assets:precompile", "deploy:symlink_php_endpoints"
-#after "deploy:assets:precompile", "whenever:update_crontab"
-#Don't want to overwrite working crontab
+after "deploy:started", "figaro:transfer"
+after "deploy:symlink:release", "figaro:symlink"

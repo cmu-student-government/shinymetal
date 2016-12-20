@@ -1,10 +1,11 @@
-<h4>Express Application</h4>
+<h1>Express Application</h1>
+<h4>Instructions for Applying</h4>
 
-<p>Description about how express app works.</p>
+<%= markdown(Page.find_or_create("x-instructions").message) %>
 
 <br>
 
-<%= form_for(@user_key, url: express_app_path, method: :post) do |f| %>
+<%= form_for(@user_key, { url: express_app_path, method: :post }) do |f| %>
   <%= render 'shared/error_messages', object: @user_key %>
   <%= render partial: 'user_keys/form_partials/express_questions', locals: {f: f} %>
 

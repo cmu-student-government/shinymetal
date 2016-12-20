@@ -24,7 +24,7 @@
       </li>
 
     <% end %>
-      <li class="<%= 'active' if cName == 'user_keys' && aName == 'express' %>">
+      <li class="new-badge <%= 'active' if cName == 'user_keys' && aName == 'express' %>">
         <%= link_to "Express App", express_app_path %>
       </li>
   <% end %>
@@ -61,7 +61,7 @@
       <%# Only admin users can look at the settings page %>
       <% if @current_user.role? :admin %>
         <li id="settings" class="<%= 'active' if cName == 'questions' %>">
-          <%= link_to questions_path do %>
+          <%= link_to admin_path do %>
             <i class="show-for-medium-up fi-widget"></i>
             <div class="show-for-small-only">Settings</div>
           <% end %>

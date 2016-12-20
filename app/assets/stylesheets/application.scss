@@ -21,6 +21,20 @@
 @import "user_keys";
 @import "express_app";
 
+.new-badge:after {
+  content: "new!";
+  position: relative;
+  height: 2rem;
+  top: -3.4rem;
+  right: -5.4rem;
+  width: 2rem;
+  text-align: center;
+  line-height: 2rem;
+  font-size: 0.75rem;
+  border-radius: 50%;
+  color: yellow;
+}
+
 .checkbox_panel {
   @extend .panel;
   background-color: white;

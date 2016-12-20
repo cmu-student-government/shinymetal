@@ -1,7 +1,7 @@
 <%# The instructions Page's content is rendered here. %>
 <h4>Instructions for Applying</h4>
 
-<%= markdown(Page.find_or_create("instructions").message) %>
+<%= markdown(Page.find_or_create(@user_key.express_app ? "x-instructions" : "lt-instructions").message) %>
 
 <br/>
 
@@ -59,8 +59,8 @@
           <div class="s3">
             <%= f.label :time_expired, value: "Expiration Date", class: "prefix" %>
           </div>
-          <div class="s3">
-            <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: 3.years.from_now %>
+          <div class="s3 pull-6">
+            <%= f.date_field :time_expired, order: [:month, :day, :year], min_date: Date.today, max_date: Date.today + 3.years %>
           </div>
         </div>
 

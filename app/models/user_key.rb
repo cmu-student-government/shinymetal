@@ -50,7 +50,7 @@ class UserKey < ActiveRecord::Base
 
   # Define our requester types, and their humanized values
   enum requester_type: [:course, :extracurricular, :department, :organization]
-  # validates_presence_of :requester_type
+  validates_presence_of :requester_type
   # validates_presence_of :requester_additional_info
 
   # Validate that the requirements of the submission step and the filtering step

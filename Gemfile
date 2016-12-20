@@ -1,4 +1,6 @@
+ruby '2.1.6'
 source 'https://rubygems.org'
+
 gem 'rails', '4.2.4'
 gem 'rake', '>= 10.0'
 gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
@@ -8,10 +10,7 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   gem 'capistrano', '~> 3.4'
   gem 'capistrano-rails', '~> 1.1.2'
   gem 'capistrano-bundler', '~> 1.1.4'
-
-  # Force updating nokogiri to latest
-  # <= 1.6.6.2 seems to be bugging out on stugov server
-  gem 'nokogiri', '~> 1.6.7'
+  gem 'capistrano-passenger', '~> 0.2.0'
 
 # Asset gems
   # Use SCSS for stylesheets
@@ -49,8 +48,9 @@ gem 'therubyracer', '~> 0.12.1',  platforms: :ruby
   # Error handler
   gem 'gaffe', '~> 1.0.2'
 
-  # Load .env files into ENV
-  gem 'dotenv-rails', github: "bkeepers/dotenv", tag: 'v2.0.1', require: 'dotenv/rails-now'
+  # Handle ENV variables
+  # gem 'dotenv-rails', github: "bkeepers/dotenv", tag: 'v2.0.1', require: 'dotenv/rails-now'
+  gem 'figaro', '1.1.1'
 
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
   gem 'turbolinks', '~> 2.5.3'
@@ -90,6 +90,7 @@ group :development do
   gem 'hirb'
   gem 'populator3'
   gem 'faker'
+  gem 'byebug'
 
   # letter_opener safely opens development emails in browser, does not send.
   # Dev emails are stored in tmp/letter_opener

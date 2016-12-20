@@ -13,14 +13,14 @@ module BridgeapiConnection
     # Set the optional page number to the first page if not otherwise specified
     params[:page] ||= "1"
 
-    @resource ||= params[:endpoint] # Should already be set in EndpointResponse
+    @resource = params[:endpoint] # Should already be set in EndpointResponse
     options = params.reject{ |k,v| k == :endpoint }
 
     # Any optional parameters that are listed for this endpoint in the API docs
     # can then be constructed into the URL
     @url_options = ""
     options.each do |k, v|
-      @url_options = @url_options + "&#{k.to_s}=#{v}"
+      @url_options = @url_options + "&#{k.to_s}=#{CGI::escape(v)}"
     end
 
     if (Rails.env.staging? || Rails.env.production?)

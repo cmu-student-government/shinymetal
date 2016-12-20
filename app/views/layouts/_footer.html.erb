@@ -9,7 +9,8 @@
   <% end %>
 
   <%# Provide a link for each possible not-so-static page. %>
-  <% Page::PAGE_LIST.keys.each_with_index do |page_url, index| %>
+  <%# Iterate over the first 4 only... %>
+  <% Page::PAGE_LIST.keys.first(4).each_with_index do |page_url, index| %>
     <% unless index == 0 %>
       &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <% end %>

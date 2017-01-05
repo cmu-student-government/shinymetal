@@ -16,14 +16,19 @@
                    !(user_key.at_stage? :confirmed)) %>
 
 <% if special_case %>
+
   <%= user_key.send(time_attr).to_formatted_s(:long_ordinal) %>
+  <%= render partial: 'shared/boolean_label', locals: { boolean_label: !user_key.expired?, true_message: temp_true_message, false_message: temp_false_message } %>
 
 <% elsif user_key.at_stage?(stage_to_show_label, true) %>
+
   <% if user_key.at_stage?(stage_to_show_time, true) %>
     <%= user_key.send(time_attr).to_formatted_s(:pretty) %>
+    <%= render partial: 'shared/boolean_label', locals: { boolean_label: user_key.at_stage?(stage_to_show_time, true), true_message: temp_true_message, false_message: temp_false_message } %>
   <% end %>
-  <%= render partial: 'shared/boolean_label', locals: { boolean_label: user_key.at_stage?(stage_to_show_time, true), true_message: temp_true_message, false_message: temp_false_message } %>
 
 <% else %>
-N/A
+
+	N/A
+	
 <% end %>

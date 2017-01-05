@@ -44,10 +44,10 @@
 
         <p><i>Set or change filters, columns, and organizations that this key may automatically have access to for each endpoint.</i></p>
 
-        <p><i>Any columns and organizations that are selected are available to the user.</i></p>
+        <p><i>Any columns and tables that are selected are available to the user.</i></p>
 
-        <p><i>For filtering out data, the system uses "whitelists" to define access rights. A "whitelist" is a group of filters.
-        User requests to an API resource will be accepted as long as they satisfy all filters for at least one whitelist for the resource.
+        <p><i>In order to not return all data to a user, whitelists are required for each table you give the user access to. A "whitelist" is a group of filters. Filters can be added and removed from a whitelist for any specific table on another screen, and you can select from available filters below and add whitelists with different combinations of filters selected. *If you do not include any whitelists or do not select any filters for the whitelist, no user requests will be allowed to that table of data.*
+        User requests to an API resource will only be accepted as long as they satisfy (e.g. include all selected filters as parameters in the request URL) all filters for at least one whitelist for the resource.
         Any user request to an API resource that does not satisfy any whitelists for the resource here will be rejected by the system.</i></p>
 
         <%= render partial: 'user_keys/form_partials/resources_checkboxes', locals: {f: f} %>

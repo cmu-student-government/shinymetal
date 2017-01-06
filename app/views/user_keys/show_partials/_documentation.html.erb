@@ -15,11 +15,17 @@
   <h3> Making A Request to The Bridge API </h3>
   <p> All requests to The Bridge API need to be <code>POST</code> requests with two
       header fields: <code>andrew_id</code> and <code>api_key</code>. Paremeters are required, but they are passed in the URL rather than in the body of the request. See below for the syntax for passing paramters. Requests follow the same syntax
-      as the <a href="http://support.collegiatelink.net/hc/en-us/articles/204033994-Documentation-for-Web-Services-API-Version-2-0-">CollegiateLink API</a>.
+      as the <a href="http://support.collegiatelink.net/hc/en-us/articles/204033994-Documentation-for-Web-Services-API-Version-2-0-">CollegiateLink API</a>. You can find more information on the API there.
       Only specific endpoints and combinations of parameters are allowed for specific keys, however, as determined by the Student Activities Office. In order to make a successful API call, you must include all whitelist filters as parameters for the specific endpoint (table) you are trying to access. You
-      can check the set of allowed permissions and parameters for your API key by clicking on the above "Permissions" tab. When the specified whitelists are included in the request, the request will return the columns specified in "Permitted" under the "Permissions" tab. 
+      can check the set of whitelists and filters for your API key by clicking on the above "Permissions" tab. When any one of the specified whitelists (if there is more than one) is included entirely in the request, the request will return the columns specified in "Permitted" under the "Permissions" tab. 
   </p>
   <p> The base URL for making API calls is: <code><%= "#{root_url + 'api/v1/'}" %></code></p>
+  <hr/>
+  <h3> Constructing the Request URL </h3>
+  <p> While all API calls must include your API key and Andrew ID as headers in a POST request, the data returned is entirely dictated by the URL you make the request to. Example requests are included below, but first it might be helpful to read a bit about how to pass parameters in a URL.</p>
+  <p>First, start with your base URL: <code><%= "#{root_url + 'api/v1/'}" %></code>. Then, choose a table/endpoint that you have access to as specified under the "Permissions" tab. For example, if you have access to <code>organizations</code>, you would append that to the URL, which now looks like this: <code><%= "#{root_url + 'api/v1/organizations'}" %></code></p>
+  <p>Now, you need to all of the filters for one of the whitelists specified for your access to the <code>organizations</code> table/endpoint. An example might be: <code>excludeHiddenOrganizations = true and status = active</code>. We first add a question mark onto the URL to indicate we're adding parameters. Then, we add each of the parmeters, with no spaces, separated by an ampersand, which we must escape by writing it as "&amp;". Now, our URL looks like this: <code><%= "#{root_url + 'api/v1/' + 'organizations?' + 'excludeHiddenOrganizations=true' + '&amp;status=active'}" %></code>.</p>
+  <p>Note about escaping characters in HTML: when you are writing in code, you must escape the ampersand as specificed above. If you are using an application to test a request, however, such as <code>https://www.hurl.it/</code>, or typing the request into a URL field, you would simply type an ampersand rather than escaping it.</p>
   <hr/>
   <h3> Optional: Pagination </h3>
   <p> All API calls can also have two pagination parameters, <code>page</code> and <code>pageSize</code>. <code>page</code>
@@ -110,7 +116,7 @@ print_r($result);"
   <hr/>
   <h3> More Sample API Calls </h3>
   <p> For example, assuming you have access to the <code>Events</code> endpoint, can
-      see all <code>public</code> events, and wish to limit the response to 2 records
+      see all <code>public</code> events (as dictated by a whitelist for <code>Events</code> that only includes , and you wish to limit the response to 2 records
       per page: </p>
   <ul class="tabs" data-tab>
     <li class="tab-title active"><a href="#curlRequest">curl</a></li>

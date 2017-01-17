@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   # GET /login
   def login
     # Get the user's andrew Id through Shibboleth.
-    remote_user = Rails.env.development? ? "jkcorrea" : request.env["REMOTE_USER"]
+    remote_user = Rails.env.development? ? "mvella" : request.env["REMOTE_USER"]
 
     if remote_user.blank?
       render_500

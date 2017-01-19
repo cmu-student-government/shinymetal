@@ -306,9 +306,3 @@ DEPENDENCIES
   whenever (~> 0.9.4)
   wirble
   yard (~> 0.8.7.6)
-
-RUBY VERSION
-   ruby 2.1.6p336
-
-BUNDLED WITH
-   1.13.6
